@@ -7,7 +7,8 @@ define(["dojo","dojox/application"],function(dojo,Application){
 
 			"dependencies": [
 				"dojox/mobile/TabBar",
-				"dojox/mobile/_base"
+				"dojox/mobile/_base",
+				"dojox/mobile/Button"
 
 			],
 			// Modules for the application.  The are basically used as the second
@@ -40,38 +41,69 @@ define(["dojo","dojox/application"],function(dojo,Application){
 						//path to the template
 						"template": "views/main.html" 
 					} 
+				},
+				//simple html view, no context data
+				"second": {
+					"params": {
+						//path to the template
+						"template": "views/second.html" 
+					} 
+				},
+				//simple html view, no context data
+				"third": {
+					"params": {
+						//path to the template
+						"template": "views/third.html" 
+					} 
 				}
+
 			},
 
 			//the name of the scene to load when the app is initialized.
-			"defaultScene": "simple",	
+			"defaultScene": "main",	
 
 			//scenes are groups of views and models loaded at once	
 			"scenes": {
 
 				//simple scene which loads all views and shows the default first
-				"simple": { 
+				"main": { 
 					//all views in the main scene will be bound to the user model
 					"params": {
 						"models": [],
 				
-						"defaultScene": "main",
+						"defaultView": "main",
 						//the views available to this scene
 						"views": [
 							{"id":"main", "view": {"$ref": "#views.main"}},
 						],
 					}
 				},
-
-				"tabScene": {
-					"type": "dojox/application/TabScene",
+				//simple scene which loads all views and shows the default first
+				"second": { 
+					//all views in the second scene will be bound to the user model
 					"params": {
 						"models": [],
+				
+						"defaultView": "second",
+						//the views available to this scene
 						"views": [
-							{"id":"view1", "label": "View 1", "view": {"$ref": "#views.view1"}},
-						]
+							{"id":"second", "view": {"$ref": "#views.second"}},
+						],
 					}
-				}	
+				},
+				//simple scene which loads all views and shows the default first
+				"third": { 
+					//all views in the main scene will be bound to the user model
+					"params": {
+						"models": [],
+				
+						"defaultView": "third",
+						//the views available to this scene
+						"views": [
+							{"id":"third", "view": {"$ref": "#views.third"}},
+						],
+					}
+				}
 			}	
 	});
 });
