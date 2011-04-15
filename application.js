@@ -17,17 +17,17 @@ define(["dojo","dojox/json/ref","dojox/json/schema","dojox/application/kernel","
 			var modules = config.modules.concat(config.dependencies||[]);
 			return define(modules, function(){
 				var modules=[kernel];
-				for(var i=0;i<config.modules.length.length;i++){
+				for(var i=0;i<config.modules.length;i++){
 					modules.push(arguments[i]);
 				}
-				console.log("declare: " );	
+				//console.log("declare: ",modules);	
 				config = dojox.json.ref.resolveJson(config);
 				if (config.template){
 					var ext = {
 						templateString: dojo.cache("",window.location.pathname + config.template)
 					}	
 				}
-				console.log("ext: ", ext);	
+				//console.log("ext: ", ext);	
 				App = dojo.declare(modules,ext);
 				console.log("after");
 				dojo.ready(function(){
