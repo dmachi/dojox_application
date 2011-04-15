@@ -26,7 +26,6 @@ define(["dojo", "dijit", "dojox", "dojox/application/view","dojo/parser","dijit/
 		},
 
 		layout: function(){
-			console.log('layout');
 			var children = dojo.query("> [region]", this.domNode).map(function(node){
 				return dijit.byNode(node) || {
 					domNode: node,
@@ -129,8 +128,6 @@ define(["dojo", "dijit", "dojox", "dojox/application/view","dojo/parser","dijit/
 			}
 
 			params.id = view.id;
-			//var node = dojo.create("div",{},this.app.domNode);
-
 			console.log("view params: ", params);
 			return new ctor(params);
 		}

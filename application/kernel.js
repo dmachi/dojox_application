@@ -21,7 +21,7 @@ define(["dojo","dijit","dojox","dojo/fx","dojox/json/ref","dojo/parser","dojox/a
 
 			if (this.scenes[scene]){
 				return this.scenes[scene];
-			}	
+			}
 
 			if (this.config.scenes && this.config.scenes[scene]){
 				var ctor = sceneCtor;
@@ -34,7 +34,9 @@ define(["dojo","dijit","dojox","dojo/fx","dojox/json/ref","dojo/parser","dojox/a
 					ctor = dojo.getObject(s);	
 				}
 				console.log("Instantiating new scene: ", scene,this.config.scenes[scene]);
-				return this.scenes[scene]=new sceneCtor({config: this.config.scenes[scene].params});
+				this.scenes[scene]=new sceneCtor({config: this.config.scenes[scene].params});
+				this.addChild(this.scenes[scene]);
+				return this.scenes[scene];
 			}
 		
 			throw Error("Scene '" + scene + "' not found.");
@@ -44,9 +46,9 @@ define(["dojo","dijit","dojox","dojo/fx","dojox/json/ref","dojo/parser","dojox/a
 			console.log('app startup', this);
 			this.inherited(arguments);
 
-			this.addChild(this.loadScene());
+			this.transition();
+
 			this._readyDef.resolve(true);
-				
 		},
 
 		layout: function(){
@@ -62,17 +64,49 @@ define(["dojo","dijit","dojox","dojo/fx","dojox/json/ref","dojo/parser","dojox/a
 
 		addChild: function(child,position){
 			dojo.place(child.domNode, this.containerNode);
-			if (!this.selectedScene){
-				this.set("selectedScene", child);
-				this.layout();					
-			}
-			
 		},
-		_setSelectedSceneAttr: function(scene){
+
+		_setSelectedSceneAttr: function(scene,opts){
 			if (scene){
 				this.selectedScene=scene;
-				this.selectedScene.startup();
 			}
+			this.layout();
+
+			if (scene && scene.startup && !scene._started){
+				scene.startup();
+			}
+		},
+
+		transition: function(transitionTo,opts){
+			//summary: 
+			//  transitions from the currently visible scene to the defined scene.
+			//  it should determine what would be the best transition unless
+			//  an override in opts tells it to use a specific transitioning methodology
+			//  the transitionTo is a string in the form of [view]@[scene].  If
+			//  view is left of, the current scene will be transitioned to the default
+			//  view of the specified scene (eg @scene2), if the scene is left off
+			//  the app controller will instruct the active scene to the view (eg view1).  If both
+			//  are supplied (view1@scene2), then the application should transition to the scene,
+			//  and instruct the scene to navigate to the view.
+
+			if (transitionTo){
+				var parts = transitionTo.split("@");
+				var toView=parts[0];
+				var toScene=parts[1];
+				var to = this.loadScene(toScene);
+				console.log("transition toScene: ", toScene);
+			}else{
+				var to = this.loadScene();
+			}
+	
+			if (this.selectedScene){	
+				dojo.style(this.selectedScene.domNode, "display", "none");
+			}
+			console.log("to: ", to);
+			//dojo.style(to.domNode, "display", "");
+			//dojo.style(to.domNode, "visibility", "visible");
+
+			this.set("selectedScene",to);
 		}
 	});
 });

@@ -6,8 +6,8 @@ define(["dojo","dojox/application"],function(dojo,Application){
 			"splash": "splash",
 
 			"dependencies": [
-				"dojox/mobile/TabBar",
 				"dojox/mobile/_base",
+				"dojox/mobile/TabBar",
 				"dojox/mobile/Button"
 
 			],
@@ -16,7 +16,8 @@ define(["dojo","dojox/application"],function(dojo,Application){
 			// of the application, how it processes the config or any other life cycle
 			// by creating and including one or more of these
 			"modules": [
-				"dojox/application/module/env"
+				"dojox/application/module/env",
+				"dojox/application/module/hash"
 				//"dojox/application/module/phonegap",
 				//"dojox/application/module/somePlugin"
 			],
@@ -60,7 +61,7 @@ define(["dojo","dojox/application"],function(dojo,Application){
 			},
 
 			//the name of the scene to load when the app is initialized.
-			"defaultScene": "main",	
+			"defaultScene": "third",	
 
 			//scenes are groups of views and models loaded at once	
 			"scenes": {
@@ -89,6 +90,10 @@ define(["dojo","dojox/application"],function(dojo,Application){
 						"views": [
 							{"id":"second", "view": {"$ref": "#views.second"}},
 						],
+						"dependencies": [
+							"dojox/mobile/Button"
+						]
+
 					}
 				},
 				//simple scene which loads all views and shows the default first
@@ -102,6 +107,10 @@ define(["dojo","dojox/application"],function(dojo,Application){
 						"views": [
 							{"id":"third", "view": {"$ref": "#views.third"}},
 						],
+
+						"dependencies": [
+							"dojox/mobile/Button"
+						]
 					}
 				}
 			}	

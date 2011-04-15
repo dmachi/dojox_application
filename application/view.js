@@ -9,7 +9,6 @@ define(["dojo", "dijit", "dojox", "dijit/_WidgetBase", "dijit/_Container", "diji
 			console.log("ctor: ", params)
 			if (params.config && params.config.template){
 				this.templateString=dojo.cache("",window.location.pathname + params.config.template);
-
 			}
 		},	
 
