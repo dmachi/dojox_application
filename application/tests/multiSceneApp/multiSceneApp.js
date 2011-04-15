@@ -54,14 +54,15 @@ define(["dojo","dojox/application"],function(dojo,Application){
 				"third": {
 					"params": {
 						//path to the template
-						"template": "views/third.html" 
+						"template": "views/third.html",
+						"fullScreen": true
 					} 
 				}
 
 			},
 
 			//the name of the scene to load when the app is initialized.
-			"defaultScene": "third",	
+			"defaultScene": "main",	
 
 			//scenes are groups of views and models loaded at once	
 			"scenes": {

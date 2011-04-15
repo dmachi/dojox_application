@@ -3,9 +3,15 @@ define(["dojo", "dijit", "dojox", "dojox/application/view","dojo/parser","dijit/
 		config: null,
 		selectedView: null,
 
+		isFullScreen: false,
 		constructor: function(params,srcRefNode){
 			this.views={};
 			this.models=[];
+
+			if (params.fullScreen){
+				this.isFullScreen=params.fullScreen;
+			}
+
 			if (params.config && params.config.template){
 				console.log("overriding templateString");
 				this.templateString=dojo.cache("",window.location.pathname + params.config.template);

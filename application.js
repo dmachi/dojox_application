@@ -27,7 +27,6 @@ define(["dojo","dojox/json/ref","dojox/json/schema","dojox/application/kernel","
 						templateString: dojo.cache("",window.location.pathname + config.template)
 					}	
 				}
-				//console.log("ext: ", ext);	
 				App = dojo.declare(modules,ext);
 				console.log("after");
 				dojo.ready(function(){

@@ -1,4 +1,4 @@
-define(["dojo","dijit","dojox","dojo/fx","dojox/json/ref","dojo/parser","dojox/application/scene","dijit/_WidgetBase","dijit/layout/_LayoutWidget","dijit/_TemplatedMixin","dijit/_WidgetsInTemplateMixin"],function(dojo,dijit,dijox,fx,jsonRef,parser,sceneCtor,widget,LayoutWidget,templatedMixin,widgetsInTemplateMixin){
+define(["dojo","dijit","dojox","dojo/fx","dojox/json/ref","dojo/parser","dojox/application/scene","dijit/_WidgetBase","dijit/layout/_LayoutWidget","dijit/_TemplatedMixin","dijit/_WidgetsInTemplateMixin","dojox/application/transition"],function(dojo,dijit,dijox,fx,jsonRef,parser,sceneCtor,widget,LayoutWidget,templatedMixin,widgetsInTemplateMixin,transition){
 	return dojo.declare([widget,LayoutWidget,templatedMixin,widgetsInTemplateMixin], {
 		constructor: function(){
 			this.scenes={};
@@ -46,34 +46,101 @@ define(["dojo","dijit","dojox","dojo/fx","dojox/json/ref","dojo/parser","dojox/a
 			console.log('app startup', this);
 			this.inherited(arguments);
 
-			this.transition();
+			console.log("this._defaultScene: ", this._defaultScene);
+			this.transition("@" + (this._defaultScene || this.config.defaultScene),{transition: "flip"});
 
 			this._readyDef.resolve(true);
 		},
 
 		layout: function(){
-			console.log('layout');
-			var children = dojo.query("> [region]", this.domNode).map(function(node){
-				return dijit.byNode(node) || {
-					domNode: node,
-					region: dojo.attr(node, "region")
+			console.log('app layout');
+			var fullScreenScene,children,hasCenter;
+			console.log("fullscreen: ", this.selectedScene && this.selectedScene.isFullScreen);
+			if (this.selectedScene && this.selectedScene.isFullScreen) {
+				/*
+				console.log("fullscreen sceen layout");
+				fullScreenScene=true;		
+				children=[{domNode: this.selectedScene.stageNode,region: "center"}];
+				dojo.query("> [region]",this.domNode).forEach(function(c){
+					if(this.selectedScene.stageNode!==c.domNode){
+						dojo.style(c.domNode,"display","none");
+					}
+				})
+				*/
+			}else{
+				console.log("regular layout");
+				children = dojo.query("> [region]", this.domNode).map(function(node){
+						
+					return dijit.byNode(node)||{
+						domNode: node,
+						region: node?dojo.attr(node,"region"):""
+					}
+						
+				});
+
+				children = dojo.filter(children, function(c){
+					if (c.region=="center" && this.selectedScene && this.selectedScene.stageNode!==c.domNode){
+						hasCenter=true;
+						return false;
+					}else if (c.region!="center"){
+						dojo.style(c.domNode,"display","");
+					}
+					if (c.region=="center"){hasCenter=true}
+
+					return c.domNode && c.region;
+				});
+
+				if (!hasCenter){
+					if (this.selectedScene){
+						dojo.attr(this.selectedScene.stageNode,"region","center");
+						dojo.style(this.selectedScene.stageNode, "display", "");
+						children.push({domNode: this.selectedScene.stageNode, region: "center"});	
+						if (this.dummyScene){
+							dojo.style(this.dummyScene.domNode, "display", "none");
+						}
+					}else{
+						if (!this.dummyScene){
+							this.dummyScene = {domNode: dojo.create("div",{"id": this.id + "dummyclient","region":"center"},this.domNode),region:"center"};
+						}
+
+						dojo.style(this.dummyScene.domNode,"display","");
+						children.push(this.dummyScene);
+					}
 				}
-			});
+			}			
+			console.log('children: ', children);	
 			dijit.layout.layoutChildren(this.domNode, this._contentBox, children);
 		},
 
 		addChild: function(child,position){
-			dojo.place(child.domNode, this.containerNode);
+			// summary:
+			//	adds (stages) a scene in the application
+			var stageNode = dojo.create("div",{region: "center"},this.domNode);
+			stageNode.appendChild(child.domNode);							
+			child.stageNode = stageNode;
+			if (!this.selectedScene){
+				this.set("selectedScene",child);			
+			}else{
+				stageNode.style = this.selectedScene.stageNode.getAttribute("style");		
+			}
 		},
 
 		_setSelectedSceneAttr: function(scene,opts){
-			if (scene){
-				this.selectedScene=scene;
-			}
-			this.layout();
+			console.log('setSelectedScene');
 
-			if (scene && scene.startup && !scene._started){
-				scene.startup();
+			if (scene && (scene !== this.selectedScene) ){
+				if (this.selectedScene){
+					dojo.style(this.selectedScene.stageNode, "display", "none");
+				}
+			
+				dojo.style(scene.stageNode, "display", "");
+				this.selectedScene=scene;
+				this.layout();
+			
+				if (scene.startup && !scene._started){
+					console.log("startup");
+					scene.startup();
+				}
 			}
 		},
 
@@ -89,24 +156,33 @@ define(["dojo","dijit","dojox","dojo/fx","dojox/json/ref","dojo/parser","dojox/a
 			//  are supplied (view1@scene2), then the application should transition to the scene,
 			//  and instruct the scene to navigate to the view.
 
+			var current = this.selectedScene;
+			
 			if (transitionTo){
 				var parts = transitionTo.split("@");
 				var toView=parts[0];
 				var toScene=parts[1];
-				var to = this.loadScene(toScene);
+				var next = this.loadScene(toScene);
 				console.log("transition toScene: ", toScene);
 			}else{
-				var to = this.loadScene();
+				var next = this.loadScene();
 			}
-	
-			if (this.selectedScene){	
-				dojo.style(this.selectedScene.domNode, "display", "none");
-			}
-			console.log("to: ", to);
-			//dojo.style(to.domNode, "display", "");
-			//dojo.style(to.domNode, "visibility", "visible");
 
-			this.set("selectedScene",to);
+			if (!current){
+				if (!this.dummyScene){
+					this.dummyScene = {domNode: dojo.create("div",{"id": this.id + "dummyclient","region":"center"},this.domNode),region:"center"};
+				}
+
+				current = {stageNode: this.dummyScene.domNode};
+			}	
+
+			console.log("do the transition: ", this.selectedScene.stageNode, next.stageNode);
+			if (next && next.startup && !next._started){
+				next.startup();
+			}
+		
+			transition(current.stageNode,next.stageNode,{transition: "slide"});				
+			this.set("selectedScene", next);
 		}
 	});
 });
