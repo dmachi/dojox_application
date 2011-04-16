@@ -57,7 +57,18 @@ define(["dojo","dojox/application"],function(dojo,Application){
 						"template": "views/third.html",
 						"fullScreen": true
 					} 
+				},
+
+				//simple html view, no context data
+				"sub1": {
+					"params": {
+						//path to the template
+						"template": "views/sub1.html",
+						"fullScreen": true
+					} 
 				}
+
+
 
 			},
 
@@ -75,9 +86,10 @@ define(["dojo","dojox/application"],function(dojo,Application){
 				
 						"defaultView": "main",
 						//the views available to this scene
-						"views": [
-							{"id":"main", "view": {"$ref": "#views.main"}},
-						],
+						"views": { 
+							"main":{"view": {"$ref": "#views.main"}},
+							"sub1":{"view": {"$ref": "#views.sub1"}},
+						}						
 					}
 				},
 				//simple scene which loads all views and shows the default first
@@ -88,12 +100,12 @@ define(["dojo","dojox/application"],function(dojo,Application){
 				
 						"defaultView": "second",
 						//the views available to this scene
-						"views": [
-							{"id":"second", "view": {"$ref": "#views.second"}},
-						],
+						"views": { 
+							"second":{ "view": {"$ref": "#views.second"}},
+						},
 						"dependencies": [
 							"dojox/mobile/Button"
-						]
+						]	
 
 					}
 				},
@@ -105,9 +117,9 @@ define(["dojo","dojox/application"],function(dojo,Application){
 				
 						"defaultView": "third",
 						//the views available to this scene
-						"views": [
-							{"id":"third", "view": {"$ref": "#views.third"}},
-						],
+						"views": { 
+							"third": {"view": {"$ref": "#views.third"}},
+						},
 
 						"dependencies": [
 							"dojox/mobile/Button"

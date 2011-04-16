@@ -1,5 +1,6 @@
 define(["dojo","dijit","dojox","dojo/html"], function(dojo,dijit,dojox,html){
 	return function(from, to, options){
+			console.log("transition() from: ", from, " to: ", to);
 			var rev = (options && options.reverse) ? " reverse" : "";
 			if(!options || !options.transition){
 				dojo.style(from,"display","none");

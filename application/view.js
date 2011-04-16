@@ -6,10 +6,12 @@ define(["dojo", "dijit", "dojox", "dijit/_WidgetBase", "dijit/_Container", "diji
 		config:null,
 		templateString: '<div dojoAttachPoint="domNode,containerNode" class="appView"></div>',
 		constructor: function(params,node){
-			console.log("ctor: ", params)
+
+			console.log("VIEW Ctor: ", params)
 			if (params.config && params.config.template){
 				this.templateString=dojo.cache("",window.location.pathname + params.config.template);
 			}
+			console.log("this.templateString: ", this.templateString);
 		},	
 
 		startup: function(){

@@ -1,13 +1,13 @@
-define(["dojo","dijit","dojox","dojo/fx","dojox/json/ref","dojo/parser","dojox/application/scene","dijit/_WidgetBase","dijit/layout/_LayoutWidget","dijit/_TemplatedMixin","dijit/_WidgetsInTemplateMixin","dojox/application/transition"],function(dojo,dijit,dijox,fx,jsonRef,parser,sceneCtor,widget,LayoutWidget,templatedMixin,widgetsInTemplateMixin,transition){
-	return dojo.declare([widget,LayoutWidget,templatedMixin,widgetsInTemplateMixin], {
+define(["dojo","dijit","dojox","dojo/fx","dojox/json/ref","dojo/parser","dojox/application/scene","dojox/application/base","dojox/application/transition"],function(dojo,dijit,dijox,fx,jsonRef,parser,sceneCtor,LayoutWidget,transition){
+	return dojo.declare([LayoutWidget], {
 		constructor: function(){
 			this.scenes={};
-			this._readyDef=new dojo.Deferred();
-			this.ready=this._readyDef.promise;	
+
 		},
 		config: null,
 		templateString: "<div></div>",
 		selectedScene: null,
+		baseClass: "dojoxApp",
 		buildRendering: function(){
 			if (this.srcNodeRef===dojo.body()){
 				this.srcNodeRef = dojo.create("DIV",{},this.srcNodeRef);
@@ -16,7 +16,7 @@ define(["dojo","dijit","dojox","dojo/fx","dojox/json/ref","dojo/parser","dojox/a
 		},
 	
 		loadScene: function(scene){
-			console.log("loadScene(): ", this.config);
+			console.log("application::loadScene() config:", this.config);
 			if (!scene) { scene=(this.config && this.config.defaultScene)?this.config.defaultScene:"default" };
 
 			if (this.scenes[scene]){
@@ -33,7 +33,6 @@ define(["dojo","dijit","dojox","dojo/fx","dojox/json/ref","dojo/parser","dojox/a
 				if (s.type){
 					ctor = dojo.getObject(s);	
 				}
-				console.log("Instantiating new scene: ", scene,this.config.scenes[scene]);
 				this.scenes[scene]=new sceneCtor({config: this.config.scenes[scene].params});
 				this.addChild(this.scenes[scene]);
 				return this.scenes[scene];
@@ -43,32 +42,31 @@ define(["dojo","dijit","dojox","dojo/fx","dojox/json/ref","dojo/parser","dojox/a
 		},
 
 		startup: function(node){
-			console.log('app startup', this);
+			console.log('application::startup()', this);
 			this.inherited(arguments);
 
 			console.log("this._defaultScene: ", this._defaultScene);
+			this.resize();
 			this.transition("@" + (this._defaultScene || this.config.defaultScene),{transition: "flip"});
 
-			this._readyDef.resolve(true);
 		},
 
 		layout: function(){
 			console.log('app layout');
 			var fullScreenScene,children,hasCenter;
-			console.log("fullscreen: ", this.selectedScene && this.selectedScene.isFullScreen);
+			//console.log("fullscreen: ", this.selectedScene && this.selectedScene.isFullScreen);
 			if (this.selectedScene && this.selectedScene.isFullScreen) {
+				console.warn("fullscreen sceen layout");
 				/*
-				console.log("fullscreen sceen layout");
 				fullScreenScene=true;		
-				children=[{domNode: this.selectedScene.stageNode,region: "center"}];
+				children=[{domNode: this.selectedScene.domNode,region: "center"}];
 				dojo.query("> [region]",this.domNode).forEach(function(c){
-					if(this.selectedScene.stageNode!==c.domNode){
+					if(this.selectedScene.domNode!==c.domNode){
 						dojo.style(c.domNode,"display","none");
 					}
 				})
 				*/
 			}else{
-				console.log("regular layout");
 				children = dojo.query("> [region]", this.domNode).map(function(node){
 						
 					return dijit.byNode(node)||{
@@ -79,7 +77,7 @@ define(["dojo","dijit","dojox","dojo/fx","dojox/json/ref","dojo/parser","dojox/a
 				});
 
 				children = dojo.filter(children, function(c){
-					if (c.region=="center" && this.selectedScene && this.selectedScene.stageNode!==c.domNode){
+					if (c.region=="center" && this.selectedScene && this.selectedScene.domNode!==c.domNode){
 						hasCenter=true;
 						return false;
 					}else if (c.region!="center"){
@@ -92,56 +90,58 @@ define(["dojo","dijit","dojox","dojo/fx","dojox/json/ref","dojo/parser","dojox/a
 
 				if (!hasCenter){
 					if (this.selectedScene){
-						dojo.attr(this.selectedScene.stageNode,"region","center");
-						dojo.style(this.selectedScene.stageNode, "display", "");
-						children.push({domNode: this.selectedScene.stageNode, region: "center"});	
-						if (this.dummyScene){
-							dojo.style(this.dummyScene.domNode, "display", "none");
-						}
-					}else{
-						if (!this.dummyScene){
-							this.dummyScene = {domNode: dojo.create("div",{"id": this.id + "dummyclient","region":"center"},this.domNode),region:"center"};
-						}
+						dojo.attr(this.selectedScene.domNode,"region","center");
+						dojo.style(this.selectedScene.domNode, "display", "");
+						children.push({domNode: this.selectedScene.domNode, region: "center"});	
+						//if (this.dummyScene){
+						//	dojo.style(this.dummyScene.domNode, "display", "none");
+						//}
+					}//else{
+						//if (!this.dummyScene){
+						//	this.dummyScene = {domNode: dojo.create("div",{"id": this.id + "dummyclient","region":"center"},this.domNode),region:"center"};
+						//}
 
-						dojo.style(this.dummyScene.domNode,"display","");
-						children.push(this.dummyScene);
-					}
+						//dojo.style(this.dummyScene.domNode,"display","");
+						//children.push(this.dummyScene);
+					//}
 				}
 			}			
-			console.log('children: ', children);	
-			dijit.layout.layoutChildren(this.domNode, this._contentBox, children);
+			console.log('application::layout() children: ', children);	
+			this.layoutChildren(this.domNode, this._contentBox, children);
+			console.log("application::layout() complete");
 		},
-
 		addChild: function(child,position){
 			// summary:
 			//	adds (stages) a scene in the application
-			var stageNode = dojo.create("div",{region: "center"},this.domNode);
-			stageNode.appendChild(child.domNode);							
-			child.stageNode = stageNode;
-			if (!this.selectedScene){
-				this.set("selectedScene",child);			
-			}else{
-				stageNode.style = this.selectedScene.stageNode.getAttribute("style");		
-			}
+			child.region="center";
+			this.inherited(arguments);
 		},
 
 		_setSelectedSceneAttr: function(scene,opts){
-			console.log('setSelectedScene');
+			console.log('application::setSelectedScene()');
 
 			if (scene && (scene !== this.selectedScene) ){
 				if (this.selectedScene){
-					dojo.style(this.selectedScene.stageNode, "display", "none");
+					this.selectedScene.deactivate(); 
+					console.log("_setSelectedSceneAttr() hide current selectedScene", this.selectedScene);
+					dojo.style(this.selectedScene.domNode, "display", "none");
 				}
 			
-				dojo.style(scene.stageNode, "display", "");
+				dojo.style(scene.domNode, "display", "");
 				this.selectedScene=scene;
-				this.layout();
-			
-				if (scene.startup && !scene._started){
-					console.log("startup");
-					scene.startup();
+	
+				if (this._started) {	
+					if (scene.startup && !scene._started){
+						console.log("startup");
+						scene.startup();
+					}else{
+						scene.activate();
+					}
+	
 				}
+				this.layout();
 			}
+
 		},
 
 		transition: function(transitionTo,opts){
@@ -155,7 +155,7 @@ define(["dojo","dijit","dojox","dojo/fx","dojox/json/ref","dojo/parser","dojox/a
 			//  the app controller will instruct the active scene to the view (eg view1).  If both
 			//  are supplied (view1@scene2), then the application should transition to the scene,
 			//  and instruct the scene to navigate to the view.
-
+			console.log("Application::transtion()");
 			var current = this.selectedScene;
 			
 			if (transitionTo){
@@ -163,25 +163,24 @@ define(["dojo","dijit","dojox","dojo/fx","dojox/json/ref","dojo/parser","dojox/a
 				var toView=parts[0];
 				var toScene=parts[1];
 				var next = this.loadScene(toScene);
-				console.log("transition toScene: ", toScene);
+				console.log("application::transition() toScene: ", toScene);
 			}else{
+				console.log("application::transition() no toScene provided");
 				var next = this.loadScene();
 			}
 
 			if (!current){
-				if (!this.dummyScene){
-					this.dummyScene = {domNode: dojo.create("div",{"id": this.id + "dummyclient","region":"center"},this.domNode),region:"center"};
-				}
-
-				current = {stageNode: this.dummyScene.domNode};
+				this.set("selectedScene", next);
+				return;
 			}	
 
-			console.log("do the transition: ", this.selectedScene.stageNode, next.stageNode);
-			if (next && next.startup && !next._started){
-				next.startup();
+			transition(current.domNode,next.domNode,{transition: "slide"});
+
+			console.log("application::transition() post begin animation", toView, next);	
+			if (toView && next.transition){
+				next.transition(toView,opts);	
 			}
-		
-			transition(current.stageNode,next.stageNode,{transition: "slide"});				
+
 			this.set("selectedScene", next);
 		}
 	});
