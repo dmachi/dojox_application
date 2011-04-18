@@ -180,10 +180,16 @@ define(["dojo","dijit","dojox","dojo/fx","dojox/json/ref","dojo/parser","dojox/a
 			}
 			
 			if(current !== next){// only switches scenes when necessary
+			    //Since the animation is non-blocking in javascript, we need to register
+			    //the call back after animation of scene switch to set the selectedScene.
+			    var _conn = dojo.connect(next.domNode, "webkitAnimationEnd", this, function(){
+			        this.set("selectedScene", next);
+			        dojo.disconnect(_conn);
+			    });
+			    
 			    transition(current.domNode,next.domNode,{transition: "slide"});
 			}
-
-			this.set("selectedScene", next);
+			
 		}
 	});
 });
