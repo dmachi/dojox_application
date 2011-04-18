@@ -57,7 +57,35 @@ define(["dojo","dojox/application"],function(dojo,Application){
 						"template": "views/simple/third.html",
 						"fullScreen": true
 					} 
+				},
+				//simple html view, no context data
+				"tab1": {
+					"params": {
+						//path to the template
+						"template": "views/tabs/tab1.html",
+						"fullScreen": true
+					} 
+				},
+
+				//simple html view, no context data
+				"tab2": {
+					"params": {
+						//path to the template
+						"template": "views/tabs/tab2.html",
+						"fullScreen": true
+					} 
+				},
+
+				//simple html view, no context data
+				"tab3": {
+					"params": {
+						//path to the template
+						"template": "views/tabs/tab3.html",
+						"fullScreen": true
+					} 
 				}
+
+
 
 			},
 
@@ -88,10 +116,12 @@ define(["dojo","dojox/application"],function(dojo,Application){
 					"params": {
 						"models": [],
 						"template": "tabScene.html",	
-						"defaultView": "second",
+						"defaultView": "tab1",
 						//the views available to this scene
 						"views": { 
-							"second":{ "view": {"$ref": "#views.second"}},
+							"tab1":{ "view": {"$ref": "#views.tab1"}},
+							"tab2":{ "view": {"$ref": "#views.tab2"}},
+							"tab3":{ "view": {"$ref": "#views.tab3"}},
 						},
 						"dependencies": [
 							"dojox/mobile/Button"
