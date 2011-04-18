@@ -1,5 +1,5 @@
-define(["dojo", "dijit", "dojox", "dojox/application/view","dojo/parser","dojox/application/base","dojox/application/transition"], function(dojo,dijit,dojox,baseView,parser,base,transition){
-	return dojo.declare([base], {
+define(["dojo", "dijit", "dojox", "dojox/application/view","dojo/parser","dojox/application/templatedLayout","dojox/application/transition"], function(dojo,dijit,dojox,baseView,parser,templatedLayout,transition){
+	return dojo.declare([templatedLayout], {
 		config: null,
 		selectedView: null,
 		baseClass: "dojoxAppScene",
@@ -25,11 +25,11 @@ define(["dojo", "dijit", "dojox", "dojox/application/view","dojo/parser","dojox/
 			this.resize()
 
 			console.log('scene::startup() call transition()');	
-			this.transition(this._defaultView || this.config.defaultView,{transition: "none"});
+			this.transition(this._defaultView || this.config.defaultView,{transition: "slide"});
 		},
 
 		layout: function(){
-			console.log('scene::layout()',this.domNode.style.height, "cb: ", this._contentBox);
+			//console.log('scene::layout()',this.domNode.style.height, "cb: ", this._contentBox);
 
 			var fullScreenView,children,hasCenter,needsStartup=[];
 			//console.log("fullscreen: ", this.selectedView && this.selectedView.isFullScreen);
@@ -56,24 +56,27 @@ define(["dojo", "dijit", "dojox", "dojox/application/view","dojo/parser","dojox/
 
 				children = dojo.filter(children, function(c){
 					if (c.region=="center" && this.selectedView&& this.selectedView.domNode!==c.domNode){
-						hasCenter=true;
+						dojo.style(c.domNode,"display","none");
+						dojo.style(c.domNode, "zIndex", 25);
 						return false;
 					}else if (c.region!="center"){
 						dojo.style(c.domNode,"display","");
+						dojo.style(c.domNode, "zIndex", 50);
 					}
-					if (c.region=="center"){hasCenter=true}
 					return c.domNode && c.region;
 				});
 
-				console.log("scene::layout() this.domNode height: ", this.domNode.style.height);
+				//console.log("scene::layout() this.domNode height: ", this.domNode.style.height);
 
 				if (this.selectedView){
 					dojo.attr(this.selectedView.domNode,"region","center");
+					this.selectedView.region="center";
 					dojo.style(this.selectedView.domNode, "display", "");
+					dojo.style(this.selectedView.domNode, "zIndex", 50);
 					children.push({domNode: this.selectedView.domNode, region: "center"});	
 				}
 			}			
-			console.log('scene children: ', children);	
+			//console.log('scene children: ', children);	
 			this.layoutChildren(this.domNode, this._contentBox, children);
 		},
 
@@ -124,10 +127,12 @@ define(["dojo", "dijit", "dojox", "dojox/application/view","dojo/parser","dojox/
 			if (view && (view !== this.selectedView) ){
 				if (this.selectedView){
 					//this.selectedView.deactivate(); 
-					dojo.style(this.selectedView.domNode, "display", "none");
+					//dojo.style(this.selectedView.domNode, "display", "none");
+					dojo.style(this.selectedView.domNode,"zIndex", 25);
 				}
 			
 				dojo.style(view.domNode, "display", "");
+				dojo.style(view.domNode,"zIndex", 50);
 				this.selectedView=view;
 		
 				if (this._started) {	
@@ -210,17 +215,20 @@ define(["dojo", "dijit", "dojox", "dojox/application/view","dojo/parser","dojox/
 				return;
 			}	
 
+			dojo.style(next.domNode, "display","");
+			dojo.style(next.domNode, "zIndex", 50);
+			dojo.style(current.domNode, "zIndex", 25);
+
 			console.log("select::transition(): ", this.selectedView, next);
-		//	if (next && next.startup && !next._started){
-		//		next.startup();
-		//	}
-		
-			
-			transition(current.domNode,next.domNode,{transition: "none"});
 
-			console.log('select::transition() set selectedView()',next);	
-			this.set("selectedView", next);
-
+			this.set("selectedView",next);
+			if (current.domNode !==next.domNode){
+				return transition(current.domNode,next.domNode,dojo.mixin({},opts,{transition: "slide"})).then(dojo.hitch(this, function(){
+					dojo.style(current.domNode, "display", "none");
+					console.log("View Animations complete, set view");
+				}));		
+			}
+	
 		}
 	});
 });

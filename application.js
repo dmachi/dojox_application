@@ -1,4 +1,4 @@
-define(["dojo","dojox/json/ref","dojox/json/schema","dojox/application/kernel","text!dojox/application/schema/application.json"],function(dojo,ref,schema, kernel,appSchema){
+define(["dojo","dojox/json/ref","dojox/json/schema","dojox/application/application","text!dojox/application/schema/application.json"],function(dojo,ref,schema, application,appSchema){
 	return function(config){
 		if (!config){
 			throw Error("App Config Missing");
@@ -16,7 +16,7 @@ define(["dojo","dojox/json/ref","dojox/json/schema","dojox/application/kernel","
 			console.log("config.modules: ", config.modules);
 			var modules = config.modules.concat(config.dependencies||[]);
 			return define(modules, function(){
-				var modules=[kernel];
+				var modules=[application];
 				for(var i=0;i<config.modules.length;i++){
 					modules.push(arguments[i]);
 				}

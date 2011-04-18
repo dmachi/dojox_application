@@ -8,8 +8,8 @@ define(["dojo","dojox/application"],function(dojo,Application){
 			"dependencies": [
 				"dojox/mobile/_base",
 				"dojox/mobile/TabBar",
-				"dojox/mobile/Button"
-
+				"dojox/mobile/Button",
+				"dojox/mobile/EdgeToEdgeDataList"
 			],
 			// Modules for the application.  The are basically used as the second
 			// array of mixins in a dojo.declare().  Modify the top level behavior
@@ -40,35 +40,24 @@ define(["dojo","dojox/application"],function(dojo,Application){
 				"main": {
 					"params": {
 						//path to the template
-						"template": "views/main.html" 
+						"template": "views/simple/main.html" 
 					} 
 				},
 				//simple html view, no context data
 				"second": {
 					"params": {
 						//path to the template
-						"template": "views/second.html" 
+						"template": "views/simple/second.html" 
 					} 
 				},
 				//simple html view, no context data
 				"third": {
 					"params": {
 						//path to the template
-						"template": "views/third.html",
-						"fullScreen": true
-					} 
-				},
-
-				//simple html view, no context data
-				"sub1": {
-					"params": {
-						//path to the template
-						"template": "views/sub1.html",
+						"template": "views/simple/third.html",
 						"fullScreen": true
 					} 
 				}
-
-
 
 			},
 
@@ -83,12 +72,13 @@ define(["dojo","dojox/application"],function(dojo,Application){
 					//all views in the main scene will be bound to the user model
 					"params": {
 						"models": [],
-				
+						"template": "simple.html",	
 						"defaultView": "main",
 						//the views available to this scene
 						"views": { 
 							"main":{"view": {"$ref": "#views.main"}},
-							"sub1":{"view": {"$ref": "#views.sub1"}},
+							"second":{"view": {"$ref": "#views.second"}},
+							"third":{"view": {"$ref": "#views.third"}},
 						}						
 					}
 				},
@@ -97,7 +87,7 @@ define(["dojo","dojox/application"],function(dojo,Application){
 					//all views in the second scene will be bound to the user model
 					"params": {
 						"models": [],
-				
+						"template": "tabScene.html",	
 						"defaultView": "second",
 						//the views available to this scene
 						"views": { 
