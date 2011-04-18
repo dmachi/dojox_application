@@ -174,11 +174,13 @@ define(["dojo","dijit","dojox","dojo/fx","dojox/json/ref","dojo/parser","dojox/a
 				return;
 			}	
 
-			transition(current.domNode,next.domNode,{transition: "slide"});
-
 			console.log("application::transition() post begin animation", toView, next);	
 			if (toView && next.transition){
 				next.transition(toView,opts);	
+			}
+			
+			if(current !== next){// only switches scenes when necessary
+			    transition(current.domNode,next.domNode,{transition: "slide"});
 			}
 
 			this.set("selectedScene", next);
