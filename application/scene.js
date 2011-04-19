@@ -133,6 +133,7 @@ define(["dojo", "dijit", "dojox", "dojox/application/view","dojo/parser","dojox/
 			
 				dojo.style(view.domNode, "display", "");
 				dojo.style(view.domNode,"zIndex", 50);
+				dojo.style(view.domNode,"overflow", "auto");
 				this.selectedView=view;
 		
 				if (this._started) {	

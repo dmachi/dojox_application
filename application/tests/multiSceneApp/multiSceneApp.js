@@ -9,7 +9,8 @@ define(["dojo","dojox/application"],function(dojo,Application){
 				"dojox/mobile/_base",
 				"dojox/mobile/TabBar",
 				"dojox/mobile/Button",
-				"dojox/mobile/EdgeToEdgeDataList"
+				"dojox/mobile/EdgeToEdgeDataList",
+				"dojox/mobile/ScrollableView"
 			],
 			// Modules for the application.  The are basically used as the second
 			// array of mixins in a dojo.declare().  Modify the top level behavior
@@ -54,16 +55,14 @@ define(["dojo","dojox/application"],function(dojo,Application){
 				"third": {
 					"params": {
 						//path to the template
-						"template": "views/simple/third.html",
-						"fullScreen": true
+						"template": "views/simple/third.html"
 					} 
 				},
 				//simple html view, no context data
 				"tab1": {
 					"params": {
 						//path to the template
-						"template": "views/tabs/tab1.html",
-						"fullScreen": true
+						"template": "views/tabs/tab1.html"
 					} 
 				},
 
@@ -71,8 +70,7 @@ define(["dojo","dojox/application"],function(dojo,Application){
 				"tab2": {
 					"params": {
 						//path to the template
-						"template": "views/tabs/tab2.html",
-						"fullScreen": true
+						"template": "views/tabs/tab2.html"
 					} 
 				},
 
@@ -80,13 +78,95 @@ define(["dojo","dojox/application"],function(dojo,Application){
 				"tab3": {
 					"params": {
 						//path to the template
-						"template": "views/tabs/tab3.html",
-						"fullScreen": true
+						"template": "views/tabs/tab3.html"
+					} 
+				},
+
+				//gallery views
+				"ajax": {
+					"params": {
+						//path to the template
+						"template": "views/gallery/ajax.html"
+					} 
+				},
+				"ajaxLoad": {
+					"paramsLoad": {
+						//path to the template
+						"template": "views/gallery/ajaxLoad.html"
+					} 
+				},
+				"animations": {
+					"params": {
+						//path to the template
+						"template": "views/gallery/animations.html"
+					} 
+				},
+				"buttons": {
+					"params": {
+						//path to the template
+						"template": "views/gallery/buttons.html"
+					} 
+				},
+				"flippableViews": {
+					"params": {
+						//path to the template
+						"template": "views/gallery/flippableViews.html"
+					} 
+				},
+				"forms": {
+					"params": {
+						//path to the template
+						"template": "views/gallery/forms.html"
+					} 
+				},
+				"headings": {
+					"params": {
+						//path to the template
+						"template": "views/gallery/headings.html"
+					} 
+				},
+				"icons": {
+					"params": {
+						//path to the template
+						"template": "views/gallery/icons.html"
+					} 
+				},
+				"jsonp": {
+					"params": {
+						//path to the template
+						"template": "views/gallery/jsonp.html"
+					} 
+				},
+				"list": {
+					"params": {
+						//path to the template
+						"template": "views/gallery/list.html"
+					} 
+				},
+				"map": {
+					"params": {
+						//path to the template
+						"template": "views/gallery/map.html"
+					} 
+				},
+				"navigation": {
+					"params": {
+						//path to the template
+						"template": "views/gallery/navigation.html"
+					} 
+				},
+				"tabbar": {
+					"params": {
+						//path to the template
+						"template": "views/gallery/tabbar.html"
+					} 
+				},
+				"welcome": {
+					"params": {
+						//path to the template
+						"template": "views/gallery/welcome.html"
 					} 
 				}
-
-
-
 			},
 
 			//the name of the scene to load when the app is initialized.
@@ -130,15 +210,28 @@ define(["dojo","dojox/application"],function(dojo,Application){
 					}
 				},
 				//simple scene which loads all views and shows the default first
-				"third": { 
+				"gallery": { 
 					//all views in the main scene will be bound to the user model
 					"params": {
 						"models": [],
 				
-						"defaultView": "third",
+						"defaultView": "welcome",
 						//the views available to this scene
 						"views": { 
-							"third": {"view": {"$ref": "#views.third"}},
+							"welcome": {"view": {"$ref": "#views.welcome"}},
+							"tabbar": {"view": {"$ref": "#views.tabbar"}},
+							"navigation": {"view": {"$ref": "#views.navigation"}},
+							"map": {"view": {"$ref": "#views.map"}},
+							"list": {"view": {"$ref": "#views.list"}},
+							"jsonp": {"view": {"$ref": "#views.jsonp"}},
+							"icons": {"view": {"$ref": "#views.icons"}},
+							"headings": {"view": {"$ref": "#views.headings"}},
+							"forms": {"view": {"$ref": "#views.forms"}},
+							"flippableViews": {"view": {"$ref": "#views.flippableView"}},
+							"buttons": {"view": {"$ref": "#views.buttons"}},
+							"animations": {"view": {"$ref": "#views.animations"}},
+							"ajaxLoad": {"view": {"$ref": "#views.ajaxLoad"}},
+							"ajax": {"view": {"$ref": "#views.ajax"}}
 						},
 
 						"dependencies": [
