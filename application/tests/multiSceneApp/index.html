@@ -34,7 +34,9 @@
 			dojo.requireIf(!dojo.isWebKit, "dojox.mobile.compat");
 		</script>
 	
-		<script type="text/javascript" src="multiSceneApp.js"></script>
+		<script type="text/javascript">
+			require(["dojox/application/tests/multiSceneApp/multiSceneApp"],function(){});
+		</script>
 	</head>
 	<body>
 	<!--	<div id="splash">
