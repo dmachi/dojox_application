@@ -15,7 +15,7 @@ define(["dojo","dojox/json/ref","dojox/json/schema","dojox/application/applicati
 		//if (schema.validate(config,appSchema)){
 			console.log("config.modules: ", config.modules);
 			var modules = config.modules.concat(config.dependencies||[]);
-			return define(modules, function(){
+			return require(modules, function(){
 				var modules=[application];
 				for(var i=0;i<config.modules.length;i++){
 					modules.push(arguments[i]);
