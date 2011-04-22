@@ -1,4 +1,4 @@
-define(function(){
+define(["dojo","dijit","dojox"], function(dojo,dijit,dojox){
 	return dojo.declare(null, {
 		mode: "",
 		init: function(){

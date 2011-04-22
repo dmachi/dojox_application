@@ -1,4 +1,4 @@
-define(["dojo","dijit","dojox","dojo/html","dojo/DeferredList"], function(dojo,dijit,dojox,html,DeferredList){
+define(["dojo","dijit","dojox","dojo/DeferredList"], function(dojo,dijit,dojox,DeferredList){
 	return function(from, to, options){
 			console.log("Trasition opts: ", options);
 			var rev = (options && options.reverse) ? " reverse" : "";

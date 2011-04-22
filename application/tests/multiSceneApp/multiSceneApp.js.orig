@@ -1,0 +1,145 @@
+require(["dojo","dojox/application/main", "dojo/text!$app/config.json"],function(dojo,Application){
+	app = new Application({
+		"id": "multiSceneApp",
+		"name": "Multi Scene App",
+		"description": "A multiSceneApp",
+		"splash": "splash",
+
+		"dependencies": [
+			"dojox/mobile/_base",
+			"dojox/mobile/TabBar",
+			"dojox/mobile/TabBarButton",
+			"dojox/mobile/Button",
+			"dojox/mobile/EdgeToEdgeDataList"
+			//"dojox/mobile/ScrollableView"
+		],
+		// Modules for the application.  The are basically used as the second
+		// array of mixins in a dojo.declare().  Modify the top level behavior
+		// of the application, how it processes the config or any other life cycle
+		// by creating and including one or more of these
+		"modules": [
+			"dojox/application/module/env",
+			"dojox/application/module/hash"
+			//"dojox/application/module/phonegap",
+			//"dojox/application/module/somePlugin"
+		],
+
+		//stores we are using 
+		"stores": {},
+
+		"templatePath": "application.html",
+
+		//models and instantiation parameters for the models. Including 'type' as a property allows
+		//one to overide the class that will be used for the model.  By default it is dojox/mvc/model
+		"models": {}, 
+
+		//the name of the scene to load when the app is initialized.
+		"defaultView": ["second","tab1"]  /* ["main"] */  /* [["main"]] */ /* [{id:"main"}] */ ,	
+
+		//scenes are groups of views and models loaded at once	
+		"views": {
+
+			//simple scene which loads all views and shows the default first
+			"home": { 
+				"templatePath": "views/simple/main.html"
+			},
+
+			"main":{
+				//all views in the main scene will be bound to the user model
+				"models": [],
+				"type": "dojox/application/scene",
+				"template": "simple.html",	
+				"defaultView": "main",
+				//the views available to this scene
+				"views": { 
+					"second":{
+						"templatePath": "views/simple/second.html" 
+					},
+					"third":{
+						"templatePath": "views/simple/third.html" 
+					}
+				}
+			},
+			//simple scene which loads all views and shows the default first
+			"second": { 
+				//all views in the second scene will be bound to the user model
+				"models": [],
+				"template": "tabScene.html",	
+				"defaultView": "tab1",
+				"type": "dojox/application/scene",
+				//the views available to this scene
+				"views": { 
+					"main":{
+						"templatePath": "views/tabScene/tab1.html" 
+					},
+					"second":{
+						"templatePath": "views/tabScene/tab2.html" 
+					},
+					"third":{
+						"templatePath": "views/tabScene/tab3.html" 
+					}
+				},
+				"dependencies": [
+					"dojox/mobile/Button"
+				]	
+			},
+			//simple scene which loads all views and shows the default first
+			"gallery": { 
+				//all views in the main scene will be bound to the user model
+				"models": [],
+		
+				"defaultView": "welcome",
+				"type": "dojox/application/scene",
+				//the views available to this scene
+				"views": { 
+					"welcome": {
+						"templatePath": "views/gallery/welcome.html"
+					},
+					"tabbar": {
+						"templatePath": "views/gallery/tabbar.html"
+					},
+					"navigation": {
+						"templatePath": "views/gallery/navigation.html"
+					},
+					"map": {
+						"templatePath": "views/gallery/map.html"
+					},
+					"list": {
+						"templatePath": "views/gallery/list.html"
+					},
+					"jsonp": {
+						"templatePath": "views/gallery/jsonp.html"
+					},
+					"icons": {
+						"templatePath": "views/gallery/icons.html"
+					},
+					"headings": {
+						"templatePath": "views/gallery/headings.html"
+					},
+					"forms": {
+						"templatePath": "views/gallery/forms.html"
+					},
+					"flippableViews": {
+						"templatePath": "views/gallery/flippableViews.html"
+					},
+					"buttons": {
+						"templatePath": "views/gallery/buttons.html"
+					},
+					"animations": {
+						"templatePath": "views/gallery/animations.html"
+					},
+					"ajaxLoad": {
+						"templatePath": "views/gallery/ajaxLoad.html"
+					},
+					"ajax": {
+						"templatePath": "views/gallery/ajax.html"
+					}
+				},
+
+				"dependencies": [
+					"dojox/mobile/Button"
+				]
+			}
+		}	
+	});
+});

@@ -29,11 +29,29 @@
 				text-align: center;
 			}
 		</style>
-		<script type="text/javascript" src="../../../../dojo/dojo.js" djConfig="parseOnLoad: false, mblHideAddressBar: false "></script>
-		<script type="text/javascript">
-			dojo.requireIf(!dojo.isWebKit, "dojox.mobile.compat");
+		<script type="text/javscript">
+			dojoConfig = {
+				parseOnLoad: false,
+				mblHideAddressBar: false	
+				traceSet:{
+					"loader-inject":1,
+					"loader-define":1,
+					"loader-runFactory":1,
+					"loader-execModule":1,
+					"loader-execModule-out":1,
+					"loader-defineModule":1
+				},
+				async:1
+			}
 		</script>
-	
+		<script type="text/javascript" src="../../../../dojo/dojo.js"></script>
+
+		<script tpye="text/javascript">
+			//register the "app" namespace as a reference 
+			dojo.registerModulePath("app",window.location.pathname);
+		</script>
+
+		<!-- the actual application launcher -->
 		<script type="text/javascript" src="multiSceneApp.js"></script>
 	</head>
 	<body>
@@ -41,5 +59,6 @@
 			<h1 style="color: #222">Loading Application</h1>
 		</div>
 	-->
+		<div style="width: 100%;height:100%" id="app"></div>
 	</body>
 </html>

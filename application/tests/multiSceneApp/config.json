@@ -1,0 +1,151 @@
+{
+	"id": "multiSceneApp",
+	"name": "Multi Scene App",
+	"description": "A multiSceneApp",
+	"splash": "splash",
+
+	"dependencies": [
+		"dojox/mobile/_base",
+		"dojox/mobile/TabBar",
+		"dojox/mobile/RoundRect",
+		"dojox/mobile/TabBarButton",
+		"dojox/mobile/Button",
+		"dojox/mobile/RoundRect",
+		"dojox/mobile/RoundRectList",
+		"dojox/mobile/ListItem",
+		"dojox/mobile/EdgeToEdgeCategory",
+		"dojox/mobile/heading"
+		//"dojox/mobile/ScrollableView"
+	],
+	// Modules for the application.  The are basically used as the second
+	// array of mixins in a dojo.declare().  Modify the top level behavior
+	// of the application, how it processes the config or any other life cycle
+	// by creating and including one or more of these
+	"modules": [
+		"dojox/application/module/env",
+		"dojox/application/module/hash"
+		//"dojox/application/module/phonegap",
+		//"dojox/application/module/somePlugin"
+	],
+
+	//stores we are using 
+	"stores": {},
+
+	"template": "application.html",
+
+	//models and instantiation parameters for the models. Including 'type' as a property allows
+	//one to overide the class that will be used for the model.  By default it is dojox/mvc/model
+	"models": {}, 
+
+	//the name of the scene to load when the app is initialized.
+	"defaultView": "main,main", 
+
+	//scenes are groups of views and models loaded at once	
+	"views": {
+
+		//simple scene which loads all views and shows the default first
+		"home": { 
+			"dependencies":["dojox/mobile/RoundRectList","dojox/mobile/ListItem", "dojox/mobile/EdgeToEdgeCategory"],
+			"template": "views/simple/main.html"
+		},
+
+		"main":{
+			//all views in the main scene will be bound to the user model
+			"models": [],
+			"type": "dojox/application/scene",
+			"template": "simple.html",	
+			"defaultView": "main",
+			//the views available to this scene
+			"views": { 
+				"main":{
+					"template": "views/simple/main.html"
+				},
+				"second":{
+					"template": "views/simple/second.html" 
+				},
+				"third":{
+					"template": "views/simple/third.html" 
+				}
+			},
+			"dependencies":["dojox/mobile/RoundRectList","dojox/mobile/ListItem"],
+		},
+		//simple scene which loads all views and shows the default first
+		"second": { 
+			//all views in the second scene will be bound to the user model
+			"models": [],
+			"template": "tabScene.html",	
+			"defaultView": "tab1",
+			"type": "dojox/application/scene",
+			//the views available to this scene
+			"views": { 
+				"main":{
+					"template": "views/tabScene/tab1.html" 
+				},
+				"second":{
+					"template": "views/tabScene/tab2.html" 
+				},
+				"third":{
+					"template": "views/tabScene/tab3.html" 
+				}
+			},
+			"dependencies":["dojox/mobile/RoundRectList","dojox/mobile/ListItem", "dojox/mobile/EdgeToEdgeCategory"],
+		},
+		//simple scene which loads all views and shows the default first
+		"gallery": { 
+			//all views in the main scene will be bound to the user model
+			"models": [],
+	
+			"defaultView": "welcome",
+			"type": "dojox/application/scene",
+			//the views available to this scene
+			"views": { 
+				"welcome": {
+					"template": "views/gallery/welcome.html"
+				},
+				"tabbar": {
+					"template": "views/gallery/tabbar.html"
+				},
+				"navigation": {
+					"template": "views/gallery/navigation.html"
+				},
+				"map": {
+					"template": "views/gallery/map.html"
+				},
+				"list": {
+					"template": "views/gallery/list.html"
+				},
+				"jsonp": {
+					"template": "views/gallery/jsonp.html"
+				},
+				"icons": {
+					"template": "views/gallery/icons.html"
+				},
+				"headings": {
+					"template": "views/gallery/headings.html"
+				},
+				"forms": {
+					"template": "views/gallery/forms.html"
+				},
+				"flippableViews": {
+					"template": "views/gallery/flippableViews.html"
+				},
+				"buttons": {
+					"template": "views/gallery/buttons.html"
+				},
+				"animations": {
+					"template": "views/gallery/animations.html"
+				},
+				"ajaxLoad": {
+					"template": "views/gallery/ajaxLoad.html"
+				},
+				"ajax": {
+					"template": "views/gallery/ajax.html"
+				}
+			},
+
+			"dependencies": [
+				"dojox/mobile/Button"
+			]
+		}
+	}	
+}
