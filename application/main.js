@@ -8,12 +8,12 @@ define(["dojo","dijit","dojox", "dojo/cache","dojo/fx","dojox/json/ref","dojo/pa
 		selectedChild: null,
 		baseClass: "application mblView",
 		defaultViewType: sceneCtor,
-		buildRendering: function(){
-			if (this.srcNodeRef===dojo.body()){
-				this.srcNodeRef = dojo.create("DIV",{},this.srcNodeRef);
-			}
-			this.inherited(arguments);
-		},
+		//buildRendering: function(){
+			//if (this.srcNodeRef===dojo.body()){
+			//	this.srcNodeRef = dojo.create("DIV",{},this.srcNodeRef);
+			//}
+		//	this.inherited(arguments);
+		//},
 	});
 	
 	function generateApp(config,node,appSchema,validate){

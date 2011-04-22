@@ -59,6 +59,7 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 
 		buildRendering: function(){
 			this.inherited(arguments);
+			dojo.style(this.domNode, {width: "100%", "height": "100%"});
 			dojo.addClass(this.domNode,"dijitContainer");
 		},
 
