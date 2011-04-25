@@ -74,7 +74,7 @@
 			//all views in the second scene will be bound to the user model
 			"models": [],
 			"template": "tabScene.html",	
-			"defaultView": "tab1",
+			"defaultView": "main",
 			"type": "dojox.application.scene",
 			//the views available to this scene
 			"views": { 
