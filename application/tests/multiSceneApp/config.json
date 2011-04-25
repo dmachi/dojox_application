@@ -14,6 +14,7 @@
 		"dojox/mobile/RoundRectList",
 		"dojox/mobile/ListItem",
 		"dojox/mobile/EdgeToEdgeCategory",
+		"dojox/mobile/EdgeToEdgeList",
 		"dojox/mobile/heading"
 		//"dojox/mobile/ScrollableView"
 	],
@@ -38,13 +39,14 @@
 	"models": {}, 
 
 	//the name of the scene to load when the app is initialized.
-	"defaultView": "main,main", 
+	"defaultView": "home", 
 
 	//scenes are groups of views and models loaded at once	
 	"views": {
 
 		//simple scene which loads all views and shows the default first
 		"home": { 
+			"type": "dojox/application/view",
 			"dependencies":["dojox/mobile/RoundRectList","dojox/mobile/ListItem", "dojox/mobile/EdgeToEdgeCategory"],
 			"template": "views/simple/main.html"
 		},
@@ -78,13 +80,13 @@
 			"type": "dojox/application/scene",
 			//the views available to this scene
 			"views": { 
-				"main":{
+				"tab1":{
 					"template": "views/tabScene/tab1.html" 
 				},
-				"second":{
+				"tab2":{
 					"template": "views/tabScene/tab2.html" 
 				},
-				"third":{
+				"tab3":{
 					"template": "views/tabScene/tab3.html" 
 				}
 			},

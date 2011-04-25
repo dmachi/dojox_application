@@ -1,4 +1,4 @@
-define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","dijit/_WidgetsInTemplateMixin","./view"], function(dojo,dijit,dojox,WidgetBase,Templated,WidgetsInTemplate,baseView){
+define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","dijit/_WidgetsInTemplateMixin","./transition", "./view"], function(dojo,dijit,dojox,WidgetBase,Templated,WidgetsInTemplate,transition, baseView){
 	
 	var marginBox2contentBox = function(/*DomNode*/ node, /*Object*/ mb){
 		// summary:
@@ -84,9 +84,11 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 			}
 	
 			console.log("children: ", this.children);
-			if (this.children[childId]){
-				console.log("got child: ", this.children[childId]);
-				return this.children[childId];
+			var cid = this.id+"_" + childId;
+			console.log("cid: ", cid);
+			if (this.children[cid]){
+				console.log("got child: ", this.children[cid]);
+				return this.children[cid];
 			}
 
 			if (this.views&& this.views[childId]){
@@ -101,13 +103,16 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 				}else{
 					def.resolve({});
 				}
-			
+		
+				console.log("return def promise from loadChild");	
 					
-				return def.then(dojo.hitch(this, function(){		
+				return dojo.when(def, dojo.hitch(this, function(){		
+					console.log("inside loadChild then");
 					var ctor;
 					if (conf.type){
 						ctor=dojo.getObject(conf.type);
 					}else if (this.defaultViewType){
+						console.log('this.defaultViewType: ', this.defaultViewType);
 						ctor=this.defaultViewType;
 					}else{
 						throw Error("Unable to find appropriate ctor for the base child class");
@@ -122,13 +127,12 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 					if (subIds){
 						params.defaultView=subIds;
 					}
-					this.children[childId]=new ctor(params );
-					console.log(this.id + "loadChild childId cb: " + childId);
-					this.addChild(this.children[childId]);
-				})).promise;
+
+					return this.addChild(new ctor(params));
+				}))
 			}
 	
-			throw Error("Child'" + childId + "' not found.");
+			throw Error("Child '" + childId + "' not found.");
 		},
 
 		resize: function(changeSize,resultSize){
@@ -178,7 +182,7 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 			var fullScreenScene,children,hasCenter;
 			//console.log("fullscreen: ", this.selectedChild && this.selectedChild.isFullScreen);
 			if (this.selectedChild && this.selectedChild.isFullScreen) {
-				//console.warn("fullscreen sceen layout");
+				console.warn("fullscreen sceen layout");
 				/*
 				fullScreenScene=true;		
 				children=[{domNode: this.selectedChild.domNode,region: "center"}];
@@ -190,19 +194,21 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 				*/
 			}else{
 				//console.log("dojo.query *: ",dojo.query("> * ", this.domNode));
-				console.log("dojo.query [region]: ",dojo.query("> [region]", this.domNode));
-
+				console.log(this.id, " dojo.query [region]: ",dojo.query("> [region]", this.domNode));
+				console.log(this.id, " domNode: ", this.domNode);	
 				children = dojo.query("> [region]", this.domNode).map(function(node){
 					var w = dijit.getEnclosingWidget(node);
-
-					if (w && w.startup && !w._started){
-						console.log("call startup on child: ", w);
-						w.startup();
-					}
+					
+					//if (w && w.startup && !w._started){
+					//	console.log("call startup on child: ", w);
+					//	w.startup();
+					//}
+					console.log("found widget in child query: ", w);
 					if (w){return w;}
-					console.log("w: ", w, dojo.attr(node, "region"));
+					console.log("no widget, returning node/region: ", w, dojo.attr(node, "region"));
 
 					//console.log("layout params: ", node, dojo.attr(node,"region"))
+
 					return {		
 						domNode: node,
 						region: dojo.attr(node,"region")
@@ -210,18 +216,21 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 						
 				});
 				console.log(this.id, 'layout children: ', children, children.length);
-
 				console.log(this.id, 'selectedChild: ', this.selectedChild);
 				if (this.selectedChild){
-					if (this._placeHolder){
-						dojo.style(this._placeHolder,"display","none");
-					}
+					console.log("setup selected child in layout", this.selectedChild, children)
+					//if (this._placeHolder){
+					//	console.log('hide _placeHolder');
+					//	dojo.style(this._placeHolder,"display","none");
+					//}
 					children = dojo.filter(children, function(c){
 						if (c.region=="center" && this.selectedChild && this.selectedChild.domNode!==c.domNode){
+							console.log("selected child: ", this.selectedChild, this.selectedChild.domNode, c.domNode);
 							dojo.style(c.domNode,"z-index",25);
 							dojo.style(c.domNode,'display','none');
 							return false;
 						}else if (c.region!="center"){
+							console.log("center region node: ", c)
 							dojo.style(c.domNode,"display","");
 							dojo.style(c.domNode,"z-index",100);
 						}
@@ -229,12 +238,14 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 						return c.domNode && c.region;
 					},this);
 
-					this.selectedChild.region="center";	
-					dojo.attr(this.selectedChild.domNode,"region","center");
-					dojo.style(this.selectedChild.domNode, "display","");
-					dojo.style(this.selectedChild.domNode,"z-index",50);
+				//	this.selectedChild.region="center";	
+				//	dojo.attr(this.selectedChild.domNode,"region","center");
+				//	dojo.style(this.selectedChild.domNode, "display","");
+				//	dojo.style(this.selectedChild.domNode,"z-index",50);
 
-					children.push({domNode: this.selectedChild.domNode, region: "center"});	
+					//children.push({domNode: this.selectedChild.domNode, region: "center"});	
+				//	children.push(this.selectedChild);
+				//	console.log("children: ", children);
 				}else{
 					console.log("NO selected child, hide center");	
 					dojo.forEach(children, function(c){
@@ -259,6 +270,13 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 			console.log("layoutChildren: ", children);
 			this.layoutChildren(this.domNode, this._contentBox, children);
 			console.log('post layoutChildren');
+			dojo.forEach(this.getChildren(), function(child){ 
+				if (!child._started && child.startup){
+					child.startup(); 
+				}
+
+			});
+
 		},
 
 
@@ -354,10 +372,6 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 			if(this._started){ return; }
 			this._started=true;
 			console.log(this.id, "startup()");
-			// Startup all children of this widget
-			dojo.forEach(this.getChildren(), function(child){ child.startup(); });
-
-
 
 			var parts = this.defaultView?this.defaultView.split(","):"default";
 			toId= parts.shift();
@@ -369,55 +383,60 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 			if(this.views[this.defaultView] && this.views[this.defaultView]["defaultView"]){
 				subIds =  this.views[this.defaultView]["defaultView"];
 			}	
-		
+			console.log("load default children ins startup");	
+
 			var next = this.loadChild(toId,subIds);
-			this.set("selectedChild",next);	
-//			this.inherited(arguments);
+			console.log("startup call setselectedChild: ",next);
+			dojo.when(next, dojo.hitch(this, function(){
+				console.log("Inside starupt() when(), ", arguments);
+				this.set("selectedChild",next);	
 
-
-			// If I am a not being controlled by a parent layout widget...
-			var parent = this.getParent && this.getParent();
-			if(!(parent && parent.isLayoutContainer)){
-				// Do recursive sizing and layout of all my descendants
-				// (passing in no argument to resize means that it has to glean the size itself)
-				this.resize();
-
-				// Since my parent isn't a layout container, and my style *may be* width=height=100%
-				// or something similar (either set directly or via a CSS class),
-				// monitor when my size changes so that I can re-layout.
-				// For browsers where I can't directly monitor when my size changes,
-				// monitor when the viewport changes size, which *may* indicate a size change for me.
-				this.connect(dojo.isIE ? this.domNode : dojo.global, 'onresize', function(){
-					// Using function(){} closure to ensure no arguments to resize.
+				// If I am a not being controlled by a parent layout widget...
+				var parent = this.getParent && this.getParent();
+				if(!(parent && parent.isLayoutContainer)){
+					// Do recursive sizing and layout of all my descendants
+					// (passing in no argument to resize means that it has to glean the size itself)
 					this.resize();
-				});
 
-			}
-
-			dojo.forEach(this.getChildren(), function(child){ child.startup(); });
-
-//			if (this.defaultView){
-//				this.transition(this.defaultView);
-//			}else{
-//				console.warn(this.id, "has not defaultView set");
-//			}
+					// Since my parent isn't a layout container, and my style *may be* width=height=100%
+					// or something similar (either set directly or via a CSS class),
+					// monitor when my size changes so that I can re-layout.
+					// For browsers where I can't directly monitor when my size changes,
+					// monitor when the viewport changes size, which *may* indicate a size change for me.
+					this.connect(dojo.isIE ? this.domNode : dojo.global, 'onresize', function(){
+						// Using function(){} closure to ensure no arguments to resize.
+						this.resize();
+					});
+	
+				}
+	
+			//	dojo.forEach(this.getChildren(), function(child){ child.startup(); });
+			}));
 		},
 
 		addChild: function(widget){
 			console.log("addChild: ", widget);
 			dojo.addClass(widget.domNode, this.baseClass + "_child");
+			console.log("set child region");
 			widget.region = "center";;
-			widget.domNode.region="center";
+			console.log('set child domNode region');
+			dojo.attr(widget.domNode,"region","center");
+			console.log('widget.domNode ', widget.domNode);
 			this._supportingWidgets.push(widget);
 			console.log("w.domNode",widget.domNode,"this: ",this.domNode);
 			dojo.place(widget.domNode,this.domNode);
+			console.log("widget offsetHeight: ", widget.domNode.offsetHeight);
+			console.log('widget.id: ', widget.id);
+			this.children[widget.id] = widget;
 			//this.layout();
 			//if (this._started){
 			//	this.layout();
 			//}
 			if(this._started && !widget._started){
+				console.log("call child startup()", widget);
 				widget.startup();
 			}
+			return widget;
 		},
 
 		removeChild: function(widget){
@@ -437,19 +456,23 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 
 		_setSelectedChildAttr: function(child,opts){
 			console.log(this.id, 'application::setSelectedChild()  child:',  child, "this.selectedChild:", this.selectedChild);
-			if (child && (child !== this.selectedChild) ){
-				if (this.selectedChild){
-					this.selectedChild.deactivate(); 
-					console.log("_setSelectedChildAttr() hide current selectedChild", this.selectedChild);
-					dojo.style(this.selectedChild.domNode,"zIndex",25);
-				}
+			if (child !== this.selectedChild) { 
+				return dojo.when(child, dojo.hitch(this, function(child){
+					if (this.selectedChild){
+						if (this.selectedChild.deactivate){
+							this.selectedChild.deactivate(); 
+						}
+
+						console.log("_setSelectedChildAttr() hide current selectedChild", this.selectedChild);
+						dojo.style(this.selectedChild.domNode,"zIndex",25);
+					}
 		
-				//dojo.style(child.domNode, {
-				//	"display": "",
-				//	"zIndex": 50,
-				//	"overflow": "auto"
-				//});
-				this.selectedChild = child.then(dojo.hitch(this, function(){
+					//dojo.style(child.domNode, {
+					//	"display": "",
+					//	"zIndex": 50,
+					//	"overflow": "auto"
+					//});
+					this.selectedChild = child;
 					dojo.style(child.domNode, "display", "");
 					dojo.style(child.domNode,"zIndex",50);
 					console.log("Actual set of selectedChild: ", child);
@@ -464,9 +487,10 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 					}
 					console.warn("call layout()");
 					this.layout();
-				})).promise;
+				}));
 			}
 		},
+
 
 		transition: function(transitionTo,opts){
 			//summary: 
@@ -502,10 +526,12 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 				//return dojo.when(next, dojo.hitch(this, function(){
 				//	console.log("scene::transition() !current, set view directly");
 				//	console.log("Next: ", next, toId);
-					this.set("selectedChild",next);	
+					console.log("set selected from !current: ", next);
+					return this.set("selectedChild",next);	
 				//}));
 			}	
 
+			console.log("already a current child, do a transition");
 			this.set("selectedChild",next)
 			return dojo.when(next, dojo.hitch(this, function(){
 				console.log('transition child ready!', next);
@@ -514,7 +540,7 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 					//this.set("selectedChild",toId)
 					return def = transition(current.domNode,next.domNode,dojo.mixin({},opts,{transition: "flip"})).then(dojo.hitch(this, function(){
 						console.log("scene animations are completed, set scene");
-						dojo.style(current.domNode, "display", "none");
+						//dojo.style(current.domNode, "display", "none");
 						if (toId && next.transition){
 							return next.transition(subIds,opts);
 						}
