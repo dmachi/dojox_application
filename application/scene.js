@@ -134,7 +134,8 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 					this.children[childId]=new ctor(params );
 					console.log(this.id + "loadChild childId cb: " + childId);
 					this.addChild(this.children[childId]);
-				})).promise;
+					return this.children[childId];
+				}));
 			}
 	
 			throw Error("Child'" + childId + "' not found.");
@@ -379,37 +380,39 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 				subIds =  this.views[this.defaultView]["defaultView"];
 			}	
 		
-			var next = this.loadChild(toId,subIds);
-			this.set("selectedChild",next);	
-//			this.inherited(arguments);
+			var nextPromise = this.loadChild(toId,subIds);
+			nextPromise.then(dojo.hitch(this,function(next){
+		                 this.set("selectedChild",next); 
+//		                      this.inherited(arguments);
 
 
-			// If I am a not being controlled by a parent layout widget...
-			var parent = this.getParent && this.getParent();
-			if(!(parent && parent.isLayoutContainer)){
-				// Do recursive sizing and layout of all my descendants
-				// (passing in no argument to resize means that it has to glean the size itself)
-				this.resize();
+		                        // If I am a not being controlled by a parent layout widget...
+		                        var parent = this.getParent && this.getParent();
+		                        if(!(parent && parent.isLayoutContainer)){
+		                                // Do recursive sizing and layout of all my descendants
+		                                // (passing in no argument to resize means that it has to glean the size itself)
+		                                this.resize();
 
-				// Since my parent isn't a layout container, and my style *may be* width=height=100%
-				// or something similar (either set directly or via a CSS class),
-				// monitor when my size changes so that I can re-layout.
-				// For browsers where I can't directly monitor when my size changes,
-				// monitor when the viewport changes size, which *may* indicate a size change for me.
-				this.connect(dojo.isIE ? this.domNode : dojo.global, 'onresize', function(){
-					// Using function(){} closure to ensure no arguments to resize.
-					this.resize();
-				});
+		                                // Since my parent isn't a layout container, and my style *may be* width=height=100%
+		                                // or something similar (either set directly or via a CSS class),
+		                                // monitor when my size changes so that I can re-layout.
+		                                // For browsers where I can't directly monitor when my size changes,
+		                                // monitor when the viewport changes size, which *may* indicate a size change for me.
+		                                this.connect(dojo.isIE ? this.domNode : dojo.global, 'onresize', function(){
+		                                        // Using function(){} closure to ensure no arguments to resize.
+		                                        this.resize();
+		                                });
 
-			}
+		                        }
 
-			dojo.forEach(this.getChildren(), function(child){ child.startup(); });
+		                        dojo.forEach(this.getChildren(), function(child){ child.startup(); });
 
-//			if (this.defaultView){
-//				this.transition(this.defaultView);
-//			}else{
-//				console.warn(this.id, "has not defaultView set");
-//			}
+//		                      if (this.defaultView){
+//		                              this.transition(this.defaultView);
+//		                      }else{
+//		                              console.warn(this.id, "has not defaultView set");
+//		                      }
+			}));
 		},
 
 		addChild: function(widget){
@@ -458,7 +461,7 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 				//	"zIndex": 50,
 				//	"overflow": "auto"
 				//});
-				this.selectedChild = child.then(dojo.hitch(this, function(){
+//				this.selectedChild = child.then(dojo.hitch(this, function(){
 					dojo.style(child.domNode, "display", "");
 					dojo.style(child.domNode,"zIndex",50);
 					console.log("Actual set of selectedChild: ", child);
@@ -473,7 +476,7 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 					}
 					console.warn("call layout()");
 					this.layout();
-				})).promise;
+//				})).promise;
 			}
 		},
 
