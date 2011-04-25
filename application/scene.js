@@ -36,7 +36,7 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 		}
 	};
 
-	return dojo.declare([dijit._WidgetBase, dijit._TemplatedMixin, dijit._WidgetsInTemplateMixin], {
+	return dojo.declare("dojox.application.scene", [dijit._WidgetBase, dijit._TemplatedMixin, dijit._WidgetsInTemplateMixin], {
 		isContainer: true,
 		widgetsInTemplate: true,
 		defaultView: "default",

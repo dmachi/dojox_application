@@ -52,7 +52,7 @@
 		"main":{
 			//all views in the main scene will be bound to the user model
 			"models": [],
-			"type": "dojox/application/scene",
+			"type": "dojox.application.scene",
 			"template": "simple.html",	
 			"defaultView": "main",
 			//the views available to this scene
@@ -75,7 +75,7 @@
 			"models": [],
 			"template": "tabScene.html",	
 			"defaultView": "tab1",
-			"type": "dojox/application/scene",
+			"type": "dojox.application.scene",
 			//the views available to this scene
 			"views": { 
 				"main":{
@@ -96,7 +96,7 @@
 			"models": [],
 	
 			"defaultView": "welcome",
-			"type": "dojox/application/scene",
+			"type": "dojox.application.scene",
 			//the views available to this scene
 			"views": { 
 				"welcome": {
