@@ -91,13 +91,22 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 
 			if (this.views&& this.views[childId]){
 				var conf = this.views[childId];
-				if (!conf.deps){conf.deps=[];}
-				var deps = conf.deps.concat(conf.template?["dojo/text!app/"+conf.template]:[])	
+				if (!conf.dependencies){conf.dependencies=[];}
+				//Need to put template sting loaded at first in the array
+				//because def.resolve can only pass one param to the callback.
+				var deps = conf.template?["dojo/text!app/"+conf.template]:[];
+				deps.concat(conf.dependencies);
 				console.log("child deps: ", deps);
 				var def = new dojo.Deferred();
 
 				if (deps.length>0) {
-					require(deps,dojo.hitch(def, def.resolve));
+					require(deps,dojo.hitch(def, function(templateString){
+					    if(conf.template){
+					        def.resolve(templateString);
+					    }else{
+					        def.resolve();
+					    }
+					}));
 				}else{
 					def.resolve({});
 				}
