@@ -14,7 +14,7 @@
 		"dojox/mobile/RoundRectList",
 		"dojox/mobile/ListItem",
 		"dojox/mobile/EdgeToEdgeCategory",
-		"dojox/mobile/heading"
+		"dojox/mobile/Heading"
 		//"dojox/mobile/ScrollableView"
 	],
 	// Modules for the application.  The are basically used as the second
