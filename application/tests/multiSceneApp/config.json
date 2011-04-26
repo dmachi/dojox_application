@@ -11,7 +11,7 @@
 		"dojox/mobile/TabBarButton",
 		"dojox/mobile/Button",
 		"dojox/mobile/RoundRect",
-		"dojox/mobile/heading"
+		"dojox/mobile/Heading"
 	],
 	// Modules for the application.  The are basically used as the second
 	// array of mixins in a dojo.declare().  Modify the top level behavior
@@ -41,7 +41,7 @@
 
 		//simple scene which loads all views and shows the default first
 		"home": { 
-			"type": "dojox/application/view",
+			"type": "dojox.application.view",
 			"dependencies":["dojox/mobile/RoundRectList","dojox/mobile/ListItem", "dojox/mobile/EdgeToEdgeCategory"],
 			"template": "views/simple/main.html"
 		},
@@ -49,7 +49,7 @@
 		"main":{
 			//all views in the main scene will be bound to the user model
 			"models": [],
-			"type": "dojox/application/scene",
+			"type": "dojox.application.scene",
 			"template": "simple.html",	
 			"defaultView": "main",
 			//the views available to this scene
@@ -93,7 +93,7 @@
 			"models": [],
 	
 			"defaultView": "welcome",
-			"type": "dojox/application/scene",
+			"type": "dojox.application.scene",
 			//the views available to this scene
 			"views": { 
 				"welcome": {
