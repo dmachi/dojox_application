@@ -7,7 +7,7 @@ define(["dojo","dijit","dojox", "dojo/cache","dojo/fx","dojox/json/ref","dojo/pa
 		templateString: "<div></div>",
 		selectedChild: null,
 		baseClass: "application mblView",
-		defaultViewType: sceneCtor,
+		defaultViewType: sceneCtor
 		//buildRendering: function(){
 			//if (this.srcNodeRef===dojo.body()){
 			//	this.srcNodeRef = dojo.create("DIV",{},this.srcNodeRef);
@@ -41,7 +41,7 @@ define(["dojo","dijit","dojox", "dojo/cache","dojo/fx","dojox/json/ref","dojo/pa
 			}
 			App = dojo.declare(modules,ext);
 			dojo.ready(function(){
-				app = App(config, node || dojo.body());
+				app = App(config, node || dojo.create("DIV",{},dojo.body()));
 				console.log("call app startup()");
 				app.startup();
 			});
