@@ -93,43 +93,50 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 
 			if (this.views&& this.views[childId]){
 				var conf = this.views[childId];
-				if (!conf.deps){conf.deps=[];}
-				var deps = conf.deps.concat(conf.template?["dojo/text!app/"+conf.template]:[])	
+				if (!conf.dependencies){conf.dependencies=[];}
+
+				var deps = conf.template? conf.dependencies.concat(["dojo/text!app/"+conf.template]) :
+						conf.dependencies.concat([]);
+			
+	
+				//var deps = conf.dependencies.concat(conf.template?["dojo/text!app/"+conf.template]:[])	
 				console.log("child deps: ", deps);
 				var def = new dojo.Deferred();
-
 				if (deps.length>0) {
-					require(deps,dojo.hitch(def, def.resolve));
+					require(deps,function(){
+						def.resolve.call(def, arguments);			
+					});
 				}else{
-					def.resolve({});
+					def.resolve(true);
 				}
 		
 				console.log("return def promise from loadChild");	
-					
-				return dojo.when(def, dojo.hitch(this, function(){		
-					console.log("inside loadChild then");
+				var self = this;					
+				return dojo.when(def, function(){		
+					console.log("inside loadChild then", arguments[0][3]);
 					var ctor;
 					if (conf.type){
 						ctor=dojo.getObject(conf.type);
-					}else if (this.defaultViewType){
-						console.log('this.defaultViewType: ', this.defaultViewType);
-						ctor=this.defaultViewType;
+					}else if (self.defaultViewType){
+						console.log('self.defaultViewType: ', self.defaultViewType);
+						ctor=self.defaultViewType;
 					}else{
 						throw Error("Unable to find appropriate ctor for the base child class");
 					}
 
 					var params = dojo.mixin({}, conf, {
-						id: this.id + "_" + childId,
-						templateString: arguments[arguments.length-1]||"<div></div>",
-						parent: this,
-						app: this.app
+						id: self.id + "_" + childId,
+						templateString: conf.template?arguments[0][arguments[0].length-1]:"<div></div>",
+						parent: self,
+						app: self.app
 					}) 
+					console.log("params: ", params);
 					if (subIds){
 						params.defaultView=subIds;
 					}
 
-					return this.addChild(new ctor(params));
-				}))
+					return self.addChild(new ctor(params));
+				});
 			}
 	
 			throw Error("Child '" + childId + "' not found.");
@@ -538,7 +545,7 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 				if (next!==current){
 					console.log("transitionining current to next: ", current.domNode, next.domNode);		
 					//this.set("selectedChild",toId)
-					return def = transition(current.domNode,next.domNode,dojo.mixin({},opts,{transition: "flip"})).then(dojo.hitch(this, function(){
+					return def = transition(current.domNode,next.domNode,dojo.mixin({},opts,{transition: "slide"})).then(dojo.hitch(this, function(){
 						console.log("scene animations are completed, set scene");
 						//dojo.style(current.domNode, "display", "none");
 						if (toId && next.transition){
