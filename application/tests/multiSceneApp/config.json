@@ -79,13 +79,13 @@
 			//the views available to this scene
 			"views": { 
 				"main":{
-					"template": "views/tabScene/tab1.html" 
+					"template": "views/tabs/tab1.html" 
 				},
 				"second":{
-					"template": "views/tabScene/tab2.html" 
+					"template": "views/tabs/tab2.html" 
 				},
 				"third":{
-					"template": "views/tabScene/tab3.html" 
+					"template": "views/tabs/tab3.html" 
 				}
 			},
 			"dependencies":["dojox/mobile/RoundRectList","dojox/mobile/ListItem", "dojox/mobile/EdgeToEdgeCategory"],
