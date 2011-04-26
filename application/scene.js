@@ -78,16 +78,12 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 		},
 
 		loadChild: function(childId,subIds){
-			console.log("loadChild() id: ", childId, "container id: ", this.id);
 			if (!childId) {
 				return error("Child ID: '" + childId +"' not found");
 			}
 	
-			console.log("children: ", this.children);
 			var cid = this.id+"_" + childId;
-			console.log("cid: ", cid);
 			if (this.children[cid]){
-				console.log("got child: ", this.children[cid]);
 				return this.children[cid];
 			}
 
@@ -98,9 +94,6 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 				var deps = conf.template? conf.dependencies.concat(["dojo/text!app/"+conf.template]) :
 						conf.dependencies.concat([]);
 			
-	
-				//var deps = conf.dependencies.concat(conf.template?["dojo/text!app/"+conf.template]:[])	
-				console.log("child deps: ", deps);
 				var def = new dojo.Deferred();
 				if (deps.length>0) {
 					require(deps,function(){
@@ -110,15 +103,12 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 					def.resolve(true);
 				}
 		
-				console.log("return def promise from loadChild");	
 				var self = this;					
 				return dojo.when(def, function(){		
-					console.log("inside loadChild then", arguments[0][3]);
 					var ctor;
 					if (conf.type){
 						ctor=dojo.getObject(conf.type);
 					}else if (self.defaultViewType){
-						console.log('self.defaultViewType: ', self.defaultViewType);
 						ctor=self.defaultViewType;
 					}else{
 						throw Error("Unable to find appropriate ctor for the base child class");
@@ -130,7 +120,6 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 						parent: self,
 						app: self.app
 					}) 
-					console.log("params: ", params);
 					if (subIds){
 						params.defaultView=subIds;
 					}
@@ -185,7 +174,6 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 		},
 
 		layout: function(){
-			console.log("layout()",this.id, this.selectedChild);
 			var fullScreenScene,children,hasCenter;
 			//console.log("fullscreen: ", this.selectedChild && this.selectedChild.isFullScreen);
 			if (this.selectedChild && this.selectedChild.isFullScreen) {
@@ -200,21 +188,9 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 				})
 				*/
 			}else{
-				//console.log("dojo.query *: ",dojo.query("> * ", this.domNode));
-				console.log(this.id, " dojo.query [region]: ",dojo.query("> [region]", this.domNode));
-				console.log(this.id, " domNode: ", this.domNode);	
 				children = dojo.query("> [region]", this.domNode).map(function(node){
 					var w = dijit.getEnclosingWidget(node);
-					
-					//if (w && w.startup && !w._started){
-					//	console.log("call startup on child: ", w);
-					//	w.startup();
-					//}
-					console.log("found widget in child query: ", w);
 					if (w){return w;}
-					console.log("no widget, returning node/region: ", w, dojo.attr(node, "region"));
-
-					//console.log("layout params: ", node, dojo.attr(node,"region"))
 
 					return {		
 						domNode: node,
@@ -222,22 +198,13 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 					}
 						
 				});
-				console.log(this.id, 'layout children: ', children, children.length);
-				console.log(this.id, 'selectedChild: ', this.selectedChild);
 				if (this.selectedChild){
-					console.log("setup selected child in layout", this.selectedChild, children)
-					//if (this._placeHolder){
-					//	console.log('hide _placeHolder');
-					//	dojo.style(this._placeHolder,"display","none");
-					//}
 					children = dojo.filter(children, function(c){
 						if (c.region=="center" && this.selectedChild && this.selectedChild.domNode!==c.domNode){
-							console.log("selected child: ", this.selectedChild, this.selectedChild.domNode, c.domNode);
 							dojo.style(c.domNode,"z-index",25);
 							dojo.style(c.domNode,'display','none');
 							return false;
 						}else if (c.region!="center"){
-							console.log("center region node: ", c)
 							dojo.style(c.domNode,"display","");
 							dojo.style(c.domNode,"z-index",100);
 						}
@@ -250,33 +217,20 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 				//	dojo.style(this.selectedChild.domNode, "display","");
 				//	dojo.style(this.selectedChild.domNode,"z-index",50);
 
-					//children.push({domNode: this.selectedChild.domNode, region: "center"});	
+				//	children.push({domNode: this.selectedChild.domNode, region: "center"});	
 				//	children.push(this.selectedChild);
 				//	console.log("children: ", children);
 				}else{
-					console.log("NO selected child, hide center");	
 					dojo.forEach(children, function(c){
-							console.log("child: ", c);
 						if (c && c.domNode && c.region=="center"){
 							dojo.style(c.domNode,"z-index",25);
 							dojo.style(c.domNode,'display','none');
 						}	
 					});
-					/*
-					console.log("add place holder since no child is selected");
-					if (!this._placeHolder){
-						this._placeHolder = dojo.create("div",{region: "center",style:{position:"absolute"}},this.domNode);
-					}
-					dojo.style(this._placeHolder,"display","");
-					children.push({domNode: this._placeHolder,region: "center"});
-					*/
 				}
 			
 			}	
-			//console.log("this._contentBox", this._contentBox, children);
-			console.log("layoutChildren: ", children);
 			this.layoutChildren(this.domNode, this._contentBox, children);
-			console.log('post layoutChildren');
 			dojo.forEach(this.getChildren(), function(child){ 
 				if (!child._started && child.startup){
 					child.startup(); 
@@ -367,35 +321,26 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 		},
 
 		getChildren: function(){
-			//var children=[];
-			//for (var i in this.children){
-			//	children.push(this.children[i]);
-			//}
 			return this._supportingWidgets;
-			//return children.concat(this._supportingWidgets);
 		},
 
 		startup: function(){
 			if(this._started){ return; }
 			this._started=true;
-			console.log(this.id, "startup()");
 
 			var parts = this.defaultView?this.defaultView.split(","):"default";
 			toId= parts.shift();
 			subIds = parts.join(',');
-			console.log(this.id, "initial load to Id: ", toId, "subs: ", subIds);	
+			//console.log(this.id, "initial load to Id: ", toId, "subs: ", subIds);	
 
 			var subIds;
 
 			if(this.views[this.defaultView] && this.views[this.defaultView]["defaultView"]){
 				subIds =  this.views[this.defaultView]["defaultView"];
 			}	
-			console.log("load default children ins startup");	
 
 			var next = this.loadChild(toId,subIds);
-			console.log("startup call setselectedChild: ",next);
 			dojo.when(next, dojo.hitch(this, function(){
-				console.log("Inside starupt() when(), ", arguments);
 				this.set("selectedChild",next);	
 
 				// If I am a not being controlled by a parent layout widget...
@@ -422,25 +367,16 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 		},
 
 		addChild: function(widget){
-			console.log("addChild: ", widget);
 			dojo.addClass(widget.domNode, this.baseClass + "_child");
-			console.log("set child region");
 			widget.region = "center";;
-			console.log('set child domNode region');
 			dojo.attr(widget.domNode,"region","center");
-			console.log('widget.domNode ', widget.domNode);
 			this._supportingWidgets.push(widget);
-			console.log("w.domNode",widget.domNode,"this: ",this.domNode);
 			dojo.place(widget.domNode,this.domNode);
-			console.log("widget offsetHeight: ", widget.domNode.offsetHeight);
-			console.log('widget.id: ', widget.id);
 			this.children[widget.id] = widget;
-			//this.layout();
-			//if (this._started){
-			//	this.layout();
-			//}
+			if (this._started){
+				this.layout();
+			}
 			if(this._started && !widget._started){
-				console.log("call child startup()", widget);
 				widget.startup();
 			}
 			return widget;
@@ -462,7 +398,6 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 		},
 
 		_setSelectedChildAttr: function(child,opts){
-			console.log(this.id, 'application::setSelectedChild()  child:',  child, "this.selectedChild:", this.selectedChild);
 			if (child !== this.selectedChild) { 
 				return dojo.when(child, dojo.hitch(this, function(child){
 					if (this.selectedChild){
@@ -470,7 +405,6 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 							this.selectedChild.deactivate(); 
 						}
 
-						console.log("_setSelectedChildAttr() hide current selectedChild", this.selectedChild);
 						dojo.style(this.selectedChild.domNode,"zIndex",25);
 					}
 		
@@ -482,7 +416,6 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 					this.selectedChild = child;
 					dojo.style(child.domNode, "display", "");
 					dojo.style(child.domNode,"zIndex",50);
-					console.log("Actual set of selectedChild: ", child);
 					this.selectedChild=child;
 					if (this._started) {	
 						if (child.startup && !child._started){
@@ -492,7 +425,6 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 						}
 		
 					}
-					console.warn("call layout()");
 					this.layout();
 				}));
 			}
@@ -511,13 +443,11 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 			//  are supplied (view1@scene2), then the application should transition to the scene,
 			//  and instruct the scene to navigate to the view.
 			var toId,subIds,next, current = this.selectedChild;
-			console.log(this.id, "transition() to: ", transitionTo);
 
 			if (transitionTo){	
 				var parts = transitionTo.split(",");
 				toId= parts.shift();
 				subIds = parts.join(',');
-				console.log(this.id, "transitiong to Id: ", toId, "subs: ", subIds);	
 
 			}else{
 				toId = this.defaultView;
@@ -526,27 +456,17 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 				}	
 			}
 		
-			console.log(this.id, "application::transition() transitionTo: ",toId, "subs: ", subIds);
 			next = this.loadChild(toId,subIds);
 
 			if (!current){
-				//return dojo.when(next, dojo.hitch(this, function(){
-				//	console.log("scene::transition() !current, set view directly");
-				//	console.log("Next: ", next, toId);
-					console.log("set selected from !current: ", next);
-					return this.set("selectedChild",next);	
-				//}));
+				return this.set("selectedChild",next);	
 			}	
 
-			console.log("already a current child, do a transition");
 			this.set("selectedChild",next)
 			return dojo.when(next, dojo.hitch(this, function(){
-				console.log('transition child ready!', next);
 				if (next!==current){
-					console.log("transitionining current to next: ", current.domNode, next.domNode);		
 					//this.set("selectedChild",toId)
 					return def = transition(current.domNode,next.domNode,dojo.mixin({},opts,{transition: "slide"})).then(dojo.hitch(this, function(){
-						console.log("scene animations are completed, set scene");
 						//dojo.style(current.domNode, "display", "none");
 						if (toId && next.transition){
 							return next.transition(subIds,opts);
