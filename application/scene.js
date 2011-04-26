@@ -36,7 +36,7 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 		}
 	};
 
-	return dojo.declare([dijit._WidgetBase, dijit._TemplatedMixin, dijit._WidgetsInTemplateMixin], {
+	return dojo.declare("dojox.application.scene", [dijit._WidgetBase, dijit._TemplatedMixin, dijit._WidgetsInTemplateMixin], {
 		isContainer: true,
 		widgetsInTemplate: true,
 		defaultView: "default",
@@ -90,7 +90,6 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 			if (this.views&& this.views[childId]){
 				var conf = this.views[childId];
 				if (!conf.dependencies){conf.dependencies=[];}
-
 				var deps = conf.template? conf.dependencies.concat(["dojo/text!app/"+conf.template]) :
 						conf.dependencies.concat([]);
 			
@@ -123,9 +122,9 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 					if (subIds){
 						params.defaultView=subIds;
 					}
-
 					return self.addChild(new ctor(params));
 				});
+
 			}
 	
 			throw Error("Child '" + childId + "' not found.");
@@ -338,7 +337,6 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 			if(this.views[this.defaultView] && this.views[this.defaultView]["defaultView"]){
 				subIds =  this.views[this.defaultView]["defaultView"];
 			}	
-
 			var next = this.loadChild(toId,subIds);
 			dojo.when(next, dojo.hitch(this, function(){
 				this.set("selectedChild",next);	
@@ -361,8 +359,9 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 					});
 	
 				}
-	
-			//	dojo.forEach(this.getChildren(), function(child){ child.startup(); });
+
+		                dojo.forEach(this.getChildren(), function(child){ child.startup(); });
+
 			}));
 		},
 
@@ -443,7 +442,6 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 			//  are supplied (view1@scene2), then the application should transition to the scene,
 			//  and instruct the scene to navigate to the view.
 			var toId,subIds,next, current = this.selectedChild;
-
 			if (transitionTo){	
 				var parts = transitionTo.split(",");
 				toId= parts.shift();
@@ -465,7 +463,6 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 			this.set("selectedChild",next)
 			return dojo.when(next, dojo.hitch(this, function(){
 				if (next!==current){
-					//this.set("selectedChild",toId)
 					return def = transition(current.domNode,next.domNode,dojo.mixin({},opts,{transition: "slide"})).then(dojo.hitch(this, function(){
 						//dojo.style(current.domNode, "display", "none");
 						if (toId && next.transition){
