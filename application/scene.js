@@ -380,8 +380,8 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 				subIds =  this.views[this.defaultView]["defaultView"];
 			}	
 		
-			var nextPromise = this.loadChild(toId,subIds);
-			nextPromise.then(dojo.hitch(this,function(next){
+			var nextPromiseOrValue = this.loadChild(toId,subIds);
+			dojo.when(nextPromiseOrValue, dojo.hitch(this,function(next){
 		                 this.set("selectedChild",next); 
 //		                      this.inherited(arguments);
 
@@ -491,7 +491,7 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 			//  the app controller will instruct the active scene to the view (eg view1).  If both
 			//  are supplied (view1@scene2), then the application should transition to the scene,
 			//  and instruct the scene to navigate to the view.
-			var toId,subIds,next, current = this.selectedChild;
+			var toId,subIds,nextPromiseOrValue, current = this.selectedChild;
 			console.log(this.id, "transition() to: ", transitionTo);
 
 			if (transitionTo){	
@@ -508,18 +508,18 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 			}
 		
 			console.log(this.id, "application::transition() transitionTo: ",toId, "subs: ", subIds);
-			next = this.loadChild(toId,subIds);
+			nextPromiseOrValue = this.loadChild(toId,subIds);
 
-			if (!current){
+//			if (!current){
 				//return dojo.when(next, dojo.hitch(this, function(){
 				//	console.log("scene::transition() !current, set view directly");
 				//	console.log("Next: ", next, toId);
-					this.set("selectedChild",next);	
+//					this.set("selectedChild",next);	
 				//}));
-			}	
+//			}	
 
-			this.set("selectedChild",next)
-			return dojo.when(next, dojo.hitch(this, function(){
+			return dojo.when(nextPromiseOrValue, dojo.hitch(this, function(next){
+			    this.set("selectedChild",next)
 				console.log('transition child ready!', next);
 				if (next!==current){
 					console.log("transitionining current to next: ", current.domNode, next.domNode);		
