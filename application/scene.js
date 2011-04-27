@@ -425,6 +425,7 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 		
 					}
 					this.layout();
+					return child;
 				}));
 			}
 		},
@@ -460,8 +461,11 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 				return this.set("selectedChild",next);	
 			}	
 
-			this.set("selectedChild",next)
-			return dojo.when(next, dojo.hitch(this, function(){
+            //Take care of set "selectedChild" attr
+			//dojo.when on the same promise will cause competition.
+			//There is a dojo.when inside the this.set function call.
+			next = this.set("selectedChild",next)
+			return dojo.when(next, dojo.hitch(this, function(next){
 				if (next!==current){
 					return def = transition(current.domNode,next.domNode,dojo.mixin({},opts,{transition: this.defaultTransition || "none"})).then(dojo.hitch(this, function(){
 						//dojo.style(current.domNode, "display", "none");
