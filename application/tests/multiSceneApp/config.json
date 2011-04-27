@@ -36,6 +36,7 @@
 	//the name of the scene to load when the app is initialized.
 	"defaultView": "home", 
 
+	"defaultTransition": "slide",
 	//scenes are groups of views and models loaded at once	
 	"views": {
 
@@ -52,6 +53,7 @@
 			"type": "dojox.application.scene",
 			"template": "simple.html",	
 			"defaultView": "main",
+			"defaultTransition": "slide",
 			//the views available to this scene
 			"views": { 
 				"main":{
@@ -72,6 +74,7 @@
 			"models": [],
 			"template": "tabScene.html",	
 			"defaultView": "tab1",
+			defaultTransition: "flip",
 			"type": "dojox.application.scene",
 			//the views available to this scene
 			"views": { 
@@ -93,7 +96,9 @@
 			"models": [],
 	
 			"defaultView": "welcome",
+			"defaultTransition": "flip",
 			"type": "dojox.application.scene",
+			"template": "gallery.html",
 			//the views available to this scene
 			"views": { 
 				"welcome": {
@@ -127,7 +132,20 @@
 					"template": "views/gallery/flippableViews.html"
 				},
 				"buttons": {
-					"template": "views/gallery/buttons.html"
+					"type": "dojox.application.scene",
+					"template": "views/gallery/buttonScene.html",
+					"defaultView": "tab1",
+					"views": {
+						"tab1":{
+							"template": "views/gallery/buttons/tab1.html"
+						},
+						"tab2":{
+							"template": "views/gallery/buttons/tab2.html"
+						},
+						"tab3":{
+							"template": "views/gallery/buttons/tab3.html"
+						}
+					}
 				},
 				"animations": {
 					"template": "views/gallery/animations.html"

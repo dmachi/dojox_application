@@ -463,7 +463,7 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 			this.set("selectedChild",next)
 			return dojo.when(next, dojo.hitch(this, function(){
 				if (next!==current){
-					return def = transition(current.domNode,next.domNode,dojo.mixin({},opts,{transition: "slide"})).then(dojo.hitch(this, function(){
+					return def = transition(current.domNode,next.domNode,dojo.mixin({},opts,{transition: this.defaultTransition || "none"})).then(dojo.hitch(this, function(){
 						//dojo.style(current.domNode, "display", "none");
 						if (toId && next.transition){
 							return next.transition(subIds,opts);
