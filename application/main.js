@@ -7,13 +7,13 @@ define(["dojo","dijit","dojox", "dojo/cache","dojo/fx","dojox/json/ref","dojo/pa
 		templateString: "<div></div>",
 		selectedChild: null,
 		baseClass: "application mblView",
-		defaultViewType: sceneCtor
-		//buildRendering: function(){
-			//if (this.srcNodeRef===dojo.body()){
-			//	this.srcNodeRef = dojo.create("DIV",{},this.srcNodeRef);
-			//}
-		//	this.inherited(arguments);
-		//},
+		defaultViewType: sceneCtor,
+		buildRendering: function(){
+			if (this.srcNodeRef===dojo.body()){
+				this.srcNodeRef = dojo.create("DIV",{},dojo.body());
+			}
+			this.inherited(arguments);
+		}
 	});
 	
 	function generateApp(config,node,appSchema,validate){
@@ -32,7 +32,6 @@ define(["dojo","dijit","dojox", "dojo/cache","dojo/fx","dojox/json/ref","dojo/pa
 			for(var i=0;i<config.modules.length;i++){
 				modules.push(arguments[i]);
 			}
-			//console.log("declare: ",modules);	
 
 			if (config.template){
 				var ext = {
@@ -40,9 +39,9 @@ define(["dojo","dijit","dojox", "dojo/cache","dojo/fx","dojox/json/ref","dojo/pa
 				}	
 			}
 			App = dojo.declare(modules,ext);
+
 			dojo.ready(function(){
-				app = App(config, node || dojo.create("DIV",{},dojo.body()));
-				console.log("call app startup()");
+				app = App(config,node || dojo.body());
 				app.startup();
 			});
 		});
