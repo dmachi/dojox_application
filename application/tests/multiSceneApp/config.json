@@ -74,7 +74,7 @@
 			"models": [],
 			"template": "tabScene.html",	
 			"defaultView": "tab1",
-			defaultTransition: "flip",
+			"defaultTransition": "flip",
 			"type": "dojox.application.scene",
 			//the views available to this scene
 			"views": { 

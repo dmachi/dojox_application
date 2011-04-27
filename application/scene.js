@@ -428,6 +428,7 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 					return child;
 				}));
 			}
+			return child;
 		},
 
 
