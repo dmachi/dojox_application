@@ -425,10 +425,8 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 		
 					}
 					this.layout();
-					return child;
 				}));
 			}
-			return child;
 		},
 
 
@@ -459,19 +457,17 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 			next = this.loadChild(toId,subIds);
 
 			if (!current){
+				//assume this.set(...) will return a promise object if child is first loaded
+				//return nothing if child is already in array of this.children
 				return this.set("selectedChild",next);	
 			}	
 
-            //Take care of set "selectedChild" attr
-			//dojo.when on the same promise will cause competition.
-			//There is a dojo.when inside the this.set function call,
-			//if the next is the current selectedChild when calling 
-			//this.set(...), it will be returned for later animation. 
-			//Otherwise a promise will be returned, while setting the 
-			//selectedChild and refresh the layout.
-			next = this.set("selectedChild",next)
 			return dojo.when(next, dojo.hitch(this, function(next){
 				if (next!==current){
+					//assume next is already loaded so that this.set(...) will not return
+					//a promise object. this.set(...) will handles the this.selectedChild,
+					//activate or deactivate views and refresh layout.
+					this.set("selectedChild", next);
 					return def = transition(current.domNode,next.domNode,dojo.mixin({},opts,{transition: this.defaultTransition || "none"})).then(dojo.hitch(this, function(){
 						//dojo.style(current.domNode, "display", "none");
 						if (toId && next.transition){
