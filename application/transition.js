@@ -7,10 +7,12 @@ define(["dojo","dijit","dojox","dojo/DeferredList"], function(dojo,dijit,dojox,D
 				dojo.style(to, "display", "");
 			}else{
 				var defs=[];
-				
+				dojo.style(from, "display", ""); // from node might be set to display:none by layout() call in setSelectedChild()
+				dojo.style(to, "display", "");
 				if (from){
 					var fromDef = new dojo.Deferred();
 					var fromHandle = dojo.connect(from, "webkitAnimationEnd", function(){
+						dojo.style(from,"display","none");
 						//remove the animation classes in the node
 						dojo.forEach([options.transition,"in","out","reverse"], function(item){
                             dojo.removeClass(from, item);
