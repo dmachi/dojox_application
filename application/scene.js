@@ -464,7 +464,11 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 
             //Take care of set "selectedChild" attr
 			//dojo.when on the same promise will cause competition.
-			//There is a dojo.when inside the this.set function call.
+			//There is a dojo.when inside the this.set function call,
+			//if the next is the current selectedChild when calling 
+			//this.set(...), it will be returned for later animation. 
+			//Otherwise a promise will be returned, while setting the 
+			//selectedChild and refresh the layout.
 			next = this.set("selectedChild",next)
 			return dojo.when(next, dojo.hitch(this, function(next){
 				if (next!==current){
