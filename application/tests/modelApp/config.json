@@ -1,0 +1,74 @@
+{
+	"id": "modelApp",
+	"name": "Model App",
+	"description": "A modelApp",
+	"splash": "splash",
+
+	"dependencies": [
+		"dojox/mobile/_base",
+		"dojox/mobile/TabBar",
+		"dojox/mobile/RoundRect",
+		"dojox/mobile/TabBarButton",
+		"dojox/mobile/Button",
+		"dojox/mobile/RoundRect",
+		"dojox/mobile/Heading"
+	],
+	// Modules for the application.  The are basically used as the second
+	// array of mixins in a dojo.declare().  Modify the top level behavior
+	// of the application, how it processes the config or any other life cycle
+	// by creating and including one or more of these
+	"modules": [
+		"dojox/application/module/env",
+		"dojox/application/module/hash"
+		//"dojox/application/module/phonegap",
+		//"dojox/application/module/somePlugin"
+	],
+
+	//stores we are using 
+	"stores": {
+	   "namesStore":{
+	       "type": "dojo.Store.Memory",
+		   "params": {
+		      "data": "modelApp.names"
+		   }
+	   }
+	},
+
+	//models and instantiation parameters for the models. Including 'type' as a property allows
+	//one to overide the class that will be used for the model.  By default it is dojox/mvc/model
+	"models": {
+	   "names": {
+	       "stores": [{"$ref":"#stores.namesStore"}]
+	   }
+	}, 
+
+	//the name of the scene to load when the app is initialized.
+	"defaultView": "home", 
+
+	"defaultTransition": "slide",
+	//scenes are groups of views and models loaded at once	
+	"views": {
+
+		"home": { 
+			"type": "dojox.application.view",
+			"dependencies":["dojox/mobile/ListItem","dojox/mobile/RoundRectList","dojox/mobile/RoundRectCategory","dojox/mobile/Heading"],
+			"template": "views/main.html"
+		},
+
+		"simple":{
+
+			"models": [{
+			     "$ref": "names"
+			}],
+			"type": "dojox.application.scene",
+			"template": "views/simple.html",			
+			"dependencies":[],
+		},
+
+		"repeat": {
+		},
+
+		"generate": {
+		}
+	}	
+}
