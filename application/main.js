@@ -1,7 +1,10 @@
 define(["dojo","dijit","dojox", "dojo/cache","dojo/fx","dojox/json/ref","dojo/parser","./scene","./transition"],function(dojo,dijit,dijox,cache,fx,jsonRef,parser,sceneCtor,transition){
 	var Application = dojo.declare([sceneCtor], {
-		constructor: function(){
+		constructor: function(params){
 			this.scenes={};
+			if(params.stores){
+			    //TODO create stores in the congfiguration.
+			}
 
 		},
 		templateString: "<div></div>",

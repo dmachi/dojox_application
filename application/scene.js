@@ -337,6 +337,15 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 			if(this.views[this.defaultView] && this.views[this.defaultView]["defaultView"]){
 				subIds =  this.views[this.defaultView]["defaultView"];
 			}	
+			
+			if(this.models){
+				//TODO load models here. create dijit.newStatefulModel 
+				//using the configuration data for models
+				dojo.forEach(this.models, function(model){
+                    
+                }, this);
+			}
+			
 			var next = this.loadChild(toId,subIds);
 			dojo.when(next, dojo.hitch(this, function(next){
 				this.set("selectedChild",next);	
