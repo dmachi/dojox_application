@@ -338,7 +338,7 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 				subIds =  this.views[this.defaultView]["defaultView"];
 			}	
 			var next = this.loadChild(toId,subIds);
-			dojo.when(next, dojo.hitch(this, function(){
+			dojo.when(next, dojo.hitch(this, function(next){
 				this.set("selectedChild",next);	
 
 				// If I am a not being controlled by a parent layout widget...
