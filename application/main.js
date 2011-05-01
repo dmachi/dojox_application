@@ -4,6 +4,14 @@ define(["dojo","dijit","dojox", "dojo/cache","dojo/fx","dojox/json/ref","dojo/pa
 			this.scenes={};
 			if(params.stores){
 			    //TODO create stores in the congfiguration.
+			    for (var item in params.stores){
+			        if(item.charAt(0)!=="_"){//skip the private properties
+			            var type = params.stores[item].type? params.stores[item].type : "dojo.store.Memory";
+			            var config = params.stores[item].params? params.stores[item].params: {};
+			            var storeCtor = dojo.getObject(type);
+			            params.stores[item].store = new storeCtor(config);
+			        }
+			    }
 			}
 
 		},
