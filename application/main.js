@@ -7,8 +7,18 @@ define(["dojo","dijit","dojox", "dojo/cache","dojo/fx","dojox/json/ref","dojo/pa
 			    for (var item in params.stores){
 			        if(item.charAt(0)!=="_"){//skip the private properties
 			            var type = params.stores[item].type? params.stores[item].type : "dojo.store.Memory";
-			            var config = params.stores[item].params? params.stores[item].params: {};
+			            var config = {};
+			            if(params.stores[item].params){
+			                dojo.mixin(config, params.stores[item].params);
+			            }
 			            var storeCtor = dojo.getObject(type);
+			            if(config.data && dojo.isString(config.data)){
+			                //get the object specified by string value of data property
+			                //cannot assign object literal or reference to data property
+			                //because json.ref will generate __parent to point to its parent
+			                //and will cause infinitive loop when creating StatefulModel.
+			                config.data = dojo.getObject(config.data);
+			            }
 			            params.stores[item].store = new storeCtor(config);
 			        }
 			    }
