@@ -232,6 +232,9 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 			this.layoutChildren(this.domNode, this._contentBox, children);
 			dojo.forEach(this.getChildren(), function(child){ 
 				if (!child._started && child.startup){
+					if(child.bindModels){
+						child.bindModels();
+					}
 					child.startup(); 
 				}
 
@@ -341,22 +344,41 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 			if(this.models){
 				//TODO load models here. create dijit.newStatefulModel 
 				//using the configuration data for models
-				dojo.forEach(this.models, function(model){
-                    
-                }, this);
+				for(var item in this.models){
+                    if(item.charAt(0)!=="_" && !this.models[item].model){
+						var params = this.models[item].params ? this.models[item].params:{};
+						var options = {
+							"store": params.store.store,
+							"query": params.store.query ? params.store.query : {}
+						};
+						var def = dojox.mvc.newStatefulModel(options);
+                        this.models[item].model = dojo.when(def,function(model){return model;});
+                    }
+                }
 			}
 			
-			var next = this.loadChild(toId,subIds);
-			dojo.when(next, dojo.hitch(this, function(next){
-				this.set("selectedChild",next);	
+			//TODO bind data
+			dojo.forEach(this.getChildren(), function(item){
+				var widgets = dojo.query("div[dojoType^=\"dojox.mvc\"]", item.domNode);
+				//TODO set ref for each dojox.mvc widgets.
+				dojo.forEach(widgets, function(widget){
+					if(widget.ref && this.models[widget.ref]){
+						dijit.byNode(widget).set("ref", this.models[widget.ref].model);
+					}
+				},this);
+			}, this);
 
+			var next = this.loadChild(toId, subIds);
+			dojo.when(next, dojo.hitch(this, function(next){
+				this.set("selectedChild", next);
+				
 				// If I am a not being controlled by a parent layout widget...
 				var parent = this.getParent && this.getParent();
-				if(!(parent && parent.isLayoutContainer)){
+				if (!(parent && parent.isLayoutContainer)) {
 					// Do recursive sizing and layout of all my descendants
 					// (passing in no argument to resize means that it has to glean the size itself)
 					this.resize();
-
+					
 					// Since my parent isn't a layout container, and my style *may be* width=height=100%
 					// or something similar (either set directly or via a CSS class),
 					// monitor when my size changes so that I can re-layout.
@@ -366,11 +388,13 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 						// Using function(){} closure to ensure no arguments to resize.
 						this.resize();
 					});
-	
+					
 				}
-
-		                dojo.forEach(this.getChildren(), function(child){ child.startup(); });
-
+				
+				dojo.forEach(this.getChildren(), function(child){
+					child.startup();
+				});
+				
 			}));
 		},
 
