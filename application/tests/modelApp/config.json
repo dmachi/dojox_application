@@ -11,7 +11,10 @@
 		"dojox/mobile/TabBarButton",
 		"dojox/mobile/Button",
 		"dojox/mobile/RoundRect",
-		"dojox/mobile/Heading"
+		"dojox/mobile/Heading",
+		"dojox/mvc/StatefulModel", //TODO remove the explicit dependency for stores.
+		"dojo/store/Memory", //TODO remove the explicit dependency for stores.
+		"dojox/mvc/Group"
 	],
 	// Modules for the application.  The are basically used as the second
 	// array of mixins in a dojo.declare().  Modify the top level behavior
@@ -27,7 +30,7 @@
 	//stores we are using 
 	"stores": {
 	   "namesStore":{
-	       "type": "dojo.Store.Memory",
+	       "type": "dojo.store.Memory",
 		   "params": {
 		      "data": "modelApp.names"
 		   }
@@ -38,7 +41,9 @@
 	//one to overide the class that will be used for the model.  By default it is dojox/mvc/model
 	"models": {
 	   "names": {
-	       "stores": [{"$ref":"#stores.namesStore"}]
+	       "params":{
+		      "store": {"$ref":"#stores.namesStore"}
+		   }	       
 	   }
 	}, 
 
@@ -57,12 +62,14 @@
 
 		"simple":{
 
-			"models": [{
-			     "$ref": "names"
-			}],
-			"type": "dojox.application.scene",
+			"models": {
+			     "names":{
+			         "$ref": "#models.names"
+			     }
+		    },
+			"type": "dojox.application.view",
 			"template": "views/simple.html",			
-			"dependencies":[],
+			"dependencies":["dojox/mobile/TextBox"],
 		},
 
 		"repeat": {

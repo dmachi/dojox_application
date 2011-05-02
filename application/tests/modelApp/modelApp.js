@@ -7,7 +7,7 @@ if (path.charAt(path.length)!="/"){
 dojo.registerModulePath("app",path);
 
 dojo.provide("modelApp");
-modelApp.names = {
+modelApp.names = [{
         "Serial" : "360324",
         "First"  : "John",
         "Last"   : "Doe",
@@ -24,7 +24,7 @@ modelApp.names = {
             "State"  : "NY",
             "Zip"    : "10532"
         }
-    };
+    }];
 
 require(["dojo","dojox/application/main", "dojo/text!app/config.json","dojox/json/ref"],function(dojo,Application,config,ref){
 	//app = Application(dojox.json.ref.resolveJson(config), dojo.body());

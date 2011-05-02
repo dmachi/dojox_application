@@ -1,8 +1,8 @@
 <div id="settings" class="view mblView">
-    <h1 dojoType="dojox.mobile.Heading" back="Home" href="#main">Data Binding Example</h1>
+    <h1 dojoType="dojox.mobile.Heading" back="Home" href="#home">Data Binding Example</h1>
     <form name="testForm" id="testForm">    
     <div class="field-title">Ship to - Bill to Address</div>
-        <div class="fieldset" dojoType="dijit.mvc.Group" ref="model">
+        <div class="fieldset" dojoType="dojox.mvc.Group" model="names" ref="'names'">
             <div class="field-row">
                 <span>Order #</span>
                 <input type=text id="lastnameInput" dojoType="dojox.mobile.TextBox"
@@ -23,26 +23,26 @@
         <button id="shipto" type="button" dojoType="dojox.mobile.Button" class="mblBlueButton" onclick="setRef('addrGroup', model.ShipTo)">Ship To</button>
         <button id="billto" type="button" dojoType="dojox.mobile.Button" class="mblBlueButton" onclick="setRef('addrGroup', model.BillTo)">Bill To</button>     
         <br/>
-        <div class="fieldset" id="addrGroup" dojoType="dijit.mvc.Group" ref="model.ShipTo">
+        <div class="fieldset" id="addrGroup" dojoType="dojox.mvc.Group" model="names" ref="'names'">
             <div class="field-row">
                 <span>Street</span>
                 <input type=text id="streetInput" dojoType="dojox.mobile.TextBox"
-                    placeholder="Street" ref="'rel:Street'"></input>
+                    placeholder="Street" ref="'rel:ShipTo.Street'"></input>
             </div>
             <div class="field-row">
                 <span>City</span>
                 <input type=text id="cityInput" dojoType="dojox.mobile.TextBox"
-                    placeholder="City" ref="'rel:City'"></input>
+                    placeholder="City" ref="'rel:ShipTo.City'"></input>
             </div>
             <div class="field-row">
                 <span>State</span>
                 <input type=text id="stateInput" dojoType="dojox.mobile.TextBox"
-                    placeholder="State" ref="'rel:State'"></input>
+                    placeholder="State" ref="'rel:ShipTo.State'"></input>
             </div>
             <div class="field-row">
                 <span>ZIP Code</span>
                 <input type=text id="zipInput" dojoType="dojox.mobile.TextBox"
-                    placeholder="ZIP Code" ref="'rel:Zip'"></input>
+                    placeholder="ZIP Code" ref="'rel:ShipTo.Zip'"></input>
             </div>
         </div>
         <div class="spacer"></div>
