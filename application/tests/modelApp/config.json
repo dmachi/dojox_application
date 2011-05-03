@@ -14,7 +14,8 @@
 		"dojox/mobile/Heading",
 		"dojox/mvc/StatefulModel", //TODO remove the explicit dependency for stores.
 		"dojo/store/Memory", //TODO remove the explicit dependency for stores.
-		"dojox/mvc/Group"
+		"dojox/mvc/Group",
+        "dojox/mvc/Repeat"
 	],
 	// Modules for the application.  The are basically used as the second
 	// array of mixins in a dojo.declare().  Modify the top level behavior
@@ -34,7 +35,13 @@
 		   "params": {
 		      "data": "modelApp.names"
 		   }
-	   }
+	   },
+       "repeatStore":{
+           "type": "dojo.store.Memory",
+           "params": {
+                "data": "modelApp.repeatData"
+           }
+       }
 	},
 
 	//models and instantiation parameters for the models. Including 'type' as a property allows
@@ -61,18 +68,22 @@
 		},
 
 		"simple":{
-
-			"models": {
-			     "names":{
-			         "$ref": "#models.names"
-			     }
-		    },
 			"type": "dojox.application.view",
 			"template": "views/simple.html",			
 			"dependencies":["dojox/mobile/TextBox"],
 		},
 
 		"repeat": {
+            "type": "dojox.application.view",
+            "models": {
+                "repeatmodels": {
+                    "params":{
+                        "store": {"$ref":"#stores.repeatStore"}
+                    }           
+                }
+            },
+            "template": "views/repeat.html",
+            "dependencies":["dojox/mobile/TextBox"],
 		},
 
 		"generate": {
