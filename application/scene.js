@@ -1,4 +1,4 @@
-define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","dijit/_WidgetsInTemplateMixin","./transition", "./view"], function(dojo,dijit,dojox,WidgetBase,Templated,WidgetsInTemplate,transition, baseView){
+define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","dijit/_WidgetsInTemplateMixin","./transition", "./model", "./view", "./bind"], function(dojo,dijit,dojox,WidgetBase,Templated,WidgetsInTemplate,transition, model, baseView, bind){
 	
 	var marginBox2contentBox = function(/*DomNode*/ node, /*Object*/ mb){
 		// summary:
@@ -122,7 +122,14 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 					if (subIds){
 						params.defaultView=subIds;
 					}
-					return self.addChild(new ctor(params));
+                    var child = new ctor(params);
+                    //load child's model if it is not loaded before
+                    if(!child.loadedModels){
+                        child.loadedModels = model(conf.models, self.loadedModels)
+                        //TODO need to find out a better way to get all bindable controls in a view
+                        bind([child], child.loadedModels);
+                    }
+					return self.addChild(child);
 				});
 
 			}
@@ -232,9 +239,6 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 			this.layoutChildren(this.domNode, this._contentBox, children);
 			dojo.forEach(this.getChildren(), function(child){ 
 				if (!child._started && child.startup){
-					if(child.bindModels){
-						child.bindModels();
-					}
 					child.startup(); 
 				}
 
@@ -341,33 +345,13 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 				subIds =  this.views[this.defaultView]["defaultView"];
 			}	
 			
-			if(this.models){
-				//TODO load models here. create dijit.newStatefulModel 
-				//using the configuration data for models
-				for(var item in this.models){
-                    if(item.charAt(0)!=="_" && !this.models[item].model){
-						var params = this.models[item].params ? this.models[item].params:{};
-						var options = {
-							"store": params.store.store,
-							"query": params.store.query ? params.store.query : {}
-						};
-						var def = dojox.mvc.newStatefulModel(options);
-                        this.models[item].model = dojo.when(def,function(model){return model;});
-                    }
-                }
+			if(this.models && !this.loadedModels){
+				//if there is this.models config data and the models has not been loaded yet,
+				//load models at here using the configuration data and load model logic in model.js
+				this.loadedModels = model(this.models);
+                bind(this.getChildren(), this.loadedModels);
 			}
 			
-			//TODO bind data
-			dojo.forEach(this.getChildren(), function(item){
-				var widgets = dojo.query("div[dojoType^=\"dojox.mvc\"]", item.domNode);
-				//TODO set ref for each dojox.mvc widgets.
-				dojo.forEach(widgets, function(widget){
-					if(widget.ref && this.models[widget.ref]){
-						dijit.byNode(widget).set("ref", this.models[widget.ref].model);
-					}
-				},this);
-			}, this);
-
 			var next = this.loadChild(toId, subIds);
 			dojo.when(next, dojo.hitch(this, function(next){
 				this.set("selectedChild", next);
