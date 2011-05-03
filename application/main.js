@@ -3,7 +3,7 @@ define(["dojo","dijit","dojox", "dojo/cache","dojo/fx","dojox/json/ref","dojo/pa
 		constructor: function(params){
 			this.scenes={};
 			if(params.stores){
-			    //TODO create stores in the congfiguration.
+			    //create stores in the configuration.
 			    for (var item in params.stores){
 			        if(item.charAt(0)!=="_"){//skip the private properties
 			            var type = params.stores[item].type? params.stores[item].type : "dojo.store.Memory";
