@@ -87,6 +87,9 @@
 		},
 
 		"generate": {
+            "type": "dojox.application.view",
+            "template": "views/generate.html",
+            "dependencies":["dojox/mobile/TextBox", "dojox/mobile/TextArea", "dojox/mvc/Generate"],
 		}
 	}	
 }
