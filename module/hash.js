@@ -1,4 +1,4 @@
-define(["dojo","dijit","dojox","dojo/hash"],function(dojo,dijit,dojox,hash){
+define(["dojo","dijit","dojox","dojo/hash","dojo/listen"],function(dojo,dijit,dojox,hash,listen){
 	return dojo.declare(null, {
 		postCreate: function(params,node){
 			this.currentHash=dojo.hash();
@@ -12,9 +12,15 @@ define(["dojo","dijit","dojox","dojo/hash"],function(dojo,dijit,dojox,hash){
 			if (this.currentHash){
 				this._defaultView=this.currentHash;
 			}
+			listen(this.domNode, "startTransition", dojo.hitch(this, "onStartTransition"));
 
-			//history.replaceState(dojo.mixin(history.state||{},{position: window.history.length}));
+			history.replaceState(dojo.mixin(history.state||{},{position: window.history.length}));
 			this.inherited(arguments);
+		},
+		onStartTransition: function(evt){
+			evt.preventDefault();
+			dojo.hash(evt.href);
+			
 		},
 
 		onHashChange: function(newhash){

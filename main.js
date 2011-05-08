@@ -1,4 +1,4 @@
-define(["dojo","dijit","dojox", "dojo/cache","dojo/fx","dojox/json/ref","dojo/parser","./scene","./transition"],function(dojo,dijit,dijox,cache,fx,jsonRef,parser,sceneCtor,transition){
+define(["dojo","dijit","dojox", "dojo/cache","dojo/fx","dojox/json/ref","dojo/parser","./scene","./transition","dojo/listen"],function(dojo,dijit,dijox,cache,fx,jsonRef,parser,sceneCtor,transition,listen){
 	var Application = dojo.declare([sceneCtor], {
 		constructor: function(params){
 			this.scenes={};

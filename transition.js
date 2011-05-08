@@ -2,6 +2,7 @@ define(["dojo","dijit","dojox","dojo/DeferredList"], function(dojo,dijit,dojox,D
 	return function(from, to, options){
 			console.log("Trasition opts: ", options);
 			var rev = (options && options.reverse) ? " reverse" : "";
+			console.log("options.transition: ", options.transition);
 			if(!options || !options.transition){
 				dojo.style(from,"display","none");
 				dojo.style(to, "display", "");
@@ -14,7 +15,7 @@ define(["dojo","dijit","dojox","dojo/DeferredList"], function(dojo,dijit,dojox,D
 					var fromHandle = dojo.connect(from, "webkitAnimationEnd", function(){
 						dojo.style(from,"display","none");
 						//remove the animation classes in the node
-						dojo.forEach([options.transition,"in","out","reverse"], function(item){
+						dojo.forEach([options.transition,"mblIn","mblOut","mblReverse"], function(item){
                             dojo.removeClass(from, item);
                         });
 						
@@ -28,7 +29,7 @@ define(["dojo","dijit","dojox","dojo/DeferredList"], function(dojo,dijit,dojox,D
 				var toDef = new dojo.Deferred();
 				var toHandle= dojo.connect(to, "webkitAnimationEnd", function(){
 					//remove the animation classes in the node
-                    dojo.forEach([options.transition,"in","out","reverse"], function(item){
+                    dojo.forEach([options.transition,"mblIn","mblOut","mblReverse"], function(item){
                         dojo.removeClass(to, item);
                     });
 					
@@ -37,9 +38,10 @@ define(["dojo","dijit","dojox","dojo/DeferredList"], function(dojo,dijit,dojox,D
 					toDef.resolve(to);
 				}); 
 				defs.push(toDef);
+				options.transition = "mbl"+(options.transition.charAt(0).toUpperCase() + options.transition.substring(1));
 
-				dojo.addClass(from, options.transition + " out" + rev);
-				dojo.addClass(to, options.transition + " in" + rev);
+				dojo.addClass(from, options.transition + " mblOut" + rev);
+				dojo.addClass(to, options.transition + " mblIn" + rev);
 
                 //TODO Since the animation is non-blocking in javascript, we might need to
                 //ensure the state consistent, otherwise the application might be broken when
