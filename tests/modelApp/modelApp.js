@@ -25,6 +25,35 @@ modelApp.names = [{
             "Zip"    : "10532"
         }
     }];
+modelApp.repeatData = [ 
+                   {
+                       "First"   : "Chad",
+                       "Last"    : "Chapman",
+                       "Location": "CA",
+                       "Office"  : "1278",
+                       "Email"   : "c.c@test.com",
+                       "Tel"     : "408-764-8237",
+                       "Fax"     : "408-764-8228"
+                   },
+                   {
+                       "First"   : "Irene",
+                       "Last"    : "Ira",
+                       "Location": "NJ",
+                       "Office"  : "F09",
+                       "Email"   : "i.i@test.com",
+                       "Tel"     : "514-764-6532",
+                       "Fax"     : "514-764-7300"
+                   },
+                   {
+                       "First"   : "John",
+                       "Last"    : "Jacklin",
+                       "Location": "CA",
+                       "Office"  : "6701",
+                       "Email"   : "j.j@test.com",
+                       "Tel"     : "408-764-1234",
+                       "Fax"     : "408-764-4321"
+                   }
+                   ];
 
 require(["dojo","dojox/application/main", "dojo/text!app/config.json","dojox/json/ref"],function(dojo,Application,config,ref){
 	//app = Application(dojox.json.ref.resolveJson(config), dojo.body());

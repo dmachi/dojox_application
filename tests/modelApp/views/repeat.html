@@ -1,9 +1,9 @@
 <div class="view mblView">
-    <h1 dojoType="dojox.mobile.Heading" back="Home" moveTo="foo">Repeat Data Binding Example</h1>
+    <h1 dojoType="dojox.mobile.Heading" back="Home" href="#home">Repeat Data Binding Example</h1>
     <form name="repeatTestForm" id="repeatTestForm">    
     <div class="field-title">Search Results</div>
-        <div class="fieldset" dojoType="dijit.mvc.Repeat" class="row" ref="repeatmodel">
-            <div dojoType="dijit.mvc.Group" ref="'rel:${this.index}'">
+        <div class="fieldset" dojoType="dojox.mvc.Repeat" class="row" ref="'repeatmodel'">
+            <div dojoType="dojox.mvc.Group" ref="'rel:${this.index}'">
                 <div class="row">            
                     <input dojoType="dojox.mobile.TextBox"
                         id="nameInput${this.index}" ref="'rel:First'" placeHolder="First Name"></input>
@@ -12,9 +12,9 @@
             </div>
         </div>
         <div class="spacer"></div>
-        <div  dojoType="dijit.mvc.Group" ref="repeatmodel">
+        <div  dojoType="dojox.mvc.Group" ref="'repeatmodel'">
             <div id="detailsBanner">Details for selected index:</div>
-                <div class="fieldset" id="detailsGroup" dojoType="dijit.mvc.Group" ref="'rel:0'">
+                <div class="fieldset" id="detailsGroup" dojoType="dojox.mvc.Group" ref="'rel:0'">
                     <div class="field-row">
                         <span>First Name</span>
                         <input type=text id="firstInput" dojoType="dojox.mobile.TextBox"
