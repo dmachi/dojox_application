@@ -30,7 +30,6 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 		}else{
 			// otherwise, call marginBox(), but favor our own numbers when we have them.
 			// the browser lies sometimes
-			console.log("dim: ", dim, dojo.marginBox(widget.domNode));
 			dojo.mixin(widget, dojo.marginBox(widget.domNode));
 
 			dojo.mixin(widget, dim);
@@ -280,9 +279,7 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 				.concat(dojo.filter(children, function(item){ return item.region == "center" || item.layoutAlign == "client"; }));
 	
 			// set positions/sizes
-			console.log("layout children for ", this.id);
 			dojo.forEach(children, function(child){
-				console.log("    layout child: ", child.id);
 				var elm = child.domNode,
 					pos = (child.region || child.layoutAlign);
 	
@@ -307,7 +304,6 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 				// note that setting the width of a <div> may affect its height.
 				if(pos == "top" || pos == "bottom"){
 					sizeSetting.w = dim.w;
-					console.log("     sizeSetting: ", sizeSetting.w);
 					size(child, sizeSetting);
 					dim.h -= child.h;
 					if(pos == "top"){
@@ -335,7 +331,6 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 		},
 
 		startup: function(){
-			console.log("startup()", this.id);
 			if(this._started){ return; }
 			this._started=true;
 
@@ -381,7 +376,6 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 				}
 				
 				dojo.forEach(this.getChildren(), function(child){
-					console.log("call child startup: ", child.id);
 					child.startup();
 				});
 				
@@ -487,12 +481,11 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 
 			return dojo.when(next, dojo.hitch(this, function(next){
 				if (next!==current){
-					console.log("do transition", current,next);
 					//assume next is already loaded so that this.set(...) will not return
 					//a promise object. this.set(...) will handles the this.selectedChild,
 					//activate or deactivate views and refresh layout.
 					this.set("selectedChild", next);
-					console.log("current.domNode: ", current.domNode, "next.domNode: ", next.domNode);
+					//console.log("current.domNode: ", current.domNode, "next.domNode: ", next.domNode);
 					return def = transition(current.domNode,next.domNode,dojo.mixin({},opts,{transition: this.defaultTransition || "none"})).then(dojo.hitch(this, function(){
 						//dojo.style(current.domNode, "display", "none");
 						if (toId && next.transition){
