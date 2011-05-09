@@ -33,7 +33,7 @@
 	"models": {}, 
 
 	//the name of the scene to load when the app is initialized.
-	"defaultView": "home", 
+	"defaultView": "main", 
 
 	"defaultTransition": "slide",
 	//scenes are groups of views and models loaded at once	
