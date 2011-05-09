@@ -1,4 +1,4 @@
-define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","dijit/_WidgetsInTemplateMixin","dojo/mobile/transition", "./model", "./view", "./bind"], function(dojo,dijit,dojox,WidgetBase,Templated,WidgetsInTemplate,transition, model, baseView, bind){
+define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","dijit/_WidgetsInTemplateMixin","dojox/mobile/transition", "./model", "./view", "./bind"], function(dojo,dijit,dojox,WidgetBase,Templated,WidgetsInTemplate,transition, model, baseView, bind){
 	
 	var marginBox2contentBox = function(/*DomNode*/ node, /*Object*/ mb){
 		// summary:
@@ -37,7 +37,7 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 		}
 	};
 
-	return dojo.declare("dojox.application.scene", [dijit._WidgetBase, dijit._TemplatedMixin, dijit._WidgetsInTemplateMixin], {
+	return dojo.declare("dojox.app.scene", [dijit._WidgetBase, dijit._TemplatedMixin, dijit._WidgetsInTemplateMixin], {
 		isContainer: true,
 		widgetsInTemplate: true,
 		defaultView: "default",

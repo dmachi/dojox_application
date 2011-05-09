@@ -1,4 +1,4 @@
-define(["dojo","dijit","dojox", "dojo/cache","dojo/fx","dojox/json/ref","dojo/parser","./scene","./transition","dojo/listen"],function(dojo,dijit,dijox,cache,fx,jsonRef,parser,sceneCtor,transition,listen){
+define(["dojo","dijit","dojox", "dojo/cache","dojo/fx","dojox/json/ref","dojo/parser","./scene","dojox/app/transition","dojo/listen"],function(dojo,dijit,dijox,cache,fx,jsonRef,parser,sceneCtor,transition,listen){
 	var Application = dojo.declare([sceneCtor], {
 		constructor: function(params){
 			this.scenes={};
@@ -76,7 +76,7 @@ define(["dojo","dijit","dojox", "dojo/cache","dojo/fx","dojox/json/ref","dojo/pa
 
 		
 		if (config.validate){
-			require(["dojox/json/schema","dojo/text!dojox/application/schema/application.json"],function(schema,appSchema){
+			require(["dojox/json/schema","dojox/json/ref","dojo/text!dojox/application/schema/application.json"],function(schema,appSchema){
 				schema = dojox.json.ref.resolveJson(schema);	
 				if (schema.validate(config,appSchema)){
 					generateApp(config,node);

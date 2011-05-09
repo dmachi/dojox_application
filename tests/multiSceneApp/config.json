@@ -5,7 +5,6 @@
 	"splash": "splash",
 
 	"dependencies": [
-		"dojox/mobile/_base",
 		"dojox/mobile/TabBar",
 		"dojox/mobile/RoundRect",
 		"dojox/mobile/TabBarButton",
@@ -13,9 +12,9 @@
 		"dojox/mobile/RoundRect",
 		"dojox/mobile/Heading"
 	],
-	// Modules for the application.  The are basically used as the second
+	// Modules for the app.  The are basically used as the second
 	// array of mixins in a dojo.declare().  Modify the top level behavior
-	// of the application, how it processes the config or any other life cycle
+	// of the app, how it processes the config or any other life cycle
 	// by creating and including one or more of these
 	"modules": [
 		"dojox/app/module/env",

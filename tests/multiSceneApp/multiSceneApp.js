@@ -6,7 +6,8 @@ if (path.charAt(path.length)!="/"){
 }
 dojo.registerModulePath("app",path);
 
-require(["dojo","dojox/app/main", "dojo/text!app/config.json","dojo/json"],function(dojo,Application,config,ref){
+require(["dojo/_base/html","dojox/app/main", "dojo/text!app/config.json"],function(dojo,Application,config){
 	//app = Application(dojox.json.ref.resolveJson(config), dojo.body());
-	app = Application(dojo.fromJson(config));
+	//app = Application(json.parse(config));
+	app = Application(eval("(" + config + ")"));
 });
