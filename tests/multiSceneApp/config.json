@@ -18,10 +18,10 @@
 	// of the application, how it processes the config or any other life cycle
 	// by creating and including one or more of these
 	"modules": [
-		"dojox/application/module/env",
-		"dojox/application/module/hash"
-		//"dojox/application/module/phonegap",
-		//"dojox/application/module/somePlugin"
+		"dojox/app/module/env",
+		"dojox/app/module/hash"
+		//"dojox/app/module/phonegap",
+		//"dojox/app/module/somePlugin"
 	],
 
 	//stores we are using 
@@ -42,7 +42,7 @@
 
 		//simple scene which loads all views and shows the default first
 		"home": { 
-			"type": "dojox.application.view",
+			"type": "dojox.app.view",
 			"dependencies":["dojox/mobile/RoundRectList","dojox/mobile/ListItem", "dojox/mobile/EdgeToEdgeCategory"],
 			"template": "views/simple/main.html"
 		},
@@ -50,7 +50,7 @@
 		"main":{
 			//all views in the main scene will be bound to the user model
 			"models": [],
-			"type": "dojox.application.scene",
+			"type": "dojox.app.scene",
 			"template": "simple.html",	
 			"defaultView": "main",
 			"defaultTransition": "slide",
@@ -75,7 +75,7 @@
 			"template": "tabScene.html",	
 			"defaultView": "tab1",
 			"defaultTransition": "flip",
-			"type": "dojox.application.scene",
+			"type": "dojox.app.scene",
 			//the views available to this scene
 			"views": { 
 				"tab1":{
@@ -97,7 +97,7 @@
 	
 			"defaultView": "welcome",
 			"defaultTransition": "flip",
-			"type": "dojox.application.scene",
+			"type": "dojox.app.scene",
 			"template": "gallery.html",
 			//the views available to this scene
 			"views": { 
@@ -132,7 +132,7 @@
 					"template": "views/gallery/flippableViews.html"
 				},
 				"buttons": {
-					"type": "dojox.application.scene",
+					"type": "dojox.app.scene",
 					"template": "views/gallery/buttonScene.html",
 					"defaultView": "tab1",
 					"views": {
