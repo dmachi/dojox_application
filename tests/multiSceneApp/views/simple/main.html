@@ -9,10 +9,10 @@
 		<li dojoType="dojox.mobile.ListItem" iconPos="0,0,29,29" clickable="false">
 			Main Scene::Main View (Current View)
 		</li>
-		<li dojoType="dojox.mobile.ListItem" iconPos="0,0,29,29"  clickable="true" href="#main,second">
+		<li dojoType="dojox.mobile.ListItem" iconPos="0,0,29,29"  clickable="true" transitionOptions='{title:"Main Scene::SecondView",target:"main,second",url: "#main,second"}'>
 			Main Scene::Second View
 		</li>
-		<li dojoType="dojox.mobile.ListItem" iconPos="0,0,29,29"  clickable="true" href="#main,third">
+		<li dojoType="dojox.mobile.ListItem" iconPos="0,0,29,29"  clickable="true" transitionOptions='{title:"Main Scene::ThirdView",target:"main,third",url: "#main,third"}'>
 			Main Scene::Third View
 		</li>
 	</ul>
@@ -20,11 +20,11 @@
 	<ul dojoType="dojox.mobile.RoundRectList" iconBase="../images/i-icon-all.png">
 		<h2 dojoType="dojox.mobile.EdgeToEdgeCategory">Tab Scene Views</h2>
 		<li dojoType="dojox.mobile.ListItem" iconPos="0,0,29,29" 
-			clickable="true" href="#second">
-			Second Scene		
+			clickable="true" transitionOptions='{title:"TabScene - Tab1",target:"tabscene,tab1",url: "#tabscene,tab1"}'>
+			Tab Scene	
 		</li>
 	</ul>
-
+	<!--
 	<ul dojoType="dojox.mobile.RoundRectList" iconBase="../images/i-icon-all.png">
 		<h2 dojoType="dojox.mobile.EdgeToEdgeCategory">Gallery Views</h2>
 		<li dojoType="dojox.mobile.ListItem" iconPos="0,0,29,29" 
@@ -88,5 +88,5 @@
 			Ajax Load
 		</li>
 	</ul>
-
+	-->
 </div>

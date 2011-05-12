@@ -48,21 +48,24 @@
 				parseOnLoad: false,
 				mblHideAddressBar: false	
 				traceSet:{
-					"loader-inject":1,
-					"loader-define":1,
-					"loader-runFactory":1,
-					"loader-execModule":1,
-					"loader-execModule-out":1,
-					"loader-defineModule":1
+					"loader-inject":0,
+					"loader-define":0,
+					"loader-runFactory":0,
+					"loader-execModule":0,
+					"loader-execModule-out":0,
+					"loader-defineModule":0
 				},
 				async:1
 			}
+			console.log("pre dojo");
 		</script>
 		<script type="text/javascript" src="../../../../dojo/dojo.js"></script>
-
+		<script>
+			console.log("post dojo");
+		</script>
 		<!-- the actual  launcher -->
 		<script type="text/javascript" src="multiSceneApp.js"></script>
-
+	
 	</head>
 	<body>
 		<!-- <div style="width: 100%; height: 100%" id="app1"><div> -->

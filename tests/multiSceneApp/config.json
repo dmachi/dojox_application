@@ -18,7 +18,7 @@
 	// by creating and including one or more of these
 	"modules": [
 		"dojox/app/module/env",
-		"dojox/app/module/hash"
+		"dojox/app/module/history"
 		//"dojox/app/module/phonegap",
 		//"dojox/app/module/somePlugin"
 	],
@@ -33,7 +33,7 @@
 	"models": {}, 
 
 	//the name of the scene to load when the app is initialized.
-	"defaultView": "main", 
+	"defaultView": "home", 
 
 	"defaultTransition": "slide",
 	//scenes are groups of views and models loaded at once	
@@ -43,7 +43,7 @@
 		"home": { 
 			"type": "dojox.app.view",
 			"dependencies":["dojox/mobile/RoundRectList","dojox/mobile/ListItem", "dojox/mobile/EdgeToEdgeCategory"],
-			"template": "views/simple/main.html"
+			"template": "views/simple/home.html"
 		},
 
 		"main":{
@@ -68,7 +68,7 @@
 			"dependencies":["dojox/mobile/RoundRectList","dojox/mobile/ListItem","dojox/mobile/EdgeToEdgeCategory","dojox/mobile/EdgeToEdgeList"],
 		},
 		//simple scene which loads all views and shows the default first
-		"second": { 
+		"tabscene": { 
 			//all views in the second scene will be bound to the user model
 			"models": [],
 			"template": "tabScene.html",	

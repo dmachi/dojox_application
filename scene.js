@@ -459,6 +459,7 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 			//  are supplied (view1@scene2), then the application should transition to the scene,
 			//  and instruct the scene to navigate to the view.
 			var toId,subIds,next, current = this.selectedChild;
+			console.log("scene", this.id, transitionTo);
 			if (transitionTo){	
 				var parts = transitionTo.split(",");
 				toId= parts.shift();
