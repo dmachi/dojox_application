@@ -18,8 +18,9 @@ define(["dojo","dijit","dojox","dojo/hash","dojo/listen"],function(dojo,dijit,do
 			this.inherited(arguments);
 		},
 		onStartTransition: function(evt){
+			if (!evt || !evt.detail || !evt.detailhref){return;}
 			evt.preventDefault();
-			dojo.hash(evt.href);
+			dojo.hash(evt.detail.href);
 			
 		},
 
