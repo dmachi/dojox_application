@@ -55,7 +55,12 @@ modelApp.repeatData = [
                    }
                    ];
 
-require(["dojo","dojox/application/main", "dojo/text!app/config.json","dojox/json/ref"],function(dojo,Application,config,ref){
+require(["dojo","dojox/app/main", "dojox/json/ref"],function(dojo,Application,config,ref){
 	//app = Application(dojox.json.ref.resolveJson(config), dojo.body());
-	app = Application(dojox.json.ref.fromJson(config));
+	//app = Application(dojox.json.ref.fromJson(config));
+});
+
+require(["dojox/app/main", "dojo/text!app/config.json"],function(Application,config){
+    //app = Application(dojox.json.ref.resolveJson(config), dojo.body());
+    app = Application(dojox.json.ref.fromJson(config));
 });
