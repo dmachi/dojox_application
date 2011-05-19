@@ -11,8 +11,9 @@ require(["dojo","dojox/app/main", "dojox/json/ref"],function(dojo,Application,co
 	//app = Application(dojox.json.ref.fromJson(config));
 });
 
-require(["dojox/app/main", "dojo/text!app/config.json"],function(Application,config){
+require(["dojo","dojox/app/main", "dojo/text!app/config.json"],function(dojo, Application,config){
     //app = Application(dojox.json.ref.resolveJson(config), dojo.body());
+    dojo.global.modelApp = {};
     modelApp.names = [{
             "Serial" : "360324",
             "First"  : "John",
