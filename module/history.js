@@ -1,4 +1,4 @@
-define(["dojo/_base/lang", "dojo/listen"],function(dlang,listen){
+define(["dojo/_base/kernel","dojo/_base/lang", "dojo/_base/declare", "dojo/listen"],function(dojo,dlang,declare,listen){
 	return dojo.declare(null, {
 		postCreate: function(params,node){
 			this.inherited(arguments);
