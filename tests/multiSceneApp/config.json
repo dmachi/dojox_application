@@ -5,6 +5,7 @@
 	"splash": "splash",
 
 	"dependencies": [
+        "dojox/mobile/View", //Temporary work around for getting a null when calling getParent
 		"dojox/mobile/TabBar",
 		"dojox/mobile/RoundRect",
 		"dojox/mobile/TabBarButton",

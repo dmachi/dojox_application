@@ -8,6 +8,8 @@ define(["dojo", "dijit", "dojox", "dijit/_WidgetBase", "dijit/_Container", "diji
 		templateString: '<div></div>',
 		toString: function(){return this.id},
 		activate:function(){},
-		deactivate: function(){}
+		deactivate: function(){},
+		//Temporary work around for getting a null when calling getParent
+		getParent: function(){return null;}
 	});
 });

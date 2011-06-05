@@ -45,6 +45,9 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 		baseClass: "scene mblView",
 		isFullScreen: false,
 		defaultViewType: baseView,
+		
+		//Temporary work around for getting a null when calling getParent
+		getParent: function(){return null;},
 
 
 		constructor: function(params,node){
