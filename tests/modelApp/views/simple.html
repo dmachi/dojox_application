@@ -10,7 +10,7 @@
     <h1 dojoType="dojox.mobile.Heading" back="Home">Data Binding Example</h1>
     <form name="testForm" id="testForm">    
     <div class="field-title">Ship to - Bill to Address</div>
-        <div id="infoGroup" class="fieldset" dojoType="dojox.mvc.Group" ref="'names'">
+        <div id="infoGroup" class="fieldset" dojoType="dojox.mvc.Group" ref="'names.0'">
             <div class="field-row">
                 <span>Order #</span>
                 <input type=text id="lastnameInput" dojoType="dojox.mobile.TextBox"
@@ -31,7 +31,7 @@
         <button id="shipto" type="button" dojoType="dojox.mobile.Button" class="mblBlueButton" onclick="setRef('addrGroup', 'ShipTo')">Ship To</button>
         <button id="billto" type="button" dojoType="dojox.mobile.Button" class="mblBlueButton" onclick="setRef('addrGroup', 'BillTo')">Bill To</button>     
         <br/>
-        <div class="fieldset" id="addrGroup" dojoType="dojox.mvc.Group" ref="'names.ShipTo'">
+        <div class="fieldset" id="addrGroup" dojoType="dojox.mvc.Group" ref="'names.0.ShipTo'">
             <div class="field-row">
                 <span>Street</span>
                 <input type=text id="streetInput" dojoType="dojox.mobile.TextBox"

@@ -15,7 +15,8 @@
 		"dojox/mvc/StatefulModel", //TODO remove the explicit dependency for stores.
 		"dojo/store/Memory", //TODO remove the explicit dependency for stores.
 		"dojox/mvc/Group",
-        "dojox/mvc/Repeat"
+        "dojox/mvc/Repeat",
+        "dojox/mvc"
 	],
 	// Modules for the application.  The are basically used as the second
 	// array of mixins in a dojo.declare().  Modify the top level behavior
