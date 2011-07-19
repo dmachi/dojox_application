@@ -1,10 +1,10 @@
-define(["dojo", "dijit"], function(dojo, dijit){
+define(["dojo/_base/kernel", "dojo/query" , "dojo/_base/array", "dijit"], function(dojo, query, array, dijit){
     return function(/*Array of widgets*/widgets, /*Object*/ models){
-        dojo.forEach(widgets, function(item){
+        array.forEach(widgets, function(item){
             //TODO need to find a better way to get all bindable widgets
-            var bindWidgets = dojo.query("div[dojoType^=\"dojox.mvc\"],div[data-dojo-type^=\"dojox.mvc\"]", item.domNode);
+            var bindWidgets = query("div[dojoType^=\"dojox.mvc\"],div[data-dojo-type^=\"dojox.mvc\"]", item.domNode);
             //set ref for each dojox.mvc widgets.
-            dojo.forEach(bindWidgets, function(widget){
+            array.forEach(bindWidgets, function(widget){
                 //TODO need to find a better way to know which model the widget is bound to
                 //currently, the ref attribute in dojox.mvc.Group cannot be empty, leave
                 //explicit string with single quote in ref attribute.
