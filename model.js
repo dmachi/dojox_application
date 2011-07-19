@@ -1,4 +1,4 @@
-define(["dojo","dojox/mvc/StatefulModel"], function(dojo){
+define(["dojo/_base/kernel","dojo/_base/Deferred","dojox/mvc/StatefulModel"], function(dojo,deferred){
 	return function(config, parent){
                 //load models here. create dojox.newStatefulModel 
                 //using the configuration data for models
@@ -17,7 +17,7 @@ define(["dojo","dojox/mvc/StatefulModel"], function(dojo){
                             
                             //TODO improve performance of loading at here
                             // do not wait for the models to be created.
-                            loadedModels[item] = dojo.when(dojox.mvc.newStatefulModel(options), function(model){return model});
+                            loadedModels[item] = deferred.when(dojox.mvc.newStatefulModel(options), function(model){return model});
                         }
                     }
 	        }

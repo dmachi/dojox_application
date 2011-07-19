@@ -1,5 +1,5 @@
-define(["dojo","dijit","dojox"], function(dojo,dijit,dojox){
-	return dojo.declare(null, {
+define(["dojo/_base/declare"], function(declare){
+	return declare(null, {
 		mode: "",
 		init: function(){
 

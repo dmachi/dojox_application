@@ -1,5 +1,5 @@
 define(["dojo/_base/kernel","dojo/_base/lang", "dojo/_base/declare", "dojo/on"],function(dojo,dlang,declare,listen){
-	return dojo.declare(null, {
+	return declare(null, {
 		postCreate: function(params,node){
 			this.inherited(arguments);
 			var hash=window.location.hash;
