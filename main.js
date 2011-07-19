@@ -1,5 +1,20 @@
-define(["dojo","dijit","dojox", "dojo/cache","dojo/fx","dojox/json/ref","dojo/parser","./scene","dojox/mobile/transition","dojo/on"],function(dojo,dijit,dijox,cache,fx,jsonRef,parser,sceneCtor,transition,listen){
-	var Application = dojo.declare([sceneCtor], {
+define(["dojo/_base/kernel",
+	"dojo/_base/lang",
+	"dojo/_base/declare",
+	"dojo/ready",
+	"dojo/_base/window",
+	"dojo/_base/dom-construct",
+	"dijit",
+	"dojox", 
+	"dojo/cache",
+	"dojo/fx",
+	"dojox/json/ref",
+	"dojo/parser",
+	"./scene",
+	"dojox/mobile/transition",
+	"dojo/on"],
+	function(dojo,lang,declare,ready,window,dom,dijit,dijox,cache,fx,jsonRef,parser,sceneCtor,transition,listen){
+	var Application = declare([sceneCtor], {
 		constructor: function(params){
 			this.scenes={};
 			if(params.stores){
@@ -12,7 +27,7 @@ define(["dojo","dijit","dojox", "dojo/cache","dojo/fx","dojox/json/ref","dojo/pa
 			                dojo.mixin(config, params.stores[item].params);
 			            }
 			            var storeCtor = dojo.getObject(type);
-			            if(config.data && dojo.isString(config.data)){
+			            if(config.data && lang.isString(config.data)){
 			                //get the object specified by string value of data property
 			                //cannot assign object literal or reference to data property
 			                //because json.ref will generate __parent to point to its parent
@@ -30,8 +45,8 @@ define(["dojo","dijit","dojox", "dojo/cache","dojo/fx","dojox/json/ref","dojo/pa
 		baseClass: "application mblView",
 		defaultViewType: sceneCtor,
 		buildRendering: function(){
-			if (this.srcNodeRef===dojo.body()){
-				this.srcNodeRef = dojo.create("DIV",{},dojo.body());
+			if (this.srcNodeRef===window.body()){
+				this.srcNodeRef = dom.create("DIV",{},window.body());
 			}
 			this.inherited(arguments);
 		}
@@ -59,10 +74,10 @@ define(["dojo","dijit","dojox", "dojo/cache","dojo/fx","dojox/json/ref","dojo/pa
 					templateString: arguments[arguments.length-1] 
 				}	
 			}
-			App = dojo.declare(modules,ext);
+			App = declare(modules,ext);
 
-			dojo.ready(function(){
-				app = App(config,node || dojo.body());
+			ready(function(){
+				app = App(config,node || window.body());
 				app.startup();
 			});
 		});
