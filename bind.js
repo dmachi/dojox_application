@@ -1,4 +1,4 @@
-define(["dojo/_base/kernel", "dojo/query" , "dojo/_base/array", "dijit"], function(dojo, query, array, dijit){
+define(["dojo/_base/kernel", "dojo/query" , "dojo/_base/array", "dijit", "dojo/_base/json"], function(dojo, query, array, dijit, djson){
     return function(/*Array of widgets*/widgets, /*Object*/ models){
         array.forEach(widgets, function(item){
             //TODO need to find a better way to get all bindable widgets
@@ -13,12 +13,20 @@ define(["dojo/_base/kernel", "dojo/query" , "dojo/_base/array", "dijit"], functi
                 if(ref === null){
                     var refProps = widget.getAttribute("data-dojo-props");
                     if(refProps){
-                        ref = refProps.replace(/^\s*ref\s*:\s*/, "");
+                        try{
+                            refProps = djson.fromJson("{" + refProps + "}");
+                        }catch(e){
+                            // give the user a pointer to their invalid parameters. FIXME: can we kill this in production?
+                            throw new Error(e.toString() + " in data-dojo-props='" + extra + "'");
+                        }
+                        ref = refProps.ref.replace(/^\s*rel\s*:\s*/, "");
                     }
                 }
                 
                 if (ref) {
-                    ref = ref.substring(1, ref.length-1);
+                    if(ref[0] === "'"){
+                        ref = ref.substring(1, ref.length-1);
+                    }
                     var model = dojo.getObject(ref, false, models);
                     if (model){
                         dijit.byNode(widget).set("ref", model);
