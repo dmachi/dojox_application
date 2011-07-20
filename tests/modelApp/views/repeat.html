@@ -2,17 +2,19 @@
     <h1 dojoType="dojox.mobile.Heading" back="Home">Repeat Data Binding Example</h1>
     <form name="repeatTestForm" id="repeatTestForm">    
     <div class="field-title">Search Results</div>
-        <div class="fieldset" dojoType="dojox.mvc.Repeat" class="row" ref="'repeatmodel'">
-            <div dojoType="dojox.mvc.Group" ref="'rel:${this.index}'">
+    
+        <div class="fieldset" data-dojo-type="dojox.mvc.Repeat" data-dojo-props="exprchar: '#', ref: 'repeatmodels'" >
+            <div dojoType="dojox.mvc.Group" ref="'rel:#{this.index}'">
                 <div class="row">            
                     <input dojoType="dojox.mobile.TextBox"
-                        id="nameInput${this.index}" ref="'rel:First'" placeHolder="First Name"></input>
-                    <button id="details${this.index}" type="button" dojoType="dojox.mobile.Button" class="mblBlueButton" onclick="setDetailsContext('${this.index}')">Details</button>
+                        id="nameInput#{this.index}" ref="'rel:First'" placeHolder="First Name"></input>
+                    <button id="details#{this.index}" type="button" dojoType="dojox.mobile.Button" class="mblBlueButton" data-dojo-props="onClick: function(e){setDetailsContext('#{this.index}');}">Details</button>
                 </div>
             </div>
         </div>
+        
         <div class="spacer"></div>
-        <div  dojoType="dojox.mvc.Group" ref="'repeatmodel'">
+        <div  dojoType="dojox.mvc.Group" ref="'repeatmodels'">
             <div id="detailsBanner">Details for selected index:</div>
                 <div class="fieldset" id="detailsGroup" dojoType="dojox.mvc.Group" ref="'rel:0'">
                     <div class="field-row">
@@ -38,8 +40,13 @@
                 </div>
             </div>         
         <div class="spacer"></div>
-        <button id="add" type="button" dojoType="dojox.mobile.Button" class="mblBlueButton" onclick="insertResult(nextIndexToAdd)">Add</button>
-        <button id="save" type="button" dojoType="dojox.mobile.Button" class="mblBlueButton" onclick="console.log(repeatmodel[selectedIndex].toPlainObject());repeatmodel[selectedIndex].commit()">Save</button>
-        <button id="reset2" type="button" dojoType="dojox.mobile.Button" class="mblBlueButton" onclick="repeatmodel.reset()">Reset</button>
-        
+        <button id="add" dojoType="dojox.mobile.Button" class="mblBlueButton" onclick="insertResult(nextIndexToAdd)">Add</button>
+        <button id="save" dojoType="dojox.mobile.Button" class="mblBlueButton" onclick="console.log(repeatmodel[selectedIndex].toPlainObject());repeatmodel[selectedIndex].commit()">Save</button>
+        <button id="reset2" dojoType="dojox.mobile.Button" class="mblBlueButton" onclick="repeatmodel.reset()">Reset</button>
+        <script type="text/javascript">
+            function setDetailsContext(index) {
+                var widget = dijit.byId("detailsGroup");
+                widget.set("ref", index);
+            }
+        </script>
 </div>

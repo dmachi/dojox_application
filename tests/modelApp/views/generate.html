@@ -8,7 +8,7 @@
             <div id="outerModelArea"> 
                 <h3 dojoType="dojox.mobile.RoundRectCategory">Model</h3> 
                 <div class="generate-textarea-row"> 
-                    <textarea class="generate-textarea-cell" dojoType="dojox.mobile.TextArea" id="modelArea"> 
+                    <textarea class="generate-textarea-cell" dojoType="dojox.mobile.TextArea" id="modelArea" style="width: 300px; height: 300px;"> 
 {
     "Serial": "11111",
     "First": "John",
@@ -27,7 +27,7 @@
                 </div> 
                 <div class="fieldset"> 
                     <div class="spacer"></div> 
-                    <button id="generate1" type="button" dojoType="dojox.mobile.Button" class="mblBlueButton" onclick="updateView()">Generate Form</button> 
+                    <button id="generate1" dojoType="dojox.mobile.Button" class="mblBlueButton" data-dojo-props="onClick: function(e){updateView();}">Generate Form</button> 
                 </div> 
             </div> 
             <div id="viewArea" style="display:none"> 
@@ -37,7 +37,7 @@
                 </div> 
                 <div class="fieldset"> 
                     <div class="spacer"></div> 
-                    <button id="updateModel" type="button" dojoType="dojox.mobile.Button" class="mblBlueButton" onclick="updateModel()">Update Model</button> 
+                    <button id="updateModel" dojoType="dojox.mobile.Button" class="mblBlueButton" data-dojo-props="onClick: function(e){updateModel();}">Update Model</button> 
                 </div> 
             </div> 
           </div> 
