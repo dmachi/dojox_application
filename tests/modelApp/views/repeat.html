@@ -3,12 +3,20 @@
     <form name="repeatTestForm" id="repeatTestForm">    
     <div class="field-title">Search Results</div>
     
-        <div class="fieldset" data-dojo-type="dojox.mvc.Repeat" data-dojo-props="exprchar: '#', ref: 'repeatmodels'" >
+        <div id="repeatWidget" class="fieldset" data-dojo-type="dojox.mvc.Repeat" data-dojo-props="exprchar: '#', ref: 'repeatmodels'" >
             <div dojoType="dojox.mvc.Group" ref="'rel:#{this.index}'">
                 <div class="row">            
                     <input dojoType="dojox.mobile.TextBox"
                         id="nameInput#{this.index}" ref="'rel:First'" placeHolder="First Name"></input>
-                    <button id="details#{this.index}" type="button" dojoType="dojox.mobile.Button" class="mblBlueButton" data-dojo-props="onClick: function(e){setDetailsContext('#{this.index}');}">Details</button>
+                    <button type="button" data-dojo-type="dojox.mobile.Button" class="mblBlueButton" data-dojo-props="onClick: function(e){setDetailsContext('#{this.index}');}">
+                        Details
+                    </button>
+                    <button type="button" data-dojo-type="dojox.mobile.Button" class="mblBlueButton" data-dojo-props="onClick: function(){insertResult('#{this.index}');}">
+                        +
+                    </button>
+                    <button type="button" data-dojo-type="dojox.mobile.Button" class="mblBlueButton" data-dojo-props="onClick: function(){deleteResult('#{this.index}');}">
+                        -
+                    </button>
                 </div>
             </div>
         </div>
@@ -44,9 +52,45 @@
         <button id="save" dojoType="dojox.mobile.Button" class="mblBlueButton" onclick="console.log(repeatmodel[selectedIndex].toPlainObject());repeatmodel[selectedIndex].commit()">Save</button>
         <button id="reset2" dojoType="dojox.mobile.Button" class="mblBlueButton" onclick="repeatmodel.reset()">Reset</button>
         <script type="text/javascript">
+            var selectedIndex = 0;
+            var repeatmodel = dijit.byId('repeatWidget').ref;
+
             function setDetailsContext(index) {
                 var widget = dijit.byId("detailsGroup");
                 widget.set("ref", index);
+                selectedIndex = index;
             }
+
+            // used in the Repeat Data binding demo
+        function insertResult(index){
+			
+			if(typeof(index) == "undefined"){
+				index = repeatmodel.length - 1;
+			}
+			console.log(index);
+            if (repeatmodel[index].First.value !== "") {
+                var insert = dojox.mvc.newStatefulModel({
+                    "data": {
+                        "First": "",
+                        "Last": "",
+                        "Location": "CA",
+                        "Office": "",
+                        "Email": "",
+                        "Tel": "",
+                        "Fax": ""
+                    }
+                });
+                repeatmodel.add(index, insert);
+												
+                setDetailsContext(index);
+            }
+            else {
+                setDetailsContext(index - 1);
+            }
+        };
+        
+        function deleteResult(index){
+            repeatmodel.remove(index);
+        }
         </script>
 </div>
