@@ -1,16 +1,37 @@
-define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","dijit/_WidgetsInTemplateMixin","dojox/mobile/transition", "./model", "./view", "./bind"], function(dojo,dijit,dojox,WidgetBase,Templated,WidgetsInTemplate,transition, model, baseView, bind){
+define(["dojo/_base/kernel",
+	"dojo/_base/declare",
+	"dojo/_base/array",
+	"dojo/_base/Deferred",
+	"dojo/_base/lang",
+	"dojo/_base/sniff",
+	"dojo/dom-style",
+	"dojo/dom-geometry",
+	"dojo/dom-class",
+	"dojo/dom-construct",
+	"dojo/dom-attr",
+	"dojo/query",
+	"dijit",
+	"dojox",
+	"dijit/_WidgetBase",
+	"dijit/_TemplatedMixin",
+	"dijit/_WidgetsInTemplateMixin",
+	"dojox/mobile/transition", 
+	"./model", 
+	"./view", 
+	"./bind"], 
+	function(dojo,declare,array,deferred,dlang,has,dstyle,dgeometry,cls,dconstruct,dattr,query,dijit,dojox,WidgetBase,Templated,WidgetsInTemplate,transition, model, baseView, bind){
 	
 	var marginBox2contentBox = function(/*DomNode*/ node, /*Object*/ mb){
 		// summary:
 		//		Given the margin-box size of a node, return its content box size.
 		//		Functions like dojo.contentBox() but is more reliable since it doesn't have
 		//		to wait for the browser to compute sizes.
-		var cs = dojo.getComputedStyle(node);
-		var me = dojo._getMarginExtents(node, cs);
-		var pb = dojo._getPadBorderExtents(node, cs);
+		var cs = dstyle.getComputedStyle(node);
+		var me = dgeometry.getMarginExtents(node, cs);
+		var pb = dgeometry.getPadBorderExtents(node, cs);
 		return {
-			l: dojo._toPixelValue(node, cs.paddingLeft),
-			t: dojo._toPixelValue(node, cs.paddingTop),
+			l: dstyle.toPixelValue(node, cs.paddingLeft),
+			t: dstyle.toPixelValue(node, cs.paddingTop),
 			w: mb.w - (me.w + pb.w),
 			h: mb.h - (me.h + pb.h)
 		};
@@ -22,7 +43,7 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 
 	var size = function(widget, dim){
 		// size the child
-		var newSize = widget.resize ? widget.resize(dim) : dojo.marginBox(widget.domNode, dim);
+		var newSize = widget.resize ? widget.resize(dim) : dgeometry.marginBox(widget.domNode, dim);
 		// record child's size
 		if(newSize){
 			// if the child returned it's new size then use that
@@ -30,13 +51,13 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 		}else{
 			// otherwise, call marginBox(), but favor our own numbers when we have them.
 			// the browser lies sometimes
-			dojo.mixin(widget, dojo.marginBox(widget.domNode));
+			dojo.mixin(widget, dgeometry.marginBox(widget.domNode));
 
 			dojo.mixin(widget, dim);
 		}
 	};
 
-	return dojo.declare("dojox.app.scene", [dijit._WidgetBase, dijit._TemplatedMixin, dijit._WidgetsInTemplateMixin], {
+	return declare("dojox.app.scene", [dijit._WidgetBase, dijit._TemplatedMixin, dijit._WidgetsInTemplateMixin], {
 		isContainer: true,
 		widgetsInTemplate: true,
 		defaultView: "default",
@@ -62,8 +83,8 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 
 		buildRendering: function(){
 			this.inherited(arguments);
-			dojo.style(this.domNode, {width: "100%", "height": "100%"});
-			dojo.addClass(this.domNode,"dijitContainer");
+			dstyle.style(this.domNode, {width: "100%", "height": "100%"});
+			cls.add(this.domNode,"dijitContainer");
 		},
 
 		splitChildRef: function(childId){
@@ -96,7 +117,7 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 				var deps = conf.template? conf.dependencies.concat(["dojo/text!app/"+conf.template]) :
 						conf.dependencies.concat([]);
 			
-				var def = new dojo.Deferred();
+				var def = new deferred();
 				if (deps.length>0) {
 					require(deps,function(){
 						def.resolve.call(def, arguments);			
@@ -106,7 +127,7 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 				}
 		
 				var self = this;					
-				return dojo.when(def, function(){		
+				return deferred.when(def, function(){		
 					var ctor;
 					if (conf.type){
 						ctor=dojo.getObject(conf.type);
@@ -145,7 +166,7 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 
 			// set margin box size, unless it wasn't specified, in which case use current size
 			if(changeSize){
-				dojo.marginBox(node, changeSize);
+				dgeometry.marginBox(node, changeSize);
 
 				// set offset of the node
 				if(changeSize.t){ node.style.top = changeSize.t + "px"; }
@@ -158,22 +179,22 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 			var mb = resultSize || {};
 			dojo.mixin(mb, changeSize || {});	// changeSize overrides resultSize
 			if( !("h" in mb) || !("w" in mb) ){
-				mb = dojo.mixin(dojo.marginBox(node), mb);	// just use dojo.marginBox() to fill in missing values
+				mb = dojo.mixin(dgeometry.marginBox(node), mb);	// just use dojo.marginBox() to fill in missing values
 			}
 
 			// Compute and save the size of my border box and content box
 			// (w/out calling dojo.contentBox() since that may fail if size was recently set)
-			var cs = dojo.getComputedStyle(node);
-			var me = dojo._getMarginExtents(node, cs);
-			var be = dojo._getBorderExtents(node, cs);
+			var cs = dstyle.getComputedStyle(node);
+			var me = dgeometry.getMarginExtents(node, cs);
+			var be = dgeometry.getBorderExtents(node, cs);
 			var bb = (this._borderBox = {
 				w: mb.w - (me.w + be.w),
 				h: mb.h - (me.h + be.h)
 			});
-			var pe = dojo._getPadExtents(node, cs);
+			var pe = dgeometry.getPadExtents(node, cs);
 			this._contentBox = {
-				l: dojo._toPixelValue(node, cs.paddingLeft),
-				t: dojo._toPixelValue(node, cs.paddingTop),
+				l: dstyle.toPixelValue(node, cs.paddingLeft),
+				t: dstyle.toPixelValue(node, cs.paddingTop),
 				w: bb.w - pe.w,
 				h: bb.h - pe.h
 			};
@@ -197,25 +218,25 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 				})
 				*/
 			}else{
-				children = dojo.query("> [region]", this.domNode).map(function(node){
+				children = query("> [region]", this.domNode).map(function(node){
 					var w = dijit.getEnclosingWidget(node);
 					if (w){return w;}
 
 					return {		
 						domNode: node,
-						region: dojo.attr(node,"region")
+						region: dattr.attr(node,"region")
 					}
 						
 				});
 				if (this.selectedChild){
-					children = dojo.filter(children, function(c){
+					children = array.filter(children, function(c){
 						if (c.region=="center" && this.selectedChild && this.selectedChild.domNode!==c.domNode){
-							dojo.style(c.domNode,"z-index",25);
-							dojo.style(c.domNode,'display','none');
+							dstyle.style(c.domNode,"z-index",25);
+							dstyle.style(c.domNode,'display','none');
 							return false;
 						}else if (c.region!="center"){
-							dojo.style(c.domNode,"display","");
-							dojo.style(c.domNode,"z-index",100);
+							dstyle.style(c.domNode,"display","");
+							dstyle.style(c.domNode,"z-index",100);
 						}
 					
 						return c.domNode && c.region;
@@ -230,17 +251,17 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 				//	children.push(this.selectedChild);
 				//	console.log("children: ", children);
 				}else{
-					dojo.forEach(children, function(c){
+					array.forEach(children, function(c){
 						if (c && c.domNode && c.region=="center"){
-							dojo.style(c.domNode,"z-index",25);
-							dojo.style(c.domNode,'display','none');
+							dstyle.style(c.domNode,"z-index",25);
+							dstyle.style(c.domNode,'display','none');
 						}	
 					});
 				}
 			
 			}	
 			this.layoutChildren(this.domNode, this._contentBox, children);
-			dojo.forEach(this.getChildren(), function(child){ 
+			array.forEach(this.getChildren(), function(child){ 
 				if (!child._started && child.startup){
 					child.startup(); 
 				}
@@ -273,16 +294,16 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 			// copy dim because we are going to modify it
 			dim = dojo.mixin({}, dim);
 	
-			dojo.addClass(container, "dijitLayoutContainer");
+			cls.add(container, "dijitLayoutContainer");
 	
 			// Move "client" elements to the end of the array for layout.  a11y dictates that the author
 			// needs to be able to put them in the document in tab-order, but this algorithm requires that
 			// client be last.    TODO: move these lines to LayoutContainer?   Unneeded other places I think.
-			children = dojo.filter(children, function(item){ return item.region != "center" && item.layoutAlign != "client"; })
-				.concat(dojo.filter(children, function(item){ return item.region == "center" || item.layoutAlign == "client"; }));
+			children = array.filter(children, function(item){ return item.region != "center" && item.layoutAlign != "client"; })
+				.concat(array.filter(children, function(item){ return item.region == "center" || item.layoutAlign == "client"; }));
 	
 			// set positions/sizes
-			dojo.forEach(children, function(child){
+			array.forEach(children, function(child){
 				var elm = child.domNode,
 					pos = (child.region || child.layoutAlign);
 	
@@ -292,7 +313,7 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 				elmStyle.top = dim.t+"px";
 				elmStyle.position = "absolute";
 	
-				dojo.addClass(elm, "dijitAlign" + capitalize(pos));
+				cls.add(elm, "dijitAlign" + capitalize(pos));
 	
 				// Size adjustments to make to this child widget
 				var sizeSetting = {};
@@ -356,7 +377,7 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 			}
 			
 			var next = this.loadChild(toId, subIds);
-			dojo.when(next, dojo.hitch(this, function(next){
+			deferred.when(next, dlang.hitch(this, function(next){
 				this.set("selectedChild", next);
 				
 				// If I am a not being controlled by a parent layout widget...
@@ -371,14 +392,14 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 					// monitor when my size changes so that I can re-layout.
 					// For browsers where I can't directly monitor when my size changes,
 					// monitor when the viewport changes size, which *may* indicate a size change for me.
-					this.connect(dojo.isIE ? this.domNode : dojo.global, 'onresize', function(){
+					this.connect(has("ie") ? this.domNode : dojo.global, 'onresize', function(){
 						// Using function(){} closure to ensure no arguments to resize.
 						this.resize();
 					});
 					
 				}
 				
-				dojo.forEach(this.getChildren(), function(child){
+				array.forEach(this.getChildren(), function(child){
 					child.startup();
 				});
 				
@@ -386,11 +407,11 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 		},
 
 		addChild: function(widget){
-			dojo.addClass(widget.domNode, this.baseClass + "_child");
+			cls.add(widget.domNode, this.baseClass + "_child");
 			widget.region = "center";;
-			dojo.attr(widget.domNode,"region","center");
+			dattr.attr(widget.domNode,"region","center");
 			this._supportingWidgets.push(widget);
-			dojo.place(widget.domNode,this.domNode);
+			dconstruct.place(widget.domNode,this.domNode);
 			this.children[widget.id] = widget;
 			if (this._started){
 				this.layout();
@@ -418,13 +439,13 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 
 		_setSelectedChildAttr: function(child,opts){
 			if (child !== this.selectedChild) { 
-				return dojo.when(child, dojo.hitch(this, function(child){
+				return deferred.when(child, dlang.hitch(this, function(child){
 					if (this.selectedChild){
 						if (this.selectedChild.deactivate){
 							this.selectedChild.deactivate(); 
 						}
 
-						dojo.style(this.selectedChild.domNode,"zIndex",25);
+						dstyle.style(this.selectedChild.domNode,"zIndex",25);
 					}
 		
 					//dojo.style(child.domNode, {
@@ -433,8 +454,8 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 					//	"overflow": "auto"
 					//});
 					this.selectedChild = child;
-					dojo.style(child.domNode, "display", "");
-					dojo.style(child.domNode,"zIndex",50);
+					dstyle.style(child.domNode, "display", "");
+					dstyle.style(child.domNode,"zIndex",50);
 					this.selectedChild=child;
 					if (this._started) {	
 						if (child.startup && !child._started){
@@ -483,14 +504,14 @@ define(["dojo","dijit","dojox","dijit/_WidgetBase","dijit/_TemplatedMixin","diji
 				return this.set("selectedChild",next);	
 			}	
 
-			return dojo.when(next, dojo.hitch(this, function(next){
+			return deferred.when(next, dlang.hitch(this, function(next){
 				if (next!==current){
 					//assume next is already loaded so that this.set(...) will not return
 					//a promise object. this.set(...) will handles the this.selectedChild,
 					//activate or deactivate views and refresh layout.
 					this.set("selectedChild", next);
 					//console.log("current.domNode: ", current.domNode, "next.domNode: ", next.domNode);
-					return def = transition(current.domNode,next.domNode,dojo.mixin({},opts,{transition: this.defaultTransition || "none"})).then(dojo.hitch(this, function(){
+					return def = transition(current.domNode,next.domNode,dojo.mixin({},opts,{transition: this.defaultTransition || "none"})).then(dlang.hitch(this, function(){
 						//dojo.style(current.domNode, "display", "none");
 						if (toId && next.transition){
 							return next.transition(subIds,opts);
