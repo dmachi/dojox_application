@@ -43,7 +43,7 @@ define(["dojo/_base/kernel",
 
 	var size = function(widget, dim){
 		// size the child
-		var newSize = widget.resize ? widget.resize(dim) : dgeometry.marginBox(widget.domNode, dim);
+		var newSize = widget.resize ? widget.resize(dim) : dgeometry.setMarginBox(widget.domNode, dim);
 		// record child's size
 		if(newSize){
 			// if the child returned it's new size then use that
@@ -51,7 +51,7 @@ define(["dojo/_base/kernel",
 		}else{
 			// otherwise, call marginBox(), but favor our own numbers when we have them.
 			// the browser lies sometimes
-			dojo.mixin(widget, dgeometry.marginBox(widget.domNode));
+			dojo.mixin(widget, dgeometry.getMarginBox(widget.domNode));
 
 			dojo.mixin(widget, dim);
 		}
@@ -83,7 +83,7 @@ define(["dojo/_base/kernel",
 
 		buildRendering: function(){
 			this.inherited(arguments);
-			dstyle.style(this.domNode, {width: "100%", "height": "100%"});
+			dstyle.set(this.domNode, {width: "100%", "height": "100%"});
 			cls.add(this.domNode,"dijitContainer");
 		},
 
@@ -166,7 +166,7 @@ define(["dojo/_base/kernel",
 
 			// set margin box size, unless it wasn't specified, in which case use current size
 			if(changeSize){
-				dgeometry.marginBox(node, changeSize);
+				dgeometry.setMarginBox(node, changeSize);
 
 				// set offset of the node
 				if(changeSize.t){ node.style.top = changeSize.t + "px"; }
@@ -179,7 +179,7 @@ define(["dojo/_base/kernel",
 			var mb = resultSize || {};
 			dojo.mixin(mb, changeSize || {});	// changeSize overrides resultSize
 			if( !("h" in mb) || !("w" in mb) ){
-				mb = dojo.mixin(dgeometry.marginBox(node), mb);	// just use dojo.marginBox() to fill in missing values
+				mb = dojo.mixin(dgeometry.getMarginBox(node), mb);	// just use dojo.marginBox() to fill in missing values
 			}
 
 			// Compute and save the size of my border box and content box
@@ -224,19 +224,19 @@ define(["dojo/_base/kernel",
 
 					return {		
 						domNode: node,
-						region: dattr.attr(node,"region")
+						region: dattr.get(node,"region")
 					}
 						
 				});
 				if (this.selectedChild){
 					children = array.filter(children, function(c){
 						if (c.region=="center" && this.selectedChild && this.selectedChild.domNode!==c.domNode){
-							dstyle.style(c.domNode,"z-index",25);
-							dstyle.style(c.domNode,'display','none');
+							dstyle.set(c.domNode,"z-index",25);
+							dstyle.set(c.domNode,'display','none');
 							return false;
 						}else if (c.region!="center"){
-							dstyle.style(c.domNode,"display","");
-							dstyle.style(c.domNode,"z-index",100);
+							dstyle.set(c.domNode,"display","");
+							dstyle.set(c.domNode,"z-index",100);
 						}
 					
 						return c.domNode && c.region;
@@ -253,8 +253,8 @@ define(["dojo/_base/kernel",
 				}else{
 					array.forEach(children, function(c){
 						if (c && c.domNode && c.region=="center"){
-							dstyle.style(c.domNode,"z-index",25);
-							dstyle.style(c.domNode,'display','none');
+							dstyle.set(c.domNode,"z-index",25);
+							dstyle.set(c.domNode,'display','none');
 						}	
 					});
 				}
@@ -409,7 +409,7 @@ define(["dojo/_base/kernel",
 		addChild: function(widget){
 			cls.add(widget.domNode, this.baseClass + "_child");
 			widget.region = "center";;
-			dattr.attr(widget.domNode,"region","center");
+			dattr.set(widget.domNode,"region","center");
 			this._supportingWidgets.push(widget);
 			dconstruct.place(widget.domNode,this.domNode);
 			this.children[widget.id] = widget;
@@ -445,7 +445,7 @@ define(["dojo/_base/kernel",
 							this.selectedChild.deactivate(); 
 						}
 
-						dstyle.style(this.selectedChild.domNode,"zIndex",25);
+						dstyle.set(this.selectedChild.domNode,"zIndex",25);
 					}
 		
 					//dojo.style(child.domNode, {
@@ -454,8 +454,8 @@ define(["dojo/_base/kernel",
 					//	"overflow": "auto"
 					//});
 					this.selectedChild = child;
-					dstyle.style(child.domNode, "display", "");
-					dstyle.style(child.domNode,"zIndex",50);
+					dstyle.set(child.domNode, "display", "");
+					dstyle.set(child.domNode,"zIndex",50);
 					this.selectedChild=child;
 					if (this._started) {	
 						if (child.startup && !child._started){
