@@ -187,26 +187,23 @@ define(["dojo/_base/kernel",
         ret.node = node;
        
         if(ret["in"]){
-         
+            //Need to set opacity here because Android 2.2 has bug that
+            //scale(...) in transform does not persist status
             ret.startState={
                 "-webkit-transform":"scale(0,0.8) skew(0,-30deg)",
-                "z-index": 50,
                 "opacity": "0"
             };            
             ret.endState={
                 "-webkit-transform":"scale(1,1) skew(0,0)",
-                "z-index": 50,
                 "opacity": "1"
             };
         }else{
             ret.startState={
                 "-webkit-transform":"scale(1,1) skew(0,0)",
-                "z-index": 50,
                 "opacity": "1"
             };            
             ret.endState={
                 "-webkit-transform":"scale(0,0.8) skew(0,30deg)",
-                "z-index": 50,
                 "opacity": "0"
             };
         }
@@ -231,7 +228,7 @@ define(["dojo/_base/kernel",
             array.forEach(args, function(item){
                 item.start();
             });            
-        }, 25);
+        }, 2);
     };
     
     //the chain player to start multiple animations together
@@ -254,7 +251,7 @@ define(["dojo/_base/kernel",
         //than 2ms will raise the timeout interval to that minimal value
         setTimeout(function(){
             args[0].start();
-        }, 25);
+        }, 2);
     };
     
     return dojox.app.animation;
