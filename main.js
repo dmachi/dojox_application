@@ -13,7 +13,7 @@ define(["dojo/_base/kernel",
 	"./scene",
 	"dojox/mobile/transition",
 	"dojo/on"],
-	function(dojo,lang,declare,ready,window,dom,dijit,dijox,cache,fx,jsonRef,parser,sceneCtor,transition,listen){
+	function(dojo,lang,declare,ready,baseWindow,dom,dijit,dijox,cache,fx,jsonRef,parser,sceneCtor,transition,listen){
 	var Application = declare([sceneCtor], {
 		constructor: function(params){
 			this.scenes={};
@@ -45,8 +45,8 @@ define(["dojo/_base/kernel",
 		baseClass: "application mblView",
 		defaultViewType: sceneCtor,
 		buildRendering: function(){
-			if (this.srcNodeRef===window.body()){
-				this.srcNodeRef = dom.create("DIV",{},window.body());
+			if (this.srcNodeRef===baseWindow.body()){
+				this.srcNodeRef = dom.create("DIV",{},baseWindow.body());
 			}
 			this.inherited(arguments);
 		}
@@ -77,7 +77,7 @@ define(["dojo/_base/kernel",
 			App = declare(modules,ext);
 
 			ready(function(){
-				app = App(config,node || window.body());
+				app = App(config,node || baseWindow.body());
 				app.startup();
 			});
 		});
