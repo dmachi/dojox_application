@@ -18,7 +18,12 @@ define(["dojo/_base/kernel","dojo/_base/lang", "dojo/_base/declare", "dojo/on"],
 				evt.preventDefault();
 			}
 
-			dojo.when(this.transition(evt.detail.target, dojo.mixin({reverse: false},evt.detail)), dojo.hitch(this, function(){
+			var target = evt.detail.target;
+			var regex = /#(.+)/;
+			if(!target && regex.test(evt.detail.href)){
+				target = evt.detail.href.match(regex)[1];
+			}
+			dojo.when(this.transition(target, dojo.mixin({reverse: false},evt.detail)), dojo.hitch(this, function(){
 				history.pushState(evt.detail,evt.detail.href, evt.detail.url);
 			}))
 	
