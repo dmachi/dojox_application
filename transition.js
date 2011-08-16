@@ -23,7 +23,7 @@ define(["dojo/_base/kernel", "dojo/_base/array","dojo/_base/html","dojo/Deferred
 				    "in": false,
 				    direction: rev,
 				    duration: duration,
-				    afterEnd: function(){
+				    onAfterEnd: function(){
 				        fromDef.resolve(from);
 				    }
 				});
@@ -36,7 +36,7 @@ define(["dojo/_base/kernel", "dojo/_base/array","dojo/_base/html","dojo/Deferred
 			var toTransit = animation[options.transition](to, {
                             direction: rev,
                             duration: duration,
-                            afterEnd: function(){
+                            onAfterEnd: function(){
                                 toDef.resolve(to);
                             }
                         });
