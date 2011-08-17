@@ -54,5 +54,5 @@ define(["dojo/_base/kernel", "dojo/_base/array","dojo/_base/html","dojo/Deferred
 			return new dojo.DeferredList(defs);
 			
 		}
-	}
+	};
 });
