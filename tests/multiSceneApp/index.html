@@ -43,10 +43,11 @@
 			}
 
 		</style>
-		<script type="text/javscript">
+		<script type="text/javascript">
 			dojoConfig = {
 				parseOnLoad: false,
-				mblHideAddressBar: false	
+				mblHideAddressBar: false,	
+                mblAlwaysHideAddressBar: false,
 				traceSet:{
 					"loader-inject":0,
 					"loader-define":0,
@@ -62,9 +63,11 @@
 		<script type="text/javascript" src="../../../../dojo/dojo.js"></script>
 		<script>
 			console.log("post dojo");
+            // the actual  launcher
+            require(["./multiSceneApp.js"], function(){});
 		</script>
-		<!-- the actual  launcher -->
-		<script type="text/javascript" src="multiSceneApp.js"></script>
+		
+		<!--script type="text/javascript" src="multiSceneApp.js"></script-->
 	
 	</head>
 	<body>
