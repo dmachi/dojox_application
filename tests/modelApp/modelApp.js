@@ -1,3 +1,4 @@
+require(["dojo/_base/kernel", "dojo/_base/loader"], function(dojo){
 var path = window.location.pathname;
 if (path.charAt(path.length)!="/"){
 	path = path.split("/");
@@ -5,11 +6,6 @@ if (path.charAt(path.length)!="/"){
 	path=path.join("/");	
 }
 dojo.registerModulePath("app",path);
-
-require(["dojo","dojox/app/main", "dojox/json/ref"],function(dojo,Application,config,ref){
-	//app = Application(dojox.json.ref.resolveJson(config), dojo.body());
-	//app = Application(dojox.json.ref.fromJson(config));
-});
 
 require(["dojo","dojox/app/main", "dojo/text!app/config.json"],function(dojo, Application,config){
     //app = Application(dojox.json.ref.resolveJson(config), dojo.body());
@@ -63,4 +59,5 @@ require(["dojo","dojox/app/main", "dojo/text!app/config.json"],function(dojo, Ap
                    ];
 
     app = Application(dojox.json.ref.fromJson(config));
+});
 });

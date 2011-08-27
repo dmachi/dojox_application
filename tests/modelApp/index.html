@@ -29,10 +29,11 @@
 			}
 
 		</style>
-		<script type="text/javscript">
+		<script type="text/javascript">
 			dojoConfig = {
 				parseOnLoad: false,
-				mblHideAddressBar: false	
+				mblHideAddressBar: false,
+                mblAlwaysHideAddressBar: false,	
 				traceSet:{
 					"loader-inject":1,
 					"loader-define":1,
@@ -46,8 +47,11 @@
 		</script>
 		<script type="text/javascript" src="../../../../dojo/dojo.js"></script>
 
-		<!-- the actual application launcher -->
-		<script type="text/javascript" src="modelApp.js"></script>
+		<script>
+            console.log("post dojo");
+            // the actual  launcher
+            require(["./modelApp.js"], function(){});
+        </script>
 
 	</head>
 	<body>
