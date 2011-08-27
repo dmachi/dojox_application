@@ -4,18 +4,36 @@ define(["dojo/_base/kernel",
         "dojo/_base/array",
         "dojo/on"], 
         function(dojo, lang, declare, array, on){
+    //TODO create cross platform animation/transition effects
+    var transitionEndEventName = "transitionend";
+    var transitionPrefix = "t"; //by default use "t" prefix and "ransition" to make word "transition"
+//    if(has("webkit")){
+        transitionPrefix = "WebkitT";
+        transitionEndEventName = "webkitTransitionEnd";
+//    }else if(has("mozilla")){
+//        transitionPrefix = "MozT";
+//    }
+    
+    
 
     //TODO find a way to lock the animation and prevent animation conflict
     declare("dojox.app.animation", null, {
-        startState: {},
-        endState: {},
-        node: null,
-        duration: 250,
-        "in": true,
-        direction: 1,
-        autoClear: true,
+        
 
         constructor: function(args){
+            //default config should be in animation object itself instead of its prototype
+            //otherwise, it might be easy for making mistake of modifying prototype
+            var defaultConfig = {
+                startState: {},
+                endState: {},
+                node: null,
+                duration: 250,
+                "in": true,
+                direction: 1,
+                autoClear: true
+            };
+            
+            lang.mixin(this, defaultConfig);
             lang.mixin(this, args);
         },
         
@@ -38,8 +56,8 @@ define(["dojo/_base/kernel",
         initState: function(){
             
             //apply the immediate style change for initial state.
-            this.node.style["-webkit-transition-property"] = "none";
-            this.node.style["-webkit-transition-duration"] = "0ms";
+            this.node.style[transitionPrefix + "ransitionProperty"] = "none";
+            this.node.style[transitionPrefix + "ransitionDuration"] = "0ms";
             this._applyState(this.startState);
             
         },
@@ -52,8 +70,8 @@ define(["dojo/_base/kernel",
         },
         
         _beforeClear: function(){
-            this.node.style["-webkit-transition-property"] = null;
-            this.node.style["-webkit-transition-duration"] = null;
+            this.node.style[transitionPrefix + "ransitionProperty"] = null;
+            this.node.style[transitionPrefix + "ransitionDuration"] = null;
             if(this["in"] !== true){
                 this.node.style.display = "none";
             }            
@@ -82,13 +100,13 @@ define(["dojo/_base/kernel",
             
             var self = this;
             //change the transition duration
-            self.node.style["-webkit-transition-property"] = "all";
-            self.node.style["-webkit-transition-duration"] = self.duration + "ms";
+            self.node.style[transitionPrefix + "ransitionProperty"] = "all";
+            self.node.style[transitionPrefix + "ransitionDuration"] = self.duration + "ms";
             
             //connect to clear the transition state after the transition end.
             //Since the transition is conducted asynchronously, we need to 
             //connect to transition end event to clear the state
-            on.once(self.node, "webkitTransitionEnd", function(){
+            on.once(self.node, transitionEndEventName, function(){
                 self.clear();
             });
             
@@ -141,13 +159,9 @@ define(["dojo/_base/kernel",
         }
         
         
-        ret.startState={
-            "-webkit-transform": "translate3d("+startX+",0,0)"
-        };
+        ret.startState[transitionPrefix + "ransform"]="translateX("+startX+")";
         
-        ret.endState={
-            "-webkit-transform": "translate3d("+endX+",0,0)"
-        };
+        ret.endState[transitionPrefix + "ransform"]="translateX("+endX+")";
         
         return ret;
     };
@@ -189,23 +203,27 @@ define(["dojo/_base/kernel",
         if(ret["in"]){
             //Need to set opacity here because Android 2.2 has bug that
             //scale(...) in transform does not persist status
-            ret.startState={
-                "-webkit-transform":"scale(0,0.8) skew(0,-30deg)",
-                "opacity": "0"
-            };            
-            ret.endState={
-                "-webkit-transform":"scale(1,1) skew(0,0)",
-                "opacity": "1"
-            };
+            lang.mixin({
+                startState:{
+                    "opacity": "0"
+                },
+                endState:{
+                    "opacity": "1"
+                }
+            });
+            ret.startState[transitionPrefix + "ransform"]="scale(0,0.8) skew(0,-30deg)";
+            ret.endState[transitionPrefix + "ransform"]="scale(1,1) skew(0,0)";
         }else{
-            ret.startState={
-                "-webkit-transform":"scale(1,1) skew(0,0)",
-                "opacity": "1"
-            };            
-            ret.endState={
-                "-webkit-transform":"scale(0,0.8) skew(0,30deg)",
-                "opacity": "0"
-            };
+            lang.mixin({
+                startState:{
+                    "opacity": "1"
+                },
+                endState:{
+                    "opacity": "0"
+                }
+            });         
+            ret.startState[transitionPrefix + "ransform"]="scale(1,1) skew(0,0)";
+            ret.endState[transitionPrefix + "ransform"]="scale(0,0.8) skew(0,30deg)";
         }
         
         return ret;
