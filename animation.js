@@ -3,7 +3,7 @@ define(["dojo/_base/kernel",
         "dojo/_base/declare",
         "dojo/_base/array",
         "dojo/on",
-        "dojox/mobile/sniff"], 
+        "dojo/_base/sniff"], 
         function(dojo, lang, declare, array, on, has){
     //TODO create cross platform animation/transition effects
     var transitionEndEventName = "transitionend";
