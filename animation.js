@@ -2,17 +2,18 @@ define(["dojo/_base/kernel",
         "dojo/_base/lang",
         "dojo/_base/declare",
         "dojo/_base/array",
-        "dojo/on"], 
-        function(dojo, lang, declare, array, on){
+        "dojo/on",
+        "dojox/mobile/sniff"], 
+        function(dojo, lang, declare, array, on, has){
     //TODO create cross platform animation/transition effects
     var transitionEndEventName = "transitionend";
     var transitionPrefix = "t"; //by default use "t" prefix and "ransition" to make word "transition"
-//    if(has("webkit")){
+    if(has("webkit")){
         transitionPrefix = "WebkitT";
         transitionEndEventName = "webkitTransitionEnd";
-//    }else if(has("mozilla")){
-//        transitionPrefix = "MozT";
-//    }
+    }else if(has("mozilla")){
+        transitionPrefix = "MozT";
+    }
     
     
 
