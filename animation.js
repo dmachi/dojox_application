@@ -183,14 +183,14 @@ define(["dojo/_base/kernel",
             startOpacity = "1";
         }
         
-        
-        ret.startState={
-            "opacity": startOpacity
-        };
-        
-        ret.endState={
-            "opacity": endOpacity
-        };
+        lang.mixin(ret, {
+            startState:{
+                "opacity": startOpacity
+            },
+            endState:{
+                "opacity": endOpacity
+            }
+        });
         
         return ret;
     };
@@ -204,7 +204,7 @@ define(["dojo/_base/kernel",
         if(ret["in"]){
             //Need to set opacity here because Android 2.2 has bug that
             //scale(...) in transform does not persist status
-            lang.mixin({
+            lang.mixin(ret,{
                 startState:{
                     "opacity": "0"
                 },
@@ -215,7 +215,7 @@ define(["dojo/_base/kernel",
             ret.startState[transitionPrefix + "ransform"]="scale(0,0.8) skew(0,-30deg)";
             ret.endState[transitionPrefix + "ransform"]="scale(1,1) skew(0,0)";
         }else{
-            lang.mixin({
+            lang.mixin(ret,{
                 startState:{
                     "opacity": "1"
                 },
