@@ -8,11 +8,15 @@ define(["dojo/_base/kernel",
     //TODO create cross platform animation/transition effects
     var transitionEndEventName = "transitionend";
     var transitionPrefix = "t"; //by default use "t" prefix and "ransition" to make word "transition"
+    var translateMethodStart = "translate3d(";//Android 2.x does not support translateX in CSS Transition, we need to use translate3d in webkit browsers
+    var translateMethodEnd = ",0,0)";
     if(has("webkit")){
         transitionPrefix = "WebkitT";
         transitionEndEventName = "webkitTransitionEnd";
     }else if(has("mozilla")){
         transitionPrefix = "MozT";
+        translateMethodStart = "translateX(";
+        translateMethodEnd = ")";
     }
     
     
@@ -160,9 +164,9 @@ define(["dojo/_base/kernel",
         }
         
         
-        ret.startState[transitionPrefix + "ransform"]="translateX("+startX+")";
+        ret.startState[transitionPrefix + "ransform"]=translateMethodStart+startX+translateMethodEnd;
         
-        ret.endState[transitionPrefix + "ransform"]="translateX("+endX+")";
+        ret.endState[transitionPrefix + "ransform"]=translateMethodStart+endX+translateMethodEnd;
         
         return ret;
     };
