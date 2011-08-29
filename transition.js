@@ -5,6 +5,14 @@ define(["dojo/_base/kernel", "dojo/_base/array","dojo/_base/html","dojo/Deferred
 		if(!options || !options.transition || !animation[options.transition]){
 			dojo.style(from,"display","none");
 			dojo.style(to, "display", "");
+			if(options.transitionDefs){
+			    if(options.transitionDefs[from.id]){
+			        options.transitionDefs[from.id].resolve(from);
+			    }
+			    if(options.transitionDefs[to.id]){
+                                options.transitionDefs[to.id].resolve(to);
+                            }
+			}
 		}else{
 			var defs=[];
 			var transit=[];
@@ -21,7 +29,8 @@ define(["dojo/_base/kernel", "dojo/_base/array","dojo/_base/html","dojo/Deferred
 				var fromTransit = animation[options.transition](from, {
 				    "in": false,
 				    direction: rev,
-				    duration: duration
+				    duration: duration,
+				    deferred: (options.transitionDefs && options.transitionDefs[from.id]) ? options.transitionDefs[from.id] : null
 				});
 				defs.push(fromTransit.deferred);//every animation object should have a deferred.
 				transit.push(fromTransit);
@@ -30,7 +39,8 @@ define(["dojo/_base/kernel", "dojo/_base/array","dojo/_base/html","dojo/Deferred
 			//create animation to transit "to" in	                
 			var toTransit = animation[options.transition](to, {
                             direction: rev,
-                            duration: duration
+                            duration: duration,
+                            deferred: (options.transitionDefs && options.transitionDefs[to.id]) ? options.transitionDefs[to.id] : null
                         });
 			defs.push(toTransit.deferred);//every animation object should have a deferred.
 			transit.push(toTransit);

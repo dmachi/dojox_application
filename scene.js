@@ -16,10 +16,11 @@ define(["dojo/_base/kernel",
 	"dijit/_TemplatedMixin",
 	"dijit/_WidgetsInTemplateMixin",
 	"./transition", 
+	"./animation",
 	"./model", 
 	"./view", 
 	"./bind"], 
-	function(dojo,declare,array,deferred,dlang,has,dstyle,dgeometry,cls,dconstruct,dattr,query,dijit,dojox,WidgetBase,Templated,WidgetsInTemplate,transition, model, baseView, bind){
+	function(dojo,declare,array,deferred,dlang,has,dstyle,dgeometry,cls,dconstruct,dattr,query,dijit,dojox,WidgetBase,Templated,WidgetsInTemplate,transition, anim, model, baseView, bind){
 	
 	var marginBox2contentBox = function(/*DomNode*/ node, /*Object*/ mb){
 		// summary:
@@ -506,17 +507,36 @@ define(["dojo/_base/kernel",
 
 			return deferred.when(next, dlang.hitch(this, function(next){
 				if (next!==current){
+				    //TODO need to refactor here, when clicking fast, current will not be the 
+				    //view we want to start transition. For example, during transition 1 -> 2
+				    //if user click button to transition to 3 and then transition to 1. It will
+				    //perform transition 2 -> 3 and 2 -> 1 because current is always point to 
+				    //2 during 1 -> 2 transition.
+				    var def  = new deferred();
+				    var waitingList = anim.getWaitingList([next.domNode, current.domNode]);
+				    //update registry with deferred objects in animations of args.
+				    var transitionDefs = {};
+				    transitionDefs[current.domNode.id] = anim.playing[current.domNode.id] = new deferred();
+				    transitionDefs[next.domNode.id] = anim.playing[current.domNode.id] = new deferred();
+				                
+				    deferred.when(waitingList, dojo.hitch(this, function(){
 					//assume next is already loaded so that this.set(...) will not return
 					//a promise object. this.set(...) will handles the this.selectedChild,
 					//activate or deactivate views and refresh layout.
 					this.set("selectedChild", next);
 					//console.log("current.domNode: ", current.domNode, "next.domNode: ", next.domNode);
-					return def = transition(current.domNode,next.domNode,dojo.mixin({},opts,{transition: this.defaultTransition || "none"})).then(dlang.hitch(this, function(){
+					transition(current.domNode,next.domNode,dojo.mixin({},opts,{transition: this.defaultTransition || "none", transitionDefs: transitionDefs})).then(dlang.hitch(this, function(){
 						//dojo.style(current.domNode, "display", "none");
 						if (toId && next.transition){
-							return next.transition(subIds,opts);
+							deferred.when(next.transition(subIds,opts), function(){
+							    def.resolve();
+							});
+						}else{
+						    def.resolve();
 						}
 					}));
+				    }));
+				    return def;
 				}
 
 				//we didn't need to transition, but continue to propogate.

@@ -3,9 +3,10 @@ define(["dojo/_base/kernel",
         "dojo/_base/declare",
         "dojo/_base/array",
         "dojo/_base/Deferred",
+        "dojo/DeferredList",
         "dojo/on",
         "dojo/_base/sniff"], 
-        function(dojo, lang, declare, array, deferred, on, has){
+        function(dojo, lang, declare, array, deferred, deferredList, on, has){
     //TODO create cross platform animation/transition effects
     var transitionEndEventName = "transitionend";
     var transitionPrefix = "t"; //by default use "t" prefix and "ransition" to make word "transition"
@@ -45,7 +46,9 @@ define(["dojo/_base/kernel",
             //create the deferred object which will resolve after the animation is finished.
             //We can rely on "onAfterEnd" function to notify the end of a single animation,
             //but using a deferred object is easier to wait for multiple animations end.
-            this.deferred = new deferred();
+            if(!this.deferred){
+                this.deferred = new deferred();
+            }
         },
         
         play: function(){
@@ -91,6 +94,9 @@ define(["dojo/_base/kernel",
         
         _onAfterEnd: function(){
             this.deferred.resolve(this.node);
+            if(this.node.id && dojox.app.animation.playing[this.node.id]===this.deferred){
+                delete dojox.app.animation.playing[this.node.id];
+            }
             this.onAfterEnd();
         },
         
@@ -129,6 +135,7 @@ define(["dojo/_base/kernel",
         clear: function(){
             this._beforeClear();
             this._removeState(this.endState);
+            console.log(this.node.id + " clear.");
             this._onAfterEnd();
         },
         
@@ -241,47 +248,95 @@ define(["dojo/_base/kernel",
         return ret;
     };
     
+    var getWaitingList = function(/*Array*/ nodes){
+        var defs = [];
+        array.forEach(nodes, function(node){
+            //check whether the node is under other animation
+            if(node.id && dojox.app.animation.playing[node.id]){
+                //TODO hook on deferred object in dojox.app.animation.playing
+                defs.push(dojox.app.animation.playing[node.id]);
+            }
+            
+        });
+        return new deferredList(defs);
+    };
+    
+    dojox.app.animation.getWaitingList = getWaitingList;
+    
     //TODO groupedPlay should ensure the UI update happens when
     //all animations end.
     //the group player to start multiple animations together
     dojox.app.animation.groupedPlay = function(/*Array*/args){
         //args should be array of dojox.app.animation
-        array.forEach(args, function(item){
-            //set the start state
-            item.initState();
+        
+        var animNodes = array.filter(args, function(item){
+            return item.node;
         });
         
-        //According to the study of Chrome V8 engine. The minimal timer
-        //interval is 2ms. Any browser with minimal timer interval greater
-        //than 2ms will raise the timeout interval to that minimal value
-        setTimeout(function(){
+        var waitingList = getWaitingList(animNodes);
+
+        //update registry with deferred objects in animations of args.
+        array.forEach(args, function(item){
+            if(item.node.id){
+                dojox.app.animation.playing[item.node.id] = item.deferred;
+            }
+        });
+        
+        //TODO wait for all deferred object in deferred list to resolve
+        dojo.when(waitingList, function(){
             array.forEach(args, function(item){
-                item.start();
-            });            
-        }, 2);
+                //set the start state
+                item.initState();
+            });
+            
+            //According to the study of Chrome V8 engine. The minimal timer
+            //interval is 2ms. Any browser with minimal timer interval greater
+            //than 2ms will raise the timeout interval to that minimal value
+            setTimeout(function(){
+                array.forEach(args, function(item){
+                    item.start();
+                });            
+            }, 2);
+        });        
     };
     
     //the chain player to start multiple animations one by one
     dojox.app.animation.chainedPlay = function(/*Array*/args){
         //args should be array of dojox.app.animation
-        array.forEach(args, function(item){
-            //set the start state
-            item.initState();
+        
+        var animNodes = array.filter(args, function(item){
+            return item.node;
         });
         
-        //TODO chain animations together
-        for (var i=1, len=args.length; i < len; i++){
-            on.once(args[i-1], "AfterEnd", lang.hitch(args[i], function(){
-                this.start();
-            }));
-        }
+        var waitingList = getWaitingList(animNodes);
+
+        //update registry with deferred objects in animations of args.
+        array.forEach(args, function(item){
+            if(item.node.id){
+                dojox.app.animation.playing[item.node.id] = item.deferred;
+            }
+        });
         
-        //According to the study of Chrome V8 engine. The minimal timer
-        //interval is 2ms. Any browser with minimal timer interval greater
-        //than 2ms will raise the timeout interval to that minimal value
-        setTimeout(function(){
-            args[0].start();
-        }, 2);
+        dojo.when(waitingList, function(){
+            array.forEach(args, function(item){
+                //set the start state
+                item.initState();
+            });
+            
+            //TODO chain animations together
+            for (var i=1, len=args.length; i < len; i++){
+                on.once(args[i-1], "AfterEnd", lang.hitch(args[i], function(){
+                    this.start();
+                }));
+            }
+            
+            //According to the study of Chrome V8 engine. The minimal timer
+            //interval is 2ms. Any browser with minimal timer interval greater
+            //than 2ms will raise the timeout interval to that minimal value
+            setTimeout(function(){
+                args[0].start();
+            }, 2);
+        });        
     };
     
     //TODO complete the registry mechanism for animation handling and prevent animation conflicts
