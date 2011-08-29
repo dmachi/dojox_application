@@ -14,6 +14,7 @@ define(["dojo/_base/kernel",
 	"dojox/mobile/transition",
 	"dojo/on"],
 	function(dojo,lang,declare,ready,baseWindow,dom,dijit,dijox,cache,fx,jsonRef,parser,sceneCtor,transition,listen){
+        dojo.experimental("dojox.app");
 	var Application = declare([sceneCtor], {
 		constructor: function(params){
 			this.scenes={};
