@@ -2,9 +2,10 @@ define(["dojo/_base/kernel",
         "dojo/_base/lang",
         "dojo/_base/declare",
         "dojo/_base/array",
+        "dojo/_base/Deferred",
         "dojo/on",
         "dojo/_base/sniff"], 
-        function(dojo, lang, declare, array, on, has){
+        function(dojo, lang, declare, array, deferred, on, has){
     //TODO create cross platform animation/transition effects
     var transitionEndEventName = "transitionend";
     var transitionPrefix = "t"; //by default use "t" prefix and "ransition" to make word "transition"
@@ -40,6 +41,11 @@ define(["dojo/_base/kernel",
             
             lang.mixin(this, defaultConfig);
             lang.mixin(this, args);
+            
+            //create the deferred object which will resolve after the animation is finished.
+            //We can rely on "onAfterEnd" function to notify the end of a single animation,
+            //but using a deferred object is easier to wait for multiple animations end.
+            this.deferred = new deferred();
         },
         
         play: function(){
@@ -84,6 +90,7 @@ define(["dojo/_base/kernel",
         },
         
         _onAfterEnd: function(){
+            this.deferred.resolve(this.node);
             this.onAfterEnd();
         },
         
@@ -254,7 +261,7 @@ define(["dojo/_base/kernel",
         }, 2);
     };
     
-    //the chain player to start multiple animations together
+    //the chain player to start multiple animations one by one
     dojox.app.animation.chainedPlay = function(/*Array*/args){
         //args should be array of dojox.app.animation
         array.forEach(args, function(item){
@@ -276,6 +283,9 @@ define(["dojo/_base/kernel",
             args[0].start();
         }, 2);
     };
+    
+    //TODO complete the registry mechanism for animation handling and prevent animation conflicts
+    dojox.app.animation.playing = {};
     
     return dojox.app.animation;
 });

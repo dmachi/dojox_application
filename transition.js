@@ -17,30 +17,22 @@ define(["dojo/_base/kernel", "dojo/_base/array","dojo/_base/html","dojo/Deferred
 			dojo.style(from, "display", ""); 
 			dojo.style(to, "display", "");
 			if (from){
-				var fromDef = new dojo.Deferred();
 				//create animation to transit "from" out
 				var fromTransit = animation[options.transition](from, {
 				    "in": false,
 				    direction: rev,
-				    duration: duration,
-				    onAfterEnd: function(){
-				        fromDef.resolve(from);
-				    }
+				    duration: duration
 				});
-				defs.push(fromDef);
+				defs.push(fromTransit.deferred);//every animation object should have a deferred.
 				transit.push(fromTransit);
 			}
 			
-			var toDef = new dojo.Deferred();
 			//create animation to transit "to" in	                
 			var toTransit = animation[options.transition](to, {
                             direction: rev,
-                            duration: duration,
-                            onAfterEnd: function(){
-                                toDef.resolve(to);
-                            }
+                            duration: duration
                         });
-			defs.push(toDef);
+			defs.push(toTransit.deferred);//every animation object should have a deferred.
 			transit.push(toTransit);
 			
 			//TODO If it is flip use the chainedPlay
