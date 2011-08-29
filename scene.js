@@ -102,18 +102,18 @@ define(["dojo/_base/kernel",
 			}
 		},
 
-		loadChild: function(childId,subIds){
+		loadChild: function(self, childId,subIds){
 			if (!childId) {
 				return error("Child ID: '" + childId +"' not found");
 			}
 	
-			var cid = this.id+"_" + childId;
-			if (this.children[cid]){
-				return this.children[cid];
+			var cid = self.id+"_" + childId;
+			if (self.children[cid]){
+				return self.children[cid];
 			}
 
-			if (this.views&& this.views[childId]){
-				var conf = this.views[childId];
+			if (this.views&& self.views[childId]){
+				var conf = self.views[childId];
 				if (!conf.dependencies){conf.dependencies=[];}
 				var deps = conf.template? conf.dependencies.concat(["dojo/text!app/"+conf.template]) :
 						conf.dependencies.concat([]);
@@ -127,8 +127,8 @@ define(["dojo/_base/kernel",
 					def.resolve(true);
 				}
 		
-				var self = this;					
-				return deferred.when(def, function(){		
+			   var loadChildDeferred = new deferred();					
+				deferred.when(def, function(){		
 					var ctor;
 					if (conf.type){
 						ctor=dojo.getObject(conf.type);
@@ -154,9 +154,23 @@ define(["dojo/_base/kernel",
                         //TODO need to find out a better way to get all bindable controls in a view
                         bind([child], child.loadedModels);
                     }
-					return self.addChild(child);
-				});
+					var addResult = self.addChild(child);
+                 var promise;
 
+                 subIds = subIds.split(',');
+                 if ((subIds[0].length > 0) && (subIds.length > 1)) {//TODO join subIds
+                     promise = self.loadChild(child, subIds[0], subIds[1]);
+                 }
+                 else 
+                     if (subIds[0].length > 0) {
+                         promise = self.loadChild(child, subIds[0], "");
+                     }
+                 
+                 dojo.when(promise, function(){
+                     loadChildDeferred.resolve(addResult)
+                 });
+				});
+              return loadChildDeferred;
 			}
 	
 			throw Error("Child '" + childId + "' not found.");
@@ -377,7 +391,7 @@ define(["dojo/_base/kernel",
 				bind(this.getChildren(), this.loadedModels);
 			}
 			
-			var next = this.loadChild(toId, subIds);
+			var next = this.loadChild(this, toId, subIds);
 			deferred.when(next, dlang.hitch(this, function(next){
 				this.set("selectedChild", next);
 				
@@ -403,7 +417,11 @@ define(["dojo/_base/kernel",
 				array.forEach(this.getChildren(), function(child){
 					child.startup();
 				});
-				
+
+				//transition to _startView
+              if (this._startView != this.defaultView) {
+                  this.transition(this._startView, {});
+              }
 			}));
 		},
 
@@ -497,7 +515,7 @@ define(["dojo/_base/kernel",
 				}	
 			}
 		
-			next = this.loadChild(toId,subIds);
+			next = this.loadChild(this, toId,subIds);
 
 			if (!current){
 				//assume this.set(...) will return a promise object if child is first loaded
@@ -505,14 +523,17 @@ define(["dojo/_base/kernel",
 				return this.set("selectedChild",next);	
 			}	
 
-			return deferred.when(next, dlang.hitch(this, function(next){
+			var transitionDeferred  = new deferred();
+			deferred.when(next, dlang.hitch(this, function(next){
+			        var promise;
+			    
 				if (next!==current){
 				    //TODO need to refactor here, when clicking fast, current will not be the 
 				    //view we want to start transition. For example, during transition 1 -> 2
 				    //if user click button to transition to 3 and then transition to 1. It will
 				    //perform transition 2 -> 3 and 2 -> 1 because current is always point to 
 				    //2 during 1 -> 2 transition.
-				    var def  = new deferred();
+				    
 				    var waitingList = anim.getWaitingList([next.domNode, current.domNode]);
 				    //update registry with deferred objects in animations of args.
 				    var transitionDefs = {};
@@ -528,22 +549,27 @@ define(["dojo/_base/kernel",
 					transition(current.domNode,next.domNode,dojo.mixin({},opts,{transition: this.defaultTransition || "none", transitionDefs: transitionDefs})).then(dlang.hitch(this, function(){
 						//dojo.style(current.domNode, "display", "none");
 						if (toId && next.transition){
-							deferred.when(next.transition(subIds,opts), function(){
-							    def.resolve();
-							});
-						}else{
-						    def.resolve();
+							promise = next.transition(subIds,opts);
 						}
+						deferred.when(promise, function(){
+		                                    transitionDeferred.resolve();
+		                                });
 					}));
 				    }));
-				    return def;
+				    return transitionDeferred;
 				}
 
 				//we didn't need to transition, but continue to propogate.
 				if (subIds && next.transition){
-					return next.transition(subIds,opts);
+					promise = next.transition(subIds,opts);
 				}
+				deferred.when(promise, function(){
+				    transitionDeferred.resolve();
+				});
+				return transitionDeferred;
+				
 			}));
+			return transitionDeferred;
 		},
 		toString: function(){return this.id},
 
