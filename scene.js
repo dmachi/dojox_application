@@ -432,12 +432,6 @@ define(["dojo/_base/kernel",
 			this._supportingWidgets.push(widget);
 			dconstruct.place(widget.domNode,this.domNode);
 			this.children[widget.id] = widget;
-			if (this._started){
-				this.layout();
-			}
-			if(this._started && !widget._started){
-				widget.startup();
-			}
 			return widget;
 		},
 
