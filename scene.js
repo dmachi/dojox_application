@@ -550,7 +550,7 @@ define(["dojo/_base/kernel",
 		                                });
 					}));
 				    }));
-				    return transitionDeferred;
+				    return;
 				}
 
 				//we didn't need to transition, but continue to propogate.
@@ -563,7 +563,6 @@ define(["dojo/_base/kernel",
 				return transitionDeferred;
 				
 			}));
-			return transitionDeferred;
 		},
 		toString: function(){return this.id},
 
