@@ -419,7 +419,7 @@ define(["dojo/_base/kernel",
 				});
 
 				//transition to _startView
-              if (this._startView != this.defaultView) {
+              if (this._startView && this._startView != this.defaultView) {
                   this.transition(this._startView, {});
               }
 			}));
