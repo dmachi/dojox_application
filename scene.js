@@ -102,18 +102,18 @@ define(["dojo/_base/kernel",
 			}
 		},
 
-		loadChild: function(self, childId,subIds){
+		loadChild: function(childId,subIds){
 			if (!childId) {
 				return error("Child ID: '" + childId +"' not found");
 			}
 	
-			var cid = self.id+"_" + childId;
-			if (self.children[cid]){
-				return self.children[cid];
+			var cid = this.id+"_" + childId;
+			if (this.children[cid]){
+				return this.children[cid];
 			}
 
-			if (this.views&& self.views[childId]){
-				var conf = self.views[childId];
+			if (this.views&& this.views[childId]){
+				var conf = this.views[childId];
 				if (!conf.dependencies){conf.dependencies=[];}
 				var deps = conf.template? conf.dependencies.concat(["dojo/text!app/"+conf.template]) :
 						conf.dependencies.concat([]);
@@ -128,6 +128,7 @@ define(["dojo/_base/kernel",
 				}
 		
 			   var loadChildDeferred = new deferred();					
+			   var self = this;
 				deferred.when(def, function(){		
 					var ctor;
 					if (conf.type){
@@ -159,11 +160,11 @@ define(["dojo/_base/kernel",
 
                  subIds = subIds.split(',');
                  if ((subIds[0].length > 0) && (subIds.length > 1)) {//TODO join subIds
-                     promise = self.loadChild(child, subIds[0], subIds[1]);
+                     promise = child.loadChild(subIds[0], subIds[1]);
                  }
                  else 
                      if (subIds[0].length > 0) {
-                         promise = self.loadChild(child, subIds[0], "");
+                         promise = child.loadChild(subIds[0], "");
                      }
                  
                  dojo.when(promise, function(){
@@ -391,7 +392,7 @@ define(["dojo/_base/kernel",
 				bind(this.getChildren(), this.loadedModels);
 			}
 			
-			var next = this.loadChild(this, toId, subIds);
+			var next = this.loadChild(toId, subIds);
 			deferred.when(next, dlang.hitch(this, function(next){
 				this.set("selectedChild", next);
 				
@@ -509,7 +510,7 @@ define(["dojo/_base/kernel",
 				}	
 			}
 		
-			next = this.loadChild(this, toId,subIds);
+			next = this.loadChild(toId,subIds);
 
 			if (!current){
 				//assume this.set(...) will return a promise object if child is first loaded
@@ -550,7 +551,7 @@ define(["dojo/_base/kernel",
 		                                });
 					}));
 				    }));
-				    return transitionDeferred;
+				    return;
 				}
 
 				//we didn't need to transition, but continue to propogate.
@@ -563,7 +564,6 @@ define(["dojo/_base/kernel",
 				return transitionDeferred;
 				
 			}));
-			return transitionDeferred;
 		},
 		toString: function(){return this.id},
 
