@@ -276,7 +276,10 @@ define(["dojo/_base/kernel",
 				}
 			
 			}	
-			this.layoutChildren(this.domNode, this._contentBox, children);
+			// We don't need to layout children if this._contentBox is null for the operation will do nothing.
+			if (this._contentBox) {
+				this.layoutChildren(this.domNode, this._contentBox, children);
+			}
 			array.forEach(this.getChildren(), function(child){ 
 				if (!child._started && child.startup){
 					child.startup(); 
