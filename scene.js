@@ -546,7 +546,7 @@ define(["dojo/_base/kernel",
 					//console.log("current.domNode: ", current.domNode, "next.domNode: ", next.domNode);
 					transition(current.domNode,next.domNode,dojo.mixin({},opts,{transition: this.defaultTransition || "none", transitionDefs: transitionDefs})).then(dlang.hitch(this, function(){
 						//dojo.style(current.domNode, "display", "none");
-						if (toId && next.transition){
+						if (subIds && next.transition){
 							promise = next.transition(subIds,opts);
 						}
 						deferred.when(promise, function(){
