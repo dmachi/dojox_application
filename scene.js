@@ -252,12 +252,12 @@ define(["dojo/_base/kernel",
 				if (this.selectedChild){
 					children = array.filter(children, function(c){
 						if (c.region=="center" && this.selectedChild && this.selectedChild.domNode!==c.domNode){
-							dstyle.set(c.domNode,"z-index",25);
+							dstyle.set(c.domNode,"zIndex",25);
 							dstyle.set(c.domNode,'display','none');
 							return false;
 						}else if (c.region!="center"){
 							dstyle.set(c.domNode,"display","");
-							dstyle.set(c.domNode,"z-index",100);
+							dstyle.set(c.domNode,"zIndex",100);
 						}
 					
 						return c.domNode && c.region;
@@ -266,7 +266,7 @@ define(["dojo/_base/kernel",
 				//	this.selectedChild.region="center";	
 				//	dojo.attr(this.selectedChild.domNode,"region","center");
 				//	dojo.style(this.selectedChild.domNode, "display","");
-				//	dojo.style(this.selectedChild.domNode,"z-index",50);
+				//	dojo.style(this.selectedChild.domNode,"zIndex",50);
 
 				//	children.push({domNode: this.selectedChild.domNode, region: "center"});	
 				//	children.push(this.selectedChild);
@@ -274,7 +274,7 @@ define(["dojo/_base/kernel",
 				}else{
 					array.forEach(children, function(c){
 						if (c && c.domNode && c.region=="center"){
-							dstyle.set(c.domNode,"z-index",25);
+							dstyle.set(c.domNode,"zIndex",25);
 							dstyle.set(c.domNode,'display','none');
 						}	
 					});
