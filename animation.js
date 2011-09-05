@@ -289,14 +289,14 @@ define(["dojo/_base/kernel",
                 item.initState();
             });
             
-            //According to the study of Chrome V8 engine. The minimal timer
-            //interval is 2ms. Any browser with minimal timer interval greater
-            //than 2ms will raise the timeout interval to that minimal value
+            //Assume the fps of the animation should be higher than 30 fps and
+            //allow the browser to use one frame's time to redraw so that
+            //the transition can be started
             setTimeout(function(){
                 array.forEach(args, function(item){
                     item.start();
                 });            
-            }, 2);
+            }, 33);
         });        
     };
     
@@ -330,12 +330,12 @@ define(["dojo/_base/kernel",
                 }));
             }
             
-            //According to the study of Chrome V8 engine. The minimal timer
-            //interval is 2ms. Any browser with minimal timer interval greater
-            //than 2ms will raise the timeout interval to that minimal value
+            //Assume the fps of the animation should be higher than 30 fps and
+            //allow the browser to use one frame's time to redraw so that
+            //the transition can be started
             setTimeout(function(){
                 args[0].start();
-            }, 2);
+            }, 33);
         });        
     };
     
