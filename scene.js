@@ -428,11 +428,7 @@ define(["dojo/_base/kernel",
 				});
 
 				//transition to _startView
-<<<<<<< HEAD
-				if (this._startView && (this._startView != this.defaultView)) {
-=======
-              if (this._startView && this._startView != this.defaultView) {
->>>>>>> master
+              if (this._startView && (this._startView != this.defaultView)) {
                   this.transition(this._startView, {});
               }
 			}));
