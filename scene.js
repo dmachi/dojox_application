@@ -128,9 +128,9 @@ define(["dojo/_base/kernel",
 					def.resolve(true);
 				}
 		
-			   var loadChildDeferred = new deferred();					
+			   var loadChildDeferred = new deferred();
 			   var self = this;
-				deferred.when(def, function(){		
+				deferred.when(def, function(){
 					var ctor;
 					if (conf.type){
 						ctor=dojo.getObject(conf.type);
@@ -428,7 +428,11 @@ define(["dojo/_base/kernel",
 				});
 
 				//transition to _startView
+<<<<<<< HEAD
 				if (this._startView && (this._startView != this.defaultView)) {
+=======
+              if (this._startView && this._startView != this.defaultView) {
+>>>>>>> master
                   this.transition(this._startView, {});
               }
 			}));
