@@ -561,9 +561,8 @@ define(["dojo/_base/kernel",
 				deferred.when(promise, function(){
 				    transitionDeferred.resolve();
 				});
-				return transitionDeferred;
-				
 			}));
+			return transitionDeferred;
 		},
 		toString: function(){return this.id},
 
