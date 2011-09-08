@@ -46,7 +46,12 @@ define(["dojo/_base/kernel","dojo/_base/lang", "dojo/_base/declare", "dojo/on"],
 		*/
 
 		onPopState: function(evt){
-			console.log("evt: ",evt, evt.state);
+			// Check application status, if application status not STARTED, do nothing.
+			// when clean browser's cache then refresh the current page, it will trigger popState event. 
+			// but the application not start, it will throw an error.
+			if(this.getStatus() !== this.lifecycle.STARTED ){
+				return;
+			}
 			var state = evt.state;
 			if (!state){
 
@@ -59,7 +64,7 @@ define(["dojo/_base/kernel","dojo/_base/lang", "dojo/_base/declare", "dojo/on"],
 					state={};	
 				}
 			}
-			console.log("Check state: ", state);	
+
 			var target = state.target || this._startView || this.defaultView;
 
 			if (this._startView){
@@ -68,7 +73,6 @@ define(["dojo/_base/kernel","dojo/_base/lang", "dojo/_base/declare", "dojo/on"],
 			var title = state.title||null;
 			var href = state.url || null;
 
-			console.log('onPopState: ',target,title,href,  arguments);
 			if (evt._sim) {
 				history.replaceState(state, title, href );
 			}

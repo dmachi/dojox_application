@@ -1,5 +1,6 @@
 define(["dojo/_base/kernel",
 	"dojo/_base/declare",
+	"dojo/_base/connect",
 	"dojo/_base/array",
 	"dojo/_base/Deferred",
 	"dojo/_base/lang",
@@ -20,7 +21,7 @@ define(["dojo/_base/kernel",
 	"./model", 
 	"./view", 
 	"./bind"], 
-	function(dojo,declare,array,deferred,dlang,has,dstyle,dgeometry,cls,dconstruct,dattr,query,dijit,dojox,WidgetBase,Templated,WidgetsInTemplate,transition, anim, model, baseView, bind){
+	function(dojo,declare,connect, array,deferred,dlang,has,dstyle,dgeometry,cls,dconstruct,dattr,query,dijit,dojox,WidgetBase,Templated,WidgetsInTemplate,transition, anim, model, baseView, bind){
 	
 	var marginBox2contentBox = function(/*DomNode*/ node, /*Object*/ mb){
 		// summary:
@@ -156,6 +157,10 @@ define(["dojo/_base/kernel",
                         bind([child], child.loadedModels);
                     }
 					var addResult = self.addChild(child);
+					//publish /app/loadchild event
+					//application can subscript this event to do user define operation like select TabBarButton, add dynamic script text etc.
+					connect.publish("/app/loadchild", [child]);
+
                  var promise;
 
                  subIds = subIds.split(',');
@@ -276,7 +281,10 @@ define(["dojo/_base/kernel",
 				}
 			
 			}	
-			this.layoutChildren(this.domNode, this._contentBox, children);
+			// We don't need to layout children if this._contentBox is null for the operation will do nothing.
+			if (this._contentBox) {
+				this.layoutChildren(this.domNode, this._contentBox, children);
+			}
 			array.forEach(this.getChildren(), function(child){ 
 				if (!child._started && child.startup){
 					child.startup(); 
@@ -420,7 +428,7 @@ define(["dojo/_base/kernel",
 				});
 
 				//transition to _startView
-              if (this._startView && this._startView != this.defaultView) {
+              if (this._startView && (this._startView != this.defaultView)) {
                   this.transition(this._startView, {});
               }
 			}));
@@ -540,10 +548,13 @@ define(["dojo/_base/kernel",
 					//a promise object. this.set(...) will handles the this.selectedChild,
 					//activate or deactivate views and refresh layout.
 					this.set("selectedChild", next);
-					//console.log("current.domNode: ", current.domNode, "next.domNode: ", next.domNode);
+					
+					//publish /app/transition event
+					//application can subscript this event to do user define operation like select TabBarButton, etc.
+					connect.publish("/app/transition", [next, toId]);
 					transition(current.domNode,next.domNode,dojo.mixin({},opts,{transition: this.defaultTransition || "none", transitionDefs: transitionDefs})).then(dlang.hitch(this, function(){
 						//dojo.style(current.domNode, "display", "none");
-						if (toId && next.transition){
+						if (subIds && next.transition){
 							promise = next.transition(subIds,opts);
 						}
 						deferred.when(promise, function(){
