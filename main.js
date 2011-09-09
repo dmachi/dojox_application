@@ -1,19 +1,14 @@
 define(["dojo/_base/kernel",
 	"dojo/_base/lang",
 	"dojo/_base/declare",
+	"dojo/_base/Deferred",
+	"dojo/_base/connect",
 	"dojo/ready",
 	"dojo/_base/window",
 	"dojo/dom-construct",
-	"dijit",
-	"dojox", 
-	"dojo/cache",
-	"dojo/fx",
-	"dojox/json/ref",
-	"dojo/parser",
-	"./scene",
-	"dojox/mobile/transition",
-	"dojo/on"],
-	function(dojo,lang,declare,ready,baseWindow,dom,dijit,dijox,cache,fx,jsonRef,parser,sceneCtor,transition,listen){
+	"./scene"],
+	function(dojo, lang, declare, deferred, connect, ready, baseWindow, dom, sceneCtor){
+
         dojo.experimental("dojox.app");
 	var Application = declare([sceneCtor], {
 		constructor: function(params){
@@ -41,6 +36,18 @@ define(["dojo/_base/kernel",
 			}
 
 		},
+
+		// load default view and startup the default view
+        start: function(applicaton){
+            var child = this.loadChild();
+
+            deferred.when(child, dojo.hitch(this, function(loadedChild){
+                this.startup(loadedChild);
+
+                //set application status to STARTED
+                this.setStatus(this.lifecycle.STARTED);
+            }));
+        },
 		templateString: "<div></div>",
 		selectedChild: null,
 		baseClass: "application mblView",
@@ -79,7 +86,8 @@ define(["dojo/_base/kernel",
 
 			ready(function(){
 				app = App(config,node || baseWindow.body());
-				app.startup();
+                app.setStatus(app.lifecycle.STARTING);
+                app.start();
 			});
 		});
 	}

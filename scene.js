@@ -104,10 +104,13 @@ define(["dojo/_base/kernel",
 		},
 
 		loadChild: function(childId,subIds){
-			if (!childId) {
-				return error("Child ID: '" + childId +"' not found");
-			}
-	
+			// if no childId, load the default view
+            if (!childId) {
+                var parts = this.defaultView ? this.defaultView.split(",") : "default";
+                childId = parts.shift();
+                subIds = parts.join(',');
+            }
+
 			var cid = this.id+"_" + childId;
 			if (this.children[cid]){
 				return this.children[cid];
@@ -383,11 +386,9 @@ define(["dojo/_base/kernel",
 			this._started=true;
 
 			var parts = this.defaultView?this.defaultView.split(","):"default";
+			var toId, subIds;
 			toId= parts.shift();
 			subIds = parts.join(',');
-			//console.log(this.id, "initial load to Id: ", toId, "subs: ", subIds);	
-
-			var subIds;
 
 			if(this.views[this.defaultView] && this.views[this.defaultView]["defaultView"]){
 				subIds =  this.views[this.defaultView]["defaultView"];
@@ -400,8 +401,10 @@ define(["dojo/_base/kernel",
 				bind(this.getChildren(), this.loadedModels);
 			}
 			
-			var next = this.loadChild(toId, subIds);
-			deferred.when(next, dlang.hitch(this, function(next){
+			var cid = this.id + "_" + toId;
+            if (this.children[cid]) {
+				var next = this.children[cid];
+
 				this.set("selectedChild", next);
 				
 				// If I am a not being controlled by a parent layout widget...
@@ -431,7 +434,7 @@ define(["dojo/_base/kernel",
               if (this._startView && (this._startView != this.defaultView)) {
                   this.transition(this._startView, {});
               }
-			}));
+			}
 		},
 
 		addChild: function(widget){
