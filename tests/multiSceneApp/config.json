@@ -19,7 +19,8 @@
 	// by creating and including one or more of these
 	"modules": [
 		"dojox/app/module/env",
-		"dojox/app/module/history"
+		"dojox/app/module/history",
+        "dojox/app/module/lifecycle"
 		//"dojox/app/module/phonegap",
 		//"dojox/app/module/somePlugin"
 	],
