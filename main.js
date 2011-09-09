@@ -41,8 +41,8 @@ define(["dojo/_base/kernel",
         start: function(applicaton){
             var child = this.loadChild();
 
-            deferred.when(child, dojo.hitch(this, function(loadedChild){
-                this.startup(loadedChild);
+            deferred.when(child, dojo.hitch(this, function(){
+                this.startup();
 
                 //set application status to STARTED
                 this.setStatus(this.lifecycle.STARTED);
