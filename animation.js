@@ -323,9 +323,9 @@ define(["dojo/_base/kernel",
                 item.initState();
             });
             
-            //TODO chain animations together
+            //chain animations together
             for (var i=1, len=args.length; i < len; i++){
-                on.once(args[i-1], "AfterEnd", lang.hitch(args[i], function(){
+                args[i-1].deferred.then(lang.hitch(args[i], function(){
                     this.start();
                 }));
             }
