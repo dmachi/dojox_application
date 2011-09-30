@@ -16,12 +16,12 @@ define(["dojo/_base/kernel",
 	"dijit/_WidgetBase",
 	"dijit/_TemplatedMixin",
 	"dijit/_WidgetsInTemplateMixin",
-	"./transition", 
+	"dojox/css3/transit", 
 	"./animation",
 	"./model", 
 	"./view", 
 	"./bind"], 
-	function(dojo,declare,connect, array,deferred,dlang,has,dstyle,dgeometry,cls,dconstruct,dattr,query,dijit,dojox,WidgetBase,Templated,WidgetsInTemplate,transition, anim, model, baseView, bind){
+	function(dojo,declare,connect, array,deferred,dlang,has,dstyle,dgeometry,cls,dconstruct,dattr,query,dijit,dojox,WidgetBase,Templated,WidgetsInTemplate,transit, anim, model, baseView, bind){
 	
 	var marginBox2contentBox = function(/*DomNode*/ node, /*Object*/ mb){
 		// summary:
@@ -557,7 +557,7 @@ define(["dojo/_base/kernel",
 					//publish /app/transition event
 					//application can subscript this event to do user define operation like select TabBarButton, etc.
 					connect.publish("/app/transition", [next, toId]);
-					transition(current.domNode,next.domNode,dojo.mixin({},opts,{transition: this.defaultTransition || "none", transitionDefs: transitionDefs})).then(dlang.hitch(this, function(){
+					transit(current.domNode,next.domNode,dojo.mixin({},opts,{transition: this.defaultTransition || "none", transitionDefs: transitionDefs})).then(dlang.hitch(this, function(){
 						//dojo.style(current.domNode, "display", "none");
 						if (subIds && next.transition){
 							promise = next.transition(subIds,opts);
