@@ -16,13 +16,12 @@ define(["dojo/_base/kernel",
 	"dijit/_WidgetBase",
 	"dijit/_TemplatedMixin",
 	"dijit/_WidgetsInTemplateMixin",
-	"dojox/css3/transit", 
-	"./animation",
+	"dojox/css3/transit",
 	"./model", 
 	"./view", 
 	"./bind",
     "./layout/utils"], 
-	function(dojo,declare,connect, array,deferred,dlang,has,dstyle,dgeometry,cls,dconstruct,dattr,query,dijit,dojox,WidgetBase,Templated,WidgetsInTemplate,transit, anim, model, baseView, bind,layoutUtils){
+	function(dojo,declare,connect, array,deferred,dlang,has,dstyle,dgeometry,cls,dconstruct,dattr,query,dijit,dojox,WidgetBase,Templated,WidgetsInTemplate,transit, model, baseView, bind,layoutUtils){
 	
 	return declare("dojox.app.scene", [dijit._WidgetBase, dijit._TemplatedMixin, dijit._WidgetsInTemplateMixin], {
 		isContainer: true,
