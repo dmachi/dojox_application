@@ -421,19 +421,15 @@ define(["dojo/_base/kernel",
 			        var promise;
 			    
 				if (next!==current){
-				    //TODO need to refactor here, when clicking fast, current will not be the 
+				    //When clicking fast, history module will cache the transition request que
+                    //and prevent the transition conflicts.
+                    //Originally when we conduct transition, selectedChild will not be the 
 				    //view we want to start transition. For example, during transition 1 -> 2
-				    //if user click button to transition to 3 and then transition to 1. It will
-				    //perform transition 2 -> 3 and 2 -> 1 because current is always point to 
-				    //2 during 1 -> 2 transition.
+				    //if user click button to transition to 3 and then transition to 1. After 
+                    //1->2 completes, it will perform transition 2 -> 3 and 2 -> 1 because 
+                    //selectedChild is always point to 2 during 1 -> 2 transition and transition
+                    //will record 2->3 and 2->1 right after the button is clicked.
 				    
-				    var waitingList = anim.getWaitingList([next.domNode, current.domNode]);
-				    //update registry with deferred objects in animations of args.
-				    var transitionDefs = {};
-				    transitionDefs[current.domNode.id] = anim.playing[current.domNode.id] = new deferred();
-				    transitionDefs[next.domNode.id] = anim.playing[current.domNode.id] = new deferred();
-				                
-				    deferred.when(waitingList, dojo.hitch(this, function(){
 					//assume next is already loaded so that this.set(...) will not return
 					//a promise object. this.set(...) will handles the this.selectedChild,
 					//activate or deactivate views and refresh layout.
@@ -442,7 +438,7 @@ define(["dojo/_base/kernel",
 					//publish /app/transition event
 					//application can subscript this event to do user define operation like select TabBarButton, etc.
 					connect.publish("/app/transition", [next, toId]);
-					transit(current.domNode,next.domNode,dojo.mixin({},opts,{transition: this.defaultTransition || "none", transitionDefs: transitionDefs})).then(dlang.hitch(this, function(){
+					transit(current.domNode,next.domNode,dojo.mixin({},opts,{transition: this.defaultTransition || "none"})).then(dlang.hitch(this, function(){
 						//dojo.style(current.domNode, "display", "none");
 						if (subIds && next.transition){
 							promise = next.transition(subIds,opts);
@@ -450,7 +446,6 @@ define(["dojo/_base/kernel",
 						deferred.when(promise, function(){
 		                                    transitionDeferred.resolve();
 		                                });
-					}));
 				    }));
 				    return;
 				}
