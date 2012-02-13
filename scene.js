@@ -34,7 +34,7 @@ define(["dojo/_base/kernel",
 		defaultViewType: baseView,
 		
 		//Temporary work around for getting a null when calling getParent
-		getParent: function(){return null;},
+//		getParent: function(){return null;},
 
 
 		constructor: function(params,node){
