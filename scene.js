@@ -32,7 +32,7 @@ define(["dojo/_base/declare",
 		defaultViewType: baseView,
 		
 		//Temporary work around for getting a null when calling getParent
-		getParent: function(){return null;},
+//		getParent: function(){return null;},
 
 
 		constructor: function(params,node){
@@ -73,9 +73,29 @@ define(["dojo/_base/declare",
                 subIds = parts.join(',');
             }
 
+            var loadChildDeferred = new deferred();
 			var cid = this.id+"_" + childId;
 			if (this.children[cid]){
-				return this.children[cid];
+                if (this.children[cid].loadChild) {
+                    var nextLoad = null;
+                    subIds = subIds.split(',');
+                    if ((subIds[0].length > 0) && (subIds.length > 1)) {
+                        nextLoad = subIds[0];
+                        subIds = subIds.join(',');
+                    }
+                    else 
+                        if (subIds[0].length > 0) {
+                            nextLoad = subIds[0];
+                            subIds = '';
+                        }
+                    
+                    deferred.when(this.children[cid].loadChild(nextLoad, subIds), dlang.hitch(this,function(){
+                        loadChildDeferred.resolve(this.children[cid]);
+                    }));
+                    return loadChildDeferred.promise;
+                }else{
+                    return this.children[cid];
+                }
 			}
 
 			if (this.views&& this.views[childId]){
@@ -93,7 +113,6 @@ define(["dojo/_base/declare",
 					def.resolve(true);
 				}
 		
-			   var loadChildDeferred = new deferred();
 			   var self = this;
 				deferred.when(def, function(){
 					var ctor;
@@ -126,7 +145,7 @@ define(["dojo/_base/declare",
 					//application can subscript this event to do user define operation like select TabBarButton, add dynamic script text etc.
 					connect.publish("/app/loadchild", [child]);
 
-                 var promise;
+                 var promise = null;
 
                  subIds = subIds.split(',');
                  if ((subIds[0].length > 0) && (subIds.length > 1)) {//TODO join subIds
@@ -141,7 +160,7 @@ define(["dojo/_base/declare",
                      loadChildDeferred.resolve(addResult)
                  });
 				});
-              return loadChildDeferred;
+              return loadChildDeferred.promise;
 			}
 	
 			throw Error("Child '" + childId + "' not found.");
