@@ -1,5 +1,4 @@
-define(["dojo/_base/kernel",
-	"dojo/_base/declare",
+define(["dojo/_base/declare",
 	"dojo/_base/connect",
 	"dojo/_base/array",
 	"dojo/_base/Deferred",
@@ -11,8 +10,7 @@ define(["dojo/_base/kernel",
 	"dojo/dom-construct",
 	"dojo/dom-attr",
 	"dojo/query",
-	"dijit",
-	"dojox",
+	"dijit/registry",
 	"dijit/_WidgetBase",
 	"dijit/_TemplatedMixin",
 	"dijit/_WidgetsInTemplateMixin",
@@ -21,9 +19,9 @@ define(["dojo/_base/kernel",
 	"./view", 
 	"./bind",
     "./layout/utils"], 
-	function(dojo,declare,connect, array,deferred,dlang,has,dstyle,dgeometry,cls,dconstruct,dattr,query,dijit,dojox,WidgetBase,Templated,WidgetsInTemplate,transit, model, baseView, bind,layoutUtils){
+	function(declare,connect,array,deferred,dlang,has,dstyle,dgeometry,cls,dconstruct,dattr,query,registry,WidgetBase,Templated,WidgetsInTemplate,transit, model, baseView, bind,layoutUtils){
 	
-	return declare("dojox.app.scene", [dijit._WidgetBase, dijit._TemplatedMixin, dijit._WidgetsInTemplateMixin], {
+	return declare("dojox.app.scene", [WidgetBase, Templated, WidgetsInTemplate], {
 		isContainer: true,
 		widgetsInTemplate: true,
 		defaultView: "default",
@@ -100,14 +98,14 @@ define(["dojo/_base/kernel",
 				deferred.when(def, function(){
 					var ctor;
 					if (conf.type){
-						ctor=dojo.getObject(conf.type);
+						ctor=dlang.getObject(conf.type);
 					}else if (self.defaultViewType){
 						ctor=self.defaultViewType;
 					}else{
 						throw Error("Unable to find appropriate ctor for the base child class");
 					}
 
-					var params = dojo.mixin({}, conf, {
+					var params = dlang.mixin({}, conf, {
 						id: self.id + "_" + childId,
 						templateString: conf.template?arguments[0][arguments[0].length-1]:"<div></div>",
 						parent: self,
@@ -139,7 +137,7 @@ define(["dojo/_base/kernel",
                          promise = child.loadChild(subIds[0], "");
                      }
                  
-                 dojo.when(promise, function(){
+                 deferred.when(promise, function(){
                      loadChildDeferred.resolve(addResult)
                  });
 				});
@@ -165,9 +163,9 @@ define(["dojo/_base/kernel",
 			// But note that setting the margin box and then immediately querying dimensions may return
 			// inaccurate results, so try not to depend on it.
 			var mb = resultSize || {};
-			dojo.mixin(mb, changeSize || {});	// changeSize overrides resultSize
+			dlang.mixin(mb, changeSize || {});	// changeSize overrides resultSize
 			if( !("h" in mb) || !("w" in mb) ){
-				mb = dojo.mixin(dgeometry.getMarginBox(node), mb);	// just use dojo.marginBox() to fill in missing values
+				mb = dlang.mixin(dgeometry.getMarginBox(node), mb);	// just use dojo.marginBox() to fill in missing values
 			}
 
 			// Compute and save the size of my border box and content box
@@ -207,7 +205,7 @@ define(["dojo/_base/kernel",
 				*/
 			}else{
 				children = query("> [region]", this.domNode).map(function(node){
-					var w = dijit.getEnclosingWidget(node);
+					var w = registry.getEnclosingWidget(node);
 					if (w){return w;}
 
 					return {		
@@ -437,7 +435,7 @@ define(["dojo/_base/kernel",
 					//publish /app/transition event
 					//application can subscript this event to do user define operation like select TabBarButton, etc.
 					connect.publish("/app/transition", [next, toId]);
-					transit(current.domNode,next.domNode,dojo.mixin({},opts,{transition: this.defaultTransition || "none"})).then(dlang.hitch(this, function(){
+					transit(current.domNode,next.domNode,dlang.mixin({},opts,{transition: this.defaultTransition || "none"})).then(dlang.hitch(this, function(){
 						//dojo.style(current.domNode, "display", "none");
 						if (subIds && next.transition){
 							promise = next.transition(subIds,opts);
