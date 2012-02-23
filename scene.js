@@ -1,5 +1,6 @@
 define(["dojo/_base/declare",
 	"dojo/_base/connect",
+	"dojo/on",
 	"dojo/_base/array",
 	"dojo/_base/Deferred",
 	"dojo/_base/lang",
@@ -19,7 +20,7 @@ define(["dojo/_base/declare",
 	"./view", 
 	"./bind",
     "./layout/utils"], 
-	function(declare,connect,array,deferred,dlang,has,dstyle,dgeometry,cls,dconstruct,dattr,query,registry,WidgetBase,Templated,WidgetsInTemplate,transit, model, baseView, bind,layoutUtils){
+	function(declare,connect,on, array,deferred,dlang,has,dstyle,dgeometry,cls,dconstruct,dattr,query,registry,WidgetBase,Templated,WidgetsInTemplate,transit, model, baseView, bind,layoutUtils){
 	
 	return declare("dojox.app.scene", [WidgetBase, Templated, WidgetsInTemplate], {
 		isContainer: true,
@@ -63,107 +64,6 @@ define(["dojo/_base/declare",
 				id:to || this.defaultView,
 				next: id.join(',') 
 			}
-		},
-
-		loadChild: function(childId,subIds){
-			// if no childId, load the default view
-            if (!childId) {
-                var parts = this.defaultView ? this.defaultView.split(",") : "default";
-                childId = parts.shift();
-                subIds = parts.join(',');
-            }
-
-            var loadChildDeferred = new deferred();
-			var cid = this.id+"_" + childId;
-			if (this.children[cid]){
-                if (this.children[cid].loadChild) {
-                    var nextLoad = null;
-                    subIds = subIds.split(',');
-                    if ((subIds[0].length > 0) && (subIds.length > 1)) {
-                        nextLoad = subIds[0];
-                        subIds = subIds.join(',');
-                    }
-                    else 
-                        if (subIds[0].length > 0) {
-                            nextLoad = subIds[0];
-                            subIds = '';
-                        }
-                    
-                    deferred.when(this.children[cid].loadChild(nextLoad, subIds), dlang.hitch(this,function(){
-                        loadChildDeferred.resolve(this.children[cid]);
-                    }));
-                    return loadChildDeferred.promise;
-                }else{
-                    return this.children[cid];
-                }
-			}
-
-			if (this.views&& this.views[childId]){
-				var conf = this.views[childId];
-				if (!conf.dependencies){conf.dependencies=[];}
-				var deps = conf.template? conf.dependencies.concat(["dojo/text!app/"+conf.template]) :
-						conf.dependencies.concat([]);
-			
-				var def = new deferred();
-				if (deps.length>0) {
-					require(deps,function(){
-						def.resolve.call(def, arguments);			
-					});
-				}else{
-					def.resolve(true);
-				}
-		
-			   var self = this;
-				deferred.when(def, function(){
-					var ctor;
-					if (conf.type){
-						ctor=dlang.getObject(conf.type);
-					}else if (self.defaultViewType){
-						ctor=self.defaultViewType;
-					}else{
-						throw Error("Unable to find appropriate ctor for the base child class");
-					}
-
-					var params = dlang.mixin({}, conf, {
-						id: self.id + "_" + childId,
-						templateString: conf.template?arguments[0][arguments[0].length-1]:"<div></div>",
-						parent: self,
-						app: self.app
-					}) 
-					if (subIds){
-						params.defaultView=subIds;
-					}
-                    var child = new ctor(params);
-                    //load child's model if it is not loaded before
-                    if(!child.loadedModels){
-                        child.loadedModels = model(conf.models, self.loadedModels)
-                        //TODO need to find out a better way to get all bindable controls in a view
-                        bind([child], child.loadedModels);
-                    }
-					var addResult = self.addChild(child);
-					//publish /app/loadchild event
-					//application can subscript this event to do user define operation like select TabBarButton, add dynamic script text etc.
-					connect.publish("/app/loadchild", [child]);
-
-                 var promise = null;
-
-                 subIds = subIds.split(',');
-                 if ((subIds[0].length > 0) && (subIds.length > 1)) {//TODO join subIds
-                     promise = child.loadChild(subIds[0], subIds[1]);
-                 }
-                 else 
-                     if (subIds[0].length > 0) {
-                         promise = child.loadChild(subIds[0], "");
-                     }
-                 
-                 deferred.when(promise, function(){
-                     loadChildDeferred.resolve(addResult)
-                 });
-				});
-              return loadChildDeferred.promise;
-			}
-	
-			throw Error("Child '" + childId + "' not found.");
 		},
 
 		resize: function(changeSize,resultSize){
@@ -335,7 +235,12 @@ define(["dojo/_base/declare",
 
 				//transition to _startView
               if (this._startView && (this._startView != this.defaultView)) {
-                  this.transition(this._startView, {});
+                  // this.transition(this._startView, {});
+				  // make sure views are loaded before transition
+				  on.emit(this.evented, "load", {"target":this._startView});
+				  deferred.when(this.evented.promise, dlang.hitch(this, function(){
+				  	this.transition(this._startView, {});
+				  }));
               }
 			}
 		},
@@ -424,18 +329,19 @@ define(["dojo/_base/declare",
 				}	
 			}
 		
-			next = this.loadChild(toId,subIds);
+			// next = this.loadChild(toId,subIds);
+			// next is loaded and ready for transition
+			next = this.children[this.id+'_'+toId];
+			if(!next){
+				throw Error("child view must be loaded before transition.");
+			}
 
 			if (!current){
 				//assume this.set(...) will return a promise object if child is first loaded
 				//return nothing if child is already in array of this.children
 				return this.set("selectedChild",next);	
 			}	
-
-			var transitionDeferred  = new deferred();
-			deferred.when(next, dlang.hitch(this, function(next){
-			        var promise;
-			    
+			// next is not a deferred object, so deferred.when is no needed.   
 				if (next!==current){
 				    //When clicking fast, history module will cache the transition request que
                     //and prevent the transition conflicts.
@@ -453,28 +359,21 @@ define(["dojo/_base/declare",
 					
 					//publish /app/transition event
 					//application can subscript this event to do user define operation like select TabBarButton, etc.
-					connect.publish("/app/transition", [next, toId]);
-					transit(current.domNode,next.domNode,dlang.mixin({},opts,{transition: this.defaultTransition || "none"})).then(dlang.hitch(this, function(){
+					// connect.publish("/app/transition", [next, toId]);
+					var result = transit(current.domNode,next.domNode,dlang.mixin({},opts,{transition: this.defaultTransition || "none"}));
+					result.then(dlang.hitch(this, function(){
 						//dojo.style(current.domNode, "display", "none");
 						if (subIds && next.transition){
-							promise = next.transition(subIds,opts);
+							next.transition(subIds,opts);
 						}
-						deferred.when(promise, function(){
-		                                    transitionDeferred.resolve();
-		                                });
 				    }));
-				    return;
+				    return result;
 				}
 
-				//we didn't need to transition, but continue to propogate.
+				// do sub transition like transition from "tabScene,tab1" to "tabScene,tab2"
 				if (subIds && next.transition){
-					promise = next.transition(subIds,opts);
+					return next.transition(subIds,opts);
 				}
-				deferred.when(promise, function(){
-				    transitionDeferred.resolve();
-				});
-			}));
-			return transitionDeferred;
 		},
 		toString: function(){return this.id},
 
