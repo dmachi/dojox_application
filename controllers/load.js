@@ -1,5 +1,5 @@
 define(["dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/_base/Deferred", "../controller", "../bind", "../model"],
-function(lang, declare, on, deferred, Controller, bind, model){
+function(lang, declare, on, Deferred, Controller, bind, model){
 	// module:
 	//		dojox/app/controllers/load
 	// summary:
@@ -65,7 +65,7 @@ function(lang, declare, on, deferred, Controller, bind, model){
 				return parent.children[id];
 			}
 			//create child and return deferred
-			var loadChildDeferred = new deferred();
+			var loadChildDeferred = new Deferred();
 			if (parent.views && parent.views[childId]) {
 				var conf = parent.views[childId];
 				if (!conf.dependencies) {
@@ -73,7 +73,7 @@ function(lang, declare, on, deferred, Controller, bind, model){
 				}
 				var deps = conf.template ? conf.dependencies.concat(["dojo/text!app/" + conf.template]) : conf.dependencies.concat([]);
 
-				var def = new deferred();
+				var def = new Deferred();
 				if (deps.length > 0) {
 					require(deps, function(){
 						def.resolve.call(def, arguments);
@@ -84,7 +84,7 @@ function(lang, declare, on, deferred, Controller, bind, model){
 				}
 
 				var self = parent;
-				deferred.when(def, lang.hitch(this, function(){
+				Deferred.when(def, lang.hitch(this, function(){
 					var ctor;
 					if (conf.type) {
 						ctor = lang.getObject(conf.type);
@@ -142,14 +142,14 @@ function(lang, declare, on, deferred, Controller, bind, model){
 				subIds = parts.join(',');
 			}
 
-			var loadChildDeferred = new deferred();
-			deferred.when(this.createChild(parent, childId, subIds), lang.hitch(this, function(child){
+			var loadChildDeferred = new Deferred();
+			Deferred.when(this.createChild(parent, childId, subIds), lang.hitch(this, function(child){
 				var parts = subIds.split(',');
 				childId = parts.shift();
 				subIds = parts.join(',');
 				if (childId) {
 					var subLoadDeferred = this.loadChild(child, childId, subIds);
-					deferred.when(subLoadDeferred, function(){
+					Deferred.when(subLoadDeferred, function(){
 						loadChildDeferred.resolve();
 					});
 				}
@@ -157,7 +157,7 @@ function(lang, declare, on, deferred, Controller, bind, model){
 					loadChildDeferred.resolve();
 				}
 			}));
-			return loadChildDeferred.promise;
+			return loadChildDeferred; //dojo.Deferred
 		}
 	});
 });
