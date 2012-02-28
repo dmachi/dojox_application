@@ -158,8 +158,6 @@ function(lang, declare, on, deferred, Controller, bind, model){
 				}
 			}));
 			return loadChildDeferred.promise;
-
-			throw Error("Child '" + childId + "' not found.");
 		}
 	});
 });
