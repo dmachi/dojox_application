@@ -5,7 +5,7 @@ function(lang, declare, on, deferred, Controller, bind, model){
 	// summary:
 	//		Bind "load" event on dojox.app application dojo.Evented instance.
 	//		Load child view and sub children at one time.
-	return declare("dojox.app.controllers.load", [Controller], {
+	return declare("dojox.app.controllers.load", Controller, {
 
 		constructor: function(app, events){
 			// summary:
