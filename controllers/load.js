@@ -3,8 +3,9 @@ function(lang, declare, on, Deferred, Controller, bind, model){
 	// module:
 	//		dojox/app/controllers/load
 	// summary:
-	//		Bind "load" event on dojox.app application dojo.Evented instance.
+	//		Bind "load" event on dojox.app application's dojo.Evented instance.
 	//		Load child view and sub children at one time.
+
 	return declare("dojox.app.controllers.load", Controller, {
 
 		constructor: function(app, events){
@@ -33,7 +34,7 @@ function(lang, declare, on, Deferred, Controller, bind, model){
 			//		Load event parameter. It should be like this: {"parent":parent, "target":target}
 			// returns:
 			//		A dojo.Deferred object.
-			//		The return value will keep in application dojo/Evented instance, other controllers can get this deffered object from application.
+			//		The return value will keep in application dojo/Evented instance, other controllers can get this Deferred object from application.
 
 			var parent = event.parent || this.app;
 			var target = event.target || "";
@@ -42,7 +43,7 @@ function(lang, declare, on, Deferred, Controller, bind, model){
 			var subIds = parts.join(",");
 
 			var def = this.loadChild(parent, childId, subIds);
-			this.app.evented.promise = def; //store loadChild deferred promise in application dojo/Evented instance
+			this.app.evented.promise = def; //store loadChild Deferred in application dojo/Evented instance
 			return def;
 		},
 
@@ -51,7 +52,7 @@ function(lang, declare, on, Deferred, Controller, bind, model){
 			//		Create dojox.app.view instance if it is not loaded.
 			//
 			// parent: Object
-			//		parent of this view.
+			//		parent of the view.
 			// childId: String
 			//		view id need to be loaded.
 			// subIds: String
@@ -61,38 +62,35 @@ function(lang, declare, on, Deferred, Controller, bind, model){
 			//		Otherwise, create the view and return a dojo.Deferred instance.
 
 			var id = parent.id + '_' + childId;
-			if (parent.children[id]) {
+			if(parent.children[id]){
 				return parent.children[id];
 			}
-			//create child and return deferred
+			//create child and return Deferred
 			var loadChildDeferred = new Deferred();
-			if (parent.views && parent.views[childId]) {
+			if(parent.views && parent.views[childId]){
 				var conf = parent.views[childId];
-				if (!conf.dependencies) {
+				if(!conf.dependencies){
 					conf.dependencies = [];
 				}
 				var deps = conf.template ? conf.dependencies.concat(["dojo/text!app/" + conf.template]) : conf.dependencies.concat([]);
 
 				var def = new Deferred();
-				if (deps.length > 0) {
+				if(deps.length > 0){
 					require(deps, function(){
 						def.resolve.call(def, arguments);
 					});
-				}
-				else {
+				}else{
 					def.resolve(true);
 				}
 
 				var self = parent;
 				Deferred.when(def, lang.hitch(this, function(){
 					var ctor;
-					if (conf.type) {
+					if(conf.type){
 						ctor = lang.getObject(conf.type);
-					}
-					else if (self.defaultViewType) {
+					}else if (self.defaultViewType){
 						ctor = self.defaultViewType;
-					}
-					else {
+					}else{
 						throw Error("Unable to find appropriate ctor for the base child class");
 					}
 
@@ -102,12 +100,12 @@ function(lang, declare, on, Deferred, Controller, bind, model){
 						parent: self,
 						app: self.app
 					});
-					if (subIds) {
+					if(subIds){
 						params.defaultView = subIds;
 					}
 					var child = new ctor(params);
 					//load child's model if it is not loaded before
-					if (!child.loadedModels) {
+					if(!child.loadedModels){
 						child.loadedModels = model(conf.models, self.loadedModels)
 						//TODO need to find out a better way to get all bindable controls in a view
 						bind([child], child.loadedModels);
@@ -116,12 +114,12 @@ function(lang, declare, on, Deferred, Controller, bind, model){
 					loadChildDeferred.resolve(child);
 				}));
 			}
-			return loadChildDeferred;
+			return loadChildDeferred; //dojo.Deferred
 		},
 
 		loadChild: function(parent, childId, subIds){
 			// summary:
-			//		Load all child and sub children views recursively.
+			//		Load child and sub children views recursively.
 			//
 			// parent: Object
 			//		parent of this view.
@@ -132,11 +130,11 @@ function(lang, declare, on, Deferred, Controller, bind, model){
 			// returns:
 			//		A dojo.Deferred instance which will be resovled when all views loaded.
 
-			if (!parent) {
+			if(!parent){
 				throw Error("No parent for Child '" + childId + "'.");
 			}
 
-			if (!childId) {
+			if(!childId){
 				var parts = parent.defaultView ? parent.defaultView.split(",") : "default";
 				childId = parts.shift();
 				subIds = parts.join(',');
@@ -147,13 +145,12 @@ function(lang, declare, on, Deferred, Controller, bind, model){
 				var parts = subIds.split(',');
 				childId = parts.shift();
 				subIds = parts.join(',');
-				if (childId) {
+				if(childId){
 					var subLoadDeferred = this.loadChild(child, childId, subIds);
 					Deferred.when(subLoadDeferred, function(){
 						loadChildDeferred.resolve();
 					});
-				}
-				else {
+				}else{
 					loadChildDeferred.resolve();
 				}
 			}));

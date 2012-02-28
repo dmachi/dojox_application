@@ -2,12 +2,13 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/Evented"], fun
 	// module:
 	//		dojox/app/controller
 	// summary:
-	//		Bind events on dojox.app application's dojo.Evented instance.
+	//		Bind events on dojox.app application's dojo.Evented instance or document.
+
 	return declare("dojox.app.controller", null, {
 		constructor: function(app, events){
 			// summary:
 			//		bind events on application dojo.Evented instance.
-			//		bind selector events on document.
+			//		bind css selector events on document.
 			//
 			// app:
 			//		dojox.app application instance.
@@ -17,16 +18,15 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/Evented"], fun
 			this.events = this.events || events;
 			this.signals = [];
 			this.app = app;
-			if (!this.app.evented) {
+			if(!this.app.evented){
 				this.app.evented = new Evented();
 			}
-			if (this.events) {
-				for (var item in this.events) {
-					if (item.charAt(0) !== "_") {//skip the private properties
-						if (item.indexOf(':') > 0) {
+			if(this.events){
+				for(var item in this.events){
+					if(item.charAt(0) !== "_"){//skip the private properties
+						if(item.indexOf(':') > 0){
 							this.bind(document, item, lang.hitch(this, this.events[item]));
-						}
-						else {
+						}else{
 							this.bind(this.app.evented, item, lang.hitch(this, this.events[item]));
 						}
 					}
@@ -36,18 +36,18 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/Evented"], fun
 
 		bind: function(evented, event, handler){
 			// summary:
-			//		Bind event on dojo.Evented instance, document or window.
+			//		Bind event on dojo.Evented instance, document, domNode or window.
 			//		Save event signal in controller instance.
 			//
 			// evented: Object
-			//		dojo.Evented instance, docuemnt or window
+			//		dojo.Evented instance, document, domNode or window
 			// event: String
 			//		event
 			// handler: Function
 			//		event handler
 
-			if (!handler) {
-				console.log("Warning: bind event '"+event+"' without callback function.");
+			if(!handler){
+				console.warn("bind event '"+event+"' without callback function.");
 			}
 			var signal = on(evented, event, handler);
 			this.signals.push({
@@ -62,7 +62,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/Evented"], fun
 			//		remove a binded event signal.
 			//
 			// evented: Object
-			//		dojo.Evented instance, docuemnt or window
+			//		dojo.Evented instance, document, domNode or window
 			// event: String
 			//		event
 
@@ -74,7 +74,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/Evented"], fun
 					return;
 				}
 			}
-			console.log("Warning: event '"+event+"' not bind on ", evented);
+			console.warn("event '"+event+"' not bind on ", evented);
 		}
 	});
 });
