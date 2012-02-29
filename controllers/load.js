@@ -65,9 +65,11 @@ function(lang, declare, on, Deferred, Controller, bind, model){
 			if(parent.children[id]){
 				return parent.children[id];
 			}
-			//create child and return Deferred
-			var loadChildDeferred = new Deferred();
+
 			if(parent.views && parent.views[childId]){
+				//create child and return Deferred
+				var loadChildDeferred = new Deferred();
+
 				var conf = parent.views[childId];
 				if(!conf.dependencies){
 					conf.dependencies = [];
@@ -76,9 +78,21 @@ function(lang, declare, on, Deferred, Controller, bind, model){
 
 				var def = new Deferred();
 				if(deps.length > 0){
-					require(deps, function(){
-						def.resolve.call(def, arguments);
-					});
+					try{
+						require.on("error", function(error){
+							if(def.fired != -1){
+								return;
+							}
+							console.error("load dependencies error in createChild.", error);
+							def.reject("load dependencies error.");
+						});
+						require(deps, function(){
+							def.resolve.call(def, arguments);
+						});
+					}catch(ex){
+						console.error("load dependencies error in createChild. ", ex)
+						def.reject("load dependencies error.");
+					}
 				}else{
 					def.resolve(true);
 				}
@@ -112,9 +126,14 @@ function(lang, declare, on, Deferred, Controller, bind, model){
 					}
 					var addResult = self.addChild(child);
 					loadChildDeferred.resolve(child);
-				}));
+				}),
+				function(){
+					//require def error, reject loadChildDeferred
+					loadChildDeferred.reject("create child error.");
+				});
+				return loadChildDeferred.promise; //dojo.Deferred promise
 			}
-			return loadChildDeferred.promise; //dojo.Deferred promise
+			throw Error("No configuration for view '"+childId+"'");
 		},
 
 		loadChild: function(parent, childId, subIds){
@@ -141,7 +160,14 @@ function(lang, declare, on, Deferred, Controller, bind, model){
 			}
 
 			var loadChildDeferred = new Deferred();
-			Deferred.when(this.createChild(parent, childId, subIds), lang.hitch(this, function(child){
+			var createPromise;
+			try{
+				createPromise = this.createChild(parent, childId, subIds);
+			}catch(ex){
+				loadChildDeferred.reject("load child '"+childId+"' error.");
+				return loadChildDeferred.promise;
+			}
+			Deferred.when(createPromise, lang.hitch(this, function(child){
 				var parts = subIds.split(',');
 				childId = parts.shift();
 				subIds = parts.join(',');
@@ -149,11 +175,17 @@ function(lang, declare, on, Deferred, Controller, bind, model){
 					var subLoadDeferred = this.loadChild(child, childId, subIds);
 					Deferred.when(subLoadDeferred, function(){
 						loadChildDeferred.resolve();
+					},
+					function(){
+						loadChildDeferred.reject("load child '"+childId+"' error.");
 					});
 				}else{
 					loadChildDeferred.resolve();
 				}
-			}));
+			}),
+			function(){
+				loadChildDeferred.reject("load child '"+childId+"' error.")
+			});
 			return loadChildDeferred.promise; //dojo.Deferred promise
 		}
 	});
