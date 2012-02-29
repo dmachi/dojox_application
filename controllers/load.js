@@ -114,7 +114,7 @@ function(lang, declare, on, Deferred, Controller, bind, model){
 					loadChildDeferred.resolve(child);
 				}));
 			}
-			return loadChildDeferred; //dojo.Deferred
+			return loadChildDeferred.promise; //dojo.Deferred promise
 		},
 
 		loadChild: function(parent, childId, subIds){
@@ -154,7 +154,7 @@ function(lang, declare, on, Deferred, Controller, bind, model){
 					loadChildDeferred.resolve();
 				}
 			}));
-			return loadChildDeferred; //dojo.Deferred
+			return loadChildDeferred.promise; //dojo.Deferred promise
 		}
 	});
 });
