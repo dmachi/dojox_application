@@ -168,6 +168,11 @@ function(lang, declare, on, Deferred, Controller, bind, model){
 				return loadChildDeferred.promise;
 			}
 			Deferred.when(createPromise, lang.hitch(this, function(child){
+				// if no subIds and current view has default view, load the default view.
+				if(!subIds && child.defaultView){
+					subIds = child.defaultView;
+				}
+
 				var parts = subIds.split(',');
 				childId = parts.shift();
 				subIds = parts.join(',');
