@@ -336,6 +336,11 @@ define(["dojo/_base/declare",
 				throw Error("child view must be loaded before transition.");
 			}
 
+			// if no subIds and next has default view,
+			// set the subIds to the default view and transition to default view.
+			if(!subIds){
+				subIds = next.defaultView;
+			}
 			if (!current){
 				//assume this.set(...) will return a promise object if child is first loaded
 				//return nothing if child is already in array of this.children
