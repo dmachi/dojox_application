@@ -78,16 +78,19 @@ function(lang, declare, on, Deferred, Controller, bind, model){
 
 				var def = new Deferred();
 				if(deps.length > 0){
+					var requireSignal;
 					try{
-						require.on("error", function(error){
+						requireSignal = require.on("error", function(error){
 							if(def.fired != -1){
 								return;
 							}
 							console.error("load dependencies error in createChild.", error);
 							def.reject("load dependencies error.");
+							requireSignal.remove();
 						});
 						require(deps, function(){
 							def.resolve.call(def, arguments);
+							requireSignal.remove();
 						});
 					}catch(ex){
 						console.error("load dependencies error in createChild. ", ex)
