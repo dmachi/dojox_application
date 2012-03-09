@@ -1,12 +1,12 @@
-define(["dojo/_base/kernel","dojo/_base/lang", "dojo/_base/declare", "dojo/on"],function(dojo,dlang,declare,listen){
+define(["dojo/_base/kernel","dojo/_base/lang", "dojo/_base/declare", "dojo/on"],function(dojo,dlang,declare,on){
 	return declare(null, {
 		postCreate: function(params,node){
 			this.inherited(arguments);
 			var hash=window.location.hash;
 			this._startView= ((hash && hash.charAt(0)=="#")?hash.substr(1):hash)||this.defaultView;
 
-			listen(this.domNode, "startTransition", dojo.hitch(this, "onStartTransition"));
-			listen(window,"popstate", dojo.hitch(this, "onPopState"));
+			on(this.domNode, "startTransition", dojo.hitch(this, "onStartTransition"));
+			on(window,"popstate", dojo.hitch(this, "onPopState"));
 		},
 		startup: function(){
 			this.inherited(arguments);
@@ -34,8 +34,12 @@ define(["dojo/_base/kernel","dojo/_base/lang", "dojo/_base/declare", "dojo/on"],
 			if(!target && regex.test(evt.detail.href)){
 				target = evt.detail.href.match(regex)[1];
 			}
-			history.pushState(evt.detail,evt.detail.href, evt.detail.url);
-			this.proceedTransition({target:target, opts: dojo.mixin({reverse: false},evt.detail)});
+			// ensure target views are loaded
+			on.emit(this.evented, "load", {"target":target});
+			dojo.when(this.evented.promise, dlang.hitch(this, function(){
+				history.pushState(evt.detail,evt.detail.href, evt.detail.url);
+				this.proceedTransition({target:target, opts: dojo.mixin({reverse: false},evt.detail)});
+			}));
 		},
 		
 		proceedTransition: function(transitionEvt){
@@ -104,7 +108,11 @@ define(["dojo/_base/kernel","dojo/_base/lang", "dojo/_base/declare", "dojo/on"],
 			}))
 			*/
 			var currentState = history.state;
-			this.proceedTransition({target:target, opts:dojo.mixin({reverse: true},state)});	
+			// ensure target views are loaded
+			on.emit(this.evented, "load", {"target":target});
+			dojo.when(this.evented.promise, dlang.hitch(this, function(){
+				this.proceedTransition({target:target, opts:dojo.mixin({reverse: true},state)});
+			}));
 		}
 	});	
 });

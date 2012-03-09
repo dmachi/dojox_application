@@ -1,12 +1,13 @@
 define(["dojo/_base/lang",
 	"dojo/_base/declare",
 	"dojo/_base/Deferred",
-	"dojo/_base/connect",
+	"dojo/on",
 	"dojo/ready",
 	"dojo/_base/window",
 	"dojo/dom-construct",
-	"./scene"],
-	function(dlang, declare, deferred, connect, ready, baseWindow, dom, sceneCtor){
+	"./scene",
+	"./controllers/load"],
+	function(dlang, declare, deferred, on, ready, baseWindow, dom, sceneCtor, loadController){
 
         dojo.experimental("dojox.app");
 	var Application = declare([sceneCtor], {
@@ -37,8 +38,13 @@ define(["dojo/_base/lang",
 		},
 
 		// load default view and startup the default view
-        start: function(applicaton){
-            var child = this.loadChild();
+        start: function(){
+			// create application controller instance
+			new loadController(this);
+            // var child = this.loadChild();
+			// emit load default view event
+			on.emit(this.evented, "load", {});
+			var child = this.evented.promise;
 
             deferred.when(child, dlang.hitch(this, function(){
                 this.startup();
