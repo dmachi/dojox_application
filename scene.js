@@ -66,6 +66,107 @@ define(["dojo/_base/declare",
 			}
 		},
 
+		loadChild: function(childId,subIds){
+			// if no childId, load the default view
+            if (!childId) {
+                var parts = this.defaultView ? this.defaultView.split(",") : "default";
+                childId = parts.shift();
+                subIds = parts.join(',');
+            }
+
+            var loadChildDeferred = new deferred();
+			var cid = this.id+"_" + childId;
+			if (this.children[cid]){
+                if (this.children[cid].loadChild) {
+                    var nextLoad = null;
+                    subIds = subIds.split(',');
+                    if ((subIds[0].length > 0) && (subIds.length > 1)) {
+                        nextLoad = subIds[0];
+                        subIds = subIds.join(',');
+                    }
+                    else 
+                        if (subIds[0].length > 0) {
+                            nextLoad = subIds[0];
+                            subIds = '';
+                        }
+                    
+                    deferred.when(this.children[cid].loadChild(nextLoad, subIds), dlang.hitch(this,function(){
+                        loadChildDeferred.resolve(this.children[cid]);
+                    }));
+                    return loadChildDeferred.promise;
+                }else{
+                    return this.children[cid];
+                }
+			}
+
+			if (this.views&& this.views[childId]){
+				var conf = this.views[childId];
+				if (!conf.dependencies){conf.dependencies=[];}
+				var deps = conf.template? conf.dependencies.concat(["dojo/text!app/"+conf.template]) :
+						conf.dependencies.concat([]);
+			
+				var def = new deferred();
+				if (deps.length>0) {
+					require(deps,function(){
+						def.resolve.call(def, arguments);			
+					});
+				}else{
+					def.resolve(true);
+				}
+		
+			   var self = this;
+				deferred.when(def, function(){
+					var ctor;
+					if (conf.type){
+						ctor=dlang.getObject(conf.type);
+					}else if (self.defaultViewType){
+						ctor=self.defaultViewType;
+					}else{
+						throw Error("Unable to find appropriate ctor for the base child class");
+					}
+
+					var params = dlang.mixin({}, conf, {
+						id: self.id + "_" + childId,
+						templateString: conf.template?arguments[0][arguments[0].length-1]:"<div></div>",
+						parent: self,
+						app: self.app
+					}) 
+					if (subIds){
+						params.defaultView=subIds;
+					}
+                    var child = new ctor(params);
+                    //load child's model if it is not loaded before
+                    if(!child.loadedModels){
+                        child.loadedModels = model(conf.models, self.loadedModels)
+                        //TODO need to find out a better way to get all bindable controls in a view
+                        bind([child], child.loadedModels);
+                    }
+					var addResult = self.addChild(child);
+					//publish /app/loadchild event
+					//application can subscript this event to do user define operation like select TabBarButton, add dynamic script text etc.
+					connect.publish("/app/loadchild", [child]);
+
+                 var promise = null;
+
+                 subIds = subIds.split(',');
+                 if ((subIds[0].length > 0) && (subIds.length > 1)) {//TODO join subIds
+                     promise = child.loadChild(subIds[0], subIds[1]);
+                 }
+                 else 
+                     if (subIds[0].length > 0) {
+                         promise = child.loadChild(subIds[0], "");
+                     }
+                 
+                 deferred.when(promise, function(){
+                     loadChildDeferred.resolve(addResult)
+                 });
+				});
+              return loadChildDeferred.promise;
+			}
+	
+			throw Error("Child '" + childId + "' not found.");
+		},
+
 		resize: function(changeSize,resultSize){
 			var node = this.domNode;
 
