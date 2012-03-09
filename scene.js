@@ -1,5 +1,6 @@
 define(["dojo/_base/declare",
 	"dojo/_base/connect",
+	"dojo/_base/window",
 	"dojo/on",
 	"dojo/_base/array",
 	"dojo/_base/Deferred",
@@ -20,7 +21,7 @@ define(["dojo/_base/declare",
 	"./view", 
 	"./bind",
     "./layout/utils"], 
-	function(declare,connect,on, array,deferred,dlang,has,dstyle,dgeometry,cls,dconstruct,dattr,query,registry,WidgetBase,Templated,WidgetsInTemplate,transit, model, baseView, bind,layoutUtils){
+	function(declare,connect,win,on,array,Deferred,dlang,has,dstyle,dgeometry,cls,dconstruct,dattr,query,registry,WidgetBase,Templated,WidgetsInTemplate,transit, model, baseView, bind,layoutUtils){
 	
 	return declare("dojox.app.scene", [WidgetBase, Templated, WidgetsInTemplate], {
 		isContainer: true,
@@ -222,7 +223,7 @@ define(["dojo/_base/declare",
 					// monitor when my size changes so that I can re-layout.
 					// For browsers where I can't directly monitor when my size changes,
 					// monitor when the viewport changes size, which *may* indicate a size change for me.
-					this.connect(has("ie") ? this.domNode : dojo.global, 'onresize', function(){
+					this.connect(has("ie") ? this.domNode : win.global, 'onresize', function(){
 						// Using function(){} closure to ensure no arguments to resize.
 						this.resize();
 					});
@@ -238,7 +239,7 @@ define(["dojo/_base/declare",
                   // this.transition(this._startView, {});
 				  // make sure views are loaded before transition
 				  on.emit(this.evented, "load", {"target":this._startView});
-				  deferred.when(this.evented.promise, dlang.hitch(this, function(){
+				  Deferred.when(this.evented.promise, dlang.hitch(this, function(){
 				  	this.transition(this._startView, {});
 				  }));
               }
@@ -272,7 +273,7 @@ define(["dojo/_base/declare",
 
 		_setSelectedChildAttr: function(child,opts){
 			if (child !== this.selectedChild) { 
-				return deferred.when(child, dlang.hitch(this, function(child){
+				return Deferred.when(child, dlang.hitch(this, function(child){
 					if (this.selectedChild){
 						if (this.selectedChild.deactivate){
 							this.selectedChild.deactivate(); 
