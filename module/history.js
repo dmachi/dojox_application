@@ -1,12 +1,12 @@
-define(["dojo/_base/kernel","dojo/_base/lang", "dojo/_base/declare", "dojo/on"],function(dojo,dlang,declare,on){
+define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/Deferred", "dojo/on"],function(dlang,declare,Deferred,on){
 	return declare(null, {
 		postCreate: function(params,node){
 			this.inherited(arguments);
 			var hash=window.location.hash;
 			this._startView= ((hash && hash.charAt(0)=="#")?hash.substr(1):hash)||this.defaultView;
 
-			on(this.domNode, "startTransition", dojo.hitch(this, "onStartTransition"));
-			on(window,"popstate", dojo.hitch(this, "onPopState"));
+			on(this.domNode, "startTransition", dlang.hitch(this, "onStartTransition"));
+			on(window,"popstate", dlang.hitch(this, "onPopState"));
 		},
 		startup: function(){
 			this.inherited(arguments);
@@ -36,9 +36,9 @@ define(["dojo/_base/kernel","dojo/_base/lang", "dojo/_base/declare", "dojo/on"],
 			}
 			// ensure target views are loaded
 			on.emit(this.evented, "load", {"target":target});
-			dojo.when(this.evented.promise, dlang.hitch(this, function(){
+			Deferred.when(this.evented.promise, dlang.hitch(this, function(){
 				history.pushState(evt.detail,evt.detail.href, evt.detail.url);
-				this.proceedTransition({target:target, opts: dojo.mixin({reverse: false},evt.detail)});
+				this.proceedTransition({target:target, opts: dlang.mixin({reverse: false},evt.detail)});
 			}));
 		},
 		
@@ -50,8 +50,8 @@ define(["dojo/_base/kernel","dojo/_base/lang", "dojo/_base/declare", "dojo/on"],
 			}
 			this.proceeding = true;
 			
-			dojo.when(this.transition(transitionEvt.target, transitionEvt.opts), 
-				dojo.hitch(this, function(){
+			Deferred.when(this.transition(transitionEvt.target, transitionEvt.opts),
+				dlang.hitch(this, function(){
 					this.proceeding = false;
 					var nextEvt = this.waitingQueue.shift();
 					if (nextEvt){
@@ -110,8 +110,8 @@ define(["dojo/_base/kernel","dojo/_base/lang", "dojo/_base/declare", "dojo/on"],
 			var currentState = history.state;
 			// ensure target views are loaded
 			on.emit(this.evented, "load", {"target":target});
-			dojo.when(this.evented.promise, dlang.hitch(this, function(){
-				this.proceedTransition({target:target, opts:dojo.mixin({reverse: true},state)});
+			Deferred.when(this.evented.promise, dlang.hitch(this, function(){
+				this.proceedTransition({target:target, opts:dlang.mixin({reverse: true},state)});
 			}));
 		}
 	});	
