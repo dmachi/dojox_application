@@ -50,7 +50,9 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/Deferred", "dojo/on
 			}
 			this.proceeding = true;
 			
-			Deferred.when(this.transition(transitionEvt.target, transitionEvt.opts),
+			on.emit(this.evented, "transition", transitionEvt);
+			var transitionDef = this.evented.transitionDef;
+			Deferred.when(transitionDef,
 				dlang.hitch(this, function(){
 					this.proceeding = false;
 					var nextEvt = this.waitingQueue.shift();
