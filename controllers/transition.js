@@ -1,5 +1,5 @@
-define(["dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojox/css3/transit", "../controller"],
-function(lang, declare, on, transit, Controller){
+define(["dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/_base/Deferred", "dojox/css3/transit", "../controller"],
+function(lang, declare, on, Deferred, transit, Controller){
 	// module:
 	//		dojox/app/controllers/transition
 	// summary:
@@ -38,7 +38,9 @@ function(lang, declare, on, transit, Controller){
 			var target = event.target;
 			var opts = event.opts;
 			var transitionDef = this._doTransition(target, opts, this.app);
-			this.app.evented.transitionDef = transitionDef;
+			if(event.callback){
+				Deferred.when(transitionDef, event.callback);
+			}
 			return transitionDef;
 		},
 

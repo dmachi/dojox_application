@@ -49,18 +49,18 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/Deferred", "dojo/on
 				return;
 			}
 			this.proceeding = true;
-			
-			on.emit(this.evented, "transition", transitionEvt);
-			var transitionDef = this.evented.transitionDef;
-			Deferred.when(transitionDef,
-				dlang.hitch(this, function(){
+
+			on.emit(this.evented, "transition", {
+				"target": transitionEvt.target,
+				"opts":transitionEvt.opts,
+				"callback": dlang.hitch(this, function(){
 					this.proceeding = false;
 					var nextEvt = this.waitingQueue.shift();
-					if (nextEvt){
+					if(nextEvt){
 						this.proceedTransition(nextEvt);
 					}
 				})
-			);
+			});
 		},
 
 		/*
