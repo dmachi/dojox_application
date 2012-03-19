@@ -5,7 +5,7 @@ function(lang, declare, on, Deferred, transit, Controller){
 	// summary:
 	//		Bind "transition" event on dojox.app application dojo.Evented instance.
 	//		Do transition from one view to another view.
-	return declare("dojox.app.controllers.transition", Controller, {
+	return declare("dojox.app.controllers.Transition", Controller, {
 
 		constructor: function(app, events){
 			// summary:
