@@ -183,6 +183,18 @@ define(["dojo/_base/declare",
 			return this._supportingWidgets;
 		},
 
+		// get application dojo.Evented instance
+		getApplicationEvented: function(){
+			var parent = this;
+			do{
+				if(parent.evented){
+					return parent.evented;
+				}
+				parent = parent.parent;
+			}while(parent)
+			return null;
+		},
+
 		startup: function(){
 			if(this._started){ return; }
 			this._started=true;
@@ -240,7 +252,10 @@ define(["dojo/_base/declare",
 				  // make sure views are loaded before transition
 				  on.emit(this.evented, "load", {"target":this._startView});
 				  Deferred.when(this.evented.promise, dlang.hitch(this, function(){
-				  	this.transition(this._startView, {});
+				  	//this.transition(this._startView, {});
+					// emit transition event to trigger transition controller
+					var evented = this.getApplicationEvented();
+					on.emit(evented, "transition", {"target":this._startView, "opts":{}});
 				  }));
               }
 			}
