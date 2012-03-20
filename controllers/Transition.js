@@ -27,13 +27,14 @@ function(lang, declare, on, Deferred, transit, Controller){
 			//
 			// example:
 			//		Use dojo.on.emit to trigger "transition" event, and this function will response to the event. For example:
-			//		|	on.emit(this.app.evented, "transition", {"target":target, "opts":opts});
+			//		|	on.emit(this.app.evented, "transition", {"target":target, "opts":opts, "callback":function(){}});
 			//
 			// event: Object
-			//		"transition" event parameter. It should be like this: {"target":target, "opts":opts}
+			//		"transition" event parameter. It should be like this: {"target":target, "opts":opts, "callback":function(){}}
 			// returns:
 			//		A dojo.Deferred object.
-			//		The return value will keep in application dojo/Evented instance, other controllers can get this deferred object from application.
+			//		The return value cannot directly return by on.emit() method. 
+			//		If the caller need to use the return value, pass callback function in event parameter and process return value in callback function.
 
 			var target = event.target;
 			var opts = event.opts;
@@ -65,7 +66,6 @@ function(lang, declare, on, Deferred, transit, Controller){
 			//
 			// returns:
 			//		transit dojo.DeferredList object.
-			//		The return value will keep in application dojo/Evented instance, other controllers can get this Deffered object from application.
 
 			if(!parent){
 				throw Error("view parent not found in transition.");
