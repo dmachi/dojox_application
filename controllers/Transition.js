@@ -58,17 +58,19 @@ function(lang, declare, on, Deferred, transit, Controller){
 			}
 			this.proceeding = true;
 
-			on.emit(this.app.evented, "load", {"target":transitionEvt.target});
-			Deferred.when(this.app.evented.promise, lang.hitch(this, function(){
-				var transitionDef = this._doTransition(transitionEvt.target, transitionEvt.opts, this.app);
-				Deferred.when(transitionDef, lang.hitch(this, function(){
-					this.proceeding = false;
-					var nextEvt = this.waitingQueue.shift();
-					if(nextEvt){
-						this.proceedTransition(nextEvt);
-					}
-				}));
-			}));
+			on.emit(this.app.evented, "load", {
+				"target": transitionEvt.target,
+				"callback": lang.hitch(this, function(){
+					var transitionDef = this._doTransition(transitionEvt.target, transitionEvt.opts, this.app);
+					Deferred.when(transitionDef, lang.hitch(this, function(){
+						this.proceeding = false;
+						var nextEvt = this.waitingQueue.shift();
+						if(nextEvt){
+							this.proceedTransition(nextEvt);
+						}
+					}));
+				})
+			});
 		},
 
 		_doTransition: function(transitionTo, opts, parent){

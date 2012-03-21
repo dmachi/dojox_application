@@ -28,13 +28,14 @@ function(lang, declare, on, Deferred, Controller, bind, model){
 			//
 			// example:
 			//		Use dojo.on.emit to trigger "load" event, and this function will response the event. For example:
-			//		|	on.emit(this.app.evented, "load", {"parent":parent, "target":target});
+			//		|	on.emit(this.app.evented, "load", {"parent":parent, "target":target, "callback":function(){}});
 			//
 			// event: Object
 			//		Load event parameter. It should be like this: {"parent":parent, "target":target}
 			// returns:
 			//		A dojo.Deferred object.
-			//		The return value will keep in application dojo/Evented instance, other controllers can get this Deferred object from application.
+			//		The return value cannot return directly return by on.emit() method.
+			//		If the caller need to use the return value, pass callback function in event parameter and process return value in callback function.
 
 			var parent = event.parent || this.app;
 			var target = event.target || "";
@@ -43,7 +44,10 @@ function(lang, declare, on, Deferred, Controller, bind, model){
 			var subIds = parts.join(",");
 
 			var def = this.loadChild(parent, childId, subIds);
-			this.app.evented.promise = def; //store loadChild Deferred in application dojo/Evented instance
+			// call Load event callback
+			if(event.callback){
+				Deferred.when(def, event.callback);
+			}
 			return def;
 		},
 

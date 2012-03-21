@@ -45,15 +45,14 @@ define(["dojo/_base/lang",
 			new TransitionController(this);
             // var child = this.loadChild();
 			// emit load default view event
-			on.emit(this.evented, "load", {});
-			var child = this.evented.promise;
+			on.emit(this.evented, "load", {
+				"callback": dlang.hitch(this, function(){
+					this.startup();
 
-            deferred.when(child, dlang.hitch(this, function(){
-                this.startup();
-
-                //set application status to STARTED
-                this.setStatus(this.lifecycle.STARTED);
-            }));
+					//set application status to STARTED
+					this.setStatus(this.lifecycle.STARTED);
+				})
+			});
         },
 		templateString: "<div></div>",
 		selectedChild: null,
