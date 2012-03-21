@@ -248,15 +248,8 @@ define(["dojo/_base/declare",
 
 				//transition to _startView
               if (this._startView && (this._startView != this.defaultView)) {
-                  // this.transition(this._startView, {});
-				  // make sure views are loaded before transition
-				  on.emit(this.evented, "load", {"target":this._startView});
-				  Deferred.when(this.evented.promise, dlang.hitch(this, function(){
-				  	//this.transition(this._startView, {});
-					// emit transition event to trigger transition controller
-					var evented = this.getApplicationEvented();
-					on.emit(evented, "transition", {"target":this._startView, "opts":{}});
-				  }));
+				  var evented = this.getApplicationEvented();
+				  on.emit(evented, "transition", {"target":this._startView, "opts":{}});
               }
 			}
 		},
