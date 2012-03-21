@@ -7,6 +7,10 @@ function(lang, declare, on, Deferred, transit, Controller){
 	//		Do transition from one view to another view.
 	return declare("dojox.app.controllers.Transition", Controller, {
 
+		proceeding: false,
+
+		waitingQueue:[],
+
 		constructor: function(app, events){
 			// summary:
 			//		bind "transition" event on application dojo.Evented instance.
@@ -27,22 +31,44 @@ function(lang, declare, on, Deferred, transit, Controller){
 			//
 			// example:
 			//		Use dojo.on.emit to trigger "transition" event, and this function will response to the event. For example:
-			//		|	on.emit(this.app.evented, "transition", {"target":target, "opts":opts, "callback":function(){}});
+			//		|	on.emit(this.app.evented, "transition", {"target":target, "opts":opts});
 			//
 			// event: Object
-			//		"transition" event parameter. It should be like this: {"target":target, "opts":opts, "callback":function(){}}
-			// returns:
-			//		A dojo.Deferred object.
-			//		The return value cannot directly return by on.emit() method. 
-			//		If the caller need to use the return value, pass callback function in event parameter and process return value in callback function.
+			//		"transition" event parameter. It should be like this: {"target":target, "opts":opts}
 
-			var target = event.target;
-			var opts = event.opts;
-			var transitionDef = this._doTransition(target, opts, this.app);
-			if(event.callback){
-				Deferred.when(transitionDef, event.callback);
+			this.proceedTransition(event);
+		},
+
+		proceedTransition: function(transitionEvt){
+			// summary:
+			//		Proceed transition queue by FIFO by default.
+			//		If transition is in proceeding, add the next transition to waiting queue.
+			//
+			// example:
+			//		Use dojo.on.emit to trigger "transition" event, and this function will response to the event. For example:
+			//		|	on.emit(this.app.evented, "transition", {"target":target, "opts":opts});
+			//
+			// event: Object
+			//		"transition" event parameter. It should be like this: {"target":target, "opts":opts}
+
+			if(this.proceeding){
+				console.log("push event", transitionEvt);
+				this.waitingQueue.push(transitionEvt);
+				return;
 			}
-			return transitionDef;
+			this.proceeding = true;
+
+			on.emit(this.app.evented, "load", {"target":transitionEvt.target});
+			Deferred.when(this.app.evented.promise, lang.hitch(this, function(){
+				var transitionDef = this._doTransition(transitionEvt.target, transitionEvt.opts, this.app);
+				Deferred.when(transitionDef, lang.hitch(this, function(){
+					this.proceeding = false;
+					var nextEvt = this.waitingQueue.shift();
+					if(nextEvt){
+						this.proceedTransition(nextEvt);
+					}
+				}));
+			}));
 		},
 
 		_doTransition: function(transitionTo, opts, parent){
