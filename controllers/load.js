@@ -99,6 +99,7 @@ function(lang, declare, on, Deferred, Controller, bind, model){
 					}catch(ex){
 						console.error("load dependencies error in createChild. ", ex)
 						def.reject("load dependencies error.");
+						requireSignal.remove();
 					}
 				}else{
 					def.resolve(true);
