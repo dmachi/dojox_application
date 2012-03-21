@@ -6,9 +6,9 @@ define(["dojo/_base/lang",
 	"dojo/_base/window",
 	"dojo/dom-construct",
 	"./scene",
-	"./controllers/load",
+	"./controllers/Load",
 	"./controllers/Transition"],
-	function(dlang, declare, deferred, on, ready, baseWindow, dom, sceneCtor, loadController, TransitionController){
+	function(dlang, declare, deferred, on, ready, baseWindow, dom, sceneCtor, LoadController, TransitionController){
 
         dojo.experimental("dojox.app");
 	var Application = declare([sceneCtor], {
@@ -41,7 +41,7 @@ define(["dojo/_base/lang",
 		// load default view and startup the default view
         start: function(){
 			// create application controller instance
-			new loadController(this);
+			new LoadController(this);
 			new TransitionController(this);
             // var child = this.loadChild();
 			// emit load default view event

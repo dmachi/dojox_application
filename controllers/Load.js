@@ -1,12 +1,12 @@
 define(["dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/_base/Deferred", "../controller", "../bind", "../model"],
 function(lang, declare, on, Deferred, Controller, bind, model){
 	// module:
-	//		dojox/app/controllers/load
+	//		dojox/app/controllers/Load
 	// summary:
 	//		Bind "load" event on dojox.app application's dojo.Evented instance.
 	//		Load child view and sub children at one time.
 
-	return declare("dojox.app.controllers.load", Controller, {
+	return declare("dojox.app.controllers.Load", Controller, {
 
 		constructor: function(app, events){
 			// summary:
@@ -34,7 +34,7 @@ function(lang, declare, on, Deferred, Controller, bind, model){
 			//		Load event parameter. It should be like this: {"parent":parent, "target":target}
 			// returns:
 			//		A dojo.Deferred object.
-			//		The return value cannot return directly return by on.emit() method.
+			//		The return value cannot return directly return by on.emit() method. 
 			//		If the caller need to use the return value, pass callback function in event parameter and process return value in callback function.
 
 			var parent = event.parent || this.app;
