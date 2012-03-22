@@ -1,12 +1,12 @@
 define(["dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/_base/Deferred", "../controller", "../bind", "../model"],
 function(lang, declare, on, Deferred, Controller, bind, model){
 	// module:
-	//		dojox/app/controllers/load
+	//		dojox/app/controllers/Load
 	// summary:
 	//		Bind "load" event on dojox.app application's dojo.Evented instance.
 	//		Load child view and sub children at one time.
 
-	return declare("dojox.app.controllers.load", Controller, {
+	return declare("dojox.app.controllers.Load", Controller, {
 
 		constructor: function(app, events){
 			// summary:
@@ -28,13 +28,14 @@ function(lang, declare, on, Deferred, Controller, bind, model){
 			//
 			// example:
 			//		Use dojo.on.emit to trigger "load" event, and this function will response the event. For example:
-			//		|	on.emit(this.app.evented, "load", {"parent":parent, "target":target});
+			//		|	on.emit(this.app.evented, "load", {"parent":parent, "target":target, "callback":function(){}});
 			//
 			// event: Object
 			//		Load event parameter. It should be like this: {"parent":parent, "target":target}
 			// returns:
 			//		A dojo.Deferred object.
-			//		The return value will keep in application dojo/Evented instance, other controllers can get this Deferred object from application.
+			//		The return value cannot return directly return by on.emit() method. 
+			//		If the caller need to use the return value, pass callback function in event parameter and process return value in callback function.
 
 			var parent = event.parent || this.app;
 			var target = event.target || "";
@@ -43,7 +44,10 @@ function(lang, declare, on, Deferred, Controller, bind, model){
 			var subIds = parts.join(",");
 
 			var def = this.loadChild(parent, childId, subIds);
-			this.app.evented.promise = def; //store loadChild Deferred in application dojo/Evented instance
+			// call Load event callback
+			if(event.callback){
+				Deferred.when(def, event.callback);
+			}
 			return def;
 		},
 
@@ -95,6 +99,7 @@ function(lang, declare, on, Deferred, Controller, bind, model){
 					}catch(ex){
 						console.error("load dependencies error in createChild. ", ex)
 						def.reject("load dependencies error.");
+						requireSignal.remove();
 					}
 				}else{
 					def.resolve(true);

@@ -11,10 +11,6 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/Deferred", "dojo/on
 		startup: function(){
 			this.inherited(arguments);
 		},
-		
-		proceeding: false,
-		
-		waitingQueue:[],
 
 		onStartTransition: function(evt){
 			console.log("onStartTransition", evt.detail.href, history.state);
@@ -34,31 +30,9 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/Deferred", "dojo/on
 			if(!target && regex.test(evt.detail.href)){
 				target = evt.detail.href.match(regex)[1];
 			}
-			// ensure target views are loaded
-			on.emit(this.evented, "load", {"target":target});
-			Deferred.when(this.evented.promise, dlang.hitch(this, function(){
-				history.pushState(evt.detail,evt.detail.href, evt.detail.url);
-				this.proceedTransition({target:target, opts: dlang.mixin({reverse: false},evt.detail)});
-			}));
-		},
-		
-		proceedTransition: function(transitionEvt){
-			if(this.proceeding){
-				console.log("push event", transitionEvt);
-				this.waitingQueue.push(transitionEvt);
-				return;
-			}
-			this.proceeding = true;
-			
-			Deferred.when(this.transition(transitionEvt.target, transitionEvt.opts),
-				dlang.hitch(this, function(){
-					this.proceeding = false;
-					var nextEvt = this.waitingQueue.shift();
-					if (nextEvt){
-						this.proceedTransition(nextEvt);
-					}
-				})
-			);
+
+			history.pushState(evt.detail,evt.detail.href, evt.detail.url);
+			on.emit(this.evented, "transition", {target:target, opts: dlang.mixin({reverse: false},evt.detail)});
 		},
 
 		/*
@@ -108,11 +82,8 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/Deferred", "dojo/on
 			}))
 			*/
 			var currentState = history.state;
-			// ensure target views are loaded
-			on.emit(this.evented, "load", {"target":target});
-			Deferred.when(this.evented.promise, dlang.hitch(this, function(){
-				this.proceedTransition({target:target, opts:dlang.mixin({reverse: true},state)});
-			}));
+			// emit transition event
+			on.emit(this.evented, "transition", {target:target, opts: dlang.mixin({reverse: false},evt.detail)});
 		}
 	});	
 });
