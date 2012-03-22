@@ -183,7 +183,9 @@ define(["dojo/_base/declare",
 			return this._supportingWidgets;
 		},
 
-		// get application dojo.Evented instance
+		// Get application's dojo.Evented instance
+		// This is a temporary method and will be removed when view is changed to object.
+		// we need this method to get the application's dojo.Evented instance because scene is a child of application and not has the application instance.
 		getApplicationEvented: function(){
 			var parent = this;
 			do{
