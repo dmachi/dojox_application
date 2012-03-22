@@ -183,6 +183,20 @@ define(["dojo/_base/declare",
 			return this._supportingWidgets;
 		},
 
+		// Get application's dojo.Evented instance
+		// This is a temporary method and will be removed when view is changed to object.
+		// we need this method to get the application's dojo.Evented instance because scene is a child of application and not has the application instance.
+		getApplicationEvented: function(){
+			var parent = this;
+			do{
+				if(parent.evented){
+					return parent.evented;
+				}
+				parent = parent.parent;
+			}while(parent)
+			return null;
+		},
+
 		startup: function(){
 			if(this._started){ return; }
 			this._started=true;
@@ -236,12 +250,8 @@ define(["dojo/_base/declare",
 
 				//transition to _startView
               if (this._startView && (this._startView != this.defaultView)) {
-                  // this.transition(this._startView, {});
-				  // make sure views are loaded before transition
-				  on.emit(this.evented, "load", {"target":this._startView});
-				  Deferred.when(this.evented.promise, dlang.hitch(this, function(){
-				  	this.transition(this._startView, {});
-				  }));
+				  var evented = this.getApplicationEvented();
+				  on.emit(evented, "transition", {"target":this._startView, "opts":{}});
               }
 			}
 		},
@@ -304,83 +314,6 @@ define(["dojo/_base/declare",
 			}
 		},
 
-
-		transition: function(transitionTo,opts){
-			//summary: 
-			//  transitions from the currently visible scene to the defined scene.
-			//  it should determine what would be the best transition unless
-			//  an override in opts tells it to use a specific transitioning methodology
-			//  the transitionTo is a string in the form of [view]@[scene].  If
-			//  view is left of, the current scene will be transitioned to the default
-			//  view of the specified scene (eg @scene2), if the scene is left off
-			//  the app controller will instruct the active scene to the view (eg view1).  If both
-			//  are supplied (view1@scene2), then the application should transition to the scene,
-			//  and instruct the scene to navigate to the view.
-			var toId,subIds,next, current = this.selectedChild;
-			console.log("scene", this.id, transitionTo);
-			if (transitionTo){	
-				var parts = transitionTo.split(",");
-				toId= parts.shift();
-				subIds = parts.join(',');
-
-			}else{
-				toId = this.defaultView;
-				if(this.views[this.defaultView] && this.views[this.defaultView]["defaultView"]){
-					subIds =  this.views[this.defaultView]["defaultView"];
-				}	
-			}
-		
-			// next = this.loadChild(toId,subIds);
-			// next is loaded and ready for transition
-			next = this.children[this.id+'_'+toId];
-			if(!next){
-				throw Error("child view must be loaded before transition.");
-			}
-
-			// if no subIds and next has default view,
-			// set the subIds to the default view and transition to default view.
-			if(!subIds){
-				subIds = next.defaultView;
-			}
-			if (!current){
-				//assume this.set(...) will return a promise object if child is first loaded
-				//return nothing if child is already in array of this.children
-				return this.set("selectedChild",next);	
-			}	
-			// next is not a deferred object, so deferred.when is no needed.   
-				if (next!==current){
-				    //When clicking fast, history module will cache the transition request que
-                    //and prevent the transition conflicts.
-                    //Originally when we conduct transition, selectedChild will not be the 
-				    //view we want to start transition. For example, during transition 1 -> 2
-				    //if user click button to transition to 3 and then transition to 1. After 
-                    //1->2 completes, it will perform transition 2 -> 3 and 2 -> 1 because 
-                    //selectedChild is always point to 2 during 1 -> 2 transition and transition
-                    //will record 2->3 and 2->1 right after the button is clicked.
-				    
-					//assume next is already loaded so that this.set(...) will not return
-					//a promise object. this.set(...) will handles the this.selectedChild,
-					//activate or deactivate views and refresh layout.
-					this.set("selectedChild", next);
-					
-					//publish /app/transition event
-					//application can subscript this event to do user define operation like select TabBarButton, etc.
-					// connect.publish("/app/transition", [next, toId]);
-					var result = transit(current.domNode,next.domNode,dlang.mixin({},opts,{transition: this.defaultTransition || "none"}));
-					result.then(dlang.hitch(this, function(){
-						//dojo.style(current.domNode, "display", "none");
-						if (subIds && next.transition){
-							next.transition(subIds,opts);
-						}
-				    }));
-				    return result;
-				}
-
-				// do sub transition like transition from "tabScene,tab1" to "tabScene,tab2"
-				if (subIds && next.transition){
-					return next.transition(subIds,opts);
-				}
-		},
 		toString: function(){return this.id},
 
 		activate: function(){},
