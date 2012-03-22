@@ -6,8 +6,9 @@ define(["dojo/_base/lang",
 	"dojo/_base/window",
 	"dojo/dom-construct",
 	"./scene",
-	"./controllers/load"],
-	function(dlang, declare, deferred, on, ready, baseWindow, dom, sceneCtor, loadController){
+	"./controllers/Load",
+	"./controllers/Transition"],
+	function(dlang, declare, deferred, on, ready, baseWindow, dom, sceneCtor, LoadController, TransitionController){
 
         dojo.experimental("dojox.app");
 	var Application = declare([sceneCtor], {
@@ -40,18 +41,18 @@ define(["dojo/_base/lang",
 		// load default view and startup the default view
         start: function(){
 			// create application controller instance
-			new loadController(this);
+			new LoadController(this);
+			new TransitionController(this);
             // var child = this.loadChild();
 			// emit load default view event
-			on.emit(this.evented, "load", {});
-			var child = this.evented.promise;
+			on.emit(this.evented, "load", {
+				"callback": dlang.hitch(this, function(){
+					this.startup();
 
-            deferred.when(child, dlang.hitch(this, function(){
-                this.startup();
-
-                //set application status to STARTED
-                this.setStatus(this.lifecycle.STARTED);
-            }));
+					//set application status to STARTED
+					this.setStatus(this.lifecycle.STARTED);
+				})
+			});
         },
 		templateString: "<div></div>",
 		selectedChild: null,
