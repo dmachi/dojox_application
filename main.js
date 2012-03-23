@@ -7,8 +7,9 @@ define(["dojo/_base/lang",
 	"dojo/dom-construct",
 	"./scene",
 	"./controllers/Load",
-	"./controllers/Transition"],
-	function(dlang, declare, deferred, on, ready, baseWindow, dom, sceneCtor, LoadController, TransitionController){
+	"./controllers/Transition",
+	"./controllers/History"],
+	function(dlang, declare, deferred, on, ready, baseWindow, dom, sceneCtor, LoadController, TransitionController, HistoryController){
 
         dojo.experimental("dojox.app");
 	var Application = declare([sceneCtor], {
@@ -43,6 +44,11 @@ define(["dojo/_base/lang",
 			// create application controller instance
 			new LoadController(this);
 			new TransitionController(this);
+			new HistoryController(this);
+
+			// move set _startView operation from history module to application
+			var hash = window.location.hash;
+			this._startView= ((hash && hash.charAt(0)=="#") ? hash.substr(1) : hash)||this.defaultView;
             // var child = this.loadChild();
 			// emit load default view event
 			on.emit(this.evented, "load", {
