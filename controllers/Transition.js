@@ -125,7 +125,9 @@ function(lang, declare, on, Deferred, transit, Controller){
 			if(!current){
 				//assume this.set(...) will return a promise object if child is first loaded
 				//return nothing if child is already in array of this.children
-				return parent.set("selectedChild", next);
+//				return parent.set("selectedChild", next);
+				on.emit(this.app.evented, "select", {"parent":parent, "view":next});
+				return;
 			}
 			// next is not a Deferred object, so Deferred.when is no needed.
 			if(next !== current){
@@ -141,17 +143,21 @@ function(lang, declare, on, Deferred, transit, Controller){
 				//assume next is already loaded so that this.set(...) will not return
 				//a promise object. this.set(...) will handles the this.selectedChild,
 				//activate or deactivate views and refresh layout.
-				parent.set("selectedChild", next);
+				current.deactivate();
 
+				on.emit(this.app.evented, "select", {"parent":parent, "view":next});
 				var result = transit(current.domNode, next.domNode, lang.mixin({}, opts, {
 					transition: parent.defaultTransition || "none"
 				}));
 				result.then(lang.hitch(this, function(){
+					next.activate();
 					if(subIds){
 						this._doTransition(subIds, opts, next);
 					}
 				}));
 				return result; //dojo.DeferredList
+			}else{
+				next.activate();
 			}
 
 			// do sub transition like transition from "tabScene,tab1" to "tabScene,tab2"

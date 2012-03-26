@@ -8,8 +8,9 @@ define(["dojo/_base/lang",
 	"./scene",
 	"./controllers/Load",
 	"./controllers/Transition",
-	"./controllers/History"],
-	function(dlang, declare, deferred, on, ready, baseWindow, dom, sceneCtor, LoadController, TransitionController, HistoryController){
+	"./controllers/History",
+	"./controllers/Layout"],
+	function(dlang, declare, deferred, on, ready, baseWindow, dom, sceneCtor, LoadController, TransitionController, HistoryController, LayoutController){
 
         dojo.experimental("dojox.app");
 	var Application = declare([sceneCtor], {
@@ -45,6 +46,7 @@ define(["dojo/_base/lang",
 			new LoadController(this);
 			new TransitionController(this);
 			new HistoryController(this);
+			new LayoutController(this);
 
 			// move set _startView operation from history module to application
 			var hash = window.location.hash;

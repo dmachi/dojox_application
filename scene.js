@@ -317,6 +317,6 @@ define(["dojo/_base/declare",
 		toString: function(){return this.id},
 
 		activate: function(){},
-		deactive: function(){}
+		deactivate: function(){}
 	});
 });
