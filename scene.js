@@ -223,25 +223,26 @@ define(["dojo/_base/declare",
             if (this.children[cid]) {
 				var next = this.children[cid];
 
-				this.set("selectedChild", next);
-				
+				var evented = this.getApplicationEvented();
+				on.emit(evented, "select", {"parent":this, "view":next});
+
 				// If I am a not being controlled by a parent layout widget...
 				var parent = this.getParent && this.getParent();
 				if (!(parent && parent.isLayoutContainer)) {
 					// Do recursive sizing and layout of all my descendants
 					// (passing in no argument to resize means that it has to glean the size itself)
-					this.resize();
-					
+//					this.resize();
+					on.emit(evented, "resize", this);
+
 					// Since my parent isn't a layout container, and my style *may be* width=height=100%
 					// or something similar (either set directly or via a CSS class),
 					// monitor when my size changes so that I can re-layout.
 					// For browsers where I can't directly monitor when my size changes,
 					// monitor when the viewport changes size, which *may* indicate a size change for me.
-					this.connect(has("ie") ? this.domNode : win.global, 'onresize', function(){
-						// Using function(){} closure to ensure no arguments to resize.
-						this.resize();
-					});
-					
+//					this.connect(has("ie") ? this.domNode : win.global, 'onresize', function(){
+//						// Using function(){} closure to ensure no arguments to resize.
+//						on.emit(evented, "resize", this);
+//					});
 				}
 				
 				array.forEach(this.getChildren(), function(child){
