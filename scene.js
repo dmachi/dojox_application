@@ -7,22 +7,17 @@ define(["dojo/_base/declare",
 	"dojo/_base/lang",
 	"dojo/_base/sniff",
 	"dojo/dom-style",
-	"dojo/dom-geometry",
 	"dojo/dom-class",
 	"dojo/dom-construct",
 	"dojo/dom-attr",
-	"dojo/query",
-	"dijit/registry",
 	"dijit/_WidgetBase",
 	"dijit/_TemplatedMixin",
 	"dijit/_WidgetsInTemplateMixin",
-	"dojox/css3/transit",
 	"./model", 
 	"./view", 
-	"./bind",
-    "./layout/utils"], 
-	function(declare,connect,win,on,array,Deferred,dlang,has,dstyle,dgeometry,cls,dconstruct,dattr,query,registry,WidgetBase,Templated,WidgetsInTemplate,transit, model, baseView, bind,layoutUtils){
-	
+	"./bind"],
+	function(declare,connect,win, on, array,deferred,dlang,has,dstyle,cls,dconstruct,dattr,WidgetBase,Templated,WidgetsInTemplate, model, baseView, bind){
+
 	return declare("dojox.app.scene", [WidgetBase, Templated, WidgetsInTemplate], {
 		isContainer: true,
 		widgetsInTemplate: true,
@@ -67,117 +62,6 @@ define(["dojo/_base/declare",
 			}
 		},
 
-		resize: function(changeSize,resultSize){
-			var node = this.domNode;
-
-			// set margin box size, unless it wasn't specified, in which case use current size
-			if(changeSize){
-				dgeometry.setMarginBox(node, changeSize);
-
-				// set offset of the node
-				if(changeSize.t){ node.style.top = changeSize.t + "px"; }
-				if(changeSize.l){ node.style.left = changeSize.l + "px"; }
-			}
-
-			// If either height or width wasn't specified by the user, then query node for it.
-			// But note that setting the margin box and then immediately querying dimensions may return
-			// inaccurate results, so try not to depend on it.
-			var mb = resultSize || {};
-			dlang.mixin(mb, changeSize || {});	// changeSize overrides resultSize
-			if( !("h" in mb) || !("w" in mb) ){
-				mb = dlang.mixin(dgeometry.getMarginBox(node), mb);	// just use dojo.marginBox() to fill in missing values
-			}
-
-			// Compute and save the size of my border box and content box
-			// (w/out calling dojo.contentBox() since that may fail if size was recently set)
-			var cs = dstyle.getComputedStyle(node);
-			var me = dgeometry.getMarginExtents(node, cs);
-			var be = dgeometry.getBorderExtents(node, cs);
-			var bb = (this._borderBox = {
-				w: mb.w - (me.w + be.w),
-				h: mb.h - (me.h + be.h)
-			});
-			var pe = dgeometry.getPadExtents(node, cs);
-			this._contentBox = {
-				l: dstyle.toPixelValue(node, cs.paddingLeft),
-				t: dstyle.toPixelValue(node, cs.paddingTop),
-				w: bb.w - pe.w,
-				h: bb.h - pe.h
-			};
-
-			// Callback for widget to adjust size of its children
-			this.layout();
-		},
-
-		layout: function(){
-			var fullScreenScene,children,hasCenter;
-			//console.log("fullscreen: ", this.selectedChild && this.selectedChild.isFullScreen);
-			if (this.selectedChild && this.selectedChild.isFullScreen) {
-				console.warn("fullscreen sceen layout");
-				/*
-				fullScreenScene=true;		
-				children=[{domNode: this.selectedChild.domNode,region: "center"}];
-				dojo.query("> [region]",this.domNode).forEach(function(c){
-					if(this.selectedChild.domNode!==c.domNode){
-						dojo.style(c.domNode,"display","none");
-					}
-				})
-				*/
-			}else{
-				children = query("> [region]", this.domNode).map(function(node){
-					var w = registry.getEnclosingWidget(node);
-					if (w){return w;}
-
-					return {		
-						domNode: node,
-						region: dattr.get(node,"region")
-					}
-						
-				});
-				if (this.selectedChild){
-					children = array.filter(children, function(c){
-						if (c.region=="center" && this.selectedChild && this.selectedChild.domNode!==c.domNode){
-							dstyle.set(c.domNode,"zIndex",25);
-							dstyle.set(c.domNode,'display','none');
-							return false;
-						}else if (c.region!="center"){
-							dstyle.set(c.domNode,"display","");
-							dstyle.set(c.domNode,"zIndex",100);
-						}
-					
-						return c.domNode && c.region;
-					},this);
-
-				//	this.selectedChild.region="center";	
-				//	dojo.attr(this.selectedChild.domNode,"region","center");
-				//	dojo.style(this.selectedChild.domNode, "display","");
-				//	dojo.style(this.selectedChild.domNode,"zIndex",50);
-
-				//	children.push({domNode: this.selectedChild.domNode, region: "center"});	
-				//	children.push(this.selectedChild);
-				//	console.log("children: ", children);
-				}else{
-					array.forEach(children, function(c){
-						if (c && c.domNode && c.region=="center"){
-							dstyle.set(c.domNode,"zIndex",25);
-							dstyle.set(c.domNode,'display','none');
-						}	
-					});
-				}
-			
-			}	
-			// We don't need to layout children if this._contentBox is null for the operation will do nothing.
-			if (this._contentBox) {
-				layoutUtils.layoutChildren(this.domNode, this._contentBox, children);
-			}
-			array.forEach(this.getChildren(), function(child){ 
-				if (!child._started && child.startup){
-					child.startup(); 
-				}
-
-			});
-
-		},
 
 		getChildren: function(){
 			return this._supportingWidgets;
@@ -279,39 +163,6 @@ define(["dojo/_base/declare",
 					node.parentNode.removeChild(node); // detach but don't destroy
 				}
 				return widget;
-			}
-		},
-
-		_setSelectedChildAttr: function(child,opts){
-			if (child !== this.selectedChild) { 
-				return Deferred.when(child, dlang.hitch(this, function(child){
-					if (this.selectedChild){
-						if (this.selectedChild.deactivate){
-							this.selectedChild.deactivate(); 
-						}
-
-						dstyle.set(this.selectedChild.domNode,"zIndex",25);
-					}
-		
-					//dojo.style(child.domNode, {
-					//	"display": "",
-					//	"zIndex": 50,
-					//	"overflow": "auto"
-					//});
-					this.selectedChild = child;
-					dstyle.set(child.domNode, "display", "");
-					dstyle.set(child.domNode,"zIndex",50);
-					this.selectedChild=child;
-					if (this._started) {	
-						if (child.startup && !child._started){
-							child.startup();
-						}else if (child.activate){
-							child.activate();
-						}
-		
-					}
-					this.layout();
-				}));
 			}
 		},
 
