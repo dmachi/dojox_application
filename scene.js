@@ -116,7 +116,7 @@ define(["dojo/_base/declare",
 					// Do recursive sizing and layout of all my descendants
 					// (passing in no argument to resize means that it has to glean the size itself)
 //					this.resize();
-					on.emit(evented, "resize", this);
+					on.emit(evented, "layout", {"view":this});
 
 					// Since my parent isn't a layout container, and my style *may be* width=height=100%
 					// or something similar (either set directly or via a CSS class),
