@@ -116,6 +116,15 @@ function(lang, declare, on, Deferred, transit, Controller){
 			if(!next){
 				throw Error("child view must be loaded before transition.");
 			}
+
+			// Ensure next is startup
+			// NOTE: next is a scene/view widget, not a view object this moment.
+			//	It is original startup by layout method. But now we need to ensure the widget is startup before transition and layout.
+			//	So we need to check and startup it before transition. When view changed to object, the view instance should responsible for startup.
+			if(!next._started){
+				next.startup();
+			}
+
 			// if no subIds and next has default view, 
 			// set the subIds to the default view and transition to default view.
 			if(!subIds && next.defaultView){
