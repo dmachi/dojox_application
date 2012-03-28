@@ -58,7 +58,6 @@ function(lang, declare, on, Deferred, transit, Controller){
 
 			// prevent event from bubbling to window and being
 			// processed by dojox/mobile/ViewController
-			console.log("in Transition onStartTransition");
 			if(evt.preventDefault){
 				evt.preventDefault();
 			}
