@@ -23,6 +23,10 @@
 		//"dojox/app/module/phonegap",
 		//"dojox/app/module/somePlugin"
 	],
+	
+	"controllers": [
+		"dojox/app/controllers/History"
+	],
 
 	//stores we are using 
 	"stores": {},

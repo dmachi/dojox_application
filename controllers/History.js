@@ -57,8 +57,7 @@ function(lang, declare, on, Deferred, Controller){
 
 			// push states to history list
 			history.pushState(evt.detail,evt.detail.href, evt.detail.url);
-			// transition to the target view
-			on.emit(this.app.evented, "transition", {target:target, opts: lang.mixin({reverse: false},evt.detail)});
+
 		},
 
 		onPopState: function(evt){

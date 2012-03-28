@@ -23,6 +23,7 @@ function(lang, declare, on, Deferred, transit, Controller){
 				"transition": this.transition
 			};
 			this.inherited(arguments);
+			this.bind(this.app.domNode, "startTransition", lang.hitch(this, this.onStartTransition));
 		},
 
 		transition: function(event){
@@ -37,6 +38,43 @@ function(lang, declare, on, Deferred, transit, Controller){
 			//		"transition" event parameter. It should be like this: {"target":target, "opts":opts}
 
 			this.proceedTransition(event);
+		},
+
+		onStartTransition: function(evt){
+			// summary:
+			//		Response to dojox.app "startTransition" event.
+			//
+			// example:
+			//		Use "dojox/mobile/TransitionEvent" to trigger "startTransition" event, and this function will response the event. For example:
+			//		|	var transOpts = {
+			//		|		title:"List",
+			//		|		target:"items,list",
+			//		|		url: "#items,list"
+			//		|	};
+			//		|	new TransitionEvent(domNode, transOpts, e).dispatch();
+			//
+			// evt: Object
+			//		transition options parameter
+
+			// prevent event from bubbling to window and being
+			// processed by dojox/mobile/ViewController
+			console.log("in Transition onStartTransition");
+			if(evt.preventDefault){
+				evt.preventDefault();
+			}
+			evt.cancelBubble = true;
+			if(evt.stopPropagation){
+				evt.stopPropagation();
+			}
+
+			var target = evt.detail.target;
+			var regex = /#(.+)/;
+			if(!target && regex.test(evt.detail.href)){
+				target = evt.detail.href.match(regex)[1];
+			}
+
+			// transition to the target view
+			this.transition({target:target, opts: lang.mixin({reverse: false},evt.detail)});
 		},
 
 		proceedTransition: function(transitionEvt){
