@@ -7,8 +7,9 @@ define(["dojo/_base/lang",
 	"dojo/dom-construct",
 	"./scene",
 	"./controllers/Load",
-	"./controllers/Transition"],
-	function(dlang, declare, deferred, on, ready, baseWindow, dom, sceneCtor, LoadController, TransitionController){
+	"./controllers/Transition",
+	"./controllers/Layout"],
+	function(dlang, declare, Deferred, on, ready, baseWindow, dom, sceneCtor, LoadController, TransitionController, LayoutController){
 
         dojo.experimental("dojox.app");
 	var Application = declare([sceneCtor], {
@@ -35,7 +36,67 @@ define(["dojo/_base/lang",
 			        }
 			    }
 			}
+		},
 
+		createControllers: function(controllers){
+			// summary:
+			//		Create controller instance
+			//
+			// parent: Array
+			//		controller configuration array.
+			// returns:
+			//		controllerDeferred object
+
+			if (controllers) {
+				var requireItems = [];
+				for (var i = 0; i < controllers.length; i++) {
+					requireItems.push(controllers[i]);
+				}
+
+				var def = new Deferred();
+				var requireSignal;
+				try{
+					requireSignal = require.on("error", function(error){
+						if(def.fired != -1){
+							return;
+						}
+						def.reject("load controllers error.");
+						requireSignal.remove();
+					});
+					require(requireItems, function(){
+						def.resolve.call(def, arguments);
+						requireSignal.remove();
+					})
+				}catch(ex){
+					def.reject("load controllers error.");
+					requireSignal.remove();
+				}
+
+				var controllerDef = new Deferred();
+				Deferred.when(def, dlang.hitch(this, function(){
+					for (var i = 0; i < arguments[0].length; i++) {
+						// Store Application object on each controller.
+						this.controllers.push(new arguments[0][i](this));
+					}
+					controllerDef.resolve(this);
+				}),
+				function(){
+					//require def error, reject loadChildDeferred
+					controllerDef.reject("load controllers error.");
+				});
+				return controllerDef;
+			}
+		},
+
+		trigger: function(event, params){
+			// summary:
+			//		trigger an event
+			//
+			// event: String
+			//		event name. The event is binded by controller.bind() method.
+			// params: Object
+			//		event parameters.
+			on.emit(this.domNode, event, params);
 		},
 
 		// load default view and startup the default view
@@ -43,9 +104,17 @@ define(["dojo/_base/lang",
 			// create application controller instance
 			new LoadController(this);
 			new TransitionController(this);
-            // var child = this.loadChild();
+			new LayoutController(this);
+
+			// move set _startView operation from history module to application
+			var hash = window.location.hash;
+			this._startView= ((hash && hash.charAt(0)=="#") ? hash.substr(1) : hash)||this.defaultView;
+			
+			// load controllers in configuration file
+			var controllers = this.createControllers(this.params.controllers);
+			Deferred.when(controllers, dlang.hitch(this, function(){
 			// emit load default view event
-			on.emit(this.evented, "load", {
+				this.trigger("load", {
 				"callback": dlang.hitch(this, function(){
 					this.startup();
 
@@ -53,6 +122,7 @@ define(["dojo/_base/lang",
 					this.setStatus(this.lifecycle.STARTED);
 				})
 			});
+			}));
         },
 		templateString: "<div></div>",
 		selectedChild: null,
