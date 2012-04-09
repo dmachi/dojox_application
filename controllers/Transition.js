@@ -3,7 +3,7 @@ function(lang, declare, on, Deferred, transit, Controller){
 	// module:
 	//		dojox/app/controllers/transition
 	// summary:
-	//		Bind "transition" event on dojox.app application dojo.Evented instance.
+	//		Bind "transition" event on dojox.app application's domNode.
 	//		Do transition from one view to another view.
 	return declare("dojox.app.controllers.Transition", Controller, {
 
@@ -13,14 +13,15 @@ function(lang, declare, on, Deferred, transit, Controller){
 
 		constructor: function(app, events){
 			// summary:
-			//		bind "transition" event on application dojo.Evented instance.
+			//		bind "transition" event on application's domNode.
 			//
 			// app:
 			//		dojox.app application instance.
 			// events:
 			//		{event : handler}
 			this.events = {
-				"transition": this.transition
+				"transition": this.transition,
+				"startTransition": this.onStartTransition
 			};
 			this.inherited(arguments);
 		},
@@ -30,13 +31,49 @@ function(lang, declare, on, Deferred, transit, Controller){
 			//		Response to dojox.app "transition" event.
 			//
 			// example:
-			//		Use dojo.on.emit to trigger "transition" event, and this function will response to the event. For example:
-			//		|	on.emit(this.app.evented, "transition", {"target":target, "opts":opts});
+			//		Use trigger() to trigger "transition" event, and this function will response to the event. For example:
+			//		|	this.trigger("transition", {"viewId":viewId, "opts":opts});
 			//
 			// event: Object
-			//		"transition" event parameter. It should be like this: {"target":target, "opts":opts}
+			//		"transition" event parameter. It should be like this: {"viewId":viewId, "opts":opts}
 
 			this.proceedTransition(event);
+		},
+
+		onStartTransition: function(evt){
+			// summary:
+			//		Response to dojox.app "startTransition" event.
+			//
+			// example:
+			//		Use "dojox/mobile/TransitionEvent" to trigger "startTransition" event, and this function will response the event. For example:
+			//		|	var transOpts = {
+			//		|		title:"List",
+			//		|		target:"items,list",
+			//		|		url: "#items,list"
+			//		|	};
+			//		|	new TransitionEvent(domNode, transOpts, e).dispatch();
+			//
+			// evt: Object
+			//		transition options parameter
+
+			// prevent event from bubbling to window and being
+			// processed by dojox/mobile/ViewController
+			if(evt.preventDefault){
+				evt.preventDefault();
+			}
+			evt.cancelBubble = true;
+			if(evt.stopPropagation){
+				evt.stopPropagation();
+			}
+
+			var target = evt.detail.target;
+			var regex = /#(.+)/;
+			if(!target && regex.test(evt.detail.href)){
+				target = evt.detail.href.match(regex)[1];
+			}
+
+			// transition to the target view
+			this.transition({"viewId":target, opts: lang.mixin({reverse: false},evt.detail)});
 		},
 
 		proceedTransition: function(transitionEvt){
@@ -44,12 +81,8 @@ function(lang, declare, on, Deferred, transit, Controller){
 			//		Proceed transition queue by FIFO by default.
 			//		If transition is in proceeding, add the next transition to waiting queue.
 			//
-			// example:
-			//		Use dojo.on.emit to trigger "transition" event, and this function will response to the event. For example:
-			//		|	on.emit(this.app.evented, "transition", {"target":target, "opts":opts});
-			//
-			// event: Object
-			//		"transition" event parameter. It should be like this: {"target":target, "opts":opts}
+			// transitionEvt: Object
+			//		"transition" event parameter. It should be like this: {"viewId":viewId, "opts":opts}
 
 			if(this.proceeding){
 				console.log("push event", transitionEvt);
@@ -58,10 +91,10 @@ function(lang, declare, on, Deferred, transit, Controller){
 			}
 			this.proceeding = true;
 
-			on.emit(this.app.evented, "load", {
-				"target": transitionEvt.target,
+			this.app.trigger("load", {
+				"viewId": transitionEvt.viewId,
 				"callback": lang.hitch(this, function(){
-					var transitionDef = this._doTransition(transitionEvt.target, transitionEvt.opts, this.app);
+					var transitionDef = this._doTransition(transitionEvt.viewId, transitionEvt.opts, this.app);
 					Deferred.when(transitionDef, lang.hitch(this, function(){
 						this.proceeding = false;
 						var nextEvt = this.waitingQueue.shift();
@@ -116,6 +149,15 @@ function(lang, declare, on, Deferred, transit, Controller){
 			if(!next){
 				throw Error("child view must be loaded before transition.");
 			}
+
+			// Ensure next is startup
+			// NOTE: next is a scene/view widget, not a view object this moment.
+			//	It is original startup by layout method. But now we need to ensure the widget is startup before transition and layout.
+			//	So we need to check and startup it before transition. When view changed to object, the view instance should responsible for startup.
+			if(!next._started){
+				next.startup();
+			}
+
 			// if no subIds and next has default view, 
 			// set the subIds to the default view and transition to default view.
 			if(!subIds && next.defaultView){
@@ -125,7 +167,9 @@ function(lang, declare, on, Deferred, transit, Controller){
 			if(!current){
 				//assume this.set(...) will return a promise object if child is first loaded
 				//return nothing if child is already in array of this.children
-				return parent.set("selectedChild", next);
+//				return parent.set("selectedChild", next);
+				this.app.trigger("select", {"parent":parent, "view":next});
+				return;
 			}
 			// next is not a Deferred object, so Deferred.when is no needed.
 			if(next !== current){
@@ -141,17 +185,21 @@ function(lang, declare, on, Deferred, transit, Controller){
 				//assume next is already loaded so that this.set(...) will not return
 				//a promise object. this.set(...) will handles the this.selectedChild,
 				//activate or deactivate views and refresh layout.
-				parent.set("selectedChild", next);
+				current.deactivate();
 
+				this.app.trigger("select", {"parent":parent, "view":next});
 				var result = transit(current.domNode, next.domNode, lang.mixin({}, opts, {
 					transition: parent.defaultTransition || "none"
 				}));
 				result.then(lang.hitch(this, function(){
+					next.activate();
 					if(subIds){
 						this._doTransition(subIds, opts, next);
 					}
 				}));
 				return result; //dojo.DeferredList
+			}else{
+				next.activate();
 			}
 
 			// do sub transition like transition from "tabScene,tab1" to "tabScene,tab2"

@@ -3,14 +3,14 @@ function(lang, declare, on, Deferred, Controller, bind, model){
 	// module:
 	//		dojox/app/controllers/Load
 	// summary:
-	//		Bind "load" event on dojox.app application's dojo.Evented instance.
+	//		Bind "load" event on dojox.app application's domNode.
 	//		Load child view and sub children at one time.
 
 	return declare("dojox.app.controllers.Load", Controller, {
 
 		constructor: function(app, events){
 			// summary:
-			//		bind "load" event on application dojo.Evented instance.
+			//		bind "load" event on application's domNode.
 			//
 			// app:
 			//		dojox.app application instance.
@@ -27,19 +27,19 @@ function(lang, declare, on, Deferred, Controller, bind, model){
 			//		Response to dojox.app "load" event.
 			//
 			// example:
-			//		Use dojo.on.emit to trigger "load" event, and this function will response the event. For example:
-			//		|	on.emit(this.app.evented, "load", {"parent":parent, "target":target, "callback":function(){}});
+			//		Use trigger() to trigger "load" event, and this function will response the event. For example:
+			//		|	this.trigger("load", {"parent":parent, "viewId":viewId, "callback":function(){...}});
 			//
 			// event: Object
-			//		Load event parameter. It should be like this: {"parent":parent, "target":target}
+			//		Load event parameter. It should be like this: {"parent":parent, "viewId":viewId, "callback":function(){...}}
 			// returns:
 			//		A dojo.Deferred object.
-			//		The return value cannot return directly return by on.emit() method. 
+			//		The return value cannot return directly. 
 			//		If the caller need to use the return value, pass callback function in event parameter and process return value in callback function.
 
 			var parent = event.parent || this.app;
-			var target = event.target || "";
-			var parts = target.split(',');
+			var viewId = event.viewId || "";
+			var parts = viewId.split(',');
 			var childId = parts.shift();
 			var subIds = parts.join(",");
 
