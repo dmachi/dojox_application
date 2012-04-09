@@ -16,7 +16,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/on"], function(lang, decl
 			//		{event : handler}
 
 			this.events = this.events || events;
-			this._bindedEvents = [];
+			this._boundEvents = [];
 			this.app = app;
 
 			if(this.events){
@@ -44,7 +44,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/on"], function(lang, decl
 				console.warn("bind event '"+event+"' without callback function.");
 			}
 			var signal = on(evented, event, handler);
-			this._bindedEvents.push({
+			this._boundEvents.push({
 				"event": event,
 				"evented": evented,
 				"signal": signal
@@ -60,11 +60,11 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/on"], function(lang, decl
 			// event: String
 			//		event
 
-			var len = this._bindedEvents.length;
+			var len = this._boundEvents.length;
 			for(var i=0; i<len; i++){
-				if((this._bindedEvents[i]['event'] == event) && (this._bindedEvents[i]['evented'] == evented)){
-					this._bindedEvents[i]['signal'].remove();
-					this._bindedEvents.splice(i, 1);
+				if((this._boundEvents[i]['event'] == event) && (this._boundEvents[i]['evented'] == evented)){
+					this._boundEvents[i]['signal'].remove();
+					this._boundEvents.splice(i, 1);
 					return;
 				}
 			}
