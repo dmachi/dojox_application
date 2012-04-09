@@ -9,7 +9,7 @@ function(lang, declare, on, win, array, query, dstyle, dattr, dgeometry, registr
 
 		constructor: function(app, events){
 			// summary:
-			//		bind "layout" and "select" events on application dojo.Evented instance.
+			//		bind "layout" and "select" events on application's domNode.
 			//
 			// app:
 			//		dojox.app application instance.
@@ -33,8 +33,8 @@ function(lang, declare, on, win, array, query, dstyle, dattr, dgeometry, registr
 			//		Response to dojox.app "layout" event.
 			//
 			// example:
-			//		Use dojo.on.emit to trigger "layout" event, and this function will response the event. For example:
-			//		|	on.emit(this.app.evented, "layout", {"view":view, "changeSize":changeSize, "resultSize":resultSize});
+			//		Use trigger() to trigger "layout" event, and this function will response the event. For example:
+			//		|	this.trigger("layout", {"view":view, "changeSize":changeSize, "resultSize":resultSize});
 			//
 			// event: Object
 			//		{"view":view, "changeSize":changeSize, "resultSize":resultSize}
@@ -181,25 +181,12 @@ function(lang, declare, on, win, array, query, dstyle, dattr, dgeometry, registr
 
 			if(view !== parent.selectedChild){
 				if(parent.selectedChild){
-// call view life cycle method, move to transition
-//					if(parent.selectedChild.beforeDeactivate){
-//						parent.selectedChild.beforeDeactivate();
-//					}
 					dstyle.set(parent.selectedChild.domNode, "zIndex", 25);
 				}
 
 				dstyle.set(view.domNode, "display", "");
 				dstyle.set(view.domNode, "zIndex", 50);
 				parent.selectedChild = view;
-// call view life cycle method, move to transition
-//				if(parent._started){
-//					if(view.startup && !view._started){
-//						view.startup();
-//					}
-//					else if(view.afterActivate){
-//						view.afterActivate();
-//					}
-//				}
 				this._doResize(parent);
 			}
 		}

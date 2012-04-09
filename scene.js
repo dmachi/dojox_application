@@ -70,11 +70,11 @@ define(["dojo/_base/declare",
 		// Get application's dojo.Evented instance
 		// This is a temporary method and will be removed when view is changed to object.
 		// we need this method to get the application's dojo.Evented instance because scene is a child of application and not has the application instance.
-		getApplicationEvented: function(){
+		getApplication: function(){
 			var parent = this;
 			do{
-				if(parent.evented){
-					return parent.evented;
+				if(parent.trigger){
+					return parent;
 				}
 				parent = parent.parent;
 			}while(parent)
@@ -107,8 +107,8 @@ define(["dojo/_base/declare",
             if (this.children[cid]) {
 				var next = this.children[cid];
 
-				var evented = this.getApplicationEvented();
-				on.emit(evented, "select", {"parent":this, "view":next});
+				var application = this.getApplication();
+				application.trigger("select", {"parent":this, "view":next});
 
 				// If I am a not being controlled by a parent layout widget...
 				var parent = this.getParent && this.getParent();
@@ -116,7 +116,7 @@ define(["dojo/_base/declare",
 					// Do recursive sizing and layout of all my descendants
 					// (passing in no argument to resize means that it has to glean the size itself)
 //					this.resize();
-					on.emit(evented, "layout", {"view":this});
+					application.trigger("layout", {"view":this});
 
 					// Since my parent isn't a layout container, and my style *may be* width=height=100%
 					// or something similar (either set directly or via a CSS class),
@@ -135,8 +135,8 @@ define(["dojo/_base/declare",
 
 				//transition to _startView
               if (this._startView && (this._startView != this.defaultView)) {
-				  var evented = this.getApplicationEvented();
-				  on.emit(evented, "transition", {"target":this._startView, "opts":{}});
+
+				  application.trigger("transition", {"viewId":this._startView, "opts":{}});
               }
 			}
 		},

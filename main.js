@@ -88,6 +88,17 @@ define(["dojo/_base/lang",
 			}
 		},
 
+		trigger: function(event, params){
+			// summary:
+			//		trigger an event
+			//
+			// event: String
+			//		event name. The event is binded by controller.bind() method.
+			// params: Object
+			//		event parameters.
+			on.emit(this.domNode, event, params);
+		},
+
 		// load default view and startup the default view
         start: function(){
 			// create application controller instance
@@ -103,7 +114,7 @@ define(["dojo/_base/lang",
 			var controllers = this.createControllers(this.params.controllers);
 			Deferred.when(controllers, dlang.hitch(this, function(){
 			// emit load default view event
-			on.emit(this.evented, "load", {
+				this.trigger("load", {
 				"callback": dlang.hitch(this, function(){
 					this.startup();
 

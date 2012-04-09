@@ -1,4 +1,4 @@
-define(["dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/Evented"], function(lang, declare, on, Evented){
+define(["dojo/_base/lang", "dojo/_base/declare", "dojo/on"], function(lang, declare, on){
 	// module:
 	//		dojox/app/controller
 	// summary:
@@ -16,19 +16,13 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/Evented"], fun
 			//		{event : handler}
 
 			this.events = this.events || events;
-			this.signals = [];
+			this._bindedEvents = [];
 			this.app = app;
-			if(!this.app.evented){
-				this.app.evented = new Evented();
-			}
+
 			if(this.events){
 				for(var item in this.events){
 					if(item.charAt(0) !== "_"){//skip the private properties
-						if(item.indexOf(':') > 0){
-							this.bind(document, item, lang.hitch(this, this.events[item]));
-						}else{
-							this.bind(this.app.evented, item, lang.hitch(this, this.events[item]));
-						}
+						this.bind(this.app.domNode, item, lang.hitch(this, this.events[item]));
 					}
 				}
 			}
@@ -50,7 +44,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/Evented"], fun
 				console.warn("bind event '"+event+"' without callback function.");
 			}
 			var signal = on(evented, event, handler);
-			this.signals.push({
+			this._bindedEvents.push({
 				"event": event,
 				"evented": evented,
 				"signal": signal
@@ -66,11 +60,11 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/Evented"], fun
 			// event: String
 			//		event
 
-			var len = this.signals.length;
+			var len = this._bindedEvents.length;
 			for(var i=0; i<len; i++){
-				if((this.signals[i]['event'] == event) && (this.signals[i]['evented'] == evented)){
-					this.signals[i]['signal'].remove();
-					this.signals.splice(i, 1);
+				if((this._bindedEvents[i]['event'] == event) && (this._bindedEvents[i]['evented'] == evented)){
+					this._bindedEvents[i]['signal'].remove();
+					this._bindedEvents.splice(i, 1);
 					return;
 				}
 			}

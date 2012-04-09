@@ -16,10 +16,11 @@ function(lang, declare, on, Deferred, Controller){
 			// app:
 			//		dojox.app application instance.
 
-			this.events = {};//set events to empty because history controller directly bind event to domNode/window.
+			this.events = {
+				"startTransition": this.onStartTransition
+			};
 			this.inherited(arguments);
 
-			this.bind(this.app.domNode, "startTransition", lang.hitch(this, this.onStartTransition));
 			this.bind(window, "popstate", lang.hitch(this, this.onPopState));
 		},
 
@@ -39,15 +40,7 @@ function(lang, declare, on, Deferred, Controller){
 			// evt: Object
 			//		transition options parameter
 
-			// prevent event from bubbling to window and being
-			// processed by dojox/mobile/ViewController
-			if(evt.preventDefault){
-				evt.preventDefault();
-			}
-			evt.cancelBubble = true;
-			if(evt.stopPropagation){
-				evt.stopPropagation();
-			}
+			// bubbling "startTransition", so Transition controller can response to it.
 
 			var target = evt.detail.target;
 			var regex = /#(.+)/;
@@ -57,7 +50,6 @@ function(lang, declare, on, Deferred, Controller){
 
 			// push states to history list
 			history.pushState(evt.detail,evt.detail.href, evt.detail.url);
-
 		},
 
 		onPopState: function(evt){
@@ -100,7 +92,10 @@ function(lang, declare, on, Deferred, Controller){
 
 			var currentState = history.state;
 			// transition to the target view
-			on.emit(this.app.evented, "transition", {target:target, opts: lang.mixin({reverse: false},evt.detail)});
+			this.app.trigger("transition", {
+				"viewId": target,
+				"opts": lang.mixin({reverse: false}, evt.detail)
+			});
 		}
 	});
 });

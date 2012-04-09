@@ -16,11 +16,11 @@ function(lang, declare, connect, on, Deferred, Controller){
 			//
 			// app:
 			//		dojox.app application instance.
-
-			this.events = {};//set events to empty because history controller directly bind event to domNode/window.
+			this.events = {
+				"startTransition": this.onStartTransition
+			};
 			this.inherited(arguments);
 
-			this.bind(this.app.domNode, "startTransition", lang.hitch(this, this.onStartTransition));
 			connect.subscribe("/dojo/hashchange", lang.hitch(this, function(newhash){
 				this._onHashChange(newhash);
 			}));
@@ -72,16 +72,6 @@ function(lang, declare, connect, on, Deferred, Controller){
 			// evt: Object
 			//		transition options parameter
 
-			// prevent event from bubbling to window and being
-			// processed by dojox/mobile/ViewController
-			if (evt.preventDefault) {
-				evt.preventDefault();
-			}
-			evt.cancelBubble = true;
-			if (evt.stopPropagation) {
-				evt.stopPropagation();
-			}
-
 			var target = evt.detail.target;
 			var regex = /#(.+)/;
 			if (!target && regex.test(evt.detail.href)) {
@@ -105,7 +95,6 @@ function(lang, declare, connect, on, Deferred, Controller){
 			this._detail = evt.detail;
 			//set startTransition event flag to true if the hash change from startTransition event.
 			this._startTransitionEvent = true;
-			console.log("in History onStartTransition");
 		},
 
 		_addHistory: function(hash){
@@ -175,8 +164,8 @@ function(lang, declare, connect, on, Deferred, Controller){
 				this._addHistory(currentHash);
 				if (!this._startTransitionEvent) {
 					// transition to the target view
-					on.emit(this.app.evented, "transition", {
-						target: currentHash
+					this.app.trigger("transition", {
+						"viewId": currentHash
 					});
 				}
 			}else{
@@ -229,12 +218,12 @@ function(lang, declare, connect, on, Deferred, Controller){
 			this._current = currentHash;
 
 			// publish history back event
-			connect.publish("app/history/back", [{'target':currentHash, 'detail':detail}]);
+			connect.publish("app/history/back", [{'viewId':currentHash, 'detail':detail}]);
 
 			// transition to the target view
-			on.emit(this.app.evented, "transition", {
-				target:currentHash,
-				opts: {reverse: true}
+			this.app.trigger("transition", {
+				"viewId": currentHash,
+				"opts": {reverse: true}
 			});
 		},
 
@@ -250,12 +239,12 @@ function(lang, declare, connect, on, Deferred, Controller){
 			this._current = currentHash;
 
 			// publish history forward event
-			connect.publish("app/history/forward", [{'target':currentHash, 'detail':detail}]);
+			connect.publish("app/history/forward", [{'viewId':currentHash, 'detail':detail}]);
 
 			// transition to the target view
-			on.emit(this.app.evented, "transition", {
-				target:currentHash,
-				opts: {reverse: false}
+			this.app.trigger("transition", {
+				"viewId": currentHash,
+				"opts": {reverse: false}
 			});
 		},
 
@@ -270,22 +259,22 @@ function(lang, declare, connect, on, Deferred, Controller){
 			this._next = this._historyStack[index + 1] ? this._historyStack[index + 1]['hash'] : null;
 
 			// publish history go event
-			connect.publish("app/history/go", [{'target':this._current, 'step':step, 'detail':this._historyStack[index]['detail']}]);
+			connect.publish("app/history/go", [{'viewId':this._current, 'step':step, 'detail':this._historyStack[index]['detail']}]);
 
 			var param;
 			if(step > 0){
 				param = {
-					target:currentHash,
-					opts: {reverse: false}
+					"viewId": this._current,
+					"opts": {reverse: false}
 				};
 			}else{
 				param = {
-					target:currentHash,
-					opts: {reverse: true}
+					"viewId": this._current,
+					"opts": {reverse: true}
 				};
 			}
 			// transition to the target view
-			on.emit(this.app.evented, "transition", param);
+			this.app.trigger("transition", param);
 		}
 	});
 });
