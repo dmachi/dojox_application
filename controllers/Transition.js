@@ -150,14 +150,6 @@ function(lang, declare, on, Deferred, transit, Controller){
 				throw Error("child view must be loaded before transition.");
 			}
 
-			// Ensure next is startup
-			// NOTE: next is a scene/view widget, not a view object this moment.
-			//	It is original startup by layout method. But now we need to ensure the widget is startup before transition and layout.
-			//	So we need to check and startup it before transition. When view changed to object, the view instance should responsible for startup.
-			if(!next._started){
-				next.startup();
-			}
-
 			// if no subIds and next has default view, 
 			// set the subIds to the default view and transition to default view.
 			if(!subIds && next.defaultView){
@@ -165,9 +157,9 @@ function(lang, declare, on, Deferred, transit, Controller){
 			}
 
 			if(!current){
-				//assume this.set(...) will return a promise object if child is first loaded
-				//return nothing if child is already in array of this.children
-//				return parent.set("selectedChild", next);
+				// current view is null, set current view equals next view.
+				next.beforeActivate();
+				next.afterActivate();
 				this.app.trigger("select", {"parent":parent, "view":next});
 				return;
 			}
@@ -185,21 +177,24 @@ function(lang, declare, on, Deferred, transit, Controller){
 				//assume next is already loaded so that this.set(...) will not return
 				//a promise object. this.set(...) will handles the this.selectedChild,
 				//activate or deactivate views and refresh layout.
-				current.deactivate();
+				current.beforeDeactivate();
+				next.beforeActivate();
 
 				this.app.trigger("select", {"parent":parent, "view":next});
 				var result = transit(current.domNode, next.domNode, lang.mixin({}, opts, {
 					transition: parent.defaultTransition || "none"
 				}));
 				result.then(lang.hitch(this, function(){
-					next.activate();
+					current.afterDeactivate();
+					next.afterActivate();
 					if(subIds){
 						this._doTransition(subIds, opts, next);
 					}
 				}));
 				return result; //dojo.DeferredList
 			}else{
-				next.activate();
+				next.beforeActivate();
+				next.afterActivate();
 			}
 
 			// do sub transition like transition from "tabScene,tab1" to "tabScene,tab2"

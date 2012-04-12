@@ -1,5 +1,5 @@
-define(["dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/_base/Deferred", "../controller", "../bind", "../model"],
-function(lang, declare, on, Deferred, Controller, bind, model){
+define(["dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/_base/Deferred", "../controller", "../view"],
+function(lang, declare, on, Deferred, Controller, View){
 	// module:
 	//		dojox/app/controllers/Load
 	// summary:
@@ -69,79 +69,14 @@ function(lang, declare, on, Deferred, Controller, bind, model){
 			if(parent.children[id]){
 				return parent.children[id];
 			}
-
-			if(parent.views && parent.views[childId]){
-				//create child and return Deferred
-				var loadChildDeferred = new Deferred();
-
-				var conf = parent.views[childId];
-				if(!conf.dependencies){
-					conf.dependencies = [];
-				}
-				var deps = conf.template ? conf.dependencies.concat(["dojo/text!app/" + conf.template]) : conf.dependencies.concat([]);
-
-				var def = new Deferred();
-				if(deps.length > 0){
-					var requireSignal;
-					try{
-						requireSignal = require.on("error", function(error){
-							if(def.fired != -1){
-								return;
-							}
-							console.error("load dependencies error in createChild.", error);
-							def.reject("load dependencies error.");
-							requireSignal.remove();
-						});
-						require(deps, function(){
-							def.resolve.call(def, arguments);
-							requireSignal.remove();
-						});
-					}catch(ex){
-						console.error("load dependencies error in createChild. ", ex)
-						def.reject("load dependencies error.");
-						requireSignal.remove();
-					}
-				}else{
-					def.resolve(true);
-				}
-
-				var self = parent;
-				Deferred.when(def, lang.hitch(this, function(){
-					var ctor;
-					if(conf.type){
-						ctor = lang.getObject(conf.type);
-					}else if (self.defaultViewType){
-						ctor = self.defaultViewType;
-					}else{
-						throw Error("Unable to find appropriate ctor for the base child class");
-					}
-
-					var params = lang.mixin({}, conf, {
-						id: self.id + "_" + childId,
-						templateString: conf.template ? arguments[0][arguments[0].length - 1] : "<div></div>",
-						parent: self,
-						app: self.app
-					});
-					if(subIds){
-						params.defaultView = subIds;
-					}
-					var child = new ctor(params);
-					//load child's model if it is not loaded before
-					if(!child.loadedModels){
-						child.loadedModels = model(conf.models, self.loadedModels)
-						//TODO need to find out a better way to get all bindable controls in a view
-						bind([child], child.loadedModels);
-					}
-					var addResult = self.addChild(child);
-					loadChildDeferred.resolve(child);
-				}),
-				function(){
-					//require def error, reject loadChildDeferred
-					loadChildDeferred.reject("create child error.");
-				});
-				return loadChildDeferred.promise; //dojo.Deferred promise
-			}
-			throw Error("No configuration for view '"+childId+"'");
+			//create and start child. return Deferred
+			var newView = new View({
+				"id": id,
+				"name": childId,
+				"parent": parent
+			});
+			parent.children[id] = newView;
+			return newView.start();
 		},
 
 		loadChild: function(parent, childId, subIds){
