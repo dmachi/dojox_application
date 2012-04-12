@@ -167,16 +167,51 @@ function(declare, lang, Deferred, dattr, TemplatedMixin, WidgetsInTemplateMixin,
 			var _definitionDef = this._loadViewDefinition();
 			var _templateDef = this._loadViewTemplate();
 
-			var _startDef = new Deferred();
+			this._startDef = new Deferred();
 			Deferred.when(_definitionDef, lang.hitch(this, function(definition){
 				this._definition = definition;
 				Deferred.when(_templateDef, lang.hitch(this, function(){
-					this._startup();
-					this._started = true;
-					_startDef.resolve(this);
+					// call setupModel, after setupModel startup will be called after startup the loadViewDeferred will be resolved
+					this._setupModel();
 				}));
 			}));
-			return _startDef;
+			return this._startDef;
+		},
+
+		_setupModel: function(){
+			//load views model if it is not already loaded then call startup
+			if (!this.loadedModels) {
+				var loadModelLoaderDeferred = new Deferred();
+				var createPromise;
+				try{
+					createPromise = Model(this.models, this.parent);
+				}catch(ex){
+					loadModelLoaderDeferred.reject("load model error.");
+					return loadModelLoaderDeferred.promise;
+				}
+				if(createPromise.then){  // model returned a promise, so set loadedModels and call startup after the .when
+					Deferred.when(createPromise, lang.hitch(this, function(newModel){
+						if(newModel){
+							this.loadedModels = newModel;
+						}
+						if(dojox.debugDataBinding){
+							console.log("in view setupModel, this.loadedModels =",this.loadedModels);
+						}
+						this._startup();
+					}),
+					function(){
+						loadModelLoaderDeferred.reject("load model error.")
+					});
+				}else{ // model returned the actual model not a promise, so set loadedModels and call _startup
+					this.loadedModels = createPromise;
+					if(dojox.debugDataBinding){
+						console.log("in view setupModel else, this.loadedModels =",this.loadedModels);
+					}
+					this._startup();
+				}
+			}else{ // loadedModels already created so call _startup
+				this._startup();				
+			}		
 		},
 
 		_startup: function(){
@@ -186,7 +221,6 @@ function(declare, lang, Deferred, dattr, TemplatedMixin, WidgetsInTemplateMixin,
 
 			this._widget = this.render(this.templateString);
 			// bind view level data model
-			this.bindModel(this._widget);
 			this.domNode = this._widget.domNode;
 			this.parent.domNode.appendChild(this.domNode);
 
@@ -206,6 +240,10 @@ function(declare, lang, Deferred, dattr, TemplatedMixin, WidgetsInTemplateMixin,
 
 			// call view assistant's init() method to initialize view
 			this.init();
+			this._started = true;
+			if(this._startDef){
+				this._startDef.resolve(this);
+			}
 		},
 
 		render: function(templateString){
@@ -215,23 +253,19 @@ function(declare, lang, Deferred, dattr, TemplatedMixin, WidgetsInTemplateMixin,
 			//		template string
 			var widgetTemplate = new TemplatedMixin();
 			var widgetInTemplate = new WidgetsInTemplateMixin();
+			// set the loadedModels here to be able to access the model on the parse.
+			if(this.loadedModels){
+				widgetInTemplate.loadedModels = this.loadedModels;
+				if(dojox.debugDataBinding){
+					console.log("in view render, this.loadedModels =",this.loadedModels);
+				}
+			}
 			lang.mixin(widgetTemplate, widgetInTemplate);
 			widgetTemplate.templateString = templateString;
 			widgetTemplate.buildRendering();
 			return widgetTemplate;
 		},
-
-		bindModel: function(widget){
-			// summary:
-			//		bind view level data model to view widget
-			// templateString:
-			//		template string
-			if(!this.loadedModels){
-				this.loadedModels = Model(this.models, this.parent);
-				Bind([widget], this.loadedModels);
-			}
-		},
-
+		
 		init: function(){
 			// summary:
 			//		view life cycle init()

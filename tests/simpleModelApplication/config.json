@@ -1,7 +1,7 @@
 {
-	"id": "modelApp",
-	"name": "Model App",
-	"description": "A modelApp",
+	"id": "simpleModelApplication",
+	"name": "Simple Model App",
+	"description": "A simple modelApp",
 	"splash": "splash",
 
 	"dependencies": [
@@ -13,9 +13,8 @@
 		"dojox/mobile/RoundRect",
 		"dojox/mobile/Heading",
 		"dojo/store/Memory",
-		"dojox/mvc/Group",
-        "dojox/mvc/Repeat",
-        "dojox/mvc/Output",
+		"dijit/form/Textbox",
+		"dojo/store/Memory",
 		"dojox/mobile/deviceTheme"
 	],
 	// Modules for the application.  The are basically used as the second
@@ -38,25 +37,18 @@
 		   "params": {
 		      "data": "modelApp.names"
 		   }
-	   },
-       "repeatStore":{
-           "type": "dojo.store.Memory",
-           "params": {
-                "data": "modelApp.repeatData"
-           }
        }
 	},
 
 	//models and instantiation parameters for the models. Including 'type' as a property allows
 	//one to overide the class that will be used for the model.  By default it is dojox/mvc/model
 	"models": {
-	   "names": {
-					"modelLoader": "dojox/app/utils/mvcModel",
-					"type": "dojox/mvc/EditStoreRefListController",
+	  		 	"names": {
+					"modelLoader": "dojox/app/utils/simpleModel",
 					"params":{
 		     		 	"store": {"$ref":"#stores.namesStore"}
 		  		 	}	       
-	   }
+				}
 	}, 
 
 	//the name of the scene to load when the app is initialized.
@@ -76,25 +68,6 @@
 			"definition" : "views/simple.js",
 			"template": "templates/simple.html",
 			"dependencies":["dojox/mobile/TextBox"]
-		},
-
-		"repeat": {
-            "models": {
-                "repeatmodels": {
-    				"modelLoader": "dojox/app/utils/mvcModel",
-					"type": "dojox/mvc/EditStoreRefListController",
-             		"params":{
-             			"store": {"$ref":"#stores.repeatStore"}
-             		}           
-                }
-            },
-            "template": "templates/repeat.html",
-            "dependencies":["dojox/mobile/TextBox"]
-		},
-
-		"generate": {
-            "template": "templates/generate.html",
-            "dependencies":["dojox/mobile/TextBox", "dojox/mobile/TextArea", "dojox/mvc/Generate"]
 		}
 	}	
 }
