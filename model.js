@@ -3,8 +3,8 @@ define(["dojo/_base/lang","dojo/_base/Deferred","dojox/mvc/_base"], function(dla
                 //load models here. create dojox.newStatefulModel 
                 //using the configuration data for models
 	        var loadedModels = {};
-	        if(parent){
-	            dlang.mixin(loadedModels, parent);
+		if(parent.loadedModels) {
+			dlang.mixin(loadedModels, parent.loadedModels);
 	        }
 	        if(config){
                     for(var item in config){

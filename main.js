@@ -1,40 +1,55 @@
-define(["dojo/_base/lang",
-	"dojo/_base/declare",
-	"dojo/_base/Deferred",
-	"dojo/on",
-	"dojo/ready",
-	"dojo/_base/window",
-	"dojo/dom-construct",
-	"./scene",
-	"./controllers/Load",
-	"./controllers/Transition",
-	"./controllers/Layout"],
-	function(dlang, declare, Deferred, on, ready, baseWindow, dom, sceneCtor, LoadController, TransitionController, LayoutController){
+define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/Deferred", "dojo/on", "dojo/ready", "dojo/_base/window", "dojo/dom-construct", "./model", "./view", "./controllers/Load", "./controllers/Transition", "./controllers/Layout", "dojo/_base/loader", "dojo/store/Memory"],
+function(lang, declare, Deferred, on, ready, baseWindow, dom, Model, View, LoadController, TransitionController, LayoutController){
+	dojo.experimental("dojox.app");
 
-        dojo.experimental("dojox.app");
-	var Application = declare([sceneCtor], {
-		constructor: function(params){
-			this.scenes={};
+	var Application = declare(null, {
+		constructor: function(params, node){
+			lang.mixin(this, params);
+			this.params = params;
+			this.id = params.id;
+			this.defaultView = params.defaultView;
+			this.widgetId = params.id;
+			this.controllers = [];
+			this.children = {};
+			this.loadedModels = {};
+
+			// Create a new domNode and append to body
+			// Need to bind startTransition event on application domNode,
+			// Because dojox.mobile.ViewController bind startTransition event on document.body
+			this.domNode = dom.create("div", {
+				id: this.id,
+				style: "width:100%; height:100%"
+			});
+			node.appendChild(this.domNode);
+		},
+
+		createDataStore: function(params){
+			// summary:
+			//		Create data store instance
+			//
+			// params: Object
+			//		data stores configuration.
+
 			if(params.stores){
-			    //create stores in the configuration.
-			    for (var item in params.stores){
-			        if(item.charAt(0)!=="_"){//skip the private properties
-			            var type = params.stores[item].type? params.stores[item].type : "dojo.store.Memory";
-			            var config = {};
-			            if(params.stores[item].params){
-			                dlang.mixin(config, params.stores[item].params);
-			            }
-			            var storeCtor = dojo.getObject(type);
-			            if(config.data && dlang.isString(config.data)){
-			                //get the object specified by string value of data property
-			                //cannot assign object literal or reference to data property
-			                //because json.ref will generate __parent to point to its parent
-			                //and will cause infinitive loop when creating StatefulModel.
-			                config.data = dlang.getObject(config.data);
-			            }
-			            params.stores[item].store = new storeCtor(config);
-			        }
-			    }
+				//create stores in the configuration.
+				for(var item in params.stores){
+					if(item.charAt(0) !== "_"){//skip the private properties
+						var type = params.stores[item].type ? params.stores[item].type : "dojo.store.Memory";
+						var config = {};
+						if(params.stores[item].params){
+							lang.mixin(config, params.stores[item].params);
+						}
+						var storeCtor = lang.getObject(type);
+						if(config.data && lang.isString(config.data)){
+							//get the object specified by string value of data property
+							//cannot assign object literal or reference to data property
+							//because json.ref will generate __parent to point to its parent
+							//and will cause infinitive loop when creating StatefulModel.
+							config.data = lang.getObject(config.data);
+						}
+						params.stores[item].store = new storeCtor(config);
+					}
+				}
 			}
 		},
 
@@ -47,9 +62,9 @@ define(["dojo/_base/lang",
 			// returns:
 			//		controllerDeferred object
 
-			if (controllers) {
+			if(controllers){
 				var requireItems = [];
-				for (var i = 0; i < controllers.length; i++) {
+				for(var i = 0; i < controllers.length; i++){
 					requireItems.push(controllers[i]);
 				}
 
@@ -66,21 +81,20 @@ define(["dojo/_base/lang",
 					require(requireItems, function(){
 						def.resolve.call(def, arguments);
 						requireSignal.remove();
-					})
+					});
 				}catch(ex){
 					def.reject("load controllers error.");
 					requireSignal.remove();
 				}
 
 				var controllerDef = new Deferred();
-				Deferred.when(def, dlang.hitch(this, function(){
-					for (var i = 0; i < arguments[0].length; i++) {
+				Deferred.when(def, lang.hitch(this, function(){
+					for(var i = 0; i < arguments[0].length; i++){
 						// Store Application object on each controller.
 						this.controllers.push(new arguments[0][i](this));
 					}
 					controllerDef.resolve(this);
-				}),
-				function(){
+				}), function(){
 					//require def error, reject loadChildDeferred
 					controllerDef.reject("load controllers error.");
 				});
@@ -100,7 +114,25 @@ define(["dojo/_base/lang",
 		},
 
 		// load default view and startup the default view
-        start: function(){
+		start: function(){
+			// create application template view
+			if(this.template){
+				this.view = new View({
+					id: this.id,
+					name: this.name,
+					parent: this,
+					templateString: this.templateString,
+					definition: this.definition
+				});
+				Deferred.when(this.view.start(), lang.hitch(this, function(){
+					this.domNode = this.view.domNode;
+					this.startup();
+				}));
+			}else{
+				this.startup();
+			}
+		},
+		startup: function(){
 			// create application controller instance
 			new LoadController(this);
 			new TransitionController(this);
@@ -108,37 +140,48 @@ define(["dojo/_base/lang",
 
 			// move set _startView operation from history module to application
 			var hash = window.location.hash;
-			this._startView= ((hash && hash.charAt(0)=="#") ? hash.substr(1) : hash)||this.defaultView;
-			
+			this._startView = ((hash && hash.charAt(0) == "#") ? hash.substr(1) : hash) || this.defaultView;
+
+			//create application level data store
+			this.createDataStore(this.params);
+
+			// create application level data model
+			this.loadedModels = Model(this.params.models, this);
 			// load controllers in configuration file
 			var controllers = this.createControllers(this.params.controllers);
-			Deferred.when(controllers, dlang.hitch(this, function(){
-			// emit load default view event
+			Deferred.when(controllers, lang.hitch(this, function(result){
+				// emit load event and let controller to load view.
 				this.trigger("load", {
-				"callback": dlang.hitch(this, function(){
-					this.startup();
-
-					//set application status to STARTED
-					this.setStatus(this.lifecycle.STARTED);
-				})
-			});
+					"viewId": this.defaultView,
+					"callback": lang.hitch(this, function(){
+						var selectId = this.defaultView.split(",");
+						selectId = selectId.shift();
+						this.selectedChild = this.children[this.id + '_' + selectId];
+						if(this._startView !== this.defaultView){
+							this.trigger("transition", {
+								"viewId": this._startView
+							});
+						}else{
+							this.trigger("layout", {
+								"view": this
+							});
+						}
+						this.setStatus(this.lifecycle.STARTED);
+					})
+				});
 			}));
-        },
-		templateString: "<div></div>",
-		selectedChild: null,
-		baseClass: "application mblView",
-		defaultViewType: sceneCtor,
-		buildRendering: function(){
-			if (this.srcNodeRef===baseWindow.body()){
-				this.srcNodeRef = dom.create("DIV",{},baseWindow.body());
-			}
-			this.inherited(arguments);
 		}
 	});
-	
-	function generateApp(config,node,appSchema,validate){
 
-		//console.log("config.modules: ", config.modules);
+	function generateApp(config, node, appSchema, validate){
+		// Register application module path
+		var path = window.location.pathname;
+		if(path.charAt(path.length) != "/"){
+			path = path.split("/");
+			path.pop();
+			path = path.join("/");
+		}
+		dojo.registerModulePath("app", path);
 		var modules = config.modules.concat(config.dependencies);
 
 		if (config.template){
