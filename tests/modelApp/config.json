@@ -25,8 +25,6 @@
 	"modules": [
 		"dojox/app/module/env",
 		"dojox/app/module/lifecycle"
-		//"dojox/app/module/phonegap",
-		//"dojox/app/module/somePlugin"
 	],
 	
 	"controllers": [
@@ -67,19 +65,18 @@
 	"views": {
 
 		"home": { 
-			"type": "dojox.app.view",
+			"definition" : "none",
 			"dependencies":["dojox/mobile/ListItem","dojox/mobile/RoundRectList","dojox/mobile/RoundRectCategory","dojox/mobile/Heading"],
-			"template": "views/main.html"
+			"template": "templates/main.html"
 		},
 
 		"simple":{
-			"type": "dojox.app.view",
-			"template": "views/simple.html",			
-			"dependencies":["dojox/mobile/TextBox"],
+			"definition" : "views/simple.js",
+			"template": "templates/simple.html",
+			"dependencies":["dojox/mobile/TextBox"]
 		},
 
 		"repeat": {
-            "type": "dojox.app.view",
             "models": {
                 "repeatmodels": {
                     "params":{
@@ -87,14 +84,13 @@
                     }           
                 }
             },
-            "template": "views/repeat.html",
-            "dependencies":["dojox/mobile/TextBox"],
+            "template": "templates/repeat.html",
+            "dependencies":["dojox/mobile/TextBox"]
 		},
 
 		"generate": {
-            "type": "dojox.app.view",
-            "template": "views/generate.html",
-            "dependencies":["dojox/mobile/TextBox", "dojox/mobile/TextArea", "dojox/mvc/Generate"],
+            "template": "templates/generate.html",
+            "dependencies":["dojox/mobile/TextBox", "dojox/mobile/TextArea", "dojox/mvc/Generate"]
 		}
 	}	
 }
