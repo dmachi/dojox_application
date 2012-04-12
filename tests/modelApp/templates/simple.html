@@ -1,12 +1,4 @@
 <div id="settings" class="view mblView">
-    <script type="text/javascript">
-        function setRef(id, addrRef) {
-                var widget = dijit.byId("infoGroup");
-                var target = dijit.byId(id);
-                var model = widget.get("ref");
-                target.set("ref", model[addrRef]);
-            }
-    </script>
     <h1 dojoType="dojox.mobile.Heading" back="Home">Data Binding Example</h1>
     <form name="testForm" id="testForm">    
     <div class="field-title">Ship to - Bill to Address</div>
@@ -28,8 +20,8 @@
             </div>
         </div>
         <div class="spacer"></div>
-        <button id="shipto" type="button" dojoType="dojox.mobile.Button" class="mblBlueButton" onclick="setRef('addrGroup', 'ShipTo')">Ship To</button>
-        <button id="billto" type="button" dojoType="dojox.mobile.Button" class="mblBlueButton" onclick="setRef('addrGroup', 'BillTo')">Bill To</button>     
+        <button id="shipto" type="button" dojoType="dojox.mobile.Button" class="mblBlueButton">Ship To</button>
+        <button id="billto" type="button" dojoType="dojox.mobile.Button" class="mblBlueButton">Bill To</button>
         <br/>
         <div class="fieldset" id="addrGroup" dojoType="dojox.mvc.Group" ref="'names.0.ShipTo'">
             <div class="field-row">
