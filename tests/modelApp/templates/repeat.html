@@ -50,40 +50,5 @@
         <div class="spacer"></div>
         <button id="save" type="button" dojoType="dojox.mobile.Button" class="mblBlueButton" data-dojo-props="onClick: function(){console.log(repeatmodel[selectedIndex].toPlainObject());repeatmodel[selectedIndex].commit();}">Save</button>
         <button id="reset2" type="button" dojoType="dojox.mobile.Button" class="mblBlueButton" data-dojo-props="onClick: function(){repeatmodel.reset();}">Reset</button>
-        <script type="text/javascript">
-            var selectedIndex = 0;
-            var repeatmodel = dijit.byId('repeatWidget').ref;
 
-            function setDetailsContext(index) {
-                var widget = dijit.byId("detailsGroup");
-                widget.set("ref", index);
-                selectedIndex = index;
-            }
-
-            // used in the Repeat Data binding demo
-        function insertResult(index){
-
-            if (repeatmodel[index].First.value !== "") {
-                var insert = dojox.mvc.newStatefulModel({
-                    "data": {
-                        "First": "",
-                        "Last": "",
-                        "Location": "CA",
-                        "Office": "",
-                        "Email": "",
-                        "Tel": "",
-                        "Fax": ""
-                    }
-                });
-                repeatmodel.add(index, insert);
-												
-                setDetailsContext(parseInt(index)+1);
-            }
-
-        };
-        
-        function deleteResult(index){
-            repeatmodel.remove(index);
-        }
-        </script>
 </div>
