@@ -184,51 +184,45 @@ function(lang, declare, Deferred, on, ready, baseWindow, dom, Model, View, LoadC
 		dojo.registerModulePath("app", path);
 		var modules = config.modules.concat(config.dependencies);
 
-		if (config.template){
-			//console.log("config.template: ", config.template);
+		if(config.template){
 			modules.push("dojo/text!" + "app/" + config.template);
 		}
-		//console.log("modules: ", modules);	
 
 		require(modules, function(){
-			var modules=[Application];
-			for(var i=0;i<config.modules.length;i++){
+			var modules = [Application];
+			for(var i = 0; i < config.modules.length; i++){
 				modules.push(arguments[i]);
 			}
 
-			if (config.template){
+			if(config.template){
 				var ext = {
-					templateString: arguments[arguments.length-1] 
-				}	
+					templateString: arguments[arguments.length - 1]
+				}
 			}
-			App = declare(modules,ext);
+			App = declare(modules, ext);
 
 			ready(function(){
-				app = App(config,node || baseWindow.body());
-                app.setStatus(app.lifecycle.STARTING);
-                app.start();
+				app = App(config, node || baseWindow.body());
+				app.setStatus(app.lifecycle.STARTING);
+				app.start();
 			});
 		});
 	}
 
-
-	return function(config,node){
-		if (!config){
+	return function(config, node){
+		if(!config){
 			throw Error("App Config Missing");
 		}
 
-		
-		if (config.validate){
-			require(["dojox/json/schema","dojox/json/ref","dojo/text!dojox/application/schema/application.json"],function(schema,appSchema){
-				schema = dojox.json.ref.resolveJson(schema);	
-				if (schema.validate(config,appSchema)){
-					generateApp(config,node);
-				}	
+		if(config.validate){
+			require(["dojox/json/schema", "dojox/json/ref", "dojo/text!dojox/application/schema/application.json"], function(schema, appSchema){
+				schema = dojox.json.ref.resolveJson(schema);
+				if(schema.validate(config, appSchema)){
+					generateApp(config, node);
+				}
 			});
-		
-
 		}else{
-			generateApp(config,node);
+			generateApp(config, node);
 		}
 	}
 });
