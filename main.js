@@ -113,7 +113,7 @@ function(lang, declare, Deferred, on, ready, baseWindow, dom, Model, View, LoadC
 			on.emit(this.domNode, event, params);
 		},
 
-		// load default view and startup the default view
+		// load default view and setupControllers and startup the default view
 		start: function(){
 			// create application template view
 			if(this.template){
@@ -126,13 +126,14 @@ function(lang, declare, Deferred, on, ready, baseWindow, dom, Model, View, LoadC
 				});
 				Deferred.when(this.view.start(), lang.hitch(this, function(){
 					this.domNode = this.view.domNode;
-					this.startup();
+					this.setupControllers();
 				}));
 			}else{
-				this.startup();
+				this.setupControllers();
 			}
 		},
-		startup: function(){
+
+		setupControllers: function(){
 			// create application controller instance
 			new LoadController(this);
 			new TransitionController(this);
@@ -145,8 +146,30 @@ function(lang, declare, Deferred, on, ready, baseWindow, dom, Model, View, LoadC
 			//create application level data store
 			this.createDataStore(this.params);
 
-			// create application level data model
-			this.loadedModels = Model(this.params.models, this);
+    		// create application level data model
+			var loadModelLoaderDeferred = new Deferred();
+			var createPromise;
+			try{
+				createPromise = Model(this.params.models, this);
+			}catch(ex){
+				loadModelLoaderDeferred.reject("load model error.");
+				return loadModelLoaderDeferred.promise;
+			}
+			if(createPromise.then){
+				Deferred.when(createPromise, lang.hitch(this, function(newModel){
+					this.loadedModels = newModel;
+					this.startup();
+				}),
+				function(){
+					loadModelLoaderDeferred.reject("load model error.")
+				});
+			}else{
+				this.loadedModels = createPromise;
+				this.startup();
+			}
+		},
+
+		startup: function(){
 			// load controllers in configuration file
 			var controllers = this.createControllers(this.params.controllers);
 			Deferred.when(controllers, lang.hitch(this, function(result){
