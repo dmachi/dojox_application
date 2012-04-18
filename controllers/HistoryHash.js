@@ -1,13 +1,13 @@
-define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/on", "dojo/_base/Deferred", "../controller", "dojo/hash"],
+define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/on", "dojo/_base/Deferred", "../Controller", "dojo/hash"],
 function(lang, declare, connect, on, Deferred, Controller){
 	// module:
-	//		dojox/app/controllers/History_hash
+	//		dojox/app/controllers/HistoryHash
 	// summary:
 	//		Bind "startTransition" event on dojox.app application's domNode,
 	//		Bind "/dojo/hashchange" event on window object.
 	//		Maintain history by history hash.
 
-	return declare("dojox.app.controllers.History_hash", Controller, {
+	return declare("dojox.app.controllers.HistoryHash", Controller, {
 
 		constructor: function(app){
 			// summary:

@@ -1,4 +1,4 @@
-define(["dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/_base/Deferred", "dojox/css3/transit", "../controller"],
+define(["dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/_base/Deferred", "dojox/css3/transit", "../Controller"],
 function(lang, declare, on, Deferred, transit, Controller){
 	// module:
 	//		dojox/app/controllers/transition

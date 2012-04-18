@@ -1,4 +1,4 @@
-define(["dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/_base/Deferred", "../controller"],
+define(["dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/_base/Deferred", "../Controller"],
 function(lang, declare, on, Deferred, Controller){
 	// module:
 	//		dojox/app/controllers/History

@@ -1,4 +1,4 @@
-define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/Deferred", "dojo/on", "dojo/ready", "dojo/_base/window", "dojo/dom-construct", "./model", "./view", "./controllers/Load", "./controllers/Transition", "./controllers/Layout", "dojo/_base/loader", "dojo/store/Memory"],
+define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/Deferred", "dojo/on", "dojo/ready", "dojo/_base/window", "dojo/dom-construct", "./model", "./View", "./controllers/Load", "./controllers/Transition", "./controllers/Layout", "dojo/_base/loader", "dojo/store/Memory"],
 function(lang, declare, Deferred, on, ready, baseWindow, dom, Model, View, LoadController, TransitionController, LayoutController){
 	dojo.experimental("dojox.app");
 

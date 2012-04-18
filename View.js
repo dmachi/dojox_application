@@ -1,11 +1,11 @@
 define(["dojo/_base/declare", "dojo/_base/lang", "dojo/_base/Deferred", "dojo/dom-attr", "dijit/_TemplatedMixin", "dijit/_WidgetsInTemplateMixin", "./model", "./bind"],
 function(declare, lang, Deferred, dattr, TemplatedMixin, WidgetsInTemplateMixin, Model, Bind){
 	// module:
-	//		dojox/app/view
+	//		dojox/app/View
 	// summary:
 	//		dojox.app view object, each view can have one parent view and several children views.
 
-	return declare("dojox.app.view", null, {
+	return declare("dojox.app.View", null, {
 		constructor: function(params){
 			// summary:
 			//		init view object. A user can use configuration file or programing type to create a view instance.
