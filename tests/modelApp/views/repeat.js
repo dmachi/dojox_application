@@ -1,13 +1,13 @@
 define(["dojo/dom", "dojo/_base/connect", "dijit/registry", "dojox/mvc/at", "dojox/mvc/Repeat", "dojox/mvc/getStateful", "dojox/mvc/Output"],
 function(dom, connect, registry, at, Repeat, getStateful, Output){
 	window.at = at;
-	dojox.debugDataBinding = true;	
+	dojox.debugDataBinding = false;
 
 	selectedIndex = 0;
 	repeatmodel = null;
 
 	deleteResult = function(index){
-		var nextIndex = currentModel.get("cursorIndex");
+		var nextIndex = repeatmodel.get("cursorIndex");
 		if(nextIndex >= index){
 			nextIndex = nextIndex-1;
 		}
