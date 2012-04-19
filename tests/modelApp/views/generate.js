@@ -43,10 +43,10 @@ define(["dojo/dom", "dojo/_base/connect", "dijit/registry", "dojox/mvc"], functi
 		},
 
 		destroy: function(){
-			for(var i = 0; i < _connectResults.length; i++){
-				if(_connectResults[i]){
-					connect.disconnect(_connectResults[i]);
-				}
+			var connectResult = _connectResults.pop();
+			while(connectResult){
+				connect.disconnect(connectResult);
+				connectResult = _connectResults.pop();
 			}
 		}
 	}

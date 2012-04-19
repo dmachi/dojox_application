@@ -69,10 +69,10 @@ function(dom, connect, registry, at, Repeat, getStateful, Output){
 		},
 		// repeate view destroy
 		destroy: function(){
-			for(var i = 0; i < _connectResults.length; i++){
-				if(_connectResults[i]){
-					connect.disconnect(_connectResults[i]);
-				}
+			var connectResult = _connectResults.pop();
+			while(connectResult){
+				connect.disconnect(connectResult);
+				connectResult = _connectResults.pop();
 			}
 		}
 	}
