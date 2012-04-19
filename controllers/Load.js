@@ -1,5 +1,5 @@
-define(["dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/_base/Deferred", "../Controller", "../View"],
-function(lang, declare, on, Deferred, Controller, View){
+define(["dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/Deferred", "dojo/when", "../Controller", "../View"],
+function(lang, declare, on, Deferred, when, Controller, View){
 	// module:
 	//		dojox/app/controllers/Load
 	// summary:
@@ -46,7 +46,7 @@ function(lang, declare, on, Deferred, Controller, View){
 			var def = this.loadChild(parent, childId, subIds);
 			// call Load event callback
 			if(event.callback){
-				Deferred.when(def, event.callback);
+				when(def, event.callback);
 			}
 			return def;
 		},
@@ -110,7 +110,7 @@ function(lang, declare, on, Deferred, Controller, View){
 				loadChildDeferred.reject("load child '"+childId+"' error.");
 				return loadChildDeferred.promise;
 			}
-			Deferred.when(createPromise, lang.hitch(this, function(child){
+			when(createPromise, lang.hitch(this, function(child){
 				// if no subIds and current view has default view, load the default view.
 				if(!subIds && child.defaultView){
 					subIds = child.defaultView;
@@ -121,7 +121,7 @@ function(lang, declare, on, Deferred, Controller, View){
 				subIds = parts.join(',');
 				if(childId){
 					var subLoadDeferred = this.loadChild(child, childId, subIds);
-					Deferred.when(subLoadDeferred, function(){
+					when(subLoadDeferred, function(){
 						loadChildDeferred.resolve();
 					},
 					function(){

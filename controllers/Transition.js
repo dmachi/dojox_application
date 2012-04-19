@@ -1,5 +1,5 @@
-define(["dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/_base/Deferred", "dojox/css3/transit", "../Controller"],
-function(lang, declare, on, Deferred, transit, Controller){
+define(["dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/Deferred", "dojo/when", "dojox/css3/transit", "../Controller"],
+function(lang, declare, on, Deferred, when, transit, Controller){
 	// module:
 	//		dojox/app/controllers/transition
 	// summary:
@@ -95,7 +95,7 @@ function(lang, declare, on, Deferred, transit, Controller){
 				"viewId": transitionEvt.viewId,
 				"callback": lang.hitch(this, function(){
 					var transitionDef = this._doTransition(transitionEvt.viewId, transitionEvt.opts, this.app);
-					Deferred.when(transitionDef, lang.hitch(this, function(){
+					when(transitionDef, lang.hitch(this, function(){
 						this.proceeding = false;
 						var nextEvt = this.waitingQueue.shift();
 						if(nextEvt){

@@ -1,5 +1,5 @@
-define(["dojo/_base/declare", "dojo/_base/lang", "dojo/_base/Deferred", "dojo/dom-attr", "dijit/_TemplatedMixin", "dijit/_WidgetsInTemplateMixin", "./model", "./bind"],
-function(declare, lang, Deferred, dattr, TemplatedMixin, WidgetsInTemplateMixin, Model, Bind){
+define(["dojo/_base/declare", "dojo/_base/lang", "dojo/Deferred", "dojo/when", "dojo/dom-attr", "dijit/_TemplatedMixin", "dijit/_WidgetsInTemplateMixin", "./model", "./bind"],
+function(declare, lang, Deferred, when, dattr, TemplatedMixin, WidgetsInTemplateMixin, Model, Bind){
 	// module:
 	//		dojox/app/View
 	// summary:
@@ -147,7 +147,7 @@ function(declare, lang, Deferred, dattr, TemplatedMixin, WidgetsInTemplateMixin,
 				}
 
 				var loadViewDeferred = new Deferred();
-				Deferred.when(def, lang.hitch(this, function(){
+				when(def, lang.hitch(this, function(){
 					this.templateString = this.template ? arguments[0][arguments[0].length - 1] : "<div></div>";
 					loadViewDeferred.resolve(this);
 				}));
@@ -168,9 +168,9 @@ function(declare, lang, Deferred, dattr, TemplatedMixin, WidgetsInTemplateMixin,
 			var _templateDef = this._loadViewTemplate();
 
 			this._startDef = new Deferred();
-			Deferred.when(_definitionDef, lang.hitch(this, function(definition){
+			when(_definitionDef, lang.hitch(this, function(definition){
 				this._definition = definition;
-				Deferred.when(_templateDef, lang.hitch(this, function(){
+				when(_templateDef, lang.hitch(this, function(){
 					// call setupModel, after setupModel startup will be called after startup the loadViewDeferred will be resolved
 					this._setupModel();
 				}));
@@ -190,7 +190,7 @@ function(declare, lang, Deferred, dattr, TemplatedMixin, WidgetsInTemplateMixin,
 					return loadModelLoaderDeferred.promise;
 				}
 				if(createPromise.then){  // model returned a promise, so set loadedModels and call startup after the .when
-					Deferred.when(createPromise, lang.hitch(this, function(newModel){
+					when(createPromise, lang.hitch(this, function(newModel){
 						if(newModel){
 							this.loadedModels = newModel;
 						}

@@ -1,5 +1,5 @@
-define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/on", "dojo/_base/Deferred", "../Controller", "dojo/hash"],
-function(lang, declare, connect, on, Deferred, Controller){
+define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/on", "../Controller", "dojo/hash"],
+function(lang, declare, connect, on, Controller){
 	// module:
 	//		dojox/app/controllers/HistoryHash
 	// summary:

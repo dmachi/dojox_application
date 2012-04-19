@@ -1,5 +1,5 @@
-define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/Deferred", "dojo/on", "dojo/ready", "dojo/_base/window", "dojo/dom-construct", "./model", "./View", "./controllers/Load", "./controllers/Transition", "./controllers/Layout", "dojo/_base/loader", "dojo/store/Memory"],
-function(lang, declare, Deferred, on, ready, baseWindow, dom, Model, View, LoadController, TransitionController, LayoutController){
+define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Deferred", "dojo/when", "dojo/on", "dojo/ready", "dojo/_base/window", "dojo/dom-construct", "./model", "./View", "./controllers/Load", "./controllers/Transition", "./controllers/Layout", "dojo/_base/loader", "dojo/store/Memory"],
+function(lang, declare, Deferred, when, on, ready, baseWindow, dom, Model, View, LoadController, TransitionController, LayoutController){
 	dojo.experimental("dojox.app");
 
 	var Application = declare(null, {
@@ -88,7 +88,7 @@ function(lang, declare, Deferred, on, ready, baseWindow, dom, Model, View, LoadC
 				}
 
 				var controllerDef = new Deferred();
-				Deferred.when(def, lang.hitch(this, function(){
+				when(def, lang.hitch(this, function(){
 					for(var i = 0; i < arguments[0].length; i++){
 						// Store Application object on each controller.
 						this.controllers.push(new arguments[0][i](this));
@@ -124,7 +124,7 @@ function(lang, declare, Deferred, on, ready, baseWindow, dom, Model, View, LoadC
 					templateString: this.templateString,
 					definition: this.definition
 				});
-				Deferred.when(this.view.start(), lang.hitch(this, function(){
+				when(this.view.start(), lang.hitch(this, function(){
 					this.domNode = this.view.domNode;
 					this.setupControllers();
 				}));
@@ -156,7 +156,7 @@ function(lang, declare, Deferred, on, ready, baseWindow, dom, Model, View, LoadC
 				return loadModelLoaderDeferred.promise;
 			}
 			if(createPromise.then){
-				Deferred.when(createPromise, lang.hitch(this, function(newModel){
+				when(createPromise, lang.hitch(this, function(newModel){
 					this.loadedModels = newModel;
 					this.startup();
 				}),
@@ -172,7 +172,7 @@ function(lang, declare, Deferred, on, ready, baseWindow, dom, Model, View, LoadC
 		startup: function(){
 			// load controllers in configuration file
 			var controllers = this.createControllers(this.params.controllers);
-			Deferred.when(controllers, lang.hitch(this, function(result){
+			when(controllers, lang.hitch(this, function(result){
 				// emit load event and let controller to load view.
 				this.trigger("load", {
 					"viewId": this.defaultView,
