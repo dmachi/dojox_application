@@ -1,43 +1,45 @@
-define(["dojo/dom", "dojo/_base/connect", "dijit/registry", "dojox/mvc/at", "dojox/mvc/Group"],
-	function(dom, connect, registry, at, Group){
-	window.at = at;
-	dojox.debugDataBinding = false;
+define(["dojo/dom", "dojo/_base/connect", "dijit/registry", "dojox/mvc/at"],
+function(dom, connect, registry, at){
+	window.at = at; // set global namespace for dojox.mvc.at
+	dojox.debugDataBinding = false;	//disable dojox.mvc data binding debug
+
+	var _connectResults = []; // events connect results
+	var currentModel = null;
+
+	var setRef = function (id, attr){
+		var widget = registry.byId(id);
+		widget.set("target", at("rel:", attr));
+		console.log("setRef done.");
+	};
 	return {
+		// simple view init
 		init: function(){
-			var currentModel = this.loadedModels.names;
+			currentModel = this.loadedModels.names;
+			var connectResult;
 
-			function setRef(id, attr){
-				require(["dijit/registry", "dojox/mvc/at"], function(registry, at){
-					var widget = registry.byId(id);
-					widget.set("target", at("rel:", attr));
-					console.log("setRef done. " + attr);
-				});
-			};
-
-			this.shiptoConn = connect.connect(dom.byId('shipto'), "click", function(){
+			connectResult = connect.connect(dom.byId('shipto'), "click", function(){
 				setRef('addrGroup', 'ShipTo');
 			});
-			this.billtoConn = connect.connect(dom.byId('billto'), "click", function(){
+			_connectResults.push(connectResult);
+
+			connectResult = connect.connect(dom.byId('billto'), "click", function(){
 				setRef('addrGroup', 'BillTo');
 			});
+			_connectResults.push(connectResult);
 
-			this.resetConn = connect.connect(dom.byId('reset1'), "click", function(){
+			connectResult = connect.connect(dom.byId('reset1'), "click", function(){
 				currentModel.reset();
 				console.log("reset done. ");
 			});
-
-			console.log("simple view init ok");
+			_connectResults.push(connectResult);
 		},
 
-		distory: function(){
-			if(this.shiptoConn){
-				connect.disconnect(this.shiptoConn);
-			}
-			if(this.billtoConn){
-				connect.disconnect(this.billtoConn);
-			}
-			if(this.resetConn){
-				connect.disconnect(this.resetConn);
+		// simple view destroy
+		destroy: function(){
+			for(var i = 0; i < _connectResults.length; i++){
+				if(_connectResults[i]){
+					connect.disconnect(_connectResults[i]);
+				}
 			}
 		}
 	}

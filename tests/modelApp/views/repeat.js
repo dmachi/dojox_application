@@ -1,12 +1,14 @@
 define(["dojo/dom", "dojo/_base/connect", "dijit/registry", "dojox/mvc/at", "dojox/mvc/Repeat", "dojox/mvc/getStateful", "dojox/mvc/Output"],
 function(dom, connect, registry, at, Repeat, getStateful, Output){
-	window.at = at;
-	dojox.debugDataBinding = false;
+	window.at = at;	// set global namespace for dojox.mvc.at
+	dojox.debugDataBinding = false;	//disable dojox.mvc data binding debug
 
-	selectedIndex = 0;
-	repeatmodel = null;
+	var _connectResults = []; // events connect result
 
-	deleteResult = function(index){
+	var repeatmodel = null;	//repeat view data model
+
+	// delete an item
+	var deleteResult = function(index){
 		var nextIndex = repeatmodel.get("cursorIndex");
 		if(nextIndex >= index){
 			nextIndex = nextIndex-1;
@@ -14,22 +16,64 @@ function(dom, connect, registry, at, Repeat, getStateful, Output){
 		repeatmodel.model.splice(index, 1);
 		repeatmodel.set("cursorIndex", nextIndex);		
 	};
-
-	setDetailsContext = function(index){
+	// show an item detail
+	var setDetailsContext = function(index){
 		repeatmodel.set("cursorIndex", index);
 	};
-
-	// used in the Repeat Data binding demo
-	insertResult = function(index){
-		var data = {id:Math.random(), "First": "", "Last": "", "Location": "CA", "Office": "", "Email": "",
-				"Tel": "", "Fax": ""};
-		repeatmodel.model.push(new getStateful(data));
-		setDetailsContext(repeatmodel.model.length-1);
+	// insert an item
+	var insertResult = function(index){
+		if(index<0 || index>repeatmodel.model.length){
+			throw Error("index out of data model.");
+		}
+		if((repeatmodel.model[index].First=="") ||
+			(repeatmodel.model[index+1] && (repeatmodel.model[index+1].First == ""))){
+			return;
+		}
+		var data = {id:Math.random(), "First": "", "Last": "", "Location": "CA", "Office": "", "Email": "", "Tel": "", "Fax": ""};
+		repeatmodel.model.splice(index+1, 0, new getStateful(data));
+		setDetailsContext(index+1);
+	};
+	// get index from dom node id
+	var getIndexFromId = function(nodeId, perfix){
+		var len = perfix.length;
+		if(nodeId.length <= len){
+			throw Error("repeate node id error.");
+		}
+		var index = nodeId.substring(len, nodeId.length);
+		return parseInt(index);
 	};
 
 	return {
+		// repeate view init
 		init: function(){
 			repeatmodel = this.loadedModels.repeatmodels;
+			var repeatDom = dom.byId('repeatWidget');
+			var connectResult;
+			connectResult = connect.connect(repeatDom, "button[id^=\"detail\"]:click", function(e){
+				var index = getIndexFromId(e.target.id, "detail");
+				setDetailsContext(index);
+			});
+			_connectResults.push(connectResult);
+
+			connectResult = connect.connect(repeatDom, "button[id^=\"insert\"]:click", function(e){
+				var index = getIndexFromId(e.target.id, "insert");
+				insertResult(index);
+			});
+			_connectResults.push(connectResult);
+
+			connectResult = connect.connect(repeatDom, "button[id^=\"delete\"]:click", function(e){
+				var index = getIndexFromId(e.target.id, "delete");
+				deleteResult(index);
+			});
+			_connectResults.push(connectResult);
+		},
+		// repeate view destroy
+		destroy: function(){
+			for(var i = 0; i < _connectResults.length; i++){
+				if(_connectResults[i]){
+					connect.disconnect(_connectResults[i]);
+				}
+			}
 		}
 	}
 });
