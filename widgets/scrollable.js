@@ -138,8 +138,9 @@ define([
 	"dojo/dom-class",
 	"dojo/dom-construct",
 	"dojo/dom-style",
-	"./sniff"
-], function(dojo, connect, event, lang, win, domClass, domConstruct, domStyle, has){
+	"dojo/_base/sniff",
+	"dojo/ready"
+], function(dojo, connect, event, lang, win, domClass, domConstruct, domStyle, has, ready){
 
 	var dm = lang.getObject("dojox.mobile", true);
 
@@ -273,13 +274,22 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 
 		this._speed = {x:0, y:0};
 		this._appFooterHeight = 0;
-		if(this.isTopLevel() && !this.noResize){
-			this.resize();
-		}
+		// DO NOT do scrollable container layout by scrollable widget in a layout container
+		//		if(this.isTopLevel() && !this.noResize){
+		//			this.resize();
+		//		}
+
 		var _this = this;
-		setTimeout(function(){
+		// Create a scrollableBar for scrollable container. All containers share this scrollableBar.
+		// Note: setTimeout will failed for dom maybe not ready in 600ms.
+		//		setTimeout(function(){
+		//			_this.flashScrollBar();
+		//		}, 600);
+
+		// Create the scrollableBar when dom ready and scrollable container init.
+		ready(function(){
 			_this.flashScrollBar();
-		}, 600);
+		});
 	};
 
 	this.isTopLevel = function(){
@@ -319,7 +329,8 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 		};
 	};
 
-	this.resize = function(e){
+	// implement layout resize method
+	this.resize = function(changeSize, resultSize){
 		// summary:
 		//		Adjusts the height of the widget.
 		// description:
@@ -331,30 +342,13 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 		//		current top position of the widget to the bottom of the screen
 		//		will be the new height.
 
-		// moved from init() to support dynamically added fixed bars
-		this._appFooterHeight = (this.fixedFooterHeight && !this.isLocalFooter) ?
-			this.fixedFooterHeight : 0;
-		if(this.isLocalHeader){
-			this.containerNode.style.marginTop = this.fixedHeaderHeight + "px";
-		}
-
-		// Get the top position. Same as dojo.position(node, true).y
-		var top = 0;
-		for(var n = this.domNode; n && n.tagName != "BODY"; n = n.offsetParent){
-			n = this.findDisp(n); // find the first displayed view node
-			if(!n){ break; }
-			top += n.offsetTop;
-		}
-
-		// adjust the height of this view
-		var	h,
-			screenHeight = this.getScreenSize().h,
-			dh = screenHeight - top - this._appFooterHeight; // default height
-		if(this.height === "inherit"){
-			if(this.domNode.offsetParent){
-				h = this.domNode.offsetParent.offsetHeight + "px";
-			}
-		}else if(this.height === "auto"){
+		// Apply layout container's changeSize to current domNode
+		if(changeSize){
+			this.domNode.style.height = changeSize.h+'px';
+			this.domNode.style.width = changeSize.w+'px';
+			this.domNode.style.left = changeSize.l+'px';
+			this.domNode.style.top = changeSize.t+'px';
+		}else{
 			var parent = this.domNode.offsetParent;
 			if(parent){
 				this.domNode.style.height = "0px";
@@ -362,23 +356,18 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 					scrollableRect = this.domNode.getBoundingClientRect(),
 					contentBottom = parentRect.bottom - this._appFooterHeight;
 				if(scrollableRect.bottom >= contentBottom){ // use entire screen
-					dh = screenHeight - (scrollableRect.top - parentRect.top) - this._appFooterHeight;
+					dh = screenHeight - parent.offsetTop; // No fixed footer here
 				}else{ // stretch to fill predefined area
 					dh = contentBottom - scrollableRect.bottom;
 				}
+
+				// content could be smaller than entire screen height
+				var contentHeight = Math.max(this.domNode.scrollHeight, this.containerNode.scrollHeight);
+				var h = (contentHeight ? Math.min(contentHeight, dh) : dh) + "px";
+
+				if(h.charAt(0) !== "-") // to ensure that h is not negative (e.g. "-10px")
+					this.domNode.style.height = h;
 			}
-			// content could be smaller than entire screen height
-			var contentHeight = Math.max(this.domNode.scrollHeight, this.containerNode.scrollHeight);
-			h = (contentHeight ? Math.min(contentHeight, dh) : dh) + "px";
-		}else if(this.height){
-			h = this.height;
-		}
-		if(!h){
-			h = dh + "px";
-		}
-		if(h.charAt(0) !== "-" && // to ensure that h is not negative (e.g. "-10px")
-			h !== "default"){
-			this.domNode.style.height = h;
 		}
 
 		// to ensure that the view is within a scrolling area when resized.
@@ -1191,6 +1180,11 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 		var v = win.doc.defaultView.getComputedStyle(elem, '')["-webkit-transform"];
 		dm.hasTranslate3d = v && v.indexOf("matrix") === 0;
 		win.doc.documentElement.removeChild(elem);
+	}
+
+	// disable dojo mobile resizeAll and let dojox.app layout container to do resize.
+	if(!dm.disableResizeAll){
+		dm.disableResizeAll = true;
 	}
 };
 
