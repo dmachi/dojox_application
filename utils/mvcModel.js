@@ -1,6 +1,6 @@
-define(["dojo/_base/lang", "dojo/_base/Deferred", "dojo/_base/config",
-		"dojo/store/DataStore"],
-function(lang, Deferred, config, dataStore){
+define(["dojo/_base/lang", "dojo/Deferred", "dojo/when", "dojo/_base/config",
+		"dojo/store/DataStore", "dojox/mvc/getStateful"],
+function(lang, Deferred, when, config, dataStore, getStateful){
 	return function(/*Object*/config, /*Object*/params, /*String*/item){
 		// summary:
 		//		mvcModel is called for each mvc model, to create the mvc model based upon the type and params.
@@ -20,18 +20,34 @@ function(lang, Deferred, config, dataStore){
 		var loadMvcModelDeferred = new Deferred();
 
 		var options;
-		if(params.store.params.data){
+		if(params.store && params.store.params && params.store.params.data){
 			options = {
 				"store": params.store.store,
 				"query": params.store.query ? params.store.query: {}
 			};
-		}else if(params.store.params.url){
+		}else if(params.datastore){
+            var ops = {};
+			for(var item in params.query){  // need this to handle query params without errors
+				if(item.charAt(0) !== "_"){
+					ops[item] = params.query[item];
+				}
+			}
+
 			options = {
 				"store": new dataStore({
-					store: params.store.store
+					store: params.datastore.store
 				}),
-				"query": params.store.query ? params.store.query: {}
+				"query": ops
 			};
+		}else if(params.data){
+			if(params.data && lang.isString(params.data)){
+				//get the object specified by string value of data property
+				//cannot assign object literal or reference to data property
+				//because json.ref will generate __parent to point to its parent
+				//and will cause infinitive loop when creating StatefulModel.
+				params.data = lang.getObject(params.data);
+			}
+			options = {"data": params.data, query: {}};
 		}
 		var modelCtor;
 		var ctrl = null;
@@ -44,22 +60,29 @@ function(lang, Deferred, config, dataStore){
 			def.resolve(requirement);
 		});
 
-		Deferred.when(def, function(modelCtor){
+		when(def, function(modelCtor){
 			newModel = new modelCtor(options);
 			var createMvcPromise;
 			try{
-				createMvcPromise = newModel.queryStore();
+				if(newModel.queryStore){
+					createMvcPromise = newModel.queryStore(options.query);
+				}else{
+					var modelProp = newModel._refSourceModelProp || newModel._refModelProp || "model";
+					newModel.set(modelProp, getStateful(options.data));
+					createMvcPromise = newModel;
+				}
 			}catch(ex){
+				//console.warn("load mvc model error.", ex);
 				loadMvcModelDeferred.reject("load mvc model error.");
 				return loadMvcModelDeferred.promise;
 			}
 			if(createMvcPromise.then){
-				Deferred.when(createMvcPromise, lang.hitch(this, function() {
+				when(createMvcPromise, lang.hitch(this, function() {
 					// now the loadedModels[item].models is set.
 					if(dojox.debugDataBinding){
 						console.log("in mvcModel promise path, loadedModels = ", loadedModels);
 					}
-					loadedModels[item] = newModel;
+					loadedModels = newModel;
 					loadMvcModelDeferred.resolve(loadedModels);
 					return loadedModels;
 				}), function(){
