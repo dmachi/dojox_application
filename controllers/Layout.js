@@ -1,4 +1,4 @@
-define(["dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/_base/window", "dojo/_base/array", "dojo/query", "dojo/dom-style", "dojo/dom-attr", "dojo/dom-geometry", "dijit/registry", "../controller", "../layout/utils"],
+define(["dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/_base/window", "dojo/_base/array", "dojo/query", "dojo/dom-style", "dojo/dom-attr", "dojo/dom-geometry", "dijit/registry", "../Controller", "../layout/utils"],
 function(lang, declare, on, win, array, query, dstyle, dattr, dgeometry, registry, Controller, layoutUtils){
 	// module:
 	//		dojox/app/controllers/Layout
