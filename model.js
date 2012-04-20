@@ -1,5 +1,5 @@
-define(["dojo/_base/lang", "dojo/_base/Deferred", "dojo/_base/config", "dojo/store/DataStore"], 
-function(lang, Deferred, config, dataStore){
+define(["dojo/_base/lang", "dojo/Deferred", "dojo/when", "dojo/_base/config", "dojo/store/DataStore"], 
+function(lang, Deferred, when, config, dataStore){
 	return function(/*Object*/ config, /*Object*/ parent){
 		// summary:
 		//		model is called to create all of the models for the app, and all models for a view, it will
@@ -56,16 +56,17 @@ function(lang, Deferred, config, dataStore){
 						}
 				);
 				var loadModelDeferred = new Deferred();
-				return Deferred.when(def, lang.hitch(this, function(modelCtor){
+				return when(def, lang.hitch(this, function(modelCtor){
 					var createModelPromise;
 					try{
 						createModelPromise = modelCtor(config, params, item);
 					}catch(ex){
+						console.warn("load model error in model.", ex);
 						loadModelDeferred.reject("load model error in model.", ex);
 						return loadModelDeferred.promise;
 					}
 					if(createModelPromise.then){
-						Deferred.when(createModelPromise, lang.hitch(this, function(newModel){
+						when(createModelPromise, lang.hitch(this, function(newModel){
 							loadedModels[item] = newModel;
 							if(dojox.debugDataBinding){
 								console.log("in model, loadedModels for item="+item);
