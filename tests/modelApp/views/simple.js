@@ -1,40 +1,46 @@
-define(["dojo/dom", "dojo/_base/connect", "dijit/registry", "dojox/mvc/at", "dojox/mvc/Group"], 
-	function(dom, connect, registry, at, Group){
-	window.at = at;
-	dojox.debugDataBinding = true;	
+define(["dojo/dom", "dojo/_base/connect", "dijit/registry", "dojox/mvc/at"],
+function(dom, connect, registry, at){
+	window.at = at; // set global namespace for dojox.mvc.at
+	dojox.debugDataBinding = false;	//disable dojox.mvc data binding debug
+
+	var _connectResults = []; // events connect results
+	var currentModel = null;
+
+	var setRef = function (id, attr){
+		var widget = registry.byId(id);
+		widget.set("target", at("rel:", attr));
+		console.log("setRef done.");
+	};
 	return {
+		// simple view init
 		init: function(){
-			// could have used app.children.modelApp_simple.loadedModels.names 
-			// instead of app.currentLoadedModels.names 
-			//var currentModel = app.children.modelApp_simple.loadedModels.names;			
-			var currentModel = this.loadedModels.names;
+			currentModel = this.loadedModels.names;
+			var connectResult;
 
-			function setRef(id, attr) {
-				require([
-				         "dijit/registry",
-				         "dojox/mvc/at"
-				         ], function(registry, at){
-								var widget = registry.byId(id);
-								widget.set("target", at("rel:", attr));
-								console.log("setRef done. "+attr);
-							});
-
-			};
-
-			connect.connect(dom.byId('shipto'), "click", function(){
+			connectResult = connect.connect(dom.byId('shipto'), "click", function(){
 				setRef('addrGroup', 'ShipTo');
 			});
-			connect.connect(dom.byId('billto'), "click", function(){
+			_connectResults.push(connectResult);
+
+			connectResult = connect.connect(dom.byId('billto'), "click", function(){
 				setRef('addrGroup', 'BillTo');
 			});
+			_connectResults.push(connectResult);
 
-			connect.connect(dom.byId('reset1'), "click", function(){
-				console.log("reset called. ");
+			connectResult = connect.connect(dom.byId('reset1'), "click", function(){
 				currentModel.reset();
 				console.log("reset done. ");
 			});
+			_connectResults.push(connectResult);
+		},
 
-			console.log("simple view init ok");
+		// simple view destroy
+		destroy: function(){
+			var connectResult = _connectResults.pop();
+			while(connectResult){
+				connect.disconnect(connectResult);
+				connectResult = _connectResults.pop();
+			}
 		}
 	}
 });

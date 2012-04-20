@@ -1,10 +1,10 @@
 define(["dojo/_base/lang", "dojo/_base/declare", "dojo/on"], function(lang, declare, on){
 	// module:
-	//		dojox/app/controller
+	//		dojox/app/Controller
 	// summary:
 	//		Bind events on dojox.app application's dojo.Evented instance or document.
 
-	return declare("dojox.app.controller", null, {
+	return declare("dojox.app.Controller", null, {
 		constructor: function(app, events){
 			// summary:
 			//		bind events on application dojo.Evented instance.

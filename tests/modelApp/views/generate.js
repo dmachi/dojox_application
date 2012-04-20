@@ -1,6 +1,15 @@
 define(["dojo/dom", "dojo/_base/connect", "dijit/registry", "dojox/mvc"], function(dom, connect, registry, mvc){
-	genmodel = null;
-	updateView = function(){
+	var genmodel = null; // generate view data model
+	var _connectResults = []; // events connect result
+
+	var updateModel = function(){
+		dom.byId("modelArea").focus();
+		dom.byId("viewArea").style.display = "none";
+		dom.byId("outerModelArea").style.display = "";
+		registry.byId("modelArea").set("value", (dojo.toJson(genmodel.toPlainObject(), true)));
+	};
+
+	var updateView = function(){
 		try{
 			var modeldata = dojo.fromJson(dom.byId("modelArea").value);
 			genmodel = mvc.newStatefulModel({
@@ -14,21 +23,31 @@ define(["dojo/dom", "dojo/_base/connect", "dijit/registry", "dojox/mvc"], functi
 		}
 	};
 
-	// used in the Generate View demo
-	updateModel = function(){
-		dom.byId("modelArea").focus(); // hack: do this to force focus off of the textbox, bug on mobile?
-		dom.byId("viewArea").style.display = "none";
-		dom.byId("outerModelArea").style.display = "";
-		registry.byId("modelArea").set("value", (dojo.toJson(genmodel.toPlainObject(), true)));
-	};
-
 	return {
 		init: function(){
-			console.log("generate view init ok");
+			var connectResult;
+
+			connectResult = connect.connect(dom.byId('generate1'), "click", function(){
+				updateView();
+			});
+			_connectResults.push(connectResult);
+
+			connectResult = connect.connect(dom.byId('updateModel'), "click", function(){
+				updateModel();
+			});
+			_connectResults.push(connectResult);
 		},
 
 		beforeActivate: function(){
 			console.log("generate view beforeActivate()");
+		},
+
+		destroy: function(){
+			var connectResult = _connectResults.pop();
+			while(connectResult){
+				connect.disconnect(connectResult);
+				connectResult = _connectResults.pop();
+			}
 		}
 	}
 });
