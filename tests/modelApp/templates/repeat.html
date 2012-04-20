@@ -7,13 +7,13 @@
            <div class="row">            
                     <input dojoType="dojox.mobile.TextBox"
                         id="nameInput#{this.index}" data-dojo-props="value: dojox.mvc.at('rel:#{this.index}','First')" placeHolder="First Name"></input>
-                    <button type="button" data-dojo-type="dojox/mobile/Button" class="mblBlueButton" data-dojo-props="onClick: function(e){setDetailsContext('#{this.index}');}">
+                    <button type="button" id="detail#{this.index}" data-dojo-type="dojox/mobile/Button" class="mblBlueButton">
                         Details
                     </button>
-                    <button type="button" data-dojo-type="dojox/mobile/Button" class="mblBlueButton" data-dojo-props="onClick: function(){insertResult('#{this.index}');}">
+                    <button type="button" id="insert#{this.index}" data-dojo-type="dojox/mobile/Button" class="mblBlueButton">
                         +
                     </button>
-                    <button type="button" data-dojo-type="dojox/mobile/Button" class="mblBlueButton" data-dojo-props="onClick: function(){deleteResult('#{this.index}');}">
+                    <button type="button" id="delete#{this.index}" data-dojo-type="dojox/mobile/Button" class="mblBlueButton">
                         -
                     </button>
                 </div>
@@ -59,4 +59,5 @@
 						</tr>
 					</table>
 		</div>
+		</form>
 </div>
