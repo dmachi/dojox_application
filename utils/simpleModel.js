@@ -1,6 +1,6 @@
-define(["dojo/_base/lang", "dojo/_base/Deferred", "dojo/_base/config",
+define(["dojo/_base/lang", "dojo/Deferred", "dojo/when", "dojo/_base/config",
 		"dojo/store/DataStore"],
-function(lang, Deferred, config, DataStore){
+function(lang, Deferred, when, config, DataStore){
 	return function(/*Object*/config, /*Object*/params, /*String*/item){
 		// summary:
 		//		simpleModel is called for each simple model, to create the simple model from the DataStore 
@@ -21,46 +21,44 @@ function(lang, Deferred, config, DataStore){
 		var loadSimpleModelDeferred = new Deferred();
 
 		var options;
-		if(params.store.params.data){
-			options = {
-				"store": params.store.store,
-				"query": params.store.query ? params.store.query: {}
-			};
-		}else if(params.store.params.url){
-			options = {
-				"store": new dataStore({
-					store: params.store.store
-				}),
-				"query": params.store.query ? params.store.query: {}
-			};
+		if(params.store){
+			if((params.store.params.data || params.store.params.store)){
+				options = {
+					"store": params.store.store,
+					"query": params.store.query ? params.store.query: {}
+				};
+			}else if(params.store.params.url){
+				options = {
+					"store": new dataStore({
+						store: params.store.store
+					}),
+					"query": params.store.query ? params.store.query: {}
+				};
+			}
+		}else if(params.data){
+			if(params.data && lang.isString(params.data)){
+				params.data = lang.getObject(params.data);
+			}
+			options = {"data": params.data, query: {}};
 		}
 		var modelCtor;
 		var ctrl = null;
 		var newModel = null;
-		//var type = config[item].type ? config[item].type
-		//		: "dojox/mvc/StatefulModel";
-		// need to load the class to use for the model
-		//var def = new Deferred();
-		//require([type], // require the model type
-		//function(requirement){
-		//	def.resolve(requirement);
-		//});
-
-		//Deferred.when(def, function(modelCtor){
-			//newModel = new DataStore(options.store);
-			//var loadSimpleModelDeferred = new Deferred();
 			var createMvcPromise;
 			try{
-				//createMvcPromise = loadedModels[item].queryStore();
-				createMvcPromise = options.store.query(options.query);
+				if(options.store){
+					createMvcPromise = options.store.query();
+				}else{
+					createMvcPromise = options.data;
+				}
 			}catch(ex){
 				loadSimpleModelDeferred.reject("load mvc model error.");
 				return loadSimpleModelDeferred.promise;
 			}
 			if(createMvcPromise.then){
-				Deferred.when(createMvcPromise, lang.hitch(this, function(newModel) {
+				when(createMvcPromise, lang.hitch(this, function(newModel) {
 					// now the loadedModels[item].models is set.
-					console.log("in simpleModel promise path, loadedModels = ", loadedModels);
+					//console.log("in simpleModel promise path, loadedModels = ", loadedModels);
 					loadedModels = newModel;
 					loadSimpleModelDeferred.resolve(loadedModels);
 					return loadedModels;
@@ -69,11 +67,11 @@ function(lang, Deferred, config, DataStore){
 				});
 			}else{ // query did not return a promise, so use newModel
 				loadedModels = createMvcPromise;
-				console.log("in simpleModel else path, loadedModels = ",loadedModels);
+				//console.log("in simpleModel else path, loadedModels = ",loadedModels);
 				loadSimpleModelDeferred.resolve(loadedModels);
 				return loadedModels;
 			}
-		//});
+			
 		return loadSimpleModelDeferred;
 	}
 });
