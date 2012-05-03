@@ -113,9 +113,35 @@ function(lang, declare, Deferred, when, on, ready, baseWindow, dom, Model, View,
 			on.emit(this.domNode, event, params);
 		},
 
-		// load default view and setupControllers and startup the default view
+		// setup default view and Controllers and startup the default view
 		start: function(){
-			// create application template view
+			//create application level data store
+			this.createDataStore(this.params);
+
+			// create application level data model
+			var loadModelLoaderDeferred = new Deferred();
+			var createPromise;
+			try{
+				createPromise = Model(this.params.models, this);
+			}catch(ex){
+				loadModelLoaderDeferred.reject("load model error.");
+				return loadModelLoaderDeferred.promise;
+			}
+			if(createPromise.then){
+				when(createPromise, lang.hitch(this, function(newModel){
+					this.loadedModels = newModel;
+					this.setupAppView();
+				}), function(){
+					loadModelLoaderDeferred.reject("load model error.")
+				});
+			}else{
+				this.loadedModels = createPromise;
+				this.setupAppView();
+			}
+		},
+
+		setupAppView: function(){
+			//create application level view
 			if(this.template){
 				this.view = new View({
 					id: this.id,
@@ -127,9 +153,11 @@ function(lang, declare, Deferred, when, on, ready, baseWindow, dom, Model, View,
 				when(this.view.start(), lang.hitch(this, function(){
 					this.domNode = this.view.domNode;
 					this.setupControllers();
+					this.startup();
 				}));
 			}else{
 				this.setupControllers();
+				this.startup();
 			}
 		},
 
@@ -142,31 +170,6 @@ function(lang, declare, Deferred, when, on, ready, baseWindow, dom, Model, View,
 			// move set _startView operation from history module to application
 			var hash = window.location.hash;
 			this._startView = ((hash && hash.charAt(0) == "#") ? hash.substr(1) : hash) || this.defaultView;
-
-			//create application level data store
-			this.createDataStore(this.params);
-
-    		// create application level data model
-			var loadModelLoaderDeferred = new Deferred();
-			var createPromise;
-			try{
-				createPromise = Model(this.params.models, this);
-			}catch(ex){
-				loadModelLoaderDeferred.reject("load model error.");
-				return loadModelLoaderDeferred.promise;
-			}
-			if(createPromise.then){
-				when(createPromise, lang.hitch(this, function(newModel){
-					this.loadedModels = newModel;
-					this.startup();
-				}),
-				function(){
-					loadModelLoaderDeferred.reject("load model error.")
-				});
-			}else{
-				this.loadedModels = createPromise;
-				this.startup();
-			}
 		},
 
 		startup: function(){
