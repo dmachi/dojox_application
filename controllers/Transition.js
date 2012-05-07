@@ -214,6 +214,8 @@ function(lang, declare, on, Deferred, when, transit, Controller){
 				// activate next view
 				next.beforeActivate();
 				next.afterActivate();
+				// layout current view
+				this.app.trigger("select", {"parent":parent, "view":next});
 			}
 
 			// do sub transition like transition from "tabScene,tab1" to "tabScene,tab2"

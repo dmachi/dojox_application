@@ -189,8 +189,9 @@ function(lang, declare, on, win, array, query, dstyle, dattr, dgeometry, registr
 				dstyle.set(view.domNode, "display", "");
 				dstyle.set(view.domNode, "zIndex", 50);
 				parent.selectedChild = view;
-				this._doResize(parent);
 			}
+			// do selected view layout
+			this._doResize(parent);
 		}
 	});
 });
