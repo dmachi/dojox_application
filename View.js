@@ -291,9 +291,9 @@ function(declare, lang, Deferred, when, dattr, TemplatedMixin, WidgetsInTemplate
 			//		view life cycle afterDeactivate()
 		},
 
-		destory: function(){
+		destroy: function(){
 			// summary:
-			//		view life cycle destory()
+			//		view life cycle destroy()
 		}
 	});
 });
