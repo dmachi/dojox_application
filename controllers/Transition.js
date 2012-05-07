@@ -177,6 +177,13 @@ function(lang, declare, on, Deferred, when, transit, Controller){
 				//assume next is already loaded so that this.set(...) will not return
 				//a promise object. this.set(...) will handles the this.selectedChild,
 				//activate or deactivate views and refresh layout.
+
+				// deactivate sub child of current view, then deactivate current view
+				var subChild = current.selectedChild;
+				while(subChild){
+					subChild.beforeDeactivate();
+					subChild = subChild.selectedChild;
+				}
 				current.beforeDeactivate();
 				next.beforeActivate();
 
@@ -185,16 +192,30 @@ function(lang, declare, on, Deferred, when, transit, Controller){
 					transition: parent.defaultTransition || "none"
 				}));
 				result.then(lang.hitch(this, function(){
+					// deactivate sub child of current view, then deactivate current view
+					var subChild = current.selectedChild;
+					while(subChild){
+						subChild.afterDeactivate();
+						subChild = subChild.selectedChild;
+					}
 					current.afterDeactivate();
 					next.afterActivate();
+
 					if(subIds){
 						this._doTransition(subIds, opts, next);
 					}
 				}));
 				return result; //dojo.DeferredList
 			}else{
+				// next view == current view, refresh current view
+				// deactivate next view
+				next.beforeDeactivate();
+				next.afterDeactivate();
+				// activate next view
 				next.beforeActivate();
 				next.afterActivate();
+				// layout current view
+				this.app.trigger("select", {"parent":parent, "view":next});
 			}
 
 			// do sub transition like transition from "tabScene,tab1" to "tabScene,tab2"
