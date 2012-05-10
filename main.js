@@ -234,9 +234,16 @@ function(lang, declare, Deferred, when, on, ready, baseWindow, dom, Model, View,
 			App = declare(modules, ext);
 
 			ready(function(){
-				app = App(config, node || baseWindow.body());
+				var app = App(config, node || baseWindow.body());
 				app.setStatus(app.lifecycle.STARTING);
 				app.start();
+				// Create global namespace for application.
+				// The global name is application id. For example: modelApp
+				var globalAppName = app.id;
+				if(window[globalAppName]){
+					lang.mixin(app, window[globalAppName]);
+				}
+				window[globalAppName] = app;
 			});
 		});
 	}
