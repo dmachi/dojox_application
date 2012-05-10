@@ -17,7 +17,7 @@ function(lang, declare, Deferred, when, on, ready, baseWindow, dom, Model, View,
 			// Need to bind startTransition event on application domNode,
 			// Because dojox.mobile.ViewController bind startTransition event on document.body
 			this.domNode = dom.create("div", {
-				id: this.id,
+				id: this.id+"_Root",
 				style: "width:100%; height:100%"
 			});
 			node.appendChild(this.domNode);
@@ -144,7 +144,7 @@ function(lang, declare, Deferred, when, on, ready, baseWindow, dom, Model, View,
 			//create application level view
 			if(this.template){
 				this.view = new View({
-					id: this.id,
+					id: this.id+"_Template",
 					name: this.name,
 					parent: this,
 					templateString: this.templateString,
