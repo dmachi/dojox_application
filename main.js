@@ -16,6 +16,7 @@ function(lang, declare, Deferred, when, on, ready, baseWindow, dom, Model, View,
 			// Create a new domNode and append to body
 			// Need to bind startTransition event on application domNode,
 			// Because dojox.mobile.ViewController bind startTransition event on document.body
+			// Make application's root domNode id unique because this id can be visited by window namespace on Chrome 18.
 			this.domNode = dom.create("div", {
 				id: this.id+"_Root",
 				style: "width:100%; height:100%"
@@ -144,7 +145,6 @@ function(lang, declare, Deferred, when, on, ready, baseWindow, dom, Model, View,
 			//create application level view
 			if(this.template){
 				this.view = new View({
-					id: this.id+"_Template",
 					name: this.name,
 					parent: this,
 					templateString: this.templateString,
