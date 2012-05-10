@@ -208,6 +208,12 @@ function(lang, declare, Deferred, when, on, ready, baseWindow, dom, Model, View,
 			path = path.join("/");
 		}
 		dojo.registerModulePath("app", path);
+
+		if(!config.modules){
+			config.modules = [];
+		}
+		// add dojox.app lifecycle module by default
+		config.modules.push("dojox/app/module/lifecycle");
 		var modules = config.modules.concat(config.dependencies);
 
 		if(config.template){
