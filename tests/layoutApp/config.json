@@ -20,9 +20,7 @@
 		"dojox/app/widgets/Container"
 	],
 
-	"modules": [
-		"dojox/app/module/lifecycle"
-	],
+	"modules": [],
 	
 	"controllers": [
 		"dojox/app/controllers/History"

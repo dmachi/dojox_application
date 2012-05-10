@@ -23,8 +23,8 @@
 	// of the application, how it processes the config or any other life cycle
 	// by creating and including one or more of these
 	"modules": [
-		"dojox/app/module/env",
-		"dojox/app/module/lifecycle"
+		//"dojox/app/module/env",
+		//"dojox/app/module/lifecycle"
 	],
 	
 	"controllers": [
