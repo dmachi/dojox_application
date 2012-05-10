@@ -16,8 +16,9 @@ function(lang, declare, Deferred, when, on, ready, baseWindow, dom, Model, View,
 			// Create a new domNode and append to body
 			// Need to bind startTransition event on application domNode,
 			// Because dojox.mobile.ViewController bind startTransition event on document.body
+			// Make application's root domNode id unique because this id can be visited by window namespace on Chrome 18.
 			this.domNode = dom.create("div", {
-				id: this.id,
+				id: this.id+"_Root",
 				style: "width:100%; height:100%"
 			});
 			node.appendChild(this.domNode);
@@ -144,7 +145,6 @@ function(lang, declare, Deferred, when, on, ready, baseWindow, dom, Model, View,
 			//create application level view
 			if(this.template){
 				this.view = new View({
-					id: this.id,
 					name: this.name,
 					parent: this,
 					templateString: this.templateString,
@@ -208,6 +208,12 @@ function(lang, declare, Deferred, when, on, ready, baseWindow, dom, Model, View,
 			path = path.join("/");
 		}
 		dojo.registerModulePath("app", path);
+
+		if(!config.modules){
+			config.modules = [];
+		}
+		// add dojox.app lifecycle module by default
+		config.modules.push("dojox/app/module/lifecycle");
 		var modules = config.modules.concat(config.dependencies);
 
 		if(config.template){
@@ -228,9 +234,16 @@ function(lang, declare, Deferred, when, on, ready, baseWindow, dom, Model, View,
 			App = declare(modules, ext);
 
 			ready(function(){
-				app = App(config, node || baseWindow.body());
+				var app = App(config, node || baseWindow.body());
 				app.setStatus(app.lifecycle.STARTING);
 				app.start();
+				// Create global namespace for application.
+				// The global name is application id. For example: modelApp
+				var globalAppName = app.id;
+				if(window[globalAppName]){
+					lang.mixin(app, window[globalAppName]);
+				}
+				window[globalAppName] = app;
 			});
 		});
 	}
