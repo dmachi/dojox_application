@@ -1,9 +1,10 @@
-define(["dojo/_base/declare", "dojo/_base/lang", "dojo/Deferred", "dojo/when", "dojo/dom-attr", "dijit/_TemplatedMixin", "dijit/_WidgetsInTemplateMixin", "./model", "./bind"],
-function(declare, lang, Deferred, when, dattr, TemplatedMixin, WidgetsInTemplateMixin, Model, Bind){
+define(["dojo/_base/declare", "dojo/_base/lang", "dojo/Deferred", "dojo/when", "dojo/dom-attr", "dijit/_TemplatedMixin", "dijit/_WidgetsInTemplateMixin", "./model", "dojo/_base/config", "dojo/has"],
+function(declare, lang, Deferred, when, dattr, TemplatedMixin, WidgetsInTemplateMixin, Model, config, has){
 	// module:
 	//		dojox/app/View
 	// summary:
 	//		dojox.app view object, each view can have one parent view and several children views.
+	has.add("mvc-bindings-log-api", (config["mvc"] || {}).debugBindings);  // setup has check for mvc debugBindings flag
 
 	return declare("dojox.app.View", null, {
 		constructor: function(params){
@@ -194,7 +195,7 @@ function(declare, lang, Deferred, when, dattr, TemplatedMixin, WidgetsInTemplate
 						if(newModel){
 							this.loadedModels = newModel;
 						}
-						if(dojox.debugDataBinding){
+						if(has("mvc-bindings-log-api")){
 							console.log("in view setupModel, this.loadedModels =",this.loadedModels);
 						}
 						this._startup();
@@ -204,7 +205,7 @@ function(declare, lang, Deferred, when, dattr, TemplatedMixin, WidgetsInTemplate
 					});
 				}else{ // model returned the actual model not a promise, so set loadedModels and call _startup
 					this.loadedModels = createPromise;
-					if(dojox.debugDataBinding){
+					if(has("mvc-bindings-log-api")){
 						console.log("in view setupModel else, this.loadedModels =",this.loadedModels);
 					}
 					this._startup();
@@ -256,7 +257,7 @@ function(declare, lang, Deferred, when, dattr, TemplatedMixin, WidgetsInTemplate
 			// set the loadedModels here to be able to access the model on the parse.
 			if(this.loadedModels){
 				widgetInTemplate.loadedModels = this.loadedModels;
-				if(dojox.debugDataBinding){
+				if(has("mvc-bindings-log-api")){
 					console.log("in view render, this.loadedModels =",this.loadedModels);
 				}
 			}

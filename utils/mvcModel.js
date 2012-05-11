@@ -1,6 +1,6 @@
 define(["dojo/_base/lang", "dojo/Deferred", "dojo/when", "dojo/_base/config",
-		"dojo/store/DataStore", "dojox/mvc/getStateful"],
-function(lang, Deferred, when, config, dataStore, getStateful){
+		"dojo/store/DataStore", "dojox/mvc/getStateful", "dojo/has"],
+function(lang, Deferred, when, config, dataStore, getStateful, has){
 	return function(/*Object*/config, /*Object*/params, /*String*/item){
 		// summary:
 		//		mvcModel is called for each mvc model, to create the mvc model based upon the type and params.
@@ -79,7 +79,7 @@ function(lang, Deferred, when, config, dataStore, getStateful){
 			if(createMvcPromise.then){
 				when(createMvcPromise, lang.hitch(this, function() {
 					// now the loadedModels[item].models is set.
-					if(dojox.debugDataBinding){
+					if(has("mvc-bindings-log-api")){
 						console.log("in mvcModel promise path, loadedModels = ", loadedModels);
 					}
 					loadedModels = newModel;
@@ -90,7 +90,7 @@ function(lang, Deferred, when, config, dataStore, getStateful){
 				});
 			}else{ // query did not return a promise, so use newModel
 				loadedModels = newModel;
-				if(dojox.debugDataBinding){
+				if(has("mvc-bindings-log-api")){
 					console.log("in mvcModel else path, loadedModels = ",loadedModels);
 				}
 				loadMvcModelDeferred.resolve(loadedModels);
