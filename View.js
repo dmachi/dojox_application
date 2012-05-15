@@ -4,7 +4,6 @@ function(declare, lang, Deferred, when, dattr, TemplatedMixin, WidgetsInTemplate
 	//		dojox/app/View
 	// summary:
 	//		dojox.app view object, each view can have one parent view and several children views.
-	has.add("mvc-bindings-log-api", (config["mvc"] || {}).debugBindings);  // setup has check for mvc debugBindings flag
 
 	return declare("dojox.app.View", null, {
 		constructor: function(params){
