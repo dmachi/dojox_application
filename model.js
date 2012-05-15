@@ -1,5 +1,6 @@
-define(["dojo/_base/lang", "dojo/Deferred", "dojo/when", "dojo/_base/config", "dojo/store/DataStore"], 
-function(lang, Deferred, when, config, dataStore){
+define(["dojo/_base/lang", "dojo/Deferred", "dojo/when", "dojo/_base/config", "dojo/has"], 
+function(lang, Deferred, when, config, has){
+	has.add("mvc-bindings-log-api", (config["mvc"] || {}).debugBindings);  // setup has check for mvc debugBindings flag
 	return function(/*Object*/ config, /*Object*/ parent){
 		// summary:
 		//		model is called to create all of the models for the app, and all models for a view, it will
@@ -16,6 +17,7 @@ function(lang, Deferred, when, config, dataStore){
 		//		 loadedModels is an object holding all of the available loaded models for this view.
 		//var config = params.config;
 		//var parent = params.parent;
+
 		this.defCount = 0;
 		var loadedModels = {};
 		var allModelsLoadedDeferred = new Deferred();
@@ -68,7 +70,7 @@ function(lang, Deferred, when, config, dataStore){
 					if(createModelPromise.then){
 						when(createModelPromise, lang.hitch(this, function(newModel){
 							loadedModels[item] = newModel;
-							if(dojox.debugDataBinding){
+							if(has("mvc-bindings-log-api")){
 								console.log("in model, loadedModels for item="+item);
 								console.log(loadedModels);
 							}
@@ -85,7 +87,7 @@ function(lang, Deferred, when, config, dataStore){
 						return loadModelDeferred;
 					}else{
 						loadedModels[item] = createModelPromise;
-						if(dojox.debugDataBinding){
+						if(has("mvc-bindings-log-api")){
 							console.log("in model else path, loadedModels for item="+item);
 							console.log(loadedModels);
 						}

@@ -1,8 +1,5 @@
 define(["dojo/dom", "dojo/_base/connect", "dijit/registry", "dojox/mvc/at", "dojox/mvc/Repeat", "dojox/mvc/getStateful", "dojox/mvc/Output"],
 function(dom, connect, registry, at, Repeat, getStateful, Output){
-	window.at = at;	// set global namespace for dojox.mvc.at
-	dojox.debugDataBinding = false;	//disable dojox.mvc data binding debug
-
 	var _connectResults = []; // events connect result
 
 	var repeatmodel = null;	//repeat view data model
