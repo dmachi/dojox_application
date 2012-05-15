@@ -1,4 +1,5 @@
 <div id="settings-2" class="view mblView">
+	<script type="dojo/require">at: "dojox/mvc/at"</script>
     <h1 data-dojo-type="dojox.mobile.Heading" data-dojo-props='back:"Home"'>simple2</h1>
     <form name="testForm-2" id="testForm">    
   	<div class="field-title">simple2 - Using an mvcModel (dojox/mvc/EditModelRefController) with json data, no store.</div>
@@ -10,7 +11,7 @@
 							<td style="width: 100px;" class="layout">First</td>
 							<td class="layout">							
 								<input  id="firstInput1-2" data-dojo-type="dojox.mobile.TextBox" 
-									data-dojo-props="value: dojox.mvc.at('rel:', 'First'), placeholder:'First'">
+									data-dojo-props="value: at('rel:', 'First'), placeholder:'First'">
 							</td>
 						</tr>
 						<tr>
@@ -18,14 +19,14 @@
 							<td class="layout">
 								<input id="lastInput1-2" data-dojo-type="dojox.mobile.TextBox"
 									 
-									data-dojo-props="placeholder:'Last Name', value: dojox.mvc.at('rel:', 'Last')">
+									data-dojo-props="placeholder:'Last Name', value: at('rel:', 'Last')">
 							</td>
 						</tr>
 						<tr>
 							<td style="width: 100px;" class="layout">Email</td>
 							<td class="layout">
 								<input  id="emailInput1-2" data-dojo-type="dojox.mobile.TextBox"
-									data-dojo-props="value: dojox.mvc.at('rel:', 'Email'), placeholder:'Email'">
+									data-dojo-props="value: at('rel:', 'Email'), placeholder:'Email'">
 							</td>
 						</tr>
 					</table>
@@ -42,7 +43,7 @@
 							<td style="width: 100px;" class="layout">Street</td>
 							<td class="layout">							
 								<input  id="streetInput-2" data-dojo-type="dojox.mobile.TextBox" 
-									data-dojo-props="value: dojox.mvc.at('rel:', 'Street'), placeholder:'Street'">
+									data-dojo-props="value: at('rel:', 'Street'), placeholder:'Street'">
 							</td>
 						</tr>
 						<tr>
@@ -50,21 +51,21 @@
 							<td class="layout">
 								<input id="cityInput-2" data-dojo-type="dojox.mobile.TextBox"
 									 
-									data-dojo-props="placeholder:'City', value: dojox.mvc.at('rel:', 'City')">
+									data-dojo-props="placeholder:'City', value: at('rel:', 'City')">
 							</td>
 						</tr>
 						<tr>
 							<td style="width: 100px;" class="layout">State</td>
 							<td class="layout">
 								<input  id="StateInput-2" data-dojo-type="dojox.mobile.TextBox"
-									data-dojo-props="value: dojox.mvc.at('rel:', 'State'), placeholder:'State'">
+									data-dojo-props="value: at('rel:', 'State'), placeholder:'State'">
 							</td>
 						</tr>
 						<tr>
 							<td style="width: 100px;" class="layout">State</td>
 							<td class="layout">
 								<input  id="ZipInput-2" data-dojo-type="dojox.mobile.TextBox"
-									data-dojo-props="value: dojox.mvc.at('rel:', 'Zip'), placeholder:'Zip Code'">
+									data-dojo-props="value: at('rel:', 'Zip'), placeholder:'Zip Code'">
 							</td>
 						</tr>
 					</table>

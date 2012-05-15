@@ -1,7 +1,5 @@
 define(["dojo/dom", "dojo/_base/connect", "dijit/registry", "dojox/mvc/at"],
 function(dom, connect, registry, at){
-	window.at = at; // set global namespace for dojox.mvc.at
-	dojox.debugDataBinding = false;	//disable dojox.mvc data binding debug
 
 	var _connectResults = []; // events connect results
 	var currentModel = null;
