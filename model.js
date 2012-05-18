@@ -1,7 +1,6 @@
 define(["dojo/_base/lang", "dojo/Deferred", "dojo/when", "dojo/_base/config", "dojo/has"], 
 function(lang, Deferred, when, config, has){
-	has.add("mvc-bindings-log-api", (config["mvc"] || {}).debugBindings);  // setup has check for mvc debugBindings flag
-	return function(/*Object*/ config, /*Object*/ parent){
+	return function(/*Object*/ config, /*Object*/ parent, /*Object*/ app){
 		// summary:
 		//		model is called to create all of the models for the app, and all models for a view, it will
 		//		create and call the appropriate model utility based upon the modelLoader set in the model in the config
@@ -18,6 +17,7 @@ function(lang, Deferred, when, config, has){
 		//var config = params.config;
 		//var parent = params.parent;
 
+		this.app = app || parent;
 		this.defCount = 0;
 		var loadedModels = {};
 		var allModelsLoadedDeferred = new Deferred();
@@ -70,9 +70,8 @@ function(lang, Deferred, when, config, has){
 					if(createModelPromise.then){
 						when(createModelPromise, lang.hitch(this, function(newModel){
 							loadedModels[item] = newModel;
-							if(has("mvc-bindings-log-api")){
-								console.log("in model, loadedModels for item="+item);
-								console.log(loadedModels);
+							if(has("app-log-api")){
+								this.app.log("in model, for item=["+item+"] loadedModels =", loadedModels);
 							}
 							this.defCount--;
 							if(this.defCount == 0){
@@ -87,9 +86,8 @@ function(lang, Deferred, when, config, has){
 						return loadModelDeferred;
 					}else{
 						loadedModels[item] = createModelPromise;
-						if(has("mvc-bindings-log-api")){
-							console.log("in model else path, loadedModels for item="+item);
-							console.log(loadedModels);
+						if(has("app-log-api")){
+							this.app.log("in model else path, for item=["+item+"] loadedModels=",  loadedModels);
 						}
 						this.defCount--;
 						if(this.defCount == 0){

@@ -85,7 +85,7 @@ function(lang, declare, on, Deferred, when, transit, Controller){
 			//		"transition" event parameter. It should be like this: {"viewId":viewId, "opts":opts}
 
 			if(this.proceeding){
-				console.log("push event", transitionEvt);
+				this.app.log("in app/controllers/proceedTransition push event", transitionEvt);
 				this.waitingQueue.push(transitionEvt);
 				return;
 			}
@@ -127,6 +127,8 @@ function(lang, declare, on, Deferred, when, transit, Controller){
 			//
 			// returns:
 			//		transit dojo.DeferredList object.
+
+			this.app.log("in app/controllers/Transition._doTransition transitionTo=["+transitionTo+"], parent.name=["+parent.name+"], opts=",opts);
 
 			if(!parent){
 				throw Error("view parent not found in transition.");

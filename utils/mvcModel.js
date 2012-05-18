@@ -79,19 +79,19 @@ function(lang, Deferred, when, config, dataStore, getStateful, has){
 			if(createMvcPromise.then){
 				when(createMvcPromise, lang.hitch(this, function() {
 					// now the loadedModels[item].models is set.
-					if(has("mvc-bindings-log-api")){
-						console.log("in mvcModel promise path, loadedModels = ", loadedModels);
-					}
 					loadedModels = newModel;
 					loadMvcModelDeferred.resolve(loadedModels);
+					if(has("app-log-api")){
+						this.app.log("in mvcModel promise path, loadedModels = ", loadedModels);
+					}
 					return loadedModels;
 				}), function(){
 					loadModelLoaderDeferred.reject("load model error.")
 				});
 			}else{ // query did not return a promise, so use newModel
 				loadedModels = newModel;
-				if(has("mvc-bindings-log-api")){
-					console.log("in mvcModel else path, loadedModels = ",loadedModels);
+				if(has("app-log-api")){
+					this.app.log("in mvcModel else path, loadedModels = ",loadedModels);
 				}
 				loadMvcModelDeferred.resolve(loadedModels);
 				return loadedModels;
