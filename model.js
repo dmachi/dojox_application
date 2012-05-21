@@ -1,5 +1,5 @@
-define(["dojo/_base/lang", "dojo/Deferred", "dojo/when", "dojo/_base/config", "dojo/has"], 
-function(lang, Deferred, when, config, has){
+define(["dojo/_base/lang", "dojo/Deferred", "dojo/when", "dojo/_base/config"], 
+function(lang, Deferred, when, config){
 	return function(/*Object*/ config, /*Object*/ parent, /*Object*/ app){
 		// summary:
 		//		model is called to create all of the models for the app, and all models for a view, it will

@@ -1,5 +1,5 @@
-define(["dojo/_base/declare", "dojo/_base/lang", "dojo/Deferred", "dojo/when", "dojo/dom-attr", "dijit/_TemplatedMixin", "dijit/_WidgetsInTemplateMixin", "./model", "dojo/_base/config", "dojo/has"],
-function(declare, lang, Deferred, when, dattr, TemplatedMixin, WidgetsInTemplateMixin, Model, config, has){
+define(["dojo/_base/declare", "dojo/_base/lang", "dojo/Deferred", "dojo/when", "dojo/dom-attr", "dijit/_TemplatedMixin", "dijit/_WidgetsInTemplateMixin", "./model"],
+function(declare, lang, Deferred, when, dattr, TemplatedMixin, WidgetsInTemplateMixin, Model){
 	// module:
 	//		dojox/app/View
 	// summary:
@@ -194,7 +194,7 @@ function(declare, lang, Deferred, when, dattr, TemplatedMixin, WidgetsInTemplate
 						if(newModel){
 							this.loadedModels = newModel;
 						}
-						this.app.log("in view setupModel, this.loadedModels =",this.loadedModels);
+						//this.app.log("in view setupModel, this.loadedModels =",this.loadedModels);
 						this._startup();
 					}),
 					function(){
@@ -202,7 +202,7 @@ function(declare, lang, Deferred, when, dattr, TemplatedMixin, WidgetsInTemplate
 					});
 				}else{ // model returned the actual model not a promise, so set loadedModels and call _startup
 					this.loadedModels = createPromise;
-					this.app.log("in view setupModel else, this.loadedModels =",this.loadedModels);
+					//this.app.log("in view setupModel else, this.loadedModels =",this.loadedModels);
 					this._startup();
 				}
 			}else{ // loadedModels already created so call _startup
@@ -235,6 +235,7 @@ function(declare, lang, Deferred, when, dattr, TemplatedMixin, WidgetsInTemplate
 			}
 
 			// call view assistant's init() method to initialize view
+			this.app.log("  > in View calling init() name=["+this.name+"], parent.name=["+this.parent.name+"]");
 			this.init();
 			this._started = true;
 			if(this._startDef){
@@ -252,7 +253,7 @@ function(declare, lang, Deferred, when, dattr, TemplatedMixin, WidgetsInTemplate
 			// set the loadedModels here to be able to access the model on the parse.
 			if(this.loadedModels){
 				widgetInTemplate.loadedModels = this.loadedModels;
-				this.app.log("in view render, this.loadedModels =",this.loadedModels);
+				//this.app.log("in view render, this.loadedModels =",this.loadedModels);
 			}
 			lang.mixin(widgetTemplate, widgetInTemplate);
 			widgetTemplate.templateString = templateString;
@@ -263,37 +264,37 @@ function(declare, lang, Deferred, when, dattr, TemplatedMixin, WidgetsInTemplate
 		init: function(){
 			// summary:
 			//		view life cycle init()
-			this.app.log("in app/View.init name=["+this.name+"], parent.name=["+this.parent.name+"]");
+			//this.app.log("in app/View.init name=["+this.name+"], parent.name=["+this.parent.name+"]");
 		},
 
 		beforeActivate: function(){
 			// summary:
 			//		view life cycle beforeActivate()
-			this.app.log("in app/View.beforeActivate name=["+this.name+"], parent.name=["+this.parent.name+"]");
+			//this.app.log("> in app/View.beforeActivate name=["+this.name+"], parent.name=["+this.parent.name+"]");
 		},
 
 		afterActivate: function(){
 			// summary:
 			//		view life cycle afterActivate()
-			this.app.log("  in View.afterActivate name=["+this.name+"], parent.name=["+this.parent.name+"]");
+			//this.app.log("  > in View.afterActivate name=["+this.name+"], parent.name=["+this.parent.name+"]");
 		},
 
 		beforeDeactivate: function(){
 			// summary:
 			//		view life cycle beforeDeactivate()
-			this.app.log("in app/View.beforeDeactivate name=["+this.name+"], parent.name=["+this.parent.name+"]");
+			//this.app.log("< in app/View.beforeDeactivate name=["+this.name+"], parent.name=["+this.parent.name+"]");
 		},
 
 		afterDeactivate: function(){
 			// summary:
 			//		view life cycle afterDeactivate()
-			this.app.log("  in View.afterDeactivate name=["+this.name+"], parent.name=["+this.parent.name+"]");
+			//this.app.log("  < in View.afterDeactivate name=["+this.name+"], parent.name=["+this.parent.name+"]");
 		},
 
 		destroy: function(){
 			// summary:
 			//		view life cycle destroy()
-			this.app.log("in app/View.destroy name=["+this.name+"], parent.name=["+this.parent.name+"]");
+			//this.app.log("in app/View.destroy name=["+this.name+"], parent.name=["+this.parent.name+"]");
 		}
 	});
 });
