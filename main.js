@@ -27,15 +27,6 @@ function(lang, declare, Deferred, when, has, config, on, ready, baseWindow, dom,
 			node.appendChild(this.domNode);
 		},
 
-		log: function(){
-			// summary:
-			//		log 
-			//
-			if(has("app-log-api")){
-				console.log(arguments);
-			}
-		},
-
 		createDataStore: function(params){
 			// summary:
 			//		Create data store instance
@@ -248,6 +239,19 @@ function(lang, declare, Deferred, when, has, config, on, ready, baseWindow, dom,
 
 			ready(function(){
 				var app = App(config, node || baseWindow.body());
+
+				if(has("app-log-api")){
+					app.log = function(){
+						try{
+							for(var i = 0; i < arguments.length; i++){
+								console.log(arguments[i]);
+							}
+						}catch(e){}
+					};
+				}else{
+					app.log = function(){}; // noop
+				}
+
 				app.setStatus(app.lifecycle.STARTING);
 				app.start();
 				// Create global namespace for application.

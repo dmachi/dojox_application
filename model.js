@@ -70,9 +70,7 @@ function(lang, Deferred, when, config, has){
 					if(createModelPromise.then){
 						when(createModelPromise, lang.hitch(this, function(newModel){
 							loadedModels[item] = newModel;
-							if(has("app-log-api")){
-								this.app.log("in model, for item=["+item+"] loadedModels =", loadedModels);
-							}
+							this.app.log("in model, for item=["+item+"] loadedModels =", loadedModels);
 							this.defCount--;
 							if(this.defCount == 0){
 								allModelsLoadedDeferred.resolve(loadedModels);
@@ -86,9 +84,7 @@ function(lang, Deferred, when, config, has){
 						return loadModelDeferred;
 					}else{
 						loadedModels[item] = createModelPromise;
-						if(has("app-log-api")){
-							this.app.log("in model else path, for item=["+item+"] loadedModels=",  loadedModels);
-						}
+						this.app.log("in model else path, for item=["+item+"] loadedModels=",  loadedModels);
 						this.defCount--;
 						if(this.defCount == 0){
 							allModelsLoadedDeferred.resolve(loadedModels);

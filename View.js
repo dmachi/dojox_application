@@ -194,9 +194,7 @@ function(declare, lang, Deferred, when, dattr, TemplatedMixin, WidgetsInTemplate
 						if(newModel){
 							this.loadedModels = newModel;
 						}
-						if(has("app-log-api")){
-							this.app.log("in view setupModel, this.loadedModels =",this.loadedModels);
-						}
+						this.app.log("in view setupModel, this.loadedModels =",this.loadedModels);
 						this._startup();
 					}),
 					function(){
@@ -204,9 +202,7 @@ function(declare, lang, Deferred, when, dattr, TemplatedMixin, WidgetsInTemplate
 					});
 				}else{ // model returned the actual model not a promise, so set loadedModels and call _startup
 					this.loadedModels = createPromise;
-					if(has("app-log-api")){
-						this.app.log("in view setupModel else, this.loadedModels =",this.loadedModels);
-					}
+					this.app.log("in view setupModel else, this.loadedModels =",this.loadedModels);
 					this._startup();
 				}
 			}else{ // loadedModels already created so call _startup
@@ -256,9 +252,7 @@ function(declare, lang, Deferred, when, dattr, TemplatedMixin, WidgetsInTemplate
 			// set the loadedModels here to be able to access the model on the parse.
 			if(this.loadedModels){
 				widgetInTemplate.loadedModels = this.loadedModels;
-				if(has("app-log-api")){
-					this.app.log("in view render, this.loadedModels =",this.loadedModels);
-				}
+				this.app.log("in view render, this.loadedModels =",this.loadedModels);
 			}
 			lang.mixin(widgetTemplate, widgetInTemplate);
 			widgetTemplate.templateString = templateString;
@@ -275,41 +269,31 @@ function(declare, lang, Deferred, when, dattr, TemplatedMixin, WidgetsInTemplate
 		beforeActivate: function(){
 			// summary:
 			//		view life cycle beforeActivate()
-			if(has("app-log-api")){
-				this.app.log("in app/View.beforeActivate name=["+this.name+"], parent.name=["+this.parent.name+"]");
-			}
+			this.app.log("in app/View.beforeActivate name=["+this.name+"], parent.name=["+this.parent.name+"]");
 		},
 
 		afterActivate: function(){
 			// summary:
 			//		view life cycle afterActivate()
-			if(has("app-log-api")){
-				this.app.log("  in View.afterActivate name=["+this.name+"], parent.name=["+this.parent.name+"]");
-			}
+			this.app.log("  in View.afterActivate name=["+this.name+"], parent.name=["+this.parent.name+"]");
 		},
 
 		beforeDeactivate: function(){
 			// summary:
 			//		view life cycle beforeDeactivate()
-			if(has("app-log-api")){
-				this.app.log("in app/View.beforeDeactivate name=["+this.name+"], parent.name=["+this.parent.name+"]");
-			}
+			this.app.log("in app/View.beforeDeactivate name=["+this.name+"], parent.name=["+this.parent.name+"]");
 		},
 
 		afterDeactivate: function(){
 			// summary:
 			//		view life cycle afterDeactivate()
-			if(has("app-log-api")){
-				this.app.log("  in View.afterDeactivate name=["+this.name+"], parent.name=["+this.parent.name+"]");
-			}
+			this.app.log("  in View.afterDeactivate name=["+this.name+"], parent.name=["+this.parent.name+"]");
 		},
 
 		destroy: function(){
 			// summary:
 			//		view life cycle destroy()
-			if(has("app-log-api")){
-				this.app.log("in app/View.destroy name=["+this.name+"], parent.name=["+this.parent.name+"]");
-			}
+			this.app.log("in app/View.destroy name=["+this.name+"], parent.name=["+this.parent.name+"]");
 		}
 	});
 });
