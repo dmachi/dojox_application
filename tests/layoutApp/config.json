@@ -54,7 +54,7 @@
 	   }
 	}, 
 
-	"template": "templates/navigation.html",
+	"template": "./templates/navigation.html",
 	"definition" : "none",
 
 	//the name of the scene to load when the app is initialized.
@@ -64,8 +64,8 @@
 	//scenes are groups of views and models loaded at once	
 	"views": {
 		"simple":{
-			"definition" : "views/simple.js",
-			"template": "templates/simple.html",
+			"definition" : "./views/simple.js",
+			"template": "./templates/simple.html",
 			"dependencies":["dojox/mobile/TextBox"]
 		},
 
@@ -79,12 +79,12 @@
              		}           
                 }
             },
-            "template": "templates/repeat.html",
+            "template": "./templates/repeat.html",
             "dependencies":["dojox/mobile/TextBox"]
 		},
 
 		"generate": {
-            "template": "templates/generate.html",
+            "template": "./templates/generate.html",
             "dependencies":["dojox/mobile/TextBox", "dojox/mobile/TextArea", "dojox/mvc/Generate"]
 		}
 	}	

@@ -87,7 +87,7 @@ function(declare, lang, Deferred, when, dattr, TemplatedMixin, WidgetsInTemplate
 				var path = this.id.split("_");
 				path.shift();
 				path = path.join("/");
-				path = "views/" + path;
+				path = "./views/" + path;
 			}
 
 			var requireSignal;
@@ -100,7 +100,11 @@ function(declare, lang, Deferred, when, dattr, TemplatedMixin, WidgetsInTemplate
 					requireSignal.remove();
 				});
 
-				require(["app/" + path], function(definition){
+				if(path.indexOf("./") == 0){
+					path = "app/"+path;
+				}
+
+				require([path], function(definition){
 					_definitionDef.resolve(definition);
 					requireSignal.remove();
 				});
@@ -122,7 +126,11 @@ function(declare, lang, Deferred, when, dattr, TemplatedMixin, WidgetsInTemplate
 				if(!this.dependencies){
 					this.dependencies = [];
 				}
-				var deps = this.template ? this.dependencies.concat(["dojo/text!app/" + this.template]) : this.dependencies.concat([]);
+				var tpl = this.template;
+				if(tpl.indexOf("./") == 0){
+					tpl = "app/"+tpl;
+				}
+				var deps = this.template ? this.dependencies.concat(["dojo/text!"+tpl]) : this.dependencies.concat([]);
 				var def = new Deferred();
 				if(deps.length > 0){
 					var requireSignal;
