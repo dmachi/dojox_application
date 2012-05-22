@@ -1,6 +1,8 @@
-define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Deferred", "dojo/when", "dojo/on", "dojo/ready", "dojo/_base/window", "dojo/dom-construct", "./model", "./View", "./controllers/Load", "./controllers/Transition", "./controllers/Layout", "dojo/_base/loader", "dojo/store/Memory"],
-function(lang, declare, Deferred, when, on, ready, baseWindow, dom, Model, View, LoadController, TransitionController, LayoutController){
+define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Deferred", "dojo/when", "dojo/has", "dojo/_base/config", "dojo/on", "dojo/ready", "dojo/_base/window", "dojo/dom-construct", "./model", "./View", "./controllers/Load", "./controllers/Transition", "./controllers/Layout", "dojo/_base/loader", "dojo/store/Memory"],
+function(lang, declare, Deferred, when, has, config, on, ready, baseWindow, dom, Model, View, LoadController, TransitionController, LayoutController){
 	dojo.experimental("dojox.app");
+
+	has.add("app-log-api", (config["app"] || {}).debugApp);
 
 	var Application = declare(null, {
 		constructor: function(params, node){
@@ -13,6 +15,7 @@ function(lang, declare, Deferred, when, on, ready, baseWindow, dom, Model, View,
 			this.children = {};
 			this.loadedModels = {};
 
+			
 			// Create a new domNode and append to body
 			// Need to bind startTransition event on application domNode,
 			// Because dojox.mobile.ViewController bind startTransition event on document.body
@@ -145,6 +148,7 @@ function(lang, declare, Deferred, when, on, ready, baseWindow, dom, Model, View,
 			//create application level view
 			if(this.template){
 				this.view = new View({
+					app: this,  // pass the app into the View so it can have easy access to app
 					name: this.name,
 					parent: this,
 					templateString: this.templateString,
@@ -235,6 +239,19 @@ function(lang, declare, Deferred, when, on, ready, baseWindow, dom, Model, View,
 
 			ready(function(){
 				var app = App(config, node || baseWindow.body());
+
+				if(has("app-log-api")){
+					app.log = function(){
+						try{
+							for(var i = 0; i < arguments.length; i++){
+								console.log(arguments[i]);
+							}
+						}catch(e){}
+					};
+				}else{
+					app.log = function(){}; // noop
+				}
+
 				app.setStatus(app.lifecycle.STARTING);
 				app.start();
 				// Create global namespace for application.
@@ -247,6 +264,7 @@ function(lang, declare, Deferred, when, on, ready, baseWindow, dom, Model, View,
 			});
 		});
 	}
+
 
 	return function(config, node){
 		if(!config){

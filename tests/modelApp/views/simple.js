@@ -6,7 +6,7 @@ function(dom, connect, registry, at){
 	var setRef = function (id, attr){
 		var widget = registry.byId(id);
 		widget.set("target", at("rel:", attr));
-		console.log("setRef done.");
+		//console.log("setRef done.");
 	};
 	return {
 		// simple view init
@@ -26,7 +26,7 @@ function(dom, connect, registry, at){
 
 			connectResult = connect.connect(dom.byId('reset1'), "click", function(){
 				currentModel.reset();
-				console.log("reset done. ");
+				//console.log("reset done. ");
 			});
 			_connectResults.push(connectResult);
 		},

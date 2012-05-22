@@ -85,12 +85,13 @@ function(lang, declare, on, Deferred, when, transit, Controller){
 			//		"transition" event parameter. It should be like this: {"viewId":viewId, "opts":opts}
 
 			if(this.proceeding){
-				console.log("push event", transitionEvt);
+				this.app.log("in app/controllers/proceedTransition push event", transitionEvt);
 				this.waitingQueue.push(transitionEvt);
 				return;
 			}
 			this.proceeding = true;
 
+			this.app.log("in app/controllers/proceedTransition calling trigger load", transitionEvt);
 			this.app.trigger("load", {
 				"viewId": transitionEvt.viewId,
 				"callback": lang.hitch(this, function(){
@@ -128,6 +129,8 @@ function(lang, declare, on, Deferred, when, transit, Controller){
 			// returns:
 			//		transit dojo.DeferredList object.
 
+			this.app.log("in app/controllers/Transition._doTransition transitionTo=["+transitionTo+"], parent.name=["+parent.name+"], opts=",opts);
+
 			if(!parent){
 				throw Error("view parent not found in transition.");
 			}
@@ -158,8 +161,11 @@ function(lang, declare, on, Deferred, when, transit, Controller){
 
 			if(!current){
 				// current view is null, set current view equals next view.
+				this.app.log("> in Transition._doTransition calling next.beforeActivate next name=["+next.name+"], parent.name=["+next.parent.name+"],  !current path,");
 				next.beforeActivate();
+				this.app.log("> in Transition._doTransition calling next.afterActivate next name=["+next.name+"], parent.name=["+next.parent.name+"],  !current path");
 				next.afterActivate();
+				this.app.log("  > in Transition._doTransition calling app.triggger select view next name=["+next.name+"], parent.name=["+next.parent.name+"], !current path");
 				this.app.trigger("select", {"parent":parent, "view":next});
 				return;
 			}
@@ -181,12 +187,16 @@ function(lang, declare, on, Deferred, when, transit, Controller){
 				// deactivate sub child of current view, then deactivate current view
 				var subChild = current.selectedChild;
 				while(subChild){
+				this.app.log("< in Transition._doTransition calling subChild.beforeDeactivate subChild name=["+subChild.name+"], parent.name=["+subChild.parent.name+"], next!==current path");
 					subChild.beforeDeactivate();
 					subChild = subChild.selectedChild;
 				}
+				this.app.log("< in Transition._doTransition calling current.beforeDeactivate current name=["+current.name+"], parent.name=["+current.parent.name+"], next!==current path");
 				current.beforeDeactivate();
+				this.app.log("> in Transition._doTransition calling next.beforeActivate next name=["+next.name+"], parent.name=["+next.parent.name+"], next!==current path");
 				next.beforeActivate();
 
+				this.app.log("> in Transition._doTransition calling app.triggger select view next name=["+next.name+"], parent.name=["+next.parent.name+"], next!==current path");
 				this.app.trigger("select", {"parent":parent, "view":next});
 				var result = transit(current.domNode, next.domNode, lang.mixin({}, opts, {
 					transition: parent.defaultTransition || "none"
@@ -195,10 +205,13 @@ function(lang, declare, on, Deferred, when, transit, Controller){
 					// deactivate sub child of current view, then deactivate current view
 					var subChild = current.selectedChild;
 					while(subChild){
+						this.app.log("  < in Transition._doTransition calling subChild.afterDeactivate subChild name=["+subChild.name+"], parent.name=["+subChild.parent.name+"], next!==current path");
 						subChild.afterDeactivate();
 						subChild = subChild.selectedChild;
 					}
+					this.app.log("  < in Transition._doTransition calling current.afterDeactivate current name=["+current.name+"], parent.name=["+current.parent.name+"], next!==current path");
 					current.afterDeactivate();
+					this.app.log("  > in Transition._doTransition calling next.afterActivate next name=["+next.name+"], parent.name=["+next.parent.name+"], next!==current path");
 					next.afterActivate();
 
 					if(subIds){
@@ -209,12 +222,17 @@ function(lang, declare, on, Deferred, when, transit, Controller){
 			}else{
 				// next view == current view, refresh current view
 				// deactivate next view
+				this.app.log("< in Transition._doTransition calling next.beforeDeactivate next name=["+next.name+"], parent.name=["+next.parent.name+"], next==current path");
 				next.beforeDeactivate();
+				this.app.log("  < in Transition._doTransition calling next.afterDeactivate next name=["+next.name+"], parent.name=["+next.parent.name+"], next==current path");
 				next.afterDeactivate();
 				// activate next view
+				this.app.log("> in Transition._doTransition calling next.beforeActivate next name=["+next.name+"], parent.name=["+next.parent.name+"], next==current path");
 				next.beforeActivate();
+				this.app.log("  > in Transition._doTransition calling next.afterActivate next name=["+next.name+"], parent.name=["+next.parent.name+"], next==current path");
 				next.afterActivate();
 				// layout current view
+				this.app.log("> in Transition._doTransition calling app.triggger select view next name=["+next.name+"], parent.name=["+next.parent.name+"], next==current path");
 				this.app.trigger("select", {"parent":parent, "view":next});
 			}
 
