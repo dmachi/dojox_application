@@ -39,7 +39,7 @@ define(["dojo/dom", "dojo/_base/connect", "dijit/registry", "dojox/mvc"], functi
 		},
 
 		beforeActivate: function(){
-			console.log("generate view beforeActivate()");
+			//console.log("generate view beforeActivate()");
 		},
 
 		destroy: function(){

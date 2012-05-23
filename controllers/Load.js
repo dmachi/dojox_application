@@ -71,6 +71,7 @@ function(lang, declare, on, Deferred, when, Controller, View){
 			}
 			//create and start child. return Deferred
 			var newView = new View({
+				"app": this.app,
 				"id": id,
 				"name": childId,
 				"parent": parent

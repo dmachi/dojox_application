@@ -25,23 +25,23 @@ function(dom, connect, registry, at){
 			var connectResult;
 
 			connectResult = connect.connect(dom.byId('shipto-3'), "click", function(){
-				console.log("shipTo called. ");
+				//console.log("shipTo called. ");
 				dom.byId("billtodiv-3").style.display = "none";
 				dom.byId("shiptodiv-3").style.display = "";
 			});
 			_connectResults.push(connectResult);
 
 			connectResult = connect.connect(dom.byId('billto-3'), "click", function(){
-				console.log("billTo called. ");
+				//console.log("billTo called. ");
 				dom.byId("billtodiv-3").style.display = "";
 				dom.byId("shiptodiv-3").style.display = "none";
 			});
 			_connectResults.push(connectResult);
 
 			connectResult = connect.connect(dom.byId('reset1-3'), "click", function(){
-				console.log("reset called. ");
+				//console.log("reset called. ");
 				setFromModel();
-				console.log("reset done. ");
+				//console.log("reset done. ");
 			});
 			_connectResults.push(connectResult);
 

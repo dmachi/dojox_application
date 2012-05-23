@@ -192,7 +192,7 @@ function(declare, lang, Deferred, when, dattr, TemplatedMixin, WidgetsInTemplate
 				var loadModelLoaderDeferred = new Deferred();
 				var createPromise;
 				try{
-					createPromise = Model(this.models, this.parent);
+					createPromise = Model(this.models, this.parent, this.app);
 				}catch(ex){
 					loadModelLoaderDeferred.reject("load model error.");
 					return loadModelLoaderDeferred.promise;
@@ -202,9 +202,6 @@ function(declare, lang, Deferred, when, dattr, TemplatedMixin, WidgetsInTemplate
 						if(newModel){
 							this.loadedModels = newModel;
 						}
-						if(has("mvc-bindings-log-api")){
-							console.log("in view setupModel, this.loadedModels =",this.loadedModels);
-						}
 						this._startup();
 					}),
 					function(){
@@ -212,9 +209,6 @@ function(declare, lang, Deferred, when, dattr, TemplatedMixin, WidgetsInTemplate
 					});
 				}else{ // model returned the actual model not a promise, so set loadedModels and call _startup
 					this.loadedModels = createPromise;
-					if(has("mvc-bindings-log-api")){
-						console.log("in view setupModel else, this.loadedModels =",this.loadedModels);
-					}
 					this._startup();
 				}
 			}else{ // loadedModels already created so call _startup
@@ -247,6 +241,7 @@ function(declare, lang, Deferred, when, dattr, TemplatedMixin, WidgetsInTemplate
 			}
 
 			// call view assistant's init() method to initialize view
+			this.app.log("  > in app/View calling init() name=[",this.name,"], parent.name=[",this.parent.name,"]");
 			this.init();
 			this._started = true;
 			if(this._startDef){
@@ -264,9 +259,6 @@ function(declare, lang, Deferred, when, dattr, TemplatedMixin, WidgetsInTemplate
 			// set the loadedModels here to be able to access the model on the parse.
 			if(this.loadedModels){
 				widgetInTemplate.loadedModels = this.loadedModels;
-				if(has("mvc-bindings-log-api")){
-					console.log("in view render, this.loadedModels =",this.loadedModels);
-				}
 			}
 			lang.mixin(widgetTemplate, widgetInTemplate);
 			widgetTemplate.templateString = templateString;
