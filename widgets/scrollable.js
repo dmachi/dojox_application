@@ -93,13 +93,6 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 						 // 2: use top/left style,
 						 // 0: use default value (2 in case of Android, otherwise 1)
 
-//>>includeStart("standaloneScrollable", kwArgs.standaloneScrollable);
-	if(!dojo){ // namespace objects are not passed
-		dojo = window.dojo;
-		dojox = window.dojox;
-	}
-//>>includeEnd("standaloneScrollable");
-
 	this.init = function(/*Object?*/params){
 		if(params){
 			for(var p in params){
@@ -1057,9 +1050,6 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 	}
 };
 
-//>>includeStart("standaloneScrollable", kwArgs.standaloneScrollable);
-	if(!dm){ dm = dojox.mobile; }
-//>>includeEnd("standaloneScrollable");
 dm.scrollable = scrollable; // for backward compatibility
 return scrollable;
 });
