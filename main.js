@@ -1,6 +1,8 @@
-define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Deferred", "dojo/when", "dojo/on", "dojo/ready", "dojo/_base/window", "dojo/dom-construct", "./model", "./View", "./controllers/Load", "./controllers/Transition", "./controllers/Layout", "dojo/_base/loader", "dojo/store/Memory"],
-function(lang, declare, Deferred, when, on, ready, baseWindow, dom, Model, View, LoadController, TransitionController, LayoutController){
+define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Deferred", "dojo/when", "dojo/has", "dojo/_base/config", "dojo/on", "dojo/ready", "dojo/_base/window", "dojo/dom-construct", "./model", "./View", "./controllers/Load", "./controllers/Transition", "./controllers/Layout", "dojo/_base/loader", "dojo/store/Memory"],
+function(lang, declare, Deferred, when, has, config, on, ready, baseWindow, dom, Model, View, LoadController, TransitionController, LayoutController){
 	dojo.experimental("dojox.app");
+
+	has.add("app-log-api", (config["app"] || {}).debugApp);
 
 	var Application = declare(null, {
 		constructor: function(params, node){
@@ -145,6 +147,7 @@ function(lang, declare, Deferred, when, on, ready, baseWindow, dom, Model, View,
 			//create application level view
 			if(this.template){
 				this.view = new View({
+					app: this,  // pass the app into the View so it can have easy access to app
 					name: this.name,
 					parent: this,
 					templateString: this.templateString,
@@ -235,6 +238,28 @@ function(lang, declare, Deferred, when, on, ready, baseWindow, dom, Model, View,
 
 			ready(function(){
 				var app = App(config, node || baseWindow.body());
+
+				if(has("app-log-api")){
+					app.log = function(){  
+						// summary:
+						//		If config is set to turn on app logging, then log msg to the console
+						//
+						// arguments: 
+						//		the message to be logged, 
+						//		all but the last argument will be treated as Strings and be concatenated together, 
+						//      the last argument can be an object it will be added as an argument to the console.log 						
+						var msg = "";
+						try{
+							for(var i = 0; i < arguments.length-1; i++){
+								msg = msg + arguments[i];
+							}
+							console.log(msg,arguments[arguments.length-1]);
+						}catch(e){}
+					};
+				}else{
+					app.log = function(){}; // noop
+				}
+
 				app.setStatus(app.lifecycle.STARTING);
 				app.start();
 				// Create global namespace for application.
