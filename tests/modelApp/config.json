@@ -69,12 +69,12 @@
 		"home": { 
 			"definition" : "none",
 			"dependencies":["dojox/mobile/ListItem","dojox/mobile/RoundRectList","dojox/mobile/RoundRectCategory","dojox/mobile/Heading"],
-			"template": "templates/main.html"
+			"template": "./templates/main.html"
 		},
 
 		"simple":{
-			"definition" : "views/simple.js",
-			"template": "templates/simple.html",
+			"definition" : "./views/simple.js",
+			"template": "./templates/simple.html",
 			"dependencies":["dojox/mobile/TextBox"]
 		},
 
@@ -88,12 +88,12 @@
              		}           
                 }
             },
-            "template": "templates/repeat.html",
+            "template": "./templates/repeat.html",
             "dependencies":["dojox/mobile/TextBox"]
 		},
 
 		"generate": {
-            "template": "templates/generate.html",
+            "template": "./templates/generate.html",
             "dependencies":["dojox/mobile/TextBox", "dojox/mobile/TextArea", "dojox/mvc/Generate"]
 		}
 	}	

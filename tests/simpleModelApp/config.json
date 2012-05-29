@@ -82,7 +82,7 @@
 		"home": { 
 			"definition" : "none",
 			"dependencies":["dojox/mobile/ListItem","dojox/mobile/RoundRectList","dojox/mobile/RoundRectCategory","dojox/mobile/Heading"],
-			"template": "templates/main.html"
+			"template": "./templates/main.html"
 		},
 
 		"simple":{
@@ -95,8 +95,8 @@
 		  		 	}	       
 	   			}
             },
-			"definition" : "views/simple.js",
-			"template": "templates/simple.html",
+			"definition" : "./views/simple.js",
+			"template": "./templates/simple.html",
             "dependencies":["dojox/mobile/TextBox","dojox/mvc/Group","dojox/mvc/Repeat","dojox/mvc/Output"]
 		},
 
@@ -117,8 +117,8 @@
              		}           
                 }
             },
-			"definition" : "views/simple2.js",
-			"template": "templates/simple2.html",
+			"definition" : "./views/simple2.js",
+			"template": "./templates/simple2.html",
             "dependencies":["dojox/mobile/TextBox","dojox/mvc/Group","dojox/mvc/Repeat","dojox/mvc/Output"]
 		},
 
@@ -137,8 +137,8 @@
 		  		 	}	       
 	   			}
             },
-			"definition" : "views/simple3.js",
-			"template": "templates/simple3.html",
+			"definition" : "./views/simple3.js",
+			"template": "./templates/simple3.html",
 			"dependencies":["dojox/mobile/TextBox"]
 		},
 
@@ -174,17 +174,17 @@
              		}           
                 }
             },
-            "template": "templates/repeat2.html",
+            "template": "./templates/repeat2.html",
             "dependencies":["dojox/mobile/TextBox","dojox/mvc/Group","dojox/mvc/Repeat","dojox/mvc/Output"]
 		},
 
 		"repeat3": {
-            "template": "templates/repeat3.html",
+            "template": "./templates/repeat3.html",
             "dependencies":["dojox/mobile/TextBox","dojox/mvc/Group","dojox/mvc/Repeat","dojox/mvc/Output"]
 		},
 
 		"generate": {
-            "template": "templates/generate.html",
+            "template": "./templates/generate.html",
             "dependencies":["dojox/mobile/TextBox", "dojox/mobile/TextArea", "dojox/mvc/Generate"]
 		}
 	}	
