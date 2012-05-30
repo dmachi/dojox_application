@@ -107,6 +107,25 @@ function(lang, declare, on, Deferred, when, transit, Controller){
 			});
 		},
 
+		_getDefaultTransition: function(parent){
+			// summary:
+			//		Get view's default transition type from parent view.
+			//		Retrieve the parent chain and get the latest ancestor's default transition type.
+			//
+			// parent: Object
+			//		view's parent
+			//
+			// returns:
+			//		transition type like "slide", "fade", "flip" or undefined.
+			var parentView = parent;
+			var defaultTransition = parentView.defaultTransition;
+			while(!defaultTransition && parentView.parent){
+				parentView = parentView.parent;
+				defaultTransition = parentView.defaultTransition;
+			}
+			return defaultTransition;
+		},
+
 		_doTransition: function(transitionTo, opts, parent){
 			// summary:
 			//		Transitions from the currently visible scene to the defined scene.
@@ -199,7 +218,7 @@ function(lang, declare, on, Deferred, when, transit, Controller){
 				this.app.log("> in Transition._doTransition calling app.triggger select view next name=[",next.name,"], parent.name=[",next.parent.name,"], next!==current path");
 				this.app.trigger("select", {"parent":parent, "view":next});
 				var result = transit(current.domNode, next.domNode, lang.mixin({}, opts, {
-					transition: parent.defaultTransition || "none"
+					transition: this._getDefaultTransition(parent) || "none"
 				}));
 				result.then(lang.hitch(this, function(){
 					// deactivate sub child of current view, then deactivate current view
