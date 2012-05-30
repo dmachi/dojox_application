@@ -14,6 +14,7 @@ function(lang, Deferred, when, config){
 		//		available to the view.
 		// returns: loadedModels 
 		//		 loadedModels is an object holding all of the available loaded models for this view.
+
 		//var config = params.config;
 		//var parent = params.parent;
 
