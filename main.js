@@ -186,15 +186,10 @@ function(lang, declare, Deferred, when, has, config, on, ready, baseWindow, dom,
 						var selectId = this.defaultView.split(",");
 						selectId = selectId.shift();
 						this.selectedChild = this.children[this.id + '_' + selectId];
-						if(this._startView !== this.defaultView){
-							this.trigger("transition", {
-								"viewId": this._startView
-							});
-						}else{
-							this.trigger("layout", {
-								"view": this
-							});
-						}
+						// transition to startView. If startView==defaultView, that means initial the default view.
+						this.trigger("transition", {
+							"viewId": this._startView
+						});
 						this.setStatus(this.lifecycle.STARTED);
 					})
 				});
