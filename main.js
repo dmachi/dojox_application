@@ -21,7 +21,7 @@ function(lang, declare, Deferred, when, has, config, on, ready, baseWindow, dom,
 			// Make application's root domNode id unique because this id can be visited by window namespace on Chrome 18.
 			this.domNode = dom.create("div", {
 				id: this.id+"_Root",
-				style: "width:100%; height:100%"
+				style: "width:100%; height:100%; overflow-y:hidden; overflow-x:hidden;"
 			});
 			node.appendChild(this.domNode);
 		},
