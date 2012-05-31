@@ -153,19 +153,17 @@ function(lang, declare, on, Deferred, when, transit, Controller){
 			if(!parent){
 				throw Error("view parent not found in transition.");
 			}
-			var toId, subIds, next, current = parent.selectedChild;
+			var parts, toId, subIds, next, current = parent.selectedChild;
 			if(transitionTo){
-				var parts = transitionTo.split(",");
-				toId = parts.shift();
-				subIds = parts.join(',');
+				parts = transitionTo.split(",");
 			}else{
-				toId = parent.defaultView;
-				if(parent.views[parent.defaultView] && parent.views[parent.defaultView]["defaultView"]){
-					subIds = parent.views[parent.defaultView]["defaultView"];
-				}
+				// If parent.defaultView is like "main,main", we also need to split it and set the value to toId and subIds.
+				// Or cannot get the next view by "parent.children[parent.id + '_' + toId]"
+				parts = parent.defaultView.split(",");
 			}
+			toId = parts.shift();
+			subIds = parts.join(',');
 
-			// next = this.loadChild(toId,subIds);
 			// next is loaded and ready for transition
 			next = parent.children[parent.id + '_' + toId];
 			if(!next){
