@@ -1,5 +1,5 @@
-define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Deferred", "dojo/when", "dojo/has", "dojo/_base/config", "dojo/on", "dojo/ready", "dojo/_base/window", "dojo/dom-construct", "./model", "./View", "./controllers/Load", "./controllers/Transition", "./controllers/Layout", "dojo/_base/loader", "dojo/store/Memory"],
-function(lang, declare, Deferred, when, has, config, on, ready, baseWindow, dom, Model, View, LoadController, TransitionController, LayoutController){
+define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Deferred", "dojo/when", "require", "dojo/has", "dojo/_base/config", "dojo/on", "dojo/ready", "dojo/_base/window", "dojo/dom-construct", "./model", "./View", "./controllers/Load", "./controllers/Transition", "./controllers/Layout", "dojo/_base/loader", "dojo/store/Memory"],
+function(lang, declare, Deferred, when, require, has, config, on, ready, baseWindow, dom, Model, View, LoadController, TransitionController, LayoutController){
 	dojo.experimental("dojox.app");
 
 	has.add("app-log-api", (config["app"] || {}).debugApp);
@@ -21,7 +21,7 @@ function(lang, declare, Deferred, when, has, config, on, ready, baseWindow, dom,
 			// Make application's root domNode id unique because this id can be visited by window namespace on Chrome 18.
 			this.domNode = dom.create("div", {
 				id: this.id+"_Root",
-				style: "width:100%; height:100%"
+				style: "width:100%; height:100%; overflow-y:hidden; overflow-x:hidden;"
 			});
 			node.appendChild(this.domNode);
 		},
@@ -75,7 +75,7 @@ function(lang, declare, Deferred, when, has, config, on, ready, baseWindow, dom,
 				var requireSignal;
 				try{
 					requireSignal = require.on("error", function(error){
-						if(def.fired != -1){
+						if(def.isResolved() || def.isRejected()){
 							return;
 						}
 						def.reject("load controllers error.");
@@ -186,15 +186,10 @@ function(lang, declare, Deferred, when, has, config, on, ready, baseWindow, dom,
 						var selectId = this.defaultView.split(",");
 						selectId = selectId.shift();
 						this.selectedChild = this.children[this.id + '_' + selectId];
-						if(this._startView !== this.defaultView){
-							this.trigger("transition", {
-								"viewId": this._startView
-							});
-						}else{
-							this.trigger("layout", {
-								"view": this
-							});
-						}
+						// transition to startView. If startView==defaultView, that means initial the default view.
+						this.trigger("transition", {
+							"viewId": this._startView
+						});
 						this.setStatus(this.lifecycle.STARTED);
 					})
 				});

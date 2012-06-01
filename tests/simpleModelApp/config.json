@@ -159,7 +159,7 @@
              		}           
                 }
             },
-            "template": "templates/repeat.html",
+            "template": "./templates/repeat.html",
             "dependencies":["dojox/mobile/TextBox","dojox/mvc/Group","dojox/mvc/Repeat","dojox/mvc/Output"]
 		},
 
