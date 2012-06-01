@@ -1,5 +1,5 @@
-define(["dojo/_base/declare", "dojo/_base/lang", "dojo/Deferred", "dojo/when", "dojo/dom-attr", "dijit/_TemplatedMixin", "dijit/_WidgetsInTemplateMixin", "./model", "dojo/_base/config", "dojo/has"],
-function(declare, lang, Deferred, when, dattr, TemplatedMixin, WidgetsInTemplateMixin, Model, config, has){
+define(["dojo/_base/declare", "dojo/_base/lang", "dojo/Deferred", "dojo/when", "require", "dojo/dom-attr", "dijit/_TemplatedMixin", "dijit/_WidgetsInTemplateMixin", "./model"],
+function(declare, lang, Deferred, when, require, dattr, TemplatedMixin, WidgetsInTemplateMixin, Model){
 	// module:
 	//		dojox/app/View
 	// summary:
@@ -15,18 +15,18 @@ function(declare, lang, Deferred, when, dattr, TemplatedMixin, WidgetsInTemplate
 			//		|
 			// 		|	// load view definition from views/simple.js by default
 			//		|	"simple":{
-			//		|		"template": "templates/simple.html",
+			//		|		"template": "./templates/simple.html",
 			//		|		"dependencies":["dojox/mobile/TextBox"]
 			//		|	}
 			//		|
 			//		|	"home":{
-			//		|		"template": "templates/home.html",
+			//		|		"template": "./templates/home.html",
 			//		|		"definition": "none",	// identify no view definition
 			//		|		"dependencies":["dojox/mobile/TextBox"]
 			//		|	}
 			//		|	"main":{
-			//		|		"template": "templates/main.html",
-			//		|		"definition": "views/main.js", // identify load view definition from views/main.js
+			//		|		"template": "./templates/main.html",
+			//		|		"definition": "./views/main.js", // identify load view definition from views/main.js
 			//		|		"dependencies":["dojox/mobile/TextBox"]
 			//		|	}
 			//
@@ -84,7 +84,7 @@ function(declare, lang, Deferred, when, dattr, TemplatedMixin, WidgetsInTemplate
 					path = this.definition.substring(0, index);
 				}
 			}else{
-				var path = this.id.split("_");
+				path = this.id.split("_");
 				path.shift();
 				path = path.join("/");
 				path = "./views/" + path;
@@ -92,12 +92,19 @@ function(declare, lang, Deferred, when, dattr, TemplatedMixin, WidgetsInTemplate
 
 			var requireSignal;
 			try{
+				var loadFile = path;
+				var index = loadFile.indexOf("./");
+				if(index >= 0){
+					loadFile = path.substring(index+2);
+				}
 				requireSignal = require.on("error", function(error){
-					if ((_definitionDef.fired != -1) || (error.info[0].indexOf(path) < 0)) {
+					if (_definitionDef.isResolved() || _definitionDef.isRejected()) {
 						return;
 					}
-					_definitionDef.resolve(false);
-					requireSignal.remove();
+					if(error.info[0] && (error.info[0].indexOf(loadFile)>= 0)){
+						_definitionDef.resolve(false);
+						requireSignal.remove();
+					}
 				});
 
 				if(path.indexOf("./") == 0){
@@ -136,11 +143,13 @@ function(declare, lang, Deferred, when, dattr, TemplatedMixin, WidgetsInTemplate
 					var requireSignal;
 					try{
 						requireSignal = require.on("error", lang.hitch(this, function(error){
-							if((def.fired != -1) || (error.info[0].indexOf(this.template) < 0)){
+							if(def.isResolved() || def.isRejected()){
 								return;
 							}
-							def.resolve(false);
-							requireSignal.remove();
+							if(error.info[0] && error.info[0].indexOf(this.template)>=0 ){
+								def.resolve(false);
+								requireSignal.remove();
+							}
 						}));
 						require(deps, function(){
 							def.resolve.call(def, arguments);

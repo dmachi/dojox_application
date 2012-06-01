@@ -1,5 +1,5 @@
-define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Deferred", "dojo/when", "dojo/has", "dojo/_base/config", "dojo/on", "dojo/ready", "dojo/_base/window", "dojo/dom-construct", "./model", "./View", "./controllers/Load", "./controllers/Transition", "./controllers/Layout", "dojo/_base/loader", "dojo/store/Memory"],
-function(lang, declare, Deferred, when, has, config, on, ready, baseWindow, dom, Model, View, LoadController, TransitionController, LayoutController){
+define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Deferred", "dojo/when", "require", "dojo/has", "dojo/_base/config", "dojo/on", "dojo/ready", "dojo/_base/window", "dojo/dom-construct", "./model", "./View", "./controllers/Load", "./controllers/Transition", "./controllers/Layout", "dojo/_base/loader", "dojo/store/Memory"],
+function(lang, declare, Deferred, when, require, has, config, on, ready, baseWindow, dom, Model, View, LoadController, TransitionController, LayoutController){
 	dojo.experimental("dojox.app");
 
 	has.add("app-log-api", (config["app"] || {}).debugApp);
@@ -75,7 +75,7 @@ function(lang, declare, Deferred, when, has, config, on, ready, baseWindow, dom,
 				var requireSignal;
 				try{
 					requireSignal = require.on("error", function(error){
-						if(def.fired != -1){
+						if(def.isResolved() || def.isRejected()){
 							return;
 						}
 						def.reject("load controllers error.");
