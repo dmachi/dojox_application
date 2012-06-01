@@ -49,7 +49,7 @@
 		"home": { 
 			"definition" : "none",
 			"dependencies":["dojox/mobile/RoundRectList","dojox/mobile/ListItem", "dojox/mobile/EdgeToEdgeCategory"],
-			"template": "templates/simple/home.html"
+			"template": "./templates/simple/home.html"
 		},
 
 		"main":{

@@ -107,6 +107,25 @@ function(lang, declare, on, Deferred, when, transit, Controller){
 			});
 		},
 
+		_getDefaultTransition: function(parent){
+			// summary:
+			//		Get view's default transition type from parent view.
+			//		Retrieve the parent chain and get the latest ancestor's default transition type.
+			//
+			// parent: Object
+			//		view's parent
+			//
+			// returns:
+			//		transition type like "slide", "fade", "flip" or undefined.
+			var parentView = parent;
+			var defaultTransition = parentView.defaultTransition;
+			while(!defaultTransition && parentView.parent){
+				parentView = parentView.parent;
+				defaultTransition = parentView.defaultTransition;
+			}
+			return defaultTransition;
+		},
+
 		_doTransition: function(transitionTo, opts, parent){
 			// summary:
 			//		Transitions from the currently visible scene to the defined scene.
@@ -134,19 +153,17 @@ function(lang, declare, on, Deferred, when, transit, Controller){
 			if(!parent){
 				throw Error("view parent not found in transition.");
 			}
-			var toId, subIds, next, current = parent.selectedChild;
+			var parts, toId, subIds, next, current = parent.selectedChild;
 			if(transitionTo){
-				var parts = transitionTo.split(",");
-				toId = parts.shift();
-				subIds = parts.join(',');
+				parts = transitionTo.split(",");
 			}else{
-				toId = parent.defaultView;
-				if(parent.views[parent.defaultView] && parent.views[parent.defaultView]["defaultView"]){
-					subIds = parent.views[parent.defaultView]["defaultView"];
-				}
+				// If parent.defaultView is like "main,main", we also need to split it and set the value to toId and subIds.
+				// Or cannot get the next view by "parent.children[parent.id + '_' + toId]"
+				parts = parent.defaultView.split(",");
 			}
+			toId = parts.shift();
+			subIds = parts.join(',');
 
-			// next = this.loadChild(toId,subIds);
 			// next is loaded and ready for transition
 			next = parent.children[parent.id + '_' + toId];
 			if(!next){
@@ -199,7 +216,7 @@ function(lang, declare, on, Deferred, when, transit, Controller){
 				this.app.log("> in Transition._doTransition calling app.triggger select view next name=[",next.name,"], parent.name=[",next.parent.name,"], next!==current path");
 				this.app.trigger("select", {"parent":parent, "view":next});
 				var result = transit(current.domNode, next.domNode, lang.mixin({}, opts, {
-					transition: parent.defaultTransition || "none"
+					transition: this._getDefaultTransition(parent) || "none"
 				}));
 				result.then(lang.hitch(this, function(){
 					// deactivate sub child of current view, then deactivate current view
