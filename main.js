@@ -1,6 +1,9 @@
-define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Deferred", "dojo/when", "require", "dojo/has", "dojo/_base/config", "dojo/on", "dojo/ready", "dojo/_base/window", "dojo/dom-construct", "./model", "./View", "./controllers/Load", "./controllers/Transition", "./controllers/Layout", "dojo/_base/loader", "dojo/store/Memory"],
-function(lang, declare, Deferred, when, require, has, config, on, ready, baseWindow, dom, Model, View, LoadController, TransitionController, LayoutController){
-	dojo.experimental("dojox.app");
+define(["dojo/_base/kernel",  "require", "dojo/_base/lang", "dojo/_base/declare", "dojo/Deferred", "dojo/when", "require", "dojo/has", "dojo/_base/config",
+	"dojo/on", "dojo/ready", "dojo/_base/window", "dojo/dom-construct", "./model", "./View", "./controllers/Load", "./controllers/Transition",
+	"./controllers/Layout"],
+function(kernel, require, lang, declare, Deferred, when, require, has, config, on, ready, baseWindow, dom, Model, View,
+		 LoadController, TransitionController, LayoutController){
+	kernel.experimental("dojox.app");
 
 	has.add("app-log-api", (config["app"] || {}).debugApp);
 
@@ -198,14 +201,23 @@ function(lang, declare, Deferred, when, require, has, config, on, ready, baseWin
 	});
 
 	function generateApp(config, node, appSchema, validate){
-		// Register application module path
-		var path = window.location.pathname;
-		if(path.charAt(path.length) != "/"){
-			path = path.split("/");
-			path.pop();
-			path = path.join("/");
+		if(!config.loaderConfig){
+			config.loaderConfig = {};
 		}
-		dojo.registerModulePath("app", path);
+		if(!config.loaderConfig.paths){
+			config.loaderConfig.paths = {};
+		}
+		if(!config.loaderConfig.paths["app"]){
+			// Register application module path
+			var path = window.location.pathname;
+			if(path.charAt(path.length) != "/"){
+				path = path.split("/");
+				path.pop();
+				path = path.join("/");
+			}
+			config.loaderConfig.paths["app"] = path;
+		}
+		require(config.loaderConfig);
 
 		if(!config.modules){
 			config.modules = [];
