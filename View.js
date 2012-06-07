@@ -79,10 +79,7 @@ function(declare, lang, Deferred, when, require, dattr, TemplatedMixin, WidgetsI
 				_definitionDef.resolve(true);
 				return _definitionDef;
 			}else if(this.definition){
-				var index = this.definition.indexOf('.js');
-				if(index != -1){
-					path = this.definition.substring(0, index);
-				}
+				path = this.definition.replace(/(\.js)$/, "");
 			}else{
 				path = this.id.split("_");
 				path.shift();
