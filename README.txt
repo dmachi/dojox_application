@@ -160,17 +160,18 @@ Property descriptions
 
 	- views -  The views property is a nested set of objects defining the views available to the application. Details of views classes is discussed below.
 
-    - stores -  The dojo/store implementations that will be used by the application
+	- stores -  The dojo/store implementations that will be used by the application
 
-    - models -  The models (potentially dojox/mvc models) connecting to the stores and exposing data to the application.
+	- models -  The models (potentially dojox/mvc models) connecting to the stores and exposing data to the application.
 
-    - id - The identifier of the application, a global variable with the id name is created by the application.
+	- id - The identifier of the application, a global variable with the id name is created by the application.
 
 Some additional properties, such as name and description are reserved for future use, but their exact use is still under development.
 
 The Application module:
-	The Application class itself doesn't currently exist as an exported class.
-	This module exports a generation function, which when provided a configuration file will declare & instantiate the application class that will actually be used on a page. Finally it then starts it up at a specific node:
+
+The Application class itself doesn't currently exist as an exported class.
+This module exports a generation function, which when provided a configuration file will declare & instantiate the application class that will actually be used on a page. Finally it then starts it up at a specific node:
 
 ```javascript
 	require(["dojox/json/ref", "dojox/app/main", "dojo/text!app/config.json"],function(json, Application, config){
@@ -179,9 +180,10 @@ The Application module:
 ```
 
 The View module:
-	The View module provides a View class to construct View instances, a template rendering engine to render view template and view lifecycle APIs. Each View can have one parent view and several children views. It provides a templated container to host the domNodes for the children views. Its purpose is to allow the layout of the view to be provided through an html template and to have a set of children views which the view transitions between. For example, to display a set of tabs, you would use a View with a child view for each tab. The view's template would define where within the view the children views are displayed and where any tab buttons and such are displayed.
-    In this case the  "template", for the base View is pretty simple. It is a simple HTML content. However, nodes within the template can be tagged with region="top" (bottom, left, right) to define where that node and its children should be displayed.
-	For example:
+
+The View module provides a View class to construct View instances, a template rendering engine to render view template and view lifecycle APIs. Each View can have one parent view and several children views. It provides a templated container to host the domNodes for the children views. Its purpose is to allow the layout of the view to be provided through an html template and to have a set of children views which the view transitions between. For example, to display a set of tabs, you would use a View with a child view for each tab. The view's template would define where within the view the children views are displayed and where any tab buttons and such are displayed.
+In this case the  "template", for the base View is pretty simple. It is a simple HTML content. However, nodes within the template can be tagged with region="top" (bottom, left, right) to define where that node and its children should be displayed.
+For example:
 
 ```html
 <div  style="background:#c5ccd3;" class="view mblView"> 
@@ -197,23 +199,24 @@ The View module:
 </div>
 ```
 
-	This template for the tabs view defines two areas with region top, a header and the tab buttons. The will be placed at the top of this main view when rendered.
+This template for the tabs view defines two areas with region top, a header and the tab buttons. The will be placed at the top of this main view when rendered.
 
-	Normally, when using a BorderContainer, one would also have a region="center" section. In the case of a View however, the "center" region will be applied to the currently active view (the current tab for example).
+Normally, when using a BorderContainer, one would also have a region="center" section. In the case of a View however, the "center" region will be applied to the currently active view (the current tab for example).
 
-	The application can also provide view definition modules to implement the View lifecyle APIs (like init(), destory(),...) for each view. The Transition controller controls the transition from one child view to another. This includes propagating transition events on to children if the active child is itself another view.
+The application can also provide view definition modules to implement the View lifecyle APIs (like init(), destory(),...) for each view. The Transition controller controls the transition from one child view to another. This includes propagating transition events on to children if the active child is itself another view.
 
 The Controller module:
-	The Controller module provides a base Class to control the application by binding events on application's root domNode. Several controllers required by the framework are implemented in dojox/app/controllers package:
+
+The Controller module provides a base Class to control the application by binding events on application's root domNode. Several controllers required by the framework are implemented in dojox/app/controllers package:
 	
-	   * Load controller: load view templates and view definitions
-	   * Transition controller: respond to "startTransition" event and do transition between views
-	   * Layout controller: perform views layout
-	   * History controller: maintain application's history. This is based on HTML5 history APIs and will not work on platforms that do not support it like IE, Android 3 & 4, iOS4, etc.
-	   * HistoryHash controller: maintain application's history. This is based on URL hash and has limitation if refresh the browser and back to an URL which out of current application's history stack.
+   * Load controller: load view templates and view definitions
+   * Transition controller: respond to "startTransition" event and do transition between views
+   * Layout controller: perform views layout
+   * History controller: maintain application's history. This is based on HTML5 history APIs and will not work on platforms that do not support it like IE, Android 3 & 4, iOS4, etc.
+   * HistoryHash controller: maintain application's history. This is based on URL hash and has limitation if refresh the browser and back to an URL which out of current application's history stack.
 	
-	A developer using the dojox/app framwork can define additional custom controller by extending the base class (dojox/app/Controller) and specifying them in the application configuration file. The events binding to application's root domNode is done by default.
-	A developer can use Controller's bind() method to bind event to document, window or dojo/Evented object if needed.
+A developer using the dojox/app framwork can define additional custom controller by extending the base class (dojox/app/Controller) and specifying them in the application configuration file. The events binding to application's root domNode is done by default.
+A developer can use Controller's bind() method to bind event to document, window or dojo/Evented object if needed.
 	
 ```javascript
 define(["dojo/_base/lang", "dojo/_base/declare"], function(lang, declare){
@@ -258,10 +261,10 @@ TODO:
 dojox/app is still an experimental framework with several key pieces still under design and development before a final release. This final release is expected to occur prior to the Dojo 2.0 release. The following items are piece that are under development and testing and we see as requirements prior to the final release:
 
 - Model/Store support. We have a couple of preliminary implementations of model/store support, including one for dojox/mvc.
-  However, additional work and testing are required to come to a simple and agreed up on API for these components.  While MVC systems such as dojox/mvc should be supported with first class capabilities, they should not be required. An application developer can 'control' the html of any one view by simply extending the view class and using javascript if they so desired.
+However, additional work and testing are required to come to a simple and agreed up on API for these components.  While MVC systems such as dojox/mvc should be supported with first class capabilities, they should not be required. An application developer can 'control' the html of any one view by simply extending the view class and using javascript if they so desired.
 
 - Desktop/Mobile Branching -  Dojox/app is not to be specific to any one particular web platform.
-  Using css media selectors and definitions within the config, there will be support for choosing which set of views and parameters to use based on the users browser.
+Using css media selectors and definitions within the config, there will be support for choosing which set of views and parameters to use based on the users browser.
 
 - Intelligent build support -  For performance, especially on the mobile side, an appropriate build of the application is required.
-  Rather than adding a build profile for the app, there will be a wrapper utility that runs the build from the config.json. This will allow us to intelligently build the base layers and dynamically loaded layers which should be defined by dependencies and default views as well as other information.
+Rather than adding a build profile for the app, there will be a wrapper utility that runs the build from the config.json. This will allow us to intelligently build the base layers and dynamically loaded layers which should be defined by dependencies and default views as well as other information.
