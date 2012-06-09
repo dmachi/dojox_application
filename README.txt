@@ -71,7 +71,7 @@ Example Config:
 	/* Application level view definition. Application will have a root view even if it has no template.
 	  "none" -- no definition for this view,
 	  "./views/myView.js" -- load definition from "./views/myView.js",
-	  no definition (by default) -- load definition from "./views/exmaple.js" */
+	  no definition (by default) -- load definition from "./views/example.js" */
 	"definition": "none",
 
 	/* the view to start on by default */
