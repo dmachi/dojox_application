@@ -167,6 +167,28 @@ function(kernel, require, lang, declare, Deferred, when, has, config, on, ready,
 			}
 		},
 
+		_getParameters: function(hash){
+			// summary:
+			//		get the parameters from the hash
+			//
+			// hash: String
+			//		the url hash
+			//
+			// returns:
+			//		the parameters object
+			//
+			var parameters = {};
+			if(hash && hash.length){
+				for(var parts= hash.split("&"), x= 0; x<parts.length; x++){
+					var tp = parts[x].split("="), name=tp[0], value=encodeURIComponent(tp[1]||""); 
+					if(name && value) {
+						parameters[name] = value;
+					}
+				}
+			}
+			return parameters; // Object
+		},
+
 		setupControllers: function(){
 			// create application controller instance
 			new LoadController(this);
@@ -175,7 +197,8 @@ function(kernel, require, lang, declare, Deferred, when, has, config, on, ready,
 
 			// move set _startView operation from history module to application
 			var hash = window.location.hash;
-			this._startView = ((hash && hash.charAt(0) == "#") ? hash.substr(1) : hash) || this.defaultView;
+			this._startView = (((hash && hash.charAt(0) == "#") ? hash.substr(1) : hash) || this.defaultView).split('&')[0];
+			this._startParameters = this._getParameters(hash) || {};
 		},
 
 		startup: function(){
@@ -183,15 +206,18 @@ function(kernel, require, lang, declare, Deferred, when, has, config, on, ready,
 			var controllers = this.createControllers(this.params.controllers);
 			when(controllers, lang.hitch(this, function(result){
 				// emit load event and let controller to load view.
+				
 				this.trigger("load", {
 					"viewId": this.defaultView,
+					"parameters": this._startParameters,
 					"callback": lang.hitch(this, function(){
 						var selectId = this.defaultView.split(",");
 						selectId = selectId.shift();
 						this.selectedChild = this.children[this.id + '_' + selectId];
 						// transition to startView. If startView==defaultView, that means initial the default view.
 						this.trigger("transition", {
-							"viewId": this._startView
+							"viewId": this._startView,
+							"parameters": this._startParameters
 						});
 						this.setStatus(this.lifecycle.STARTED);
 					})

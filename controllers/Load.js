@@ -42,8 +42,9 @@ function(lang, declare, on, Deferred, when, Controller, View){
 			var parts = viewId.split(',');
 			var childId = parts.shift();
 			var subIds = parts.join(",");
-
-			var def = this.loadChild(parent, childId, subIds);
+			var parameters = event.parameters || "";
+			
+			var def = this.loadChild(parent, childId, subIds, parameters);
 			// call Load event callback
 			if(event.callback){
 				when(def, event.callback);
@@ -51,7 +52,7 @@ function(lang, declare, on, Deferred, when, Controller, View){
 			return def;
 		},
 
-		createChild: function(parent, childId, subIds){
+		createChild: function(parent, childId, subIds, parameters){
 			// summary:
 			//		Create dojox.app.view instance if it is not loaded.
 			//
@@ -73,6 +74,7 @@ function(lang, declare, on, Deferred, when, Controller, View){
 			var newView = new View({
 				"app": this.app,
 				"id": id,
+				"parameters": parameters,
 				"name": childId,
 				"parent": parent
 			});
@@ -80,7 +82,7 @@ function(lang, declare, on, Deferred, when, Controller, View){
 			return newView.start();
 		},
 
-		loadChild: function(parent, childId, subIds){
+		loadChild: function(parent, childId, subIds, parameters){
 			// summary:
 			//		Load child and sub children views recursively.
 			//
@@ -106,7 +108,7 @@ function(lang, declare, on, Deferred, when, Controller, View){
 			var loadChildDeferred = new Deferred();
 			var createPromise;
 			try{
-				createPromise = this.createChild(parent, childId, subIds);
+				createPromise = this.createChild(parent, childId, subIds, parameters);
 			}catch(ex){
 				loadChildDeferred.reject("load child '"+childId+"' error.");
 				return loadChildDeferred.promise;
@@ -121,7 +123,7 @@ function(lang, declare, on, Deferred, when, Controller, View){
 				childId = parts.shift();
 				subIds = parts.join(',');
 				if(childId){
-					var subLoadDeferred = this.loadChild(child, childId, subIds);
+					var subLoadDeferred = this.loadChild(child, childId, subIds, parameters);
 					when(subLoadDeferred, function(){
 						loadChildDeferred.resolve();
 					},
