@@ -39,6 +39,7 @@ function(dom, connect, registry, at, getStateful, Output){
 			});
 			_connectResults.push(connectResult);
 		},
+
 		// repeate view destroy
 		destroy: function(){
 			var connectResult = _connectResults.pop();

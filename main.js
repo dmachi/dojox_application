@@ -198,7 +198,7 @@ function(kernel, require, lang, declare, Deferred, when, has, config, on, ready,
 			// move set _startView operation from history module to application
 			var hash = window.location.hash;
 			this._startView = (((hash && hash.charAt(0) == "#") ? hash.substr(1) : hash) || this.defaultView).split('&')[0];
-			this._startParameters = this._getParameters(hash) || {};
+			this._startParameters = this._getParameters(hash) || this.defaultParameters || {};
 		},
 
 		startup: function(){

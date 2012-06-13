@@ -71,13 +71,12 @@ function(lang, declare, on, Deferred, when, Controller, View){
 				return parent.children[id];
 			}
 			//create and start child. return Deferred
-			var newView = new View({
+			var newView = new View(lang.mixin({
 				"app": this.app,
 				"id": id,
-				"parameters": parameters,
 				"name": childId,
 				"parent": parent
-			});
+			},{"parameters": parameters}));
 			parent.children[id] = newView;
 			return newView.start();
 		},
