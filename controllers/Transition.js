@@ -94,6 +94,7 @@ function(lang, declare, on, Deferred, when, transit, Controller){
 			this.app.log("in app/controllers/Transition proceedTransition calling trigger load", transitionEvt);
 			this.app.trigger("load", {
 				"viewId": transitionEvt.viewId,
+				"parameters": transitionEvt.parameters,
 				"callback": lang.hitch(this, function(){
 					var transitionDef = this._doTransition(transitionEvt.viewId, transitionEvt.opts, this.app);
 					when(transitionDef, lang.hitch(this, function(){

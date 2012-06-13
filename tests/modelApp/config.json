@@ -56,11 +56,19 @@
 					"params":{
 		     		 	"store": {"$ref":"#stores.namesStore"}
 		  		 	}	       
-	   }
+	   },
+       "repeatmodels": {
+    				"modelLoader": "dojox/app/utils/mvcModel",
+					"type": "dojox/mvc/EditStoreRefListController",
+             		"params":{
+             			"store": {"$ref":"#stores.repeatStore"}
+             		}           
+       }
 	}, 
 
 	//the name of the scene to load when the app is initialized.
 	"defaultView": "home", 
+	"defaultParameters": {"cursor":"0"}, 
 
 	"defaultTransition": "slide",
 	//scenes are groups of views and models loaded at once	
@@ -78,18 +86,16 @@
 			"dependencies":["dojox/mobile/TextBox"]
 		},
 
-		"repeat": {
-            "models": {
-                "repeatmodels": {
-    				"modelLoader": "dojox/app/utils/mvcModel",
-					"type": "dojox/mvc/EditStoreRefListController",
-             		"params":{
-             			"store": {"$ref":"#stores.repeatStore"}
-             		}           
-                }
-            },
-            "template": "./templates/repeat.html",
-            "dependencies":["dojox/mobile/TextBox"]
+		"repeat":{
+			"definition" : "./views/repeat.js",
+			"template": "./templates/repeat.html",
+			"dependencies":["dojox/mobile/TextBox"]
+		},
+
+		"repeatDetails":{
+			"definition" : "./views/repeatDetails.js",
+			"template": "./templates/repeatDetails.html",
+			"dependencies":["dojox/mobile/TextBox"]
 		},
 
 		"generate": {
