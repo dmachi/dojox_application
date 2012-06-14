@@ -92,11 +92,15 @@ function(lang, declare, on, Deferred, when, transit, Controller){
 			this.proceeding = true;
 
 			this.app.log("in app/controllers/Transition proceedTransition calling trigger load", transitionEvt);
+			var params = transitionEvt.params || {};
+			if(transitionEvt.opts && transitionEvt.opts.params){
+				params = transitionEvt.params || transitionEvt.opts.params;
+			}
 			this.app.trigger("load", {
 				"viewId": transitionEvt.viewId,
-				"parameters": transitionEvt.parameters,
+				"params": params,
 				"callback": lang.hitch(this, function(){
-					var transitionDef = this._doTransition(transitionEvt.viewId, transitionEvt.opts, this.app);
+					var transitionDef = this._doTransition(transitionEvt.viewId, transitionEvt.opts, params, this.app);
 					when(transitionDef, lang.hitch(this, function(){
 						this.proceeding = false;
 						var nextEvt = this.waitingQueue.shift();
@@ -127,7 +131,7 @@ function(lang, declare, on, Deferred, when, transit, Controller){
 			return defaultTransition;
 		},
 
-		_doTransition: function(transitionTo, opts, parent){
+		_doTransition: function(transitionTo, opts, params, parent){
 			// summary:
 			//		Transitions from the currently visible scene to the defined scene.
 			//		It should determine what would be the best transition unless
@@ -143,6 +147,8 @@ function(lang, declare, on, Deferred, when, transit, Controller){
 			//		transition to view id. It looks like #tabScene,tab1
 			// opts: Object
 			//		transition options
+			// params: Object
+			//		params
 			// parent: Object
 			//		view's parent
 			//
@@ -154,7 +160,7 @@ function(lang, declare, on, Deferred, when, transit, Controller){
 			if(!parent){
 				throw Error("view parent not found in transition.");
 			}
-			var parts, toId, subIds, next, current = parent.selectedChild;
+			var parts, toId, subIds, next, params, current = parent.selectedChild;
 			if(transitionTo){
 				parts = transitionTo.split(",");
 			}else{
@@ -170,6 +176,9 @@ function(lang, declare, on, Deferred, when, transit, Controller){
 			if(!next){
 				throw Error("child view must be loaded before transition.");
 			}
+
+			// set params on next view.
+			next.params = params || next.params;
 
 			// if no subIds and next has default view, 
 			// set the subIds to the default view and transition to default view.
@@ -233,7 +242,7 @@ function(lang, declare, on, Deferred, when, transit, Controller){
 					next.afterActivate();
 
 					if(subIds){
-						this._doTransition(subIds, opts, next);
+						this._doTransition(subIds, opts, params, next);
 					}
 				}));
 				return result; //dojo.DeferredList
@@ -256,7 +265,7 @@ function(lang, declare, on, Deferred, when, transit, Controller){
 
 			// do sub transition like transition from "tabScene,tab1" to "tabScene,tab2"
 			if(subIds){
-				return this._doTransition(subIds, opts, next); //dojo.DeferredList
+				return this._doTransition(subIds, opts, params, next); //dojo.DeferredList
 			}
 		}
 	});
