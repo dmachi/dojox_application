@@ -6,8 +6,9 @@ function(dom, connect, registry, at, getStateful, Output){
 
 	// show an item detail
 	var setDetailsContext = function(index){
-		if(parseInt(index) < repeatmodel.model.length){
-			repeatmodel.set("cursorIndex", index);
+		// only set the cursor if it is different and valid
+		if(parseInt(index) != repeatmodel.cursorIndex && parseInt(index) < repeatmodel.model.length){
+			repeatmodel.set("cursorIndex", parseInt(index));
 		}
 	};
 
@@ -25,27 +26,15 @@ function(dom, connect, registry, at, getStateful, Output){
 		// repeate view init
 		init: function(){
 			repeatmodel = this.loadedModels.repeatmodels;
-
-			// if this.parameters["cursor"] is set use it to set the selected Details Context
-			if(this.parameters["cursor"]){
-				setDetailsContext(this.parameters["cursor"]);
-			}
-
-			var repeatDom = dom.byId('repeatWidget');
-			var connectResult;
-			connectResult = connect.connect(repeatDom, "button[id^=\"detail\"]:click", function(e){
-				var index = getIndexFromId(e.target.id, "detail");
-				setDetailsContext(index);
-			});
-			_connectResults.push(connectResult);
 		},
 
-		// repeate view destroy
-		destroy: function(){
-			var connectResult = _connectResults.pop();
-			while(connectResult){
-				connect.disconnect(connectResult);
-				connectResult = _connectResults.pop();
+		beforeActivate: function(){
+			// summary:
+			//		view life cycle beforeActivate()
+			//
+			// if this.params["cursor"] is set use it to set the selected Details Context
+			if(this.params["cursor"]){
+				setDetailsContext(this.params["cursor"]);
 			}
 		}
 	}

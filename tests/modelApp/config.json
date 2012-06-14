@@ -50,13 +50,6 @@
 	//models and instantiation parameters for the models. Including 'type' as a property allows
 	//one to overide the class that will be used for the model.  By default it is dojox/mvc/model
 	"models": {
-	   "names": {
-					"modelLoader": "dojox/app/utils/mvcModel",
-					"type": "dojox/mvc/EditStoreRefListController",
-					"params":{
-		     		 	"store": {"$ref":"#stores.namesStore"}
-		  		 	}	       
-	   },
        "repeatmodels": {
     				"modelLoader": "dojox/app/utils/mvcModel",
 					"type": "dojox/mvc/EditStoreRefListController",
@@ -81,6 +74,15 @@
 		},
 
 		"simple":{
+            "models": {
+				"names": {
+					"modelLoader": "dojox/app/utils/mvcModel",
+					"type": "dojox/mvc/EditStoreRefListController",
+					"params":{
+		     		 	"store": {"$ref":"#stores.namesStore"}
+		  		 	}	       
+	   			}
+            },
 			"definition" : "./views/simple.js",
 			"template": "./templates/simple.html",
 			"dependencies":["dojox/mobile/TextBox"]

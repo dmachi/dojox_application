@@ -21,7 +21,8 @@ function(dom, connect, registry, at, TransitionEvent, Repeat, getStateful, Outpu
 		var transOpts = {
 			title : "repeatDetails",
 			target : "repeatDetails",
-			url : "#repeatDetails&cursor=" + index
+			//url : "#repeatDetails", // this is optional if not set it will be created from target   
+			params : {"cursor":index}
 		};
 		var e = window.event;
 		new TransitionEvent(e.srcElement, transOpts, e).dispatch(); 
