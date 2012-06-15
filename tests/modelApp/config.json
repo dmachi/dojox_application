@@ -34,13 +34,13 @@
 	//stores we are using 
 	"stores": {
 	   "namesStore":{
-	       "type": "dojo.store.Memory",
+	       "type": "dojo/store/Memory",
 		   "params": {
 		      "data": "modelApp.names"
 		   }
 	   },
        "repeatStore":{
-           "type": "dojo.store.Memory",
+           "type": "dojo/store/Memory",
            "params": {
                 "data": "modelApp.repeatData"
            }
