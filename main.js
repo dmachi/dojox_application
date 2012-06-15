@@ -40,12 +40,13 @@ function(kernel, require, lang, declare, Deferred, when, has, config, on, ready,
 				//create stores in the configuration.
 				for(var item in params.stores){
 					if(item.charAt(0) !== "_"){//skip the private properties
-						var type = params.stores[item].type ? params.stores[item].type : "dojo.store.Memory";
+						var type = params.stores[item].type ? params.stores[item].type : "dojo/store/Memory";
 						var config = {};
 						if(params.stores[item].params){
 							lang.mixin(config, params.stores[item].params);
 						}
-						var storeCtor = lang.getObject(type);
+						// we assume the store is here through dependencies
+						var storeCtor = require(type);
 						if(config.data && lang.isString(config.data)){
 							//get the object specified by string value of data property
 							//cannot assign object literal or reference to data property
