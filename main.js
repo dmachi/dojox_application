@@ -115,7 +115,7 @@ function(kernel, require, lang, declare, Deferred, when, has, config, on, ready,
 			// event: String
 			//		event name. The event is binded by controller.bind() method.
 			// params: Object
-			//		event parameters.
+			//		event params.
 			on.emit(this.domNode, event, params);
 		},
 
@@ -167,26 +167,26 @@ function(kernel, require, lang, declare, Deferred, when, has, config, on, ready,
 			}
 		},
 
-		_getParameters: function(hash){
+		getParamsFromHash: function(hash){
 			// summary:
-			//		get the parameters from the hash
+			//		get the params from the hash
 			//
 			// hash: String
 			//		the url hash
 			//
 			// returns:
-			//		the parameters object
+			//		the params object
 			//
-			var parameters = {};
+			var params = {};
 			if(hash && hash.length){
 				for(var parts= hash.split("&"), x= 0; x<parts.length; x++){
 					var tp = parts[x].split("="), name=tp[0], value=encodeURIComponent(tp[1]||""); 
 					if(name && value) {
-						parameters[name] = value;
+						params[name] = value;
 					}
 				}
 			}
-			return parameters; // Object
+			return params; // Object
 		},
 
 		setupControllers: function(){
@@ -198,7 +198,7 @@ function(kernel, require, lang, declare, Deferred, when, has, config, on, ready,
 			// move set _startView operation from history module to application
 			var hash = window.location.hash;
 			this._startView = (((hash && hash.charAt(0) == "#") ? hash.substr(1) : hash) || this.defaultView).split('&')[0];
-			this._startParameters = this._getParameters(hash) || this.defaultParameters || {};
+			this._startParams = this.getParamsFromHash(hash) || this.defaultParams || {};
 		},
 
 		startup: function(){
@@ -209,7 +209,7 @@ function(kernel, require, lang, declare, Deferred, when, has, config, on, ready,
 				
 				this.trigger("load", {
 					"viewId": this.defaultView,
-					"parameters": this._startParameters,
+					"params": this._startParams,
 					"callback": lang.hitch(this, function(){
 						var selectId = this.defaultView.split(",");
 						selectId = selectId.shift();
@@ -217,13 +217,14 @@ function(kernel, require, lang, declare, Deferred, when, has, config, on, ready,
 						// transition to startView. If startView==defaultView, that means initial the default view.
 						this.trigger("transition", {
 							"viewId": this._startView,
-							"parameters": this._startParameters
+							"params": this._startParams
 						});
 						this.setStatus(this.lifecycle.STARTED);
 					})
 				});
 			}));
-		}
+		}		
+		
 	});
 
 	function generateApp(config, node, appSchema, validate){
