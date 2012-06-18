@@ -3,7 +3,7 @@ function(declare, lang, Deferred, when, require, dattr, TemplatedMixin, WidgetsI
 	// module:
 	//		dojox/app/View
 	// summary:
-	//		dojox.app view object, each view can have one parent view and several children views.
+	//		dojox/app view object, each view can have one parent view and several children views.
 
 	return declare("dojox.app.View", null, {
 		constructor: function(params){
@@ -193,7 +193,9 @@ function(declare, lang, Deferred, when, require, dattr, TemplatedMixin, WidgetsI
 		},
 
 		_setupModel: function(){
-			//load views model if it is not already loaded then call startup
+			// summary:
+			//		Private method. Load views model if it is not already loaded then call _startup.
+			
 			if (!this.loadedModels) {
 				var loadModelLoaderDeferred = new Deferred();
 				var createPromise;

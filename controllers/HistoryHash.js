@@ -3,7 +3,7 @@ function(lang, declare, connect, on, Controller){
 	// module:
 	//		dojox/app/controllers/HistoryHash
 	// summary:
-	//		Bind "startTransition" event on dojox.app application's domNode,
+	//		Bind "startTransition" event on dojox/app application's domNode,
 	//		Bind "/dojo/hashchange" event on window object.
 	//		Maintain history by history hash.
 
@@ -11,11 +11,11 @@ function(lang, declare, connect, on, Controller){
 
 		constructor: function(app){
 			// summary:
-			//		Bind "startTransition" event on dojox.app application's domNode,
+			//		Bind "startTransition" event on dojox/app application's domNode,
 			//		subscribe "/dojo/hashchange" event.
 			//
 			// app:
-			//		dojox.app application instance.
+			//		dojox/app application instance.
 			this.events = {
 				"startTransition": this.onStartTransition
 			};
@@ -58,7 +58,7 @@ function(lang, declare, connect, on, Controller){
 
 		onStartTransition: function(evt){
 			// summary:
-			//		Response to dojox.app "startTransition" event.
+			//		Response to dojox/app "startTransition" event.
 			//
 			// example:
 			//		Use "dojox/mobile/TransitionEvent" to trigger "startTransition" event, and this function will response the event. For example:
