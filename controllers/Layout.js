@@ -135,11 +135,11 @@ function(lang, declare, on, win, array, query, dstyle, dattr, dgeometry, registr
 			var mb = resultSize || {};
 			lang.mixin(mb, changeSize || {});	// changeSize overrides resultSize
 			if( !("h" in mb) || !("w" in mb) ){
-				mb = lang.mixin(dgeometry.getMarginBox(node), mb);	// just use dojo/marginBox() to fill in missing values
+				mb = lang.mixin(dgeometry.getMarginBox(node), mb);	// just use dojo/_base/html.marginBox() to fill in missing values
 			}
 
 			// Compute and save the size of my border box and content box
-			// (w/out calling dojo/contentBox() since that may fail if size was recently set)
+			// (w/out calling dojo/_base/html.contentBox() since that may fail if size was recently set)
 			var cs = dstyle.getComputedStyle(node);
 			var me = dgeometry.getMarginExtents(node, cs);
 			var be = dgeometry.getBorderExtents(node, cs);

@@ -49,8 +49,8 @@
 			"modelLoader": "dojox/app/utils/mvcModel",
 			"type": "dojox/mvc/EditStoreRefListController",
 			"params":{
-     		 	"store": {"$ref":"#stores.namesStore"}
-  		 	}	       
+				"store": {"$ref":"#stores.namesStore"}
+			}	       
 	   }
 	}, 
 
@@ -72,11 +72,11 @@
 		"repeat": {
             "models": {
                 "repeatmodels": {
-    				"modelLoader": "dojox/app/utils/mvcModel",
+					"modelLoader": "dojox/app/utils/mvcModel",
 					"type": "dojox/mvc/EditStoreRefListController",
-             		"params":{
-             			"store": {"$ref":"#stores.repeatStore"}
-             		}           
+					"params":{
+						"store": {"$ref":"#stores.repeatStore"}
+					}           
                 }
             },
             "template": "./templates/repeat.html",
