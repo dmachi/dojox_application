@@ -1,5 +1,5 @@
-define(["dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/_base/window", "dojo/_base/array", "dojo/query", "dojo/dom-style", "dojo/dom-attr", "dojo/dom-geometry", "dijit/registry", "../Controller", "../layout/utils"],
-function(lang, declare, on, win, array, query, dstyle, dattr, dgeometry, registry, Controller, layoutUtils){
+define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/sniff", "dojo/on", "dojo/_base/window", "dojo/_base/array", "dojo/query", "dojo/dom-style", "dojo/dom-attr", "dojo/dom-geometry", "dijit/registry", "../Controller", "../layout/utils"],
+function(lang, declare, has, on, win, array, query, dstyle, dattr, dgeometry, registry, Controller, layoutUtils){
 	// module:
 	//		dojox/app/controllers/Layout
 	// summary:
@@ -20,8 +20,9 @@ function(lang, declare, on, win, array, query, dstyle, dattr, dgeometry, registr
 				"select": this.select
 			};
 			this.inherited(arguments);
-			// bind "resize" event to do browser's resize
-			this.bind(win.global, "resize", lang.hitch(this, this.onResize));
+
+			// bind to browsers orientationchange event for ios otherwise bind to browsers resize
+			this.bind(win.global, has("iphone") ? "orientationchange" : "resize", lang.hitch(this, this.onResize));
 		},
 
 		onResize: function(){
@@ -119,7 +120,6 @@ function(lang, declare, on, win, array, query, dstyle, dattr, dgeometry, registr
 			//
 			// view: Object
 			//		view instance needs to do layout.
-
 			var node = view.domNode;
 			// set margin box size, unless it wasn't specified, in which case use current size
 			if(changeSize){
