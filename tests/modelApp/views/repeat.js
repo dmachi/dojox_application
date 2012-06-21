@@ -20,8 +20,8 @@ function(dom, connect, registry, at, TransitionEvent, Repeat, getStateful, Outpu
 		// transition to repeatDetails view with the &cursor=index
 		var transOpts = {
 			title : "repeatDetails",
-			target : "repeatDetails",
-			//url : "#repeatDetails", // this is optional if not set it will be created from target   
+			target : "repeat,repeatDetails",
+			url : "#repeat,repeatDetails", // this is optional if not set it will be created from target   
 			params : {"cursor":index}
 		};
 		var e = window.event;

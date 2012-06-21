@@ -74,7 +74,7 @@
 					"template": "./templates/simple/third.html"
 				}
 			},
-			"dependencies":["dojox/mobile/RoundRectList","dojox/mobile/ListItem","dojox/mobile/EdgeToEdgeCategory","dojox/mobile/EdgeToEdgeList"],
+			"dependencies":["dojox/mobile/RoundRectList","dojox/mobile/ListItem","dojox/mobile/EdgeToEdgeCategory","dojox/mobile/EdgeToEdgeList"]
 		},
 		//simple scene which loads all views and shows the default first
 		"tabscene": { 
@@ -99,7 +99,7 @@
 					"template": "./templates/tabs/tab3.html"
 				}
 			},
-			"dependencies":["dojox/mobile/RoundRectList","dojox/mobile/ListItem", "dojox/mobile/EdgeToEdgeCategory"],
+			"dependencies":["dojox/mobile/RoundRectList","dojox/mobile/ListItem", "dojox/mobile/EdgeToEdgeCategory"]
 		},
 		//simple scene which loads all views and shows the default first
 		"gallery": { 
