@@ -1,5 +1,5 @@
-define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/on", "../Controller", "dojo/hash"],
-function(lang, declare, connect, on, Controller){
+define(["dojo/_base/lang", "dojo/_base/declare", "dojo/topic", "dojo/on", "../Controller", "dojo/hash"],
+	function(lang, declare, topic, on, Controller){
 	// module:
 	//		dojox/app/controllers/HistoryHash
 	// summary:
@@ -21,7 +21,7 @@ function(lang, declare, connect, on, Controller){
 			};
 			this.inherited(arguments);
 
-			connect.subscribe("/dojo/hashchange", lang.hitch(this, function(newhash){
+			topic.subscribe("/dojo/hashchange", lang.hitch(this, function(newhash){
 				this._onHashChange(newhash);
 			}));
 
@@ -218,7 +218,7 @@ function(lang, declare, connect, on, Controller){
 			this._current = currentHash;
 
 			// publish history back event
-			connect.publish("app/history/back", [{'viewId':currentHash, 'detail':detail}]);
+			topic.publish("app/history/back", [{"viewId": currentHash, "detail": detail}]);
 
 			// transition to the target view
 			this.app.trigger("transition", {
@@ -239,7 +239,7 @@ function(lang, declare, connect, on, Controller){
 			this._current = currentHash;
 
 			// publish history forward event
-			connect.publish("app/history/forward", [{'viewId':currentHash, 'detail':detail}]);
+			topic.publish("app/history/forward", [{"viewId": currentHash, "detail": detail}]);
 
 			// transition to the target view
 			this.app.trigger("transition", {
@@ -259,7 +259,7 @@ function(lang, declare, connect, on, Controller){
 			this._next = this._historyStack[index + 1] ? this._historyStack[index + 1]['hash'] : null;
 
 			// publish history go event
-			connect.publish("app/history/go", [{'viewId':this._current, 'step':step, 'detail':this._historyStack[index]['detail']}]);
+			topic.publish("app/history/go", [{"viewId": this._current, "step": step, "detail": this._historyStack[index]["detail"]}]);
 
 			var param;
 			if(step > 0){
