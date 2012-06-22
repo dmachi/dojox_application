@@ -3,7 +3,7 @@ function(lang, declare, on, Deferred, when, transit, Controller){
 	// module:
 	//		dojox/app/controllers/transition
 	// summary:
-	//		Bind "transition" event on dojox.app application's domNode.
+	//		Bind "transition" event on dojox/app application's domNode.
 	//		Do transition from one view to another view.
 	return declare("dojox.app.controllers.Transition", Controller, {
 
@@ -16,7 +16,7 @@ function(lang, declare, on, Deferred, when, transit, Controller){
 			//		bind "transition" event on application's domNode.
 			//
 			// app:
-			//		dojox.app application instance.
+			//		dojox/app application instance.
 			// events:
 			//		{event : handler}
 			this.events = {
@@ -28,7 +28,7 @@ function(lang, declare, on, Deferred, when, transit, Controller){
 
 		transition: function(event){
 			// summary:
-			//		Response to dojox.app "transition" event.
+			//		Response to dojox/app "transition" event.
 			//
 			// example:
 			//		Use trigger() to trigger "transition" event, and this function will response to the event. For example:
@@ -42,7 +42,7 @@ function(lang, declare, on, Deferred, when, transit, Controller){
 
 		onStartTransition: function(evt){
 			// summary:
-			//		Response to dojox.app "startTransition" event.
+			//		Response to dojox/app "startTransition" event.
 			//
 			// example:
 			//		Use "dojox/mobile/TransitionEvent" to trigger "startTransition" event, and this function will response the event. For example:
@@ -153,7 +153,7 @@ function(lang, declare, on, Deferred, when, transit, Controller){
 			//		view's parent
 			//
 			// returns:
-			//		transit dojo.DeferredList object.
+			//		transit dojo/DeferredList object.
 
 			this.app.log("in app/controllers/Transition._doTransition transitionTo=[",transitionTo,"], parent.name=[",parent.name,"], opts=",opts);
 
@@ -245,7 +245,7 @@ function(lang, declare, on, Deferred, when, transit, Controller){
 						this._doTransition(subIds, opts, params, next);
 					}
 				}));
-				return result; //dojo.DeferredList
+				return result; // dojo/DeferredList
 			}else{
 				// next view == current view, refresh current view
 				// deactivate next view
