@@ -210,7 +210,6 @@ function(kernel, require, lang, declare, Deferred, when, has, config, on, ready,
 			var controllers = this.createControllers(this.params.controllers);
 			when(controllers, lang.hitch(this, function(result){
 				// emit load event and let controller to load view.
-				
 				this.trigger("load", {
 					"viewId": this.defaultView,
 					"params": this._startParams,
@@ -306,7 +305,6 @@ function(kernel, require, lang, declare, Deferred, when, has, config, on, ready,
 				}
 
 				app.setStatus(app.lifecycle.STARTING);
-				app.start();
 				// Create global namespace for application.
 				// The global name is application id. For example: modelApp
 				var globalAppName = app.id;
@@ -314,6 +312,7 @@ function(kernel, require, lang, declare, Deferred, when, has, config, on, ready,
 					lang.mixin(app, window[globalAppName]);
 				}
 				window[globalAppName] = app;
+				app.start();
 			});
 		});
 	}
