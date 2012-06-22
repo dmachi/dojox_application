@@ -5,7 +5,7 @@ function(lang, declare, has, on, win, array, query, dstyle, dattr, dgeometry, re
 	// summary:
 	//		Bind "layout" and "select" events on dojox/app application's dojo/Evented instance.
 
-	return declare("dojox.application.controllers.Layout", Controller, {
+	return declare("dojox.app.controllers.Layout", Controller, {
 
 		constructor: function(app, events){
 			// summary:
