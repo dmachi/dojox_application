@@ -2,16 +2,16 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/on"], function(lang, decl
 	// module:
 	//		dojox/app/Controller
 	// summary:
-	//		Bind events on dojox.app application's dojo.Evented instance or document.
+	//		Bind events on dojox/app application's dojo/Evented instance or document.
 
 	return declare("dojox.app.Controller", null, {
 		constructor: function(app, events){
 			// summary:
-			//		bind events on application dojo.Evented instance.
+			//		bind events on application dojo/Evented instance.
 			//		bind css selector events on document.
 			//
 			// app:
-			//		dojox.app application instance.
+			//		dojox/app application instance.
 			// events:
 			//		{event : handler}
 
@@ -30,11 +30,11 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/on"], function(lang, decl
 
 		bind: function(evented, event, handler){
 			// summary:
-			//		Bind event on dojo.Evented instance, document, domNode or window.
+			//		Bind event on dojo/Evented instance, document, domNode or window.
 			//		Save event signal in controller instance.
 			//
 			// evented: Object
-			//		dojo.Evented instance, document, domNode or window
+			//		dojo/Evented instance, document, domNode or window
 			// event: String
 			//		event
 			// handler: Function
@@ -56,7 +56,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/on"], function(lang, decl
 			//		remove a binded event signal.
 			//
 			// evented: Object
-			//		dojo.Evented instance, document, domNode or window
+			//		dojo/Evented instance, document, domNode or window
 			// event: String
 			//		event
 

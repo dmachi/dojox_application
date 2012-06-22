@@ -20,7 +20,7 @@ function(kernel, require, lang, declare, Deferred, when, has, config, on, ready,
 
 			// Create a new domNode and append to body
 			// Need to bind startTransition event on application domNode,
-			// Because dojox.mobile.ViewController bind startTransition event on document.body
+			// Because dojox/mobile/ViewController bind startTransition event on document.body
 			// Make application's root domNode id unique because this id can be visited by window namespace on Chrome 18.
 			this.domNode = dom.create("div", {
 				id: this.id+"_Root",
@@ -64,7 +64,7 @@ function(kernel, require, lang, declare, Deferred, when, has, config, on, ready,
 			// summary:
 			//		Create controller instance
 			//
-			// parent: Array
+			// controllers: Array
 			//		controller configuration array.
 			// returns:
 			//		controllerDeferred object
@@ -122,6 +122,7 @@ function(kernel, require, lang, declare, Deferred, when, has, config, on, ready,
 
 		// setup default view and Controllers and startup the default view
 		start: function(){
+			//
 			//create application level data store
 			this.createDataStore(this.params);
 
@@ -149,6 +150,7 @@ function(kernel, require, lang, declare, Deferred, when, has, config, on, ready,
 
 		setupAppView: function(){
 			//create application level view
+			//
 			if(this.template){
 				this.view = new View({
 					app: this,  // pass the app into the View so it can have easy access to app
@@ -204,6 +206,7 @@ function(kernel, require, lang, declare, Deferred, when, has, config, on, ready,
 
 		startup: function(){
 			// load controllers in configuration file
+			//
 			var controllers = this.createControllers(this.params.controllers);
 			when(controllers, lang.hitch(this, function(result){
 				// emit load event and let controller to load view.
@@ -228,6 +231,13 @@ function(kernel, require, lang, declare, Deferred, when, has, config, on, ready,
 	});
 
 	function generateApp(config, node, appSchema, validate){
+		// summary:
+		//		generate the application
+		//
+		// config: Object
+		//		app config
+		// node: domNode
+		//		domNode.
 		if(!config.loaderConfig){
 			config.loaderConfig = {};
 		}
@@ -249,7 +259,7 @@ function(kernel, require, lang, declare, Deferred, when, has, config, on, ready,
 		if(!config.modules){
 			config.modules = [];
 		}
-		// add dojox.app lifecycle module by default
+		// add dojox/app lifecycle module by default
 		config.modules.push("dojox/app/module/lifecycle");
 		var modules = config.modules.concat(config.dependencies);
 

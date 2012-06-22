@@ -3,18 +3,18 @@ function(lang, declare, on, Controller){
 	// module:
 	//		dojox/app/controllers/History
 	// summary:
-	//		Bind "startTransition" event on dojox.app application's domNode,
+	//		Bind "startTransition" event on dojox/app application's domNode,
 	//		Bind "popstate" event on window object.
 	//		Maintain history by HTML5 "pushState" method and "popstate" event.
 
 	return declare("dojox.app.controllers.History", Controller, {
 		constructor: function(app){
 			// summary:
-			//		Bind "startTransition" event on dojox.app application's domNode,
+			//		Bind "startTransition" event on dojox/app application's domNode,
 			//		Bind "popstate" event on window object.
 			//
 			// app:
-			//		dojox.app application instance.
+			//		dojox/app application instance.
 
 			this.events = {
 				"startTransition": this.onStartTransition
@@ -49,7 +49,7 @@ function(lang, declare, on, Controller){
 
 		onStartTransition: function(evt){
 			// summary:
-			//		Response to dojox.app "startTransition" event.
+			//		Response to dojox/app "startTransition" event.
 			//
 			// example:
 			//		Use "dojox/mobile/TransitionEvent" to trigger "startTransition" event, and this function will response the event. For example:
@@ -84,7 +84,7 @@ function(lang, declare, on, Controller){
 
 		onPopState: function(evt){
 			// summary:
-			//		Response to dojox.app "popstate" event.
+			//		Response to dojox/app "popstate" event.
 			//
 			// evt: Object
 			//		transition options parameter
