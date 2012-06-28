@@ -27,7 +27,6 @@ define(["doh", "dojox/app/main", "dojox/json/ref", "dojo/text!./config.json", "d
 				return dohDeferred;
 			},
 			tearDown: function(){
-				console.log("tear down");
 				this._topic.remove();
 			}
 		}
