@@ -11,16 +11,24 @@ define(["doh", "dojox/app/main", "dojox/json/ref", "dojo/text!./config.json", "d
 				dohDeferred.addCallback(function(){
 					t.assertEqual([1, 2], events);
 				});
-				topic.subscribe("/app/status", function(evt){
+				this._topic = topic.subscribe("/app/status", function(evt){
 					events.push(evt);
 					if(evt == 2){
 						// testApp needs to be available at this point
 						t.assertNotEqual(null, testApp);
+						// test lifecycle methods are available
+						t.assertNotEqual(null, testApp.setStatus);
+						t.assertNotEqual(null, testApp.getStatus);
+						t.assertNotEqual(null, testApp.lifecycle);
 						dohDeferred.callback(true);
 					}
 				});
 				Application(json.fromJson(config));
 				return dohDeferred;
+			},
+			tearDown: function(){
+				console.log("tear down");
+				this._topic.remove();
 			}
 		}
 	]);
