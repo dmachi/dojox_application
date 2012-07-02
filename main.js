@@ -194,9 +194,9 @@ function(kernel, require, lang, declare, Deferred, when, has, config, on, ready,
 
 		setupControllers: function(){
 			// create application controller instance
-			new LoadController(this);
-			new TransitionController(this);
-			new LayoutController(this);
+			this.controllers.push(new LoadController(this));
+			this.controllers.push(new TransitionController(this));
+			this.controllers.push(new LayoutController(this));
 
 			// move set _startView operation from history module to application
 			var hash = window.location.hash;
