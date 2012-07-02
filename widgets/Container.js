@@ -54,6 +54,7 @@ function(declare, lang, registry, dattr, domGeometry, domStyle, WidgetBase, Cont
 			//			become.
 			//
 			//		In either mode, this method also:
+			//
 			//			1. Sets this._borderBox and this._contentBox to the new size of
 			//				the widget.  Queries the current domNode size if necessary.
 			//			2. Calls layout() to resize contents (and maybe adjust child widgets).
