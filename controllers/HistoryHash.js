@@ -98,10 +98,10 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/topic", "dojo/on", "../Co
 		},
 
 		_addHistory: function(hash){
-			//	summary:
+			// summary:
 			//		Add hash to application history stack, update history management flags.
 			//
-			//	hash:
+			// hash:
 			//		new hash should be added to _historyStack.
 			this._historyStack.push({
 				'hash': hash,
@@ -124,10 +124,10 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/topic", "dojo/on", "../Co
 		},
 
 		_onHashChange: function(currentHash){
-			//	summary:
+			// summary:
 			//		subscribe /dojo/hashchange and do add history, back, forward and go operation.
 			//
-			//	currentHash:
+			// currentHash:
 			//		the new url hash when /dojo/hashchange is triggered.
 
 			if(this._index < 0 || this._index > (window.history.length - 1)){
