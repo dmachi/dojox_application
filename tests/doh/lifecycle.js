@@ -28,6 +28,8 @@ define(["doh", "dojox/app/main", "dojox/json/ref", "dojo/text!./config.json", "d
 			},
 			tearDown: function(){
 				this._topic.remove();
+				// maybe dojox/app should do that?
+				delete testApp;
 			}
 		}
 	]);
