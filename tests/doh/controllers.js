@@ -12,10 +12,10 @@ define(["doh", "dojox/app/main", "dojox/json/ref", "dojo/text!./config.json", "d
 					if(evt == 2){
 						// test controllers
 						t.assertEqual(4, testApp.controllers.length);
-						t.assertEqual(4, testApp.controllers[0] instanceof Load);
-						t.assertEqual(4, testApp.controllers[1] instanceof Transition);
-						t.assertEqual(4, testApp.controllers[2] instanceof Layout);
-						t.assertEqual(4, testApp.controllers[3] instanceof History);
+						t.assertTrue(testApp.controllers[0] instanceof Load);
+						t.assertTrue(testApp.controllers[1] instanceof Transition);
+						t.assertTrue(testApp.controllers[2] instanceof Layout);
+						t.assertTrue(testApp.controllers[3] instanceof History);
 						dohDeferred.callback(true);
 					}
 				});
