@@ -246,7 +246,7 @@ function(declare, lang, Deferred, when, require, dattr, TemplatedMixin, WidgetsI
 
 			// set widget attributes
 			dattr.set(this.domNode, "id", this.id);
-			dattr.set(this.domNode, "region", "center");
+			dattr.set(this.domNode, "data-app-region", "center");
 			dattr.set(this.domNode, "style", "width:100%; height:100%");
 			this._widget.region = "center";
 
