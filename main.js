@@ -238,6 +238,7 @@ function(kernel, require, lang, declare, Deferred, when, has, config, on, ready,
 		//		app config
 		// node: domNode
 		//		domNode.
+		var path;
 		if(!config.loaderConfig){
 			config.loaderConfig = {};
 		}
@@ -246,7 +247,7 @@ function(kernel, require, lang, declare, Deferred, when, has, config, on, ready,
 		}
 		if(!config.loaderConfig.paths["app"]){
 			// Register application module path
-			var path = window.location.pathname;
+			path = window.location.pathname;
 			if(path.charAt(path.length) != "/"){
 				path = path.split("/");
 				path.pop();
@@ -264,7 +265,11 @@ function(kernel, require, lang, declare, Deferred, when, has, config, on, ready,
 		var modules = config.modules.concat(config.dependencies);
 
 		if(config.template){
-			modules.push("dojo/text!" + "app/" + config.template);
+			path = config.template;
+			if(path.indexOf("./") == 0){
+				path = "app/"+path;
+			}
+			modules.push("dojo/text!" + path);
 		}
 
 		require(modules, function(){
