@@ -98,15 +98,6 @@ function(lang, declare, has, on, win, array, query, domStyle, domAttr, domGeom, 
 						}
 						return c.domNode && c.region;
 					}, view);
-				}else{
-					array.forEach(children, function(c){
-						// fix layout container display issue.
-						// only need to hide the view
-						if(c && (c.widget instanceof dojox.app.View) && c.domNode && c.region == "center"){
-							domStyle.set(c.domNode, "zIndex", 25);
-							domStyle.set(c.domNode, "display", "none");
-						}
-					});
 				}
 			}
 			// We don't need to layout children if this._contentBox is null for the operation will do nothing.
