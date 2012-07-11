@@ -264,7 +264,11 @@ function(kernel, require, lang, declare, Deferred, when, has, config, on, ready,
 		var modules = config.modules.concat(config.dependencies);
 
 		if(config.template){
-			modules.push("dojo/text!" + "app/" + config.template);
+			var path = config.template;
+			if(path.indexOf("./") == 0){
+				path = "app/"+path;
+			}
+			modules.push("dojo/text!" + path);
 		}
 
 		require(modules, function(){
