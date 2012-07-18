@@ -218,7 +218,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/topic", "dojo/on", "../Co
 			this._current = currentHash;
 
 			// publish history back event
-			topic.publish("app/history/back", [{"viewId": currentHash, "detail": detail}]);
+			topic.publish("/app/history/back", {"viewId": currentHash, "detail": detail});
 
 			// transition to the target view
 			this.app.trigger("transition", {
@@ -239,7 +239,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/topic", "dojo/on", "../Co
 			this._current = currentHash;
 
 			// publish history forward event
-			topic.publish("app/history/forward", [{"viewId": currentHash, "detail": detail}]);
+			topic.publish("/app/history/forward", {"viewId": currentHash, "detail": detail});
 
 			// transition to the target view
 			this.app.trigger("transition", {
@@ -259,7 +259,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/topic", "dojo/on", "../Co
 			this._next = this._historyStack[index + 1] ? this._historyStack[index + 1]['hash'] : null;
 
 			// publish history go event
-			topic.publish("app/history/go", [{"viewId": this._current, "step": step, "detail": this._historyStack[index]["detail"]}]);
+			topic.publish("/app/history/go", {"viewId": this._current, "step": step, "detail": this._historyStack[index]["detail"]});
 
 			var param;
 			if(step > 0){

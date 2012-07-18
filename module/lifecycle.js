@@ -20,7 +20,7 @@ define(["dojo/_base/declare", "dojo/topic"], function(declare, topic){
             
             // publish /app/stauts event.
             // application can subscribe this event to do some status change operation.
-            topic.publish("/app/status", [newStatus]);
+            topic.publish("/app/status", newStatus);
         }
     });
 });
