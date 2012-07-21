@@ -19,15 +19,6 @@ define([
 		//		scrollable.js is not a dojo class, but just a collection
 		//		of functions. This module makes scrollable.js a dojo class.
 
-		// remove fixedHeader and fixedFooter, let dojox/app layout container to do header and footer layout
-		// fixedHeader: String
-		//		Id of the fixed header.
-		//fixedHeader: "",
-
-		// fixedFooter: String
-		//		Id of the fixed footer.
-		//fixedFooter: "",
-
 		// scrollableParams: Object
 		//		Parameters for dojox/mobile/scrollable.init().
 		scrollableParams: null,
@@ -35,9 +26,6 @@ define([
 		// allowNestedScrolls: Boolean
 		//		e.g. Allow ScrollableView in a SwapView.
 		allowNestedScrolls: true,
-
-		// remove appBars, let dojox/app layout container to do appBars layout
-		//appBars: true, // search for application-level bars
 
 		constructor: function(){
 			this.scrollableParams = {};
@@ -54,7 +42,6 @@ define([
 			this.init(params);
 			this.inherited(arguments);
 			this.reparent();
-			//remove fixedHeader and fixedFooter
 		},
 
 		// build scrollable container domNode. This method from dojox/mobile/ScrollableView
