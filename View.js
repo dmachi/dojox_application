@@ -43,14 +43,15 @@ function(declare, lang, Deferred, when, require, dattr, TemplatedMixin, WidgetsI
 			//
 			// params:
 			//		view parameters, include:
-			//		app: the app
-			//		id: view id
-			//		name: view name
-			//		template: view template url. If templateString not empty, ignore this parameter.
-			//		templateString: view template string
-			//		definition: view definition url
-			//		parent: parent view
-			//		children: children views
+			//
+			//		- app: the app
+			//		- id: view id
+			//		- name: view name
+			//		- template: view template url. If templateString not empty, ignore this parameter.
+			//		- templateString: view template string
+			//		- definition: view definition url
+			//		- parent: parent view
+			//		- children: children views
 			this.id = "";
 			this.name = "";
 			this.templateString = "";
