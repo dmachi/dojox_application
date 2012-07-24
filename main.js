@@ -286,7 +286,7 @@ function(kernel, require, lang, declare, Deferred, when, has, config, on, ready,
 			App = declare(modules, ext);
 
 			ready(function(){
-				var app = App(config, node || baseWindow.body());
+				var app = new App(config, node || baseWindow.body());
 
 				if(has("app-log-api")){
 					app.log = function(){  

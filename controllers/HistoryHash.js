@@ -27,7 +27,6 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/topic", "dojo/on", "../Co
 
 			this._historyStack = []; // application history stack
 			this._historyLen = 0;	// current window.history length
-			this._histroyDiff = 0;	// the diff of window.history stack and applicaton history stack
 			this._current = null;	// current history item in application history stack
 			this._next = null;		// next history item in application history stack
 			this._previous = null;	// privious history item in application history stack

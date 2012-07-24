@@ -49,8 +49,6 @@ function(lang, Deferred, when, config, dataStore, getStateful, has){
 			}
 			options = {"data": params.data, query: {}};
 		}
-		var modelCtor;
-		var ctrl = null;
 		var newModel = null;
 		var type = config[item].type ? config[item].type : "dojox/mvc/EditStoreRefListController";
 		// need to load the class to use for the model
