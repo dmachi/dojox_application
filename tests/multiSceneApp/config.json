@@ -31,7 +31,7 @@
 	//stores we are using 
 	"stores": {},
 
-	"template": "application.html",
+	"template": "./application.html",
 	"definition" : "none",
 
 	//models and instantiation parameters for the models. Including 'type' as a property allows

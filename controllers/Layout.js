@@ -59,7 +59,7 @@ function(lang, declare, has, on, win, array, query, domStyle, domAttr, domGeom, 
 				return;
 			}
 
-			var fullScreenScene, children, hasCenter;
+			var fullScreenScene, children;
 
 			if(view.selectedChild && view.selectedChild.isFullScreen){
 				console.warn("fullscreen sceen layout");

@@ -29,7 +29,7 @@ function(lang, Deferred, when, config, DataStore){
 				};
 			}else if(params.store.params.url){
 				options = {
-					"store": new dataStore({
+					"store": new DataStore({
 						store: params.store.store
 					}),
 					"query": params.store.query ? params.store.query: {}
@@ -41,36 +41,33 @@ function(lang, Deferred, when, config, DataStore){
 			}
 			options = {"data": params.data, query: {}};
 		}
-		var modelCtor;
-		var ctrl = null;
-		var newModel = null;
-			var createMvcPromise;
-			try{
-				if(options.store){
-					createMvcPromise = options.store.query();
-				}else{
-					createMvcPromise = options.data;
-				}
-			}catch(ex){
-				loadSimpleModelDeferred.reject("load mvc model error.");
-				return loadSimpleModelDeferred.promise;
+		var createMvcPromise;
+		try{
+			if(options.store){
+				createMvcPromise = options.store.query();
+			}else{
+				createMvcPromise = options.data;
 			}
-			if(createMvcPromise.then){
-				when(createMvcPromise, lang.hitch(this, function(newModel) {
-					// now the loadedModels[item].models is set.
-					//console.log("in simpleModel promise path, loadedModels = ", loadedModels);
-					loadedModels = newModel;
-					loadSimpleModelDeferred.resolve(loadedModels);
-					return loadedModels;
-				}), function(){
-					loadModelLoaderDeferred.reject("load model error.")
-				});
-			}else{ // query did not return a promise, so use newModel
-				loadedModels = createMvcPromise;
-				//console.log("in simpleModel else path, loadedModels = ",loadedModels);
+		}catch(ex){
+			loadSimpleModelDeferred.reject("load mvc model error.");
+			return loadSimpleModelDeferred.promise;
+		}
+		if(createMvcPromise.then){
+			when(createMvcPromise, lang.hitch(this, function(newModel) {
+				// now the loadedModels[item].models is set.
+				//console.log("in simpleModel promise path, loadedModels = ", loadedModels);
+				loadedModels = newModel;
 				loadSimpleModelDeferred.resolve(loadedModels);
 				return loadedModels;
-			}
+			}), function(){
+				loadModelLoaderDeferred.reject("load model error.")
+			});
+		}else{ // query did not return a promise, so use newModel
+			loadedModels = createMvcPromise;
+			//console.log("in simpleModel else path, loadedModels = ",loadedModels);
+			loadSimpleModelDeferred.resolve(loadedModels);
+			return loadedModels;
+		}
 			
 		return loadSimpleModelDeferred;
 	}
