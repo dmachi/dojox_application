@@ -27,7 +27,16 @@
 	// by creating and including one or more of these
 	"modules": [],
 	
+	// If noAutoLoadControllers is set to true a Load, Transition, and Layout controller 
+	// should be included in the list of controllers.  
+	// If noAutoLoadControllers is set to false (or not set) the default Load, Transition, and Layout  
+	// controllers will be added automatically.  
+	"noAutoLoadControllers" : true,  
+	
 	"controllers": [
+		"dojox/app/controllers/Load",
+		"dojox/app/controllers/Transition",
+		"dojox/app/controllers/Layout",
 		"dojox/app/controllers/History"
 	],
 
