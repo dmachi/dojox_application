@@ -1,5 +1,5 @@
-define(["dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/Deferred", "dojo/when", "dojox/css3/transit", "../Controller"],
-function(lang, declare, on, Deferred, when, transit, Controller){
+define(["dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on", "dojo/Deferred", "dojo/when", "dojox/css3/transit", "../Controller"],
+function(lang, declare, has, on, Deferred, when, transit, Controller){
 	// module:
 	//		dojox/app/controllers/transition
 	// summary:
@@ -225,10 +225,14 @@ function(lang, declare, on, Deferred, when, transit, Controller){
 
 				this.app.log("> in Transition._doTransition calling app.triggger select view next name=[",next.name,"], parent.name=[",next.parent.name,"], next!==current path");
 				this.app.trigger("select", {"parent":parent, "view":next});
-				var result = transit(current.domNode, next.domNode, lang.mixin({}, opts, {
-					transition: this._getDefaultTransition(parent) || "none"
-				}));
-				result.then(lang.hitch(this, function(){
+				var result = true;
+				if(!has("ie")){
+					// if we are on IE CSS3 transitions are not supported (yet). So just skip the transition itself.
+					result = transit(current.domNode, next.domNode, lang.mixin({}, opts, {
+						transition: this._getDefaultTransition(parent) || "none"
+					}));
+				}
+				when(result, lang.hitch(this, function(){
 					// deactivate sub child of current view, then deactivate current view
 					var subChild = current.selectedChild;
 					while(subChild){
