@@ -6,6 +6,7 @@
 
 	"dependencies": [
 		"dojox/mobile/_base",
+		"dojox/mobile/compat",
 		"dojox/mobile/TabBar",
 		"dojox/mobile/RoundRect",
 		"dojox/mobile/TabBarButton",
@@ -79,8 +80,22 @@
 					}           
                 }
             },
-            "template": "./templates/repeat.html",
-            "dependencies":["dojox/mobile/TextBox"]
+			"defaultView": "repeatList",
+			"defaultTransition": "fade",
+			"definition": "none",
+
+			"views": {
+				"repeatList":{
+					"definition" : "./views/repeat.js",
+					"template": "./templates/repeat.html",
+					"dependencies":["dojox/mobile/TextBox"]
+				},
+				"repeatDetails":{
+					"definition" : "./views/repeatDetails.js",
+					"template": "./templates/repeatDetails.html",
+					"dependencies":["dojox/mobile/TextBox"]
+				}
+			}
 		},
 
 		"generate": {
