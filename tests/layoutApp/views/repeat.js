@@ -1,5 +1,5 @@
-define(["dojo/dom", "dojo/_base/connect", "dijit/registry", "dojox/mvc/at", "dojox/mvc/Repeat", "dojox/mvc/getStateful", "dojox/mvc/Output"],
-function(dom, connect, registry, at, Repeat, getStateful, Output){
+define(["dojo/dom", "dojo/_base/connect", "dijit/registry", "dojox/mvc/at", "dojox/mobile/TransitionEvent", "dojox/mvc/Repeat", "dojox/mvc/getStateful", "dojox/mvc/Output"],
+function(dom, connect, registry, at, TransitionEvent, Repeat, getStateful, Output){
 	var _connectResults = []; // events connect result
 
 	var repeatmodel = null;	//repeat view data model
@@ -16,6 +16,17 @@ function(dom, connect, registry, at, Repeat, getStateful, Output){
 	// show an item detail
 	var setDetailsContext = function(index){
 		repeatmodel.set("cursorIndex", index);
+
+		// transition to repeatDetails view with the &cursor=index
+		var transOpts = {
+			title : "repeatDetails",
+			target : "repeat,repeatDetails",
+			url : "#repeat,repeatDetails", // this is optional if not set it will be created from target   
+			params : {"cursor":index}
+		};
+		var e = window.event;
+		new TransitionEvent(e.srcElement, transOpts, e).dispatch(); 
+		
 	};
 	// insert an item
 	var insertResult = function(index){
