@@ -1,5 +1,5 @@
-require(["dojo/_base/window","dojox/app/main", "dojox/json/ref", "dojo/text!./config.json"],
-function(win, Application, jsonRef, config){
+require(["dojo/_base/window","dojox/app/main", "dojox/json/ref", "dojo/text!./config.json", "dojo/sniff"],
+function(win, Application, jsonRef, config, has){
 	win.global.modelApp = {};
 	modelApp.names = {
 		identifier: "id",
@@ -48,5 +48,11 @@ function(win, Application, jsonRef, config){
 		"Tel": "408-764-1234",
 		"Fax": "408-764-4321"
 	}];
-	app = Application(jsonRef.fromJson(config));
+	var config = jsonRef.fromJson(config);
+	// on IE use the HistoryHash controller instead of the History controller.
+	//console.log("has(ie)="+has("ie"));
+	config.controllers[0] = has("ie") ? "dojox/app/controllers/HistoryHash" : "dojox/app/controllers/History";		
+	//console.log("config.controllers[0]="+config.controllers[0]);
+	Application(config);
+	
 });
