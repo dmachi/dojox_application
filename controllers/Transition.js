@@ -73,7 +73,7 @@ function(lang, declare, has, on, Deferred, when, transit, Controller){
 			}
 
 			// transition to the target view
-			this.transition({"viewId":target, opts: lang.mixin({reverse: false},evt.detail)});
+			this.transition({"viewId":target, opts: lang.mixin({},evt.detail)});
 		},
 
 		proceedTransition: function(transitionEvt){
@@ -228,9 +228,12 @@ function(lang, declare, has, on, Deferred, when, transit, Controller){
 				var result = true;
 				if(!has("ie")){
 					// if we are on IE CSS3 transitions are not supported (yet). So just skip the transition itself.
-					result = transit(current.domNode, next.domNode, lang.mixin({}, opts, {
-						transition: this._getDefaultTransition(parent) || "none"
-					}));
+					var mergedOpts = lang.mixin({}, opts); // handle reverse from mergedOpts or transitionDir 
+					mergedOpts = lang.mixin({}, mergedOpts, {
+						reverse: (mergedOpts.reverse || mergedOpts.transitionDir===-1)?true:false,
+						transition: mergedOpts.transition || this._getDefaultTransition(parent) || "none"
+					}); 
+					result = transit(current.domNode, next.domNode, mergedOpts);
 				}
 				when(result, lang.hitch(this, function(){
 					// deactivate sub child of current view, then deactivate current view
