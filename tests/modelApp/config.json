@@ -83,7 +83,7 @@
 		//repeat scene, include list view and date view
 		"repeat": {
 			"defaultView": "repeatList",
-			"defaultTransition": "fade",
+			"defaultTransition": "slide",
 			"definition": "none",
 
 			"views": {
