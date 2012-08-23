@@ -81,7 +81,7 @@
                 }
             },
 			"defaultView": "repeatList",
-			"defaultTransition": "fade",
+			"defaultTransition": "slide",
 			"definition": "none",
 
 			"views": {
