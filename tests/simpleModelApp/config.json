@@ -14,6 +14,7 @@
 		"dojox/mobile/Heading",
 		"dojo/store/Memory",
 		"dijit/form/Textbox",
+		"dojo/store/JsonRest",
 		"dojo/store/Memory",
 		"dojo/data/ItemFileWriteStore",
 		"dojo/store/DataStore",
@@ -59,26 +60,41 @@
 		   "params": {
 				"url": "./resources/data/repeat.json"
 		   }
+       },
+       // note that a jsonRest store requires the data be in a different format...
+	   "jsonStore":{
+	       "type": "dojo/store/JsonRest",
+		   "params": {
+		   		"target": "./resources/data/jsonRestRepeatData.json"
+		   }
        }
 	},
 
 	//models and instantiation parameters for the models. Including 'type' as a property allows
 	//one to overide the class that will be used for the model.  By default it is dojox/mvc/mvcModel
 	"models": {
-	   "namesXUnused": {
+		"namesXUnused": {
 					"modelLoader": "dojox/app/utils/mvcModel",
 					"type": "dojox/mvc/EditStoreRefListController",
 					"params":{
 		     		 	"store": {"$ref":"#stores.namesStore"}
 		  		 	}	       
-	   },
-                "repeatmodels3": {
+		},
+		"repeatmodels3": {
     				"modelLoader": "dojox/app/utils/mvcModel",
 					"type": "dojox/mvc/EditStoreRefListController",
              		"params":{
              			"datastore": {"$ref":"#stores.repeatItemStore"}
              		}           
-                }
+		},
+		"jsonRestModel": {
+    				"modelLoader": "dojox/app/utils/mvcModel",
+					"type": "dojox/mvc/EditStoreRefListController",
+             		"params":{
+             			"store": {"$ref":"#stores.jsonStore"},
+             			"query": {"Location": "NY"}  			
+             		}           
+		}
 	}, 
 
 	//the name of the scene to load when the app is initialized.
