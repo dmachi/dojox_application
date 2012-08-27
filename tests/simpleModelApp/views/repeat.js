@@ -44,7 +44,7 @@ function(dom, connect, registry, at, Repeat, getStateful, Output){
 	return {
 		// repeate view init
 		init: function(){
-			repeatmodel = this.loadedModels.repeatmodels;
+			repeatmodel = this.loadedModels.jsonRestModel;
 			var repeatDom = dom.byId('repeatWidget');
 			var connectResult;
 			connectResult = connect.connect(repeatDom, "button[id^=\"detail\"]:click", function(e){
