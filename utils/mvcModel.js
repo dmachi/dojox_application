@@ -15,18 +15,18 @@ function(lang, Deferred, when, config, dataStore, getStateful, has){
 		// item: String
 		//		The String with the name of this model
 		// returns: model 
-		//		 The model, of the type specified in the config for this model.
+		//		The model, of the type specified in the config for this model.
 		var loadedModels = {};
 		var loadMvcModelDeferred = new Deferred();
 
 		var fixupQuery = function(query){
-            var ops = {};
+			var ops = {};
 			for(var item in query){  // need this to handle query params without errors
 				if(item.charAt(0) !== "_"){
 					ops[item] = query[item];
 				}
 			}
-			return(ops);			
+			return(ops);
 		}
 
 		var options;
