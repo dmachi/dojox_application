@@ -15,29 +15,33 @@ function(lang, Deferred, when, config, dataStore, getStateful, has){
 		// item: String
 		//		The String with the name of this model
 		// returns: model 
-		//		 The model, of the type specified in the config for this model.
+		//		The model, of the type specified in the config for this model.
 		var loadedModels = {};
 		var loadMvcModelDeferred = new Deferred();
 
-		var options;
-		if(params.store && params.store.params && params.store.params.data){
-			options = {
-				"store": params.store.store,
-				"query": params.store.query ? params.store.query: {}
-			};
-		}else if(params.datastore){
-            var ops = {};
-			for(var item in params.query){  // need this to handle query params without errors
+		var fixupQuery = function(query){
+			var ops = {};
+			for(var item in query){  // need this to handle query params without errors
 				if(item.charAt(0) !== "_"){
-					ops[item] = params.query[item];
+					ops[item] = query[item];
 				}
 			}
+			return(ops);
+		}
 
+		var options;
+		if(params.store){
+			//	if query is not set on the model params, it may be set on the store
+			options = {
+				"store": params.store.store,
+				"query": params.query ? fixupQuery(params.query) : params.store.query ? fixupQuery(params.store.query) : {}
+			};
+		}else if(params.datastore){
 			options = {
 				"store": new dataStore({
 					store: params.datastore.store
 				}),
-				"query": ops
+				"query": fixupQuery(params.query)
 			};
 		}else if(params.data){
 			if(params.data && lang.isString(params.data)){
