@@ -2,9 +2,9 @@
 	<script type="dojo/require">at: "dojox/mvc/at"</script>
     <h1 data-dojo-type="dojox.mobile.Heading" data-dojo-props='back:"Home"'>repeat</h1>
     <form name="repeatTestForm" id="repeatTestForm">    
-    <div class="field-title">repeat - Using an mvcModel (dojox/mvc/EditStoreRefListController) with a dojo.store.Memory.</div>
+    <div class="field-title">repeat - Using an mvcModel (dojox/mvc/EditStoreRefListController) with a dojo.store.JsonRest.</div>
         <div id="repeatWidget" class="fieldset" data-dojo-type="dojox/mvc/Repeat" 
-        	data-dojo-props="exprchar: '#', children: this.loadedModels.repeatmodels.model" >
+        	data-dojo-props="exprchar: '#', children: this.loadedModels.jsonRestModel.model" >
            <div class="row">            
                     <input data-dojo-type="dojox.mobile.TextBox"
                         id="nameInput#{this.index}" data-dojo-props="value: at('rel:#{this.index}','First')" placeHolder="First Name"></input>
@@ -21,12 +21,12 @@
         </div>
         <div class="spacer"></div>
 		<div data-dojo-type="dojox/mvc/Group" 
-			data-dojo-props="target: at(this.loadedModels.repeatmodels, 'cursor')">
+			data-dojo-props="target: at(this.loadedModels.jsonRestModel, 'cursor')">
 					<div class="field-title">
 						<div style="display: inline-block;" id="detailsBanner">Details for selected index:</div>
 						<span class="cell" id="indexOutput"
 							data-dojo-type="dojox/mvc/Output"
-							data-dojo-props="value: at(this.loadedModels.repeatmodels, 'cursorIndex')"></span>
+							data-dojo-props="value: at(this.loadedModels.jsonRestModel, 'cursorIndex')"></span>
 					</div>
 					<table id="table" cellspacing="10"  style="width: 100%">
 						<tr>
