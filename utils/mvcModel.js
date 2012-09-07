@@ -1,6 +1,6 @@
 define(["dojo/_base/lang", "dojo/Deferred", "dojo/when", "dojo/_base/config",
-		"dojo/store/DataStore", "dojox/mvc/getStateful", "dojo/has"],
-function(lang, Deferred, when, config, dataStore, getStateful, has){
+		"dojo/store/DataStore", "dojox/mvc/getStateful"],
+function(lang, Deferred, when, config, dataStore, getStateful){
 	return function(/*Object*/config, /*Object*/params, /*String*/item){
 		// summary:
 		//		mvcModel is called for each mvc model, to create the mvc model based upon the type and params.
@@ -53,48 +53,43 @@ function(lang, Deferred, when, config, dataStore, getStateful, has){
 			}
 			options = {"data": params.data, query: {}};
 		}
-		var newModel = null;
 		var type = config[item].type ? config[item].type : "dojox/mvc/EditStoreRefListController";
 		// need to load the class to use for the model
-		var def = new Deferred();
-		require([type], // require the model type
-		function(requirement){
-			def.resolve(requirement);
-		});
+		// modelLoader must be listed in the dependencies and has thus already been loaded so it _must_ be here
+		// => no need for complex code here
+		var modelCtor = require(type);
 
-		when(def, function(modelCtor){
-			newModel = new modelCtor(options);
-			var createMvcPromise;
-			try{
-				if(newModel.queryStore){
-					createMvcPromise = newModel.queryStore(options.query);
-				}else{
-					var modelProp = newModel._refSourceModelProp || newModel._refModelProp || "model";
-					newModel.set(modelProp, getStateful(options.data));
-					createMvcPromise = newModel;
-				}
-			}catch(ex){
-				//console.warn("load mvc model error.", ex);
-				loadMvcModelDeferred.reject("load mvc model error.");
-				return loadMvcModelDeferred.promise;
+		var newModel = new modelCtor(options);
+		var createMvcPromise;
+		try{
+			if(newModel.queryStore){
+				createMvcPromise = newModel.queryStore(options.query);
+			}else{
+				var modelProp = newModel._refSourceModelProp || newModel._refModelProp || "model";
+				newModel.set(modelProp, getStateful(options.data));
+				createMvcPromise = newModel;
 			}
-			if(createMvcPromise.then){
-				when(createMvcPromise, lang.hitch(this, function() {
-					// now the loadedModels[item].models is set.
-					loadedModels = newModel;
-					loadMvcModelDeferred.resolve(loadedModels);
-					//this.app.log("in mvcModel promise path, loadedModels = ", loadedModels);
-					return loadedModels;
-				}), function(){
-					loadModelLoaderDeferred.reject("load model error.")
-				});
-			}else{ // query did not return a promise, so use newModel
+		}catch(ex){
+			//console.warn("load mvc model error.", ex);
+			loadMvcModelDeferred.reject("load mvc model error.");
+			return loadMvcModelDeferred.promise;
+		}
+		if(createMvcPromise.then){
+			when(createMvcPromise, lang.hitch(this, function() {
+				// now the loadedModels[item].models is set.
 				loadedModels = newModel;
-				//this.app.log("in mvcModel else path, loadedModels = ",loadedModels);
 				loadMvcModelDeferred.resolve(loadedModels);
+				//this.app.log("in mvcModel promise path, loadedModels = ", loadedModels);
 				return loadedModels;
-			}
-		});
+			}), function(){
+				loadModelLoaderDeferred.reject("load model error.")
+			});
+		}else{ // query did not return a promise, so use newModel
+			loadedModels = newModel;
+			//this.app.log("in mvcModel else path, loadedModels = ",loadedModels);
+			loadMvcModelDeferred.resolve(loadedModels);
+			return loadedModels;
+		}
 		return loadMvcModelDeferred;
 	}
 });
