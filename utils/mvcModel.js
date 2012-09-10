@@ -74,22 +74,15 @@ function(lang, Deferred, when, config, dataStore, getStateful){
 			loadMvcModelDeferred.reject("load mvc model error.");
 			return loadMvcModelDeferred.promise;
 		}
-		if(createMvcPromise.then){
-			when(createMvcPromise, lang.hitch(this, function() {
-				// now the loadedModels[item].models is set.
-				loadedModels = newModel;
-				loadMvcModelDeferred.resolve(loadedModels);
-				//this.app.log("in mvcModel promise path, loadedModels = ", loadedModels);
-				return loadedModels;
-			}), function(){
-				loadModelLoaderDeferred.reject("load model error.")
-			});
-		}else{ // query did not return a promise, so use newModel
+		when(createMvcPromise, lang.hitch(this, function() {
+			// now the loadedModels[item].models is set.
 			loadedModels = newModel;
-			//this.app.log("in mvcModel else path, loadedModels = ",loadedModels);
 			loadMvcModelDeferred.resolve(loadedModels);
+			//this.app.log("in mvcModel promise path, loadedModels = ", loadedModels);
 			return loadedModels;
-		}
+		}), function(){
+			loadModelLoaderDeferred.reject("load model error.")
+		});
 		return loadMvcModelDeferred;
 	}
 });
