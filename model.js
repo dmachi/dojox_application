@@ -59,29 +59,18 @@ function(lang, Deferred, when){
 			loadModelDeferred.reject("load model error in model.", ex);
 			return loadModelDeferred.promise;
 		}
-		if(createModelPromise.then){
-			when(createModelPromise, lang.hitch(this, function(newModel){
-				loadedModels[item] = newModel;
-				this.app.log("in app/model, for item=[",item,"] loadedModels =", loadedModels);
-				this.defCount--;
-				if(this.defCount == 0){
-					allModelsLoadedDeferred.resolve(loadedModels);
-				}
-				loadModelDeferred.resolve(loadedModels);
-				return loadedModels;
-			}), function(){
-				loadModelDeferred.reject("load model error in models.");
-			});
-			return loadModelDeferred;
-		}else{
-			loadedModels[item] = createModelPromise;
-			this.app.log("in app/model else path, for item=[",item,"] loadedModels=",  loadedModels);
+		when(createModelPromise, lang.hitch(this, function(newModel){
+			loadedModels[item] = newModel;
+			this.app.log("in app/model, for item=[",item,"] loadedModels =", loadedModels);
 			this.defCount--;
 			if(this.defCount == 0){
 				allModelsLoadedDeferred.resolve(loadedModels);
 			}
 			loadModelDeferred.resolve(loadedModels);
 			return loadedModels;
-		}
+		}), function(){
+			loadModelDeferred.reject("load model error in models.");
+		});
+		return loadModelDeferred;
 	}
 });
