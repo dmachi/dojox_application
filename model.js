@@ -43,51 +43,34 @@ function(lang, Deferred, when){
 	};
 
 	function setupModel(config, item, parent, allModelsLoadedDeferred, loadedModels){
-				// Here we need to create the modelLoader and call it passing in the item and the config[item].params
-				var params = config[item].params ? config[item].params : {};
-				var def = new Deferred();
-				
-				var modelLoader = config[item].modelLoader ? config[item].modelLoader : "dojox/app/utils/simpleModel";
-				require([modelLoader], // require the model type
-						function( requirement ){
-							def.resolve( requirement );
-						}
-				);
-				var loadModelDeferred = new Deferred();
-				return when(def, lang.hitch(this, function(modelCtor){
-					var createModelPromise;
-					try{
-						createModelPromise = modelCtor(config, params, item);
-					}catch(ex){
-						console.warn("load model error in model.", ex);
-						loadModelDeferred.reject("load model error in model.", ex);
-						return loadModelDeferred.promise;
-					}
-					if(createModelPromise.then){
-						when(createModelPromise, lang.hitch(this, function(newModel){
-							loadedModels[item] = newModel;
-							this.app.log("in app/model, for item=[",item,"] loadedModels =", loadedModels);
-							this.defCount--;
-							if(this.defCount == 0){
-								allModelsLoadedDeferred.resolve(loadedModels);
-							}
-							loadModelDeferred.resolve(loadedModels);
-							return loadedModels;
-						}),
-						function(){
-							loadModelDeferred.reject("load model error in models.");
-						});
-						return loadModelDeferred;
-					}else{
-						loadedModels[item] = createModelPromise;
-						this.app.log("in app/model else path, for item=[",item,"] loadedModels=",  loadedModels);
-						this.defCount--;
-						if(this.defCount == 0){
-							allModelsLoadedDeferred.resolve(loadedModels);
-						}
-						loadModelDeferred.resolve(loadedModels);
-						return loadedModels;
-					}
-				}));
-	}	
+		// Here we need to create the modelLoader and call it passing in the item and the config[item].params
+		var params = config[item].params ? config[item].params : {};
+
+		var modelLoader = config[item].modelLoader ? config[item].modelLoader : "dojox/app/utils/simpleModel";
+		// modelLoader must be listed in the dependencies and has thus already been loaded so it _must_ be here
+		// => no need for complex code here
+		var modelCtor = require(modelLoader);
+		var loadModelDeferred = new Deferred();
+		var createModelPromise;
+		try{
+			createModelPromise = modelCtor(config, params, item);
+		}catch(ex){
+			console.warn("load model error in model.", ex);
+			loadModelDeferred.reject("load model error in model.", ex);
+			return loadModelDeferred.promise;
+		}
+		when(createModelPromise, lang.hitch(this, function(newModel){
+			loadedModels[item] = newModel;
+			this.app.log("in app/model, for item=[",item,"] loadedModels =", loadedModels);
+			this.defCount--;
+			if(this.defCount == 0){
+				allModelsLoadedDeferred.resolve(loadedModels);
+			}
+			loadModelDeferred.resolve(loadedModels);
+			return loadedModels;
+		}), function(){
+			loadModelDeferred.reject("load model error in models.");
+		});
+		return loadModelDeferred;
+	}
 });
