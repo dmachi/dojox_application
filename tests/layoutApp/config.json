@@ -5,6 +5,7 @@
 	"splash": "splash",
 
 	"dependencies": [
+		"dojox/app/utils/mvcModel",
 		"dojox/mobile/_base",
 		"dojox/mobile/compat",
 		"dojox/mobile/TabBar",
@@ -14,6 +15,7 @@
 		"dojox/mobile/RoundRect",
 		"dojox/mobile/Heading",
 		"dojo/store/Memory",
+		"dojox/mvc/EditStoreRefListController",
 		"dojox/mvc/Group",
         "dojox/mvc/Repeat",
         "dojox/mvc/Output",
