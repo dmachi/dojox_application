@@ -70,36 +70,6 @@
 							events.push(newStatus);
 							if (newStatus == 2) {
 								doh.register("Test-SimpleApp", [{
-									name : "test-LifeCycle",
-									runTest : function(t) {
-										var dfd = new doh.Deferred();
-										setTimeout(function() {
-											t.assertEqual([1, 2], events);
-											// test lifecycle methods are available
-											t.assertNotEqual(null, simpleModelApp.setStatus);
-											t.assertNotEqual(null, simpleModelApp.getStatus);
-											t.assertNotEqual(null, simpleModelApp.lifecycle);
-											return dfd.callback(true);
-										}, 500);
-										return dfd;
-									},
-								}, {
-									// Test controllers
-									name : "test-Controllers",
-									runTest : function(t) {
-										var dfd = new doh.Deferred();
-										setTimeout(function() {
-											// test controllers
-											t.assertEqual(4, simpleModelApp.controllers.length);
-											t.assertTrue(simpleModelApp.controllers[0] instanceof Load);
-											t.assertTrue(simpleModelApp.controllers[1] instanceof Transition);
-											t.assertTrue(simpleModelApp.controllers[2] instanceof Layout);
-											t.assertTrue(simpleModelApp.controllers[3] instanceof History);
-											return dfd.callback(true);
-										}, 500);
-										return dfd;
-									}
-								}, {
 									// Test initial listitem labels
 									name : "initial-listItem-labels",
 									runTest : function() {
