@@ -6,7 +6,7 @@
 
 	"dependencies": [
 		"dojox/mobile/_base",
-		"dojox/mobile/compat",
+		"dojox/mobile/compat",		
 		"dojox/mobile/TabBar",
 		"dojox/mobile/RoundRect",
 		"dojox/mobile/TabBarButton",
@@ -19,7 +19,6 @@
 		"dojo/store/Memory",
 		"dojo/data/ItemFileWriteStore",
 		"dojo/store/DataStore",
-		"dojox/app/utils/simpleModel",
 		"dojox/app/utils/mvcModel",
 		"dojox/mvc/EditStoreRefListController",
 		"dojox/mobile/deviceTheme"
@@ -109,7 +108,7 @@
 		"home": {
 			"definition" : "none",
 			"dependencies":["dojox/mobile/ListItem","dojox/mobile/RoundRectList","dojox/mobile/RoundRectCategory","dojox/mobile/Heading"],
-			"template": "./templates/main.html"
+			"template": "../app/tests/simpleModelApp/templates/main.html"
 		},
 
 		"simple":{
@@ -122,8 +121,8 @@
 					}
 				}
 			},
-			"definition" : "./views/simple.js",
-			"template": "./templates/simple.html",
+			"definition" : "../app/tests/simpleModelApp/views/simple.js",
+			"template": "../app/tests/simpleModelApp/templates/simple.html",
 			"dependencies":["dojox/mobile/TextBox","dojox/mvc/Group","dojox/mvc/Repeat","dojox/mvc/Output"]
 		},
 
@@ -144,8 +143,8 @@
 					}
 				}
 			},
-			"definition" : "./views/simple2.js",
-			"template": "./templates/simple2.html",
+			"definition" : "../app/tests/simpleModelApp/views/simple2.js",
+			"template": "../app/tests/simpleModelApp/templates/simple2.html",
 			"dependencies":["dojox/mobile/TextBox","dojox/mvc/Group","dojox/mvc/Repeat","dojox/mvc/Output"]
 		},
 
@@ -164,8 +163,8 @@
 					}
 				}
 			},
-			"definition" : "./views/simple3.js",
-			"template": "./templates/simple3.html",
+			"definition" : "../app/tests/simpleModelApp/views/simple3.js",
+			"template": "../app/tests/simpleModelApp/templates/simple3.html",
 			"dependencies":["dojox/mobile/TextBox"]
 		},
 
@@ -186,7 +185,8 @@
 					}
 				}
 			},
-			"template": "./templates/repeat.html",
+			"template": "../app/tests/simpleModelApp/templates/repeat.html",
+			"definition" : "../app/tests/simpleModelApp/views/repeat.js",
 			"dependencies":["dojox/mobile/TextBox","dojox/mvc/Group","dojox/mvc/Repeat","dojox/mvc/Output"]
 		},
 
@@ -201,17 +201,20 @@
 					}
 				}
 			},
-			"template": "./templates/repeat2.html",
+			"template": "../app/tests/simpleModelApp/templates/repeat2.html",
+			"definition" : "../app/tests/simpleModelApp/views/repeat2.js",
 			"dependencies":["dojox/mobile/TextBox","dojox/mvc/Group","dojox/mvc/Repeat","dojox/mvc/Output"]
 		},
 
 		"repeat3": {
-			"template": "./templates/repeat3.html",
+			"template": "../app/tests/simpleModelApp/templates/repeat3.html",
+			"definition" : "../app/tests/simpleModelApp/views/repeat3.js",
 			"dependencies":["dojox/mobile/TextBox","dojox/mvc/Group","dojox/mvc/Repeat","dojox/mvc/Output"]
 		},
 
 		"generate": {
-			"template": "./templates/generate.html",
+			"template": "../app/tests/simpleModelApp/templates/generate.html",
+			"definition" : "../app/tests/simpleModelApp/views/generate.js",
 			"dependencies":["dojox/mobile/TextBox", "dojox/mobile/TextArea", "dojox/mvc/Generate"]
 		}
 	}
