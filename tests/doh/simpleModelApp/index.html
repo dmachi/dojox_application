@@ -69,14 +69,26 @@
 						topic.subscribe("/app/status", lang.hitch(this, function(newStatus) {
 							events.push(newStatus);
 							if (newStatus == 2) {
+								var listItem_0TestStr = "simple - Using an mvcModel (dojox/mvc/ModelRefController) with json data, no store";
+								var listItem_1TestStr = "simple2 - Using an mvcModel (dojox/mvc/EditModelRefController) with json data, no store";
 								doh.register("Test-SimpleApp", [{
 									// Test initial listitem labels
 									name : "initial-listItem-labels",
 									runTest : function() {
 										var dfd = new doh.Deferred();
 										setTimeout(function() {
-											doh.is(registry.byId("dojox_mobile_ListItem_0").labelNode.innerText, "simple - Using an mvcModel (dojox/mvc/ModelRefController) with json data, no store.");
-											doh.is(registry.byId("dojox_mobile_ListItem_1").labelNode.innerText, "simple2 - Using an mvcModel (dojox/mvc/EditModelRefController) with json data, no store.");
+											var ListItem_0Label = registry.byId("dojox_mobile_ListItem_0");
+											if(ListItem_0Label){
+												doh.is(ListItem_0Label.labelNode.innerText.substring(0,82), listItem_0TestStr);
+											}else{
+												throw new Error("In initial-listItem-labels ListItem_0Label not found."); 
+											}
+											var ListItem_1Label = registry.byId("dojox_mobile_ListItem_1");
+											if(ListItem_1Label){
+												doh.is(ListItem_1Label.labelNode.innerText.substring(0,87), listItem_1TestStr);
+											}else{
+												throw new Error("In initial-listItem-labels ListItem_1Label not found."); 
+											}
 											return dfd.callback(true);
 										}, 500);
 										return dfd;
@@ -144,8 +156,18 @@
 									runTest : function() {
 										var dfd = new doh.Deferred();
 										setTimeout(function() {
-											doh.is(registry.byId("dojox_mobile_ListItem_0").labelNode.innerText, "simple - Using an mvcModel (dojox/mvc/ModelRefController) with json data, no store.");
-											doh.is(registry.byId("dojox_mobile_ListItem_1").labelNode.innerText, "simple2 - Using an mvcModel (dojox/mvc/EditModelRefController) with json data, no store.");
+											var ListItem_0Label = registry.byId("dojox_mobile_ListItem_0");
+											if(ListItem_0Label){
+												doh.is(ListItem_0Label.labelNode.innerText.substring(0,82), listItem_0TestStr);
+											}else{
+												throw new Error("In testbackToHome1 ListItem_0Label not found."); 
+											}
+											var ListItem_1Label = registry.byId("dojox_mobile_ListItem_1");
+											if(ListItem_1Label){
+												doh.is(ListItem_1Label.labelNode.innerText.substring(0,87), listItem_1TestStr);
+											}else{
+												throw new Error("In testbackToHome1 ListItem_1Label not found."); 
+											}
 											return dfd.callback(true);
 										}, 500);
 										return dfd;
@@ -203,8 +225,18 @@
 									runTest : function() {
 										var dfd = new doh.Deferred();
 										setTimeout(function() {
-											doh.is(registry.byId("dojox_mobile_ListItem_0").labelNode.innerText, "simple - Using an mvcModel (dojox/mvc/ModelRefController) with json data, no store.");
-											doh.is(registry.byId("dojox_mobile_ListItem_1").labelNode.innerText, "simple2 - Using an mvcModel (dojox/mvc/EditModelRefController) with json data, no store.");
+											var ListItem_0Label = registry.byId("dojox_mobile_ListItem_0");
+											if(ListItem_0Label){
+												doh.is(ListItem_0Label.labelNode.innerText.substring(0,82), listItem_0TestStr);
+											}else{
+												throw new Error("In testbackToHome ListItem_0Label not found."); 
+											}
+											var ListItem_1Label = registry.byId("dojox_mobile_ListItem_1");
+											if(ListItem_1Label){
+												doh.is(ListItem_1Label.labelNode.innerText.substring(0,87), listItem_1TestStr);
+											}else{
+												throw new Error("In testbackToHome ListItem_1Label not found."); 
+											}
 											return dfd.callback(true);
 										}, 500);
 										return dfd;
