@@ -1,6 +1,5 @@
-define(["dojo/_base/lang", "dojo/Deferred", "dojo/when", "dojo/_base/config",
-		"dojo/store/DataStore"],
-function(lang, Deferred, when, config, DataStore){
+define(["dojo/_base/lang", "dojo/Deferred", "dojo/when"],
+function(lang, Deferred, when){
 	return function(/*Object*/config, /*Object*/params, /*String*/item){
 		// summary:
 		//		simpleModel is called for each simple model, to create the simple model from the DataStore 
@@ -28,8 +27,13 @@ function(lang, Deferred, when, config, DataStore){
 					"query": params.store.query ? params.store.query: {}
 				};
 			}else if(params.store.params.url){
+				try{
+					var dataStoreCtor = require("dojo/store/DataStore");
+				}catch(e){
+					throw new Error("dojo/store/DataStore must be listed in the dependencies");
+				}
 				options = {
-					"store": new DataStore({
+					"store": new dataStoreCtor({
 						store: params.store.store
 					}),
 					"query": params.store.query ? params.store.query: {}

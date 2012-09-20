@@ -46,7 +46,11 @@ function(kernel, require, lang, declare, Deferred, when, has, config, on, ready,
 							lang.mixin(config, params.stores[item].params);
 						}
 						// we assume the store is here through dependencies
-						var storeCtor = require(type);
+						try{
+							var storeCtor = require(type);
+						}catch(e){
+							throw new Error(type+" must be listed in the dependencies");
+						}
 						if(config.data && lang.isString(config.data)){
 							//get the object specified by string value of data property
 							//cannot assign object literal or reference to data property
@@ -326,7 +330,7 @@ function(kernel, require, lang, declare, Deferred, when, has, config, on, ready,
 
 	return function(config, node){
 		if(!config){
-			throw Error("App Config Missing");
+			throw new Error("App Config Missing");
 		}
 
 		if(config.validate){

@@ -19,7 +19,7 @@
 		"dojo/store/JsonRest",
 		"dojo/store/Memory",
 		"dojo/data/ItemFileWriteStore",
-		"dojo/store/DataStore",
+	 	"dojo/store/DataStore",
 		"dojox/app/utils/simpleModel",
 		"dojox/app/utils/mvcModel",
 		"dojox/mvc/EditStoreRefListController",
