@@ -49,14 +49,17 @@ function(lang, Deferred, when){
 		var modelLoader = config[item].modelLoader ? config[item].modelLoader : "dojox/app/utils/simpleModel";
 		// modelLoader must be listed in the dependencies and has thus already been loaded so it _must_ be here
 		// => no need for complex code here
-		var modelCtor = require(modelLoader);
+		try{
+			var modelCtor = require(modelLoader);
+		}catch(e){
+			throw new Error(modelLoader+" must be listed in the dependencies");
+		}
 		var loadModelDeferred = new Deferred();
 		var createModelPromise;
 		try{
 			createModelPromise = modelCtor(config, params, item);
-		}catch(ex){
-			console.warn("load model error in model.", ex);
-			loadModelDeferred.reject("load model error in model.", ex);
+		}catch(e){
+			loadModelDeferred.reject(e);
 			return loadModelDeferred.promise;
 		}
 		when(createModelPromise, lang.hitch(this, function(newModel){
@@ -68,8 +71,8 @@ function(lang, Deferred, when){
 			}
 			loadModelDeferred.resolve(loadedModels);
 			return loadedModels;
-		}), function(){
-			loadModelDeferred.reject("load model error in models.");
+		}), function(e){
+			loadModelDeferred.reject(e);
 		});
 		return loadModelDeferred;
 	}

@@ -1,6 +1,5 @@
-define(["dojo/_base/lang", "dojo/Deferred", "dojo/when", "dojo/_base/config",
-		"dojo/store/DataStore", "dojox/mvc/getStateful"],
-function(lang, Deferred, when, config, dataStore, getStateful){
+define(["dojo/_base/lang", "dojo/Deferred", "dojo/when", "dojox/mvc/getStateful"],
+function(lang, Deferred, when, getStateful){
 	return function(/*Object*/config, /*Object*/params, /*String*/item){
 		// summary:
 		//		mvcModel is called for each mvc model, to create the mvc model based upon the type and params.
@@ -37,8 +36,13 @@ function(lang, Deferred, when, config, dataStore, getStateful){
 				"query": params.query ? fixupQuery(params.query) : params.store.query ? fixupQuery(params.store.query) : {}
 			};
 		}else if(params.datastore){
+			try{
+				var dataStoreCtor = require("dojo/store/DataStore");
+			}catch(e){
+				throw new Error("When using datastore the dojo/store/DataStore module must be listed in the dependencies");
+			}
 			options = {
-				"store": new dataStore({
+				"store": new dataStoreCtor({
 					store: params.datastore.store
 				}),
 				"query": fixupQuery(params.query)
@@ -57,8 +61,11 @@ function(lang, Deferred, when, config, dataStore, getStateful){
 		// need to load the class to use for the model
 		// modelLoader must be listed in the dependencies and has thus already been loaded so it _must_ be here
 		// => no need for complex code here
-		var modelCtor = require(type);
-
+		try{
+			var modelCtor = require(type);
+		}catch(e){
+			throw new Error(type+" must be listed in the dependencies");
+		}
 		var newModel = new modelCtor(options);
 		var createMvcPromise;
 		try{
