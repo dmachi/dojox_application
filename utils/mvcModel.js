@@ -57,6 +57,10 @@ function(lang, Deferred, when, getStateful){
 			}
 			options = {"data": params.data, query: {}};
 		}
+		else {
+			console.warn("mvcModel: Missing parameters.");
+		}
+
 		var type = config[item].type ? config[item].type : "dojox/mvc/EditStoreRefListController";
 		// need to load the class to use for the model
 		// modelLoader must be listed in the dependencies and has thus already been loaded so it _must_ be here
