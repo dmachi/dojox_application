@@ -55,6 +55,7 @@
 				"dojo/when",
 				"dojo/Stateful",
 				"dijit/registry",
+				"dojox/mvc/at",
  				"dojox/app/controllers/Load", 
  				"dojox/app/controllers/Transition", 
  				"dojox/app/controllers/Layout",
@@ -64,8 +65,19 @@
 				"dijit/form/ValidationTextBox",
 				"dijit/form/Button",
 				"dojox/mvc/Output"
-					], function(doh, topic, lang, TransitionEvent, parser, when, Stateful, registry, Load, Transition, Layout, History) {
+					], function(doh, topic, lang, TransitionEvent, parser, when, Stateful, registry, at, Load, Transition, Layout, History) {
+						window.at = at;
 						var events = [];
+
+						getLabelfromWid = function(wid, indx1, indx2){
+							var val = wid.labelNode.innerText || wid.labelNode.firstChild.nodeValue || "";
+							val = lang.trim(val);
+							if(indx2){
+								val = val.substring(indx1,indx2)
+							}
+							return val;
+						};
+
 						topic.subscribe("/app/status", lang.hitch(this, function(newStatus) {
 							events.push(newStatus);
 							if (newStatus == 2) {
@@ -79,13 +91,14 @@
 										setTimeout(function() {
 											var ListItem_0Label = registry.byId("dojox_mobile_ListItem_0");
 											if(ListItem_0Label){
-												doh.is(ListItem_0Label.labelNode.innerText.substring(0,82), listItem_0TestStr);
+												var lab = getLabelfromWid(ListItem_0Label,0,82); 
+												doh.is(lab, listItem_0TestStr);
 											}else{
 												throw new Error("In initial-listItem-labels ListItem_0Label not found."); 
 											}
 											var ListItem_1Label = registry.byId("dojox_mobile_ListItem_1");
 											if(ListItem_1Label){
-												doh.is(ListItem_1Label.labelNode.innerText.substring(0,87), listItem_1TestStr);
+												doh.is(getLabelfromWid(ListItem_1Label,0,87), listItem_1TestStr);
 											}else{
 												throw new Error("In initial-listItem-labels ListItem_1Label not found."); 
 											}
@@ -112,8 +125,20 @@
 									runTest : function() {
 										var dfd = new doh.Deferred();
 										setTimeout(function() {
-											doh.is("123 Valley Rd", registry.byId("streetInput").get("value"), "Street should be of ShipTo");
-											doh.is("Katonah", registry.byId("cityInput").get("value"), "City should be of ShipTo");
+											var wid = registry.byId("streetInput");
+											if(wid){
+												doh.is("123 Valley Rd", wid.get("value"), "Street should be of ShipTo");
+											}else{
+												//throw new Error("In simple-mvc-test-1 streetInput not found.");
+												console.warn("In simple-mvc-test-1 streetInput not found."); 
+											}
+											var wid = registry.byId("cityInput");
+											if(wid){
+												doh.is("Katonah", wid.get("value"), "City should be of ShipTo");
+											}else{
+												//throw new Error("In simple-mvc-test-1 streetInput not found.");
+												console.warn("In simple-mvc-test-1 cityInput not found."); 
+											}
 											return dfd.callback(true);
 										}, 1000);
 										return dfd;
@@ -158,15 +183,15 @@
 										setTimeout(function() {
 											var ListItem_0Label = registry.byId("dojox_mobile_ListItem_0");
 											if(ListItem_0Label){
-												doh.is(ListItem_0Label.labelNode.innerText.substring(0,82), listItem_0TestStr);
+												doh.is(getLabelfromWid(ListItem_0Label,0,82), listItem_0TestStr);
 											}else{
-												throw new Error("In testbackToHome1 ListItem_0Label not found."); 
+												throw new Error("In initial-listItem-labels ListItem_0Label not found."); 
 											}
 											var ListItem_1Label = registry.byId("dojox_mobile_ListItem_1");
 											if(ListItem_1Label){
-												doh.is(ListItem_1Label.labelNode.innerText.substring(0,87), listItem_1TestStr);
+												doh.is(getLabelfromWid(ListItem_1Label,0,87), listItem_1TestStr);
 											}else{
-												throw new Error("In testbackToHome1 ListItem_1Label not found."); 
+												throw new Error("In initial-listItem-labels ListItem_1Label not found."); 
 											}
 											return dfd.callback(true);
 										}, 500);
@@ -188,7 +213,7 @@
 									}
 								}, {
 									// Test verify back to at home
-									name : "testbackToHome1",
+									name : "testInputs1",
 									runTest : function() {
 										var dfd = new doh.Deferred();
 										setTimeout(function() {
@@ -227,15 +252,15 @@
 										setTimeout(function() {
 											var ListItem_0Label = registry.byId("dojox_mobile_ListItem_0");
 											if(ListItem_0Label){
-												doh.is(ListItem_0Label.labelNode.innerText.substring(0,82), listItem_0TestStr);
+												doh.is(getLabelfromWid(ListItem_0Label,0,82), listItem_0TestStr);
 											}else{
-												throw new Error("In testbackToHome ListItem_0Label not found."); 
+												throw new Error("In initial-listItem-labels ListItem_0Label not found."); 
 											}
 											var ListItem_1Label = registry.byId("dojox_mobile_ListItem_1");
 											if(ListItem_1Label){
-												doh.is(ListItem_1Label.labelNode.innerText.substring(0,87), listItem_1TestStr);
+												doh.is(getLabelfromWid(ListItem_1Label,0,87), listItem_1TestStr);
 											}else{
-												throw new Error("In testbackToHome ListItem_1Label not found."); 
+												throw new Error("In initial-listItem-labels ListItem_1Label not found."); 
 											}
 											return dfd.callback(true);
 										}, 500);
