@@ -117,8 +117,8 @@ function(declare, lang, Deferred, when, require, dattr, TemplatedMixin, WidgetsI
 					_definitionDef.resolve(definition);
 					requireSignal.remove();
 				});
-			}catch(ex){
-				_definitionDef.resolve(false);
+			}catch(e){
+				_definitionDef.reject(e);
 				requireSignal.remove();
 			}
 			return _definitionDef;
@@ -159,7 +159,7 @@ function(declare, lang, Deferred, when, require, dattr, TemplatedMixin, WidgetsI
 							def.resolve.call(def, arguments);
 							requireSignal.remove();
 						});
-					}catch(ex){
+					}catch(e){
 						def.resolve(false);
 						requireSignal.remove();
 					}
@@ -210,8 +210,8 @@ function(declare, lang, Deferred, when, require, dattr, TemplatedMixin, WidgetsI
 				var createPromise;
 				try{
 					createPromise = Model(this.models, this.parent, this.app);
-				}catch(ex){
-					loadModelLoaderDeferred.reject("load model error.");
+				}catch(e){
+					loadModelLoaderDeferred.reject(e);
 					return loadModelLoaderDeferred.promise;
 				}
 				if(createPromise.then){  // model returned a promise, so set loadedModels and call startup after the .when
@@ -221,8 +221,8 @@ function(declare, lang, Deferred, when, require, dattr, TemplatedMixin, WidgetsI
 						}
 						this._startup();
 					}),
-					function(){
-						loadModelLoaderDeferred.reject("load model error.")
+					function(err){
+						loadModelLoaderDeferred.reject(err);
 					});
 				}else{ // model returned the actual model not a promise, so set loadedModels and call _startup
 					this.loadedModels = createPromise;
