@@ -92,7 +92,7 @@ function(lang, Deferred, when, getStateful){
 			//this.app.log("in mvcModel promise path, loadedModels = ", loadedModels);
 			return loadedModels;
 		}), function(){
-			loadModelLoaderDeferred.reject("load model error.")
+			loadMvcModelDeferred.reject("load model error.")
 		});
 		return loadMvcModelDeferred;
 	}
