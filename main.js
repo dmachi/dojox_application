@@ -93,8 +93,8 @@ function(kernel, require, lang, declare, Deferred, when, has, config, on, ready,
 						def.resolve.call(def, arguments);
 						requireSignal.remove();
 					});
-				}catch(ex){
-					def.reject("load controllers error.");
+				}catch(e){
+					def.reject(e);
 					requireSignal.remove();
 				}
 
@@ -135,8 +135,8 @@ function(kernel, require, lang, declare, Deferred, when, has, config, on, ready,
 			var createPromise;
 			try{
 				createPromise = Model(this.params.models, this);
-			}catch(ex){
-				loadModelLoaderDeferred.reject("load model error.");
+			}catch(e){
+				loadModelLoaderDeferred.reject(e);
 				return loadModelLoaderDeferred.promise;
 			}
 			if(createPromise.then){

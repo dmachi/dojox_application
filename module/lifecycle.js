@@ -18,7 +18,7 @@ define(["dojo/_base/declare", "dojo/topic"], function(declare, topic){
         setStatus: function(newStatus){
             this._status = newStatus;
             
-            // publish /app/stauts event.
+            // publish /app/status event.
             // application can subscribe this event to do some status change operation.
             topic.publish("/app/status", newStatus);
         }
