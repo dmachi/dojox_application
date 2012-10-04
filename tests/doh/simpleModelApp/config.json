@@ -15,7 +15,6 @@
 		"dojox/mobile/RoundRect",
 		"dojox/mobile/Heading",
 		"dojo/store/Memory",
-		"dijit/form/Textbox",
 		"dojo/store/JsonRest",
 		"dojo/store/Memory",
 		"dojo/data/ItemFileWriteStore",
