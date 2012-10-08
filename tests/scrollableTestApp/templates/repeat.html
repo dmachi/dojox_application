@@ -1,0 +1,31 @@
+<div class="view mblView">
+<div data-dojo-type="dojox/app/widgets/Container" data-dojo-props="scrollable:'true'">    
+	
+	<script type="dojo/require">at: "dojox/mvc/at"</script>
+	<div data-dojo-type="dojox/mobile/Heading" data-dojo-props='label:"Scrollable List One"'>
+		<span id="back3r" data-dojo-type="dojox.mobile.ToolBarButton" arrow="left" 
+		data-dojo-props="transitionOptions: {title: 'Configure', target: 'configuration,ScrollableListSelection', url: '#configuration,ScrollableListSelection', transitionDir: -1}">Back</span>
+		<span data-dojo-type="dojox/mobile/ToolBarButton" id="insert3rx" data-dojo-props='icon:"mblDomButtonWhitePlus"' style="float:right;"></span>
+
+	</div>     
+    <form name="repeatTestForm" id="repeatTestForm3r">    
+    	<div class="field-title">This list should scroll</div>
+        <div id="repeatWidget" class="fieldset" data-dojo-type="dojox/mvc/Repeat" 
+        	data-dojo-props="exprchar: '#', children: this.loadedModels.repeatmodels.model" >
+           <div class="row">            
+                    <input dojoType="dojox.mobile.TextBox"
+                        id="nameInput3r#{this.index}" data-dojo-props="value: at('rel:#{this.index}','First')" placeHolder="First Name"></input>
+                    <button type="button" id="detail#{this.index}" data-dojo-type="dojox/mobile/Button" class="mblBlueButton">
+                        Details
+                    </button>
+                    <button type="button" id="insert#{this.index}" data-dojo-type="dojox/mobile/Button" class="mblBlueButton">
+                        +
+                    </button>
+                    <button type="button" id="delete#{this.index}" data-dojo-type="dojox/mobile/Button" class="mblBlueButton">
+                        -
+                    </button>
+			</div>
+        </div>
+	</form>
+</div>
+</div>

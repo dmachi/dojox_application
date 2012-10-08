@@ -1,0 +1,29 @@
+<div class="view mblView">
+	<script type="dojo/require">at: "dojox/mvc/at"</script>
+	<h1 data-dojo-type="dojox/mobile/Heading" data-dojo-props="label: 'Scrollable List Selection'" data-app-region="top">
+	</h1>
+	<h2 data-dojo-type="dojox/mobile/RoundRectCategory" data-app-region="top">Select a Scrollable List</h2>
+	<div data-dojo-type="dojox/app/widgets/Container" data-app-region="center" data-dojo-prop="scrollable: true">
+	<div id="configurewrapper" style="visibility:hidden">
+		<ul data-dojo-type="dojox/mobile/RoundRectList">
+			<li id="configure_completeLi" data-dojo-type="dojox/mobile/ListItem"
+				data-dojo-props="label: 'Scrollable list One', clickable: true, noArrow: true, onClick: function(e){selectCompleted(-1);},
+				transitionOptions: {title:'List',target: 'Scrollable1', url: '#Scrollable1'}">
+			</li>
+			<li id="configure_completeLi2" data-dojo-type="dojox/mobile/ListItem"
+				data-dojo-props="label: 'Scrollable list Two', clickable: true, noArrow: true, onClick: function(e){selectCompleted(1);},
+				transitionOptions: {title:'List',target: 'Scrollable2', url: '#Scrollable2'}">
+			</li>
+			<li id="configure_completeLi3" data-dojo-type="dojox/mobile/ListItem"
+				data-dojo-props="label: 'Scrollable list Three', clickable: true, noArrow: true, 
+				transitionOptions: {title:'List',target: 'Scrollable3', url: '#Scrollable3'}">
+			</li>
+			
+			<li id="configure_completeLi4" data-dojo-type="dojox/mobile/ListItem"
+				data-dojo-props="label: 'Repeat', clickable: true, noArrow: true, onClick: function(e){selectCompleted(2);},
+				transitionOptions: {title:'List',target: 'repeat', url: '#repeat'}">
+			</li>
+		</ul>
+	</div>
+	</div>
+</div>
