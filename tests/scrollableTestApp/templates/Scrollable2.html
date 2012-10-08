@@ -1,0 +1,33 @@
+<div class="view mblView">
+	  	
+	<script type="dojo/require">at: "dojox/mvc/at"</script>
+	<div data-dojo-type="dojox/mobile/Heading" data-dojo-props='label:"Scrollable List Two"'>
+		<span id="back2" data-dojo-type="dojox.mobile.ToolBarButton" arrow="left" 
+		data-dojo-props="transitionOptions: {title: 'Configure', target: 'configuration,ScrollableListSelection', url: '#configuration,ScrollableListSelection', transitionDir: -1}">Back</span>
+		<span data-dojo-type="dojox/mobile/ToolBarButton" id="insert2x" data-dojo-props='icon:"mblDomButtonWhitePlus"' style="float:right;"></span>
+		<span data-dojo-type="dojox/mobile/ToolBarButton" id="insert10x2" data-dojo-props='icon:"mblDomButtonWhitePlus"' style="float:right;">10</span>
+		<span data-dojo-type="dojox/mobile/ToolBarButton" id="remove10x2" data-dojo-props='icon:"mblDomButtonWhiteMinus"' style="float:right;">10</span>
+
+	</div>     
+	<div data-dojo-type="dojox/mobile/ScrollableView" height="auto">
+
+    <form name="repeatTestForm" id="repeatTestForm2">    
+    	<div class="field-title">This list should scroll, under top header.</div>
+				<ul id="listItems2"
+					data-dojo-type="dojox/mobile/RoundRectList"
+					data-dojo-mixins="dojox/mvc/WidgetList,dojox/mvc/_InlineTemplateMixin"
+					data-dojo-props="children: this.loadedModels.repeatmodels.model"
+					data-mvc-child-type="dojox/mvc/Templated"
+					data-mvc-child-mixins="dojox/mobile/ListItem"
+					data-mvc-child-props="clickable: true,
+							label: at(this.target, 'First'),
+							transitionOptions: {title:'Details',target:'repeatDetails',url:'#repeatDetails',params:{'cursor':this.indexAtStartup}},
+							onClick: function(){setDetailsContext(this.indexAtStartup);}">					
+					<script type="dojox/mvc/InlineTemplate">
+						<li data-dojo-type="dojox/mobile/ListItem">
+						</li>
+					</script>
+				</ul>
+	</form>
+	</div>
+</div>
