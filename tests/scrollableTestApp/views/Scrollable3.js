@@ -1,8 +1,14 @@
-define(["dojo/dom", "dojo/dom-style", "dojo/_base/connect", "dojo/_base/lang", "dijit/registry", "dojox/mvc/at", "dojox/mobile/TransitionEvent", "dojox/mvc/Repeat", "dojox/mvc/getStateful", "dojox/mvc/Output"],
+define(["dojo/dom", "dojo/dom-style", "dojo/_base/connect", "dojo/_base/lang","dijit/registry", "dojox/mvc/at", "dojox/mobile/TransitionEvent", "dojox/mvc/Repeat", "dojox/mvc/getStateful", "dojox/mvc/Output"],
 function(dom, domStyle, connect, lang, registry, at, TransitionEvent, Repeat, getStateful, Output){
 	var _connectResults = []; // events connect result
 
 	var repeatmodel = null;	//repeat view data model
+	
+	// these ids are updated here and in the html file to avoid duplicate ids
+	var backId = 'sc3back1';
+	var insert1Id = 'sc3insert1x';
+	var insert10Id = 'sc3insert10x';
+	var remove10Id = 'sc3remove10x';
 
 	// delete an item
 	deleteResult = function(index){
@@ -30,6 +36,15 @@ function(dom, domStyle, connect, lang, registry, at, TransitionEvent, Repeat, ge
 		var data = {id:Math.random(), "First": "", "Last": "", "Location": "CA", "Office": "", "Email": "", "Tel": "", "Fax": ""};
 		repeatmodel.model.splice(index+1, 0, new getStateful(data));
 		setDetailsContext(index+1);
+		var transOpts = {
+			title : "repeatDetails",
+			target : "repeatDetails",
+			url : "#repeatDetails", // this is optional if not set it will be created from target   
+			params : {"cursor":index+1}
+		};
+		var e = window.event;
+		new TransitionEvent(e.srcElement, transOpts, e).dispatch(); 
+		
 	};
 
 	// get index from dom node id
@@ -44,17 +59,16 @@ function(dom, domStyle, connect, lang, registry, at, TransitionEvent, Repeat, ge
 
 	return {
 		// repeate view init
-		init: function(){
+		init: function(){			
 			repeatmodel = this.loadedModels.repeatmodels;
-		//	var repeatDom = dom.byId('repeatWidget');
 			var connectResult;
 
-			connectResult = connect.connect(dom.byId('insert3x'), "click", function(){
+			connectResult = connect.connect(dom.byId(insert1Id), "click", function(){
 				insertResult(repeatmodel.model.length-1);
 			});
 			_connectResults.push(connectResult);
 
-			connectResult = connect.connect(dom.byId('insert10x3'), "click", function(){
+			connectResult = connect.connect(dom.byId(insert10Id), "click", function(){
 				//Add 10 items to the end of the model
 				app.showProgressIndicator(true);
 				setTimeout(lang.hitch(this,function(){
@@ -69,7 +83,7 @@ function(dom, domStyle, connect, lang, registry, at, TransitionEvent, Repeat, ge
 			});
 			_connectResults.push(connectResult);
 
-			connectResult = connect.connect(dom.byId('remove10x3'), "click", function(){
+			connectResult = connect.connect(dom.byId(remove10Id), "click", function(){
 				//remove 10 items to the end of the model
 				app.showProgressIndicator(true);
 				setTimeout(lang.hitch(this,function(){				
@@ -82,11 +96,6 @@ function(dom, domStyle, connect, lang, registry, at, TransitionEvent, Repeat, ge
 				}), 100);				
 			});
 			_connectResults.push(connectResult);
-
-			if(dom.byId("back3") && this.app.isTablet){ 
-				domStyle.set(dom.byId("back3"), "display", "none"); // hide the back button in tablet mode
-			}
-		
 		},
 
 
@@ -96,6 +105,13 @@ function(dom, domStyle, connect, lang, registry, at, TransitionEvent, Repeat, ge
 			// description:
 			//		beforeActivate will call refreshData to create the
 			//		model/controller and show the list.
+			if(dom.byId(backId) && this.app.isTablet){ 
+				domStyle.set(dom.byId(backId), "visibility", "hidden"); // hide the back button in tablet mode
+			}
+			if(dom.byId("tab1WrapperA")){ 
+				domStyle.set(dom.byId("tab1WrapperA"), "visibility", "visible");  // show the nav view if it being used
+				domStyle.set(dom.byId("tab1WrapperB"), "visibility", "visible");  // show the nav view if it being used
+			}
 		},
 		
 		

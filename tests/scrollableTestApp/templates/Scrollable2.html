@@ -1,19 +1,21 @@
 <div class="view mblView">
-	  	
 	<script type="dojo/require">at: "dojox/mvc/at"</script>
-	<div data-dojo-type="dojox/mobile/Heading" data-dojo-props='label:"Scrollable List Two"'>
-		<span id="back2" data-dojo-type="dojox.mobile.ToolBarButton" arrow="left" 
+
+	<h1 data-dojo-type="dojox/mobile/Heading" data-dojo-props='label:"Scrollable List Two"' data-app-region="top">
+		<span id="sc2back1" data-dojo-type="dojox.mobile.ToolBarButton" arrow="left" 
 		data-dojo-props="transitionOptions: {title: 'Configure', target: 'configuration,ScrollableListSelection', url: '#configuration,ScrollableListSelection', transitionDir: -1}">Back</span>
-		<span data-dojo-type="dojox/mobile/ToolBarButton" id="insert2x" data-dojo-props='icon:"mblDomButtonWhitePlus"' style="float:right;"></span>
-		<span data-dojo-type="dojox/mobile/ToolBarButton" id="insert10x2" data-dojo-props='icon:"mblDomButtonWhitePlus"' style="float:right;">10</span>
-		<span data-dojo-type="dojox/mobile/ToolBarButton" id="remove10x2" data-dojo-props='icon:"mblDomButtonWhiteMinus"' style="float:right;">10</span>
+		<span data-dojo-type="dojox/mobile/ToolBarButton" id="sc2insert1x" data-dojo-props='icon:"mblDomButtonWhitePlus"' style="float:right;">1</span>
+		<span data-dojo-type="dojox/mobile/ToolBarButton" id="sc2insert10x" data-dojo-props='icon:"mblDomButtonWhitePlus"' style="float:right;">10</span>
+		<span data-dojo-type="dojox/mobile/ToolBarButton" id="sc2remove10x" data-dojo-props='icon:"mblDomButtonWhiteMinus"' style="float:right;">10</span>
 
-	</div>     
-	<div data-dojo-type="dojox/mobile/ScrollableView" height="auto">
+	</h1>
 
-    <form name="repeatTestForm" id="repeatTestForm2">    
-    	<div class="field-title">This list should scroll, under top header.</div>
-				<ul id="listItems2"
+	<div data-dojo-type="dojox/app/widgets/Container" data-dojo-props="scrollable:'true'">
+
+		<div class="field-title">Should scroll between the header and footer, this text will also scroll.</div>
+
+		<form name="repeatTestForm">
+				<ul
 					data-dojo-type="dojox/mobile/RoundRectList"
 					data-dojo-mixins="dojox/mvc/WidgetList,dojox/mvc/_InlineTemplateMixin"
 					data-dojo-props="children: this.loadedModels.repeatmodels.model"
@@ -22,12 +24,18 @@
 					data-mvc-child-props="clickable: true,
 							label: at(this.target, 'First'),
 							transitionOptions: {title:'Details',target:'repeatDetails',url:'#repeatDetails',params:{'cursor':this.indexAtStartup}},
-							onClick: function(){setDetailsContext(this.indexAtStartup);}">					
+							onClick: function(){setDetailsContext(this.indexAtStartup);}">
 					<script type="dojox/mvc/InlineTemplate">
 						<li data-dojo-type="dojox/mobile/ListItem">
+							<div data-dojo-type="dojox/mobile/ToolBarButton"
+								data-dojo-props="icon: 'mblDomButtonRedCircleMinus',preventTouch: true, indexAtStartup: this.indexAtStartup,
+													onClick: function(e){ /*console.log(this); console.log(this.indexAtStartup);console.log(e);*/
+																		removeScrollableItem(this.indexAtStartup); return false; }"
+								style="float: left; color: white; background-color: transparent; background-image: none; border: none;"></div>
 						</li>
 					</script>
 				</ul>
-	</form>
+		</form>
 	</div>
+	<h1 data-dojo-type="dojox/mobile/Heading" data-dojo-props="label: 'Scrollable List Two Footer Bar'" data-app-region="bottom">
 </div>

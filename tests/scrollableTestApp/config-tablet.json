@@ -22,6 +22,7 @@
 		"dojox/mobile/RoundRectList",
 		"dojox/mobile/RoundRectCategory",
 		"dojox/app/widgets/Container",
+		"dojox/mobile/Container",
 		"dojo/data/ItemFileWriteStore",
 		"dojo/store/DataStore",
 		"dojox/app/utils/mvcModel",
@@ -72,7 +73,7 @@
 	"definition": "scrollableTestApp/views/tablet/ViewScrollableLists",
 
 	//the name of the view to load when the app is initialized.
-	"defaultView": "Scrollable1",
+	"defaultView": "TestInfo",
 
 	"defaultTransition": "slide",
 	//views are groups of views and models loaded at once
@@ -89,6 +90,10 @@
 			}
 		},
 		
+		
+		"TestInfo": {
+			"template": "scrollableTestApp/templates/TestInfo.html"
+		},
 		"Scrollable1": {
 			"template": "scrollableTestApp/templates/Scrollable1.html"
 		},
@@ -98,8 +103,17 @@
 		"Scrollable3": {
 			"template": "scrollableTestApp/templates/Scrollable3.html"
 		},
-		"repeat": {
-			"template": "scrollableTestApp/templates/repeat.html"
+		"Scrollable4": {
+			"template": "scrollableTestApp/templates/Scrollable4.html"
+		},
+		"Scrollable5": {
+			"template": "scrollableTestApp/templates/Scrollable5.html"
+		},
+		"ListItem-domButtons": {
+			"template": "scrollableTestApp/templates/ListItem-domButtons.html"
+		},
+		"ListItem-domButtons2": {
+			"template": "scrollableTestApp/templates/ListItem-domButtons2.html"
 		},
 		
 		//repeatDetails view, include list view and date view

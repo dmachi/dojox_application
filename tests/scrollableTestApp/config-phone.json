@@ -87,6 +87,10 @@
 			}
 		},
 
+		
+		"TestInfo": {
+			"template": "scrollableTestApp/templates/TestInfo.html"
+		},
 		"Scrollable1": {
 			"template": "scrollableTestApp/templates/Scrollable1.html"
 		},
@@ -96,8 +100,17 @@
 		"Scrollable3": {
 			"template": "scrollableTestApp/templates/Scrollable3.html"
 		},
-		"repeat": {
-			"template": "scrollableTestApp/templates/repeat.html"
+		"Scrollable4": {
+			"template": "scrollableTestApp/templates/Scrollable4.html"
+		},
+		"Scrollable5": {
+			"template": "scrollableTestApp/templates/Scrollable5.html"
+		},
+		"ListItem-domButtons": {
+			"template": "scrollableTestApp/templates/ListItem-domButtons.html"
+		},
+		"ListItem-domButtons2": {
+			"template": "scrollableTestApp/templates/ListItem-domButtons2.html"
 		},
 
 		//repeatDetails view, include list view and date view
