@@ -1,5 +1,7 @@
-define(["dojo/dom", "dojo/_base/lang", "dojo/dom-style", "dijit/registry", "dojox/mvc/at", "dojox/mobile/TransitionEvent", "../utils"],
-	function(dom, lang, domStyle, registry, at, TransitionEvent, utils){
+define(["dojo/dom", "dojo/_base/lang", "dojo/dom-style", "dijit/registry", "dojox/mvc/at", "dojox/mobile/TransitionEvent"],
+	function(dom, lang, domStyle, registry, at, TransitionEvent){
+
+	var wrapperId = 'cfg1Wrapper';
 
 	selectCompleted = function(index){
 		this.app.selected_configuration_item = index;
@@ -14,7 +16,7 @@ define(["dojo/dom", "dojo/_base/lang", "dojo/dom-style", "dijit/registry", "dojo
 		afterActivate: function(){
 			//console.log("configuration/ScrollableListSelection afterActivate called this.app.selected_configuration_item=",this.app.selected_configuration_item);
 			//console.log("setting configurewrapper visible 1");
-			domStyle.set(dom.byId("configurewrapper"), "visibility", "visible"); // show the items list
+			//domStyle.set(dom.byId("configurewrapper"), "visibility", "visible"); // show the items list
 		},
 		
 		beforeDeactivate: function(){

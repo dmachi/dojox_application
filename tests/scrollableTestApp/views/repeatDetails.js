@@ -1,5 +1,5 @@
-define(["dojo/dom", "dojo/_base/connect", "dijit/registry", "dojox/mvc/at", "dojox/mvc/getStateful", "dojox/mvc/Output"],
-function(dom, connect, registry, at, getStateful, Output){
+define(["dojo/dom", "dojo/dom-style", "dojo/_base/connect", "dijit/registry", "dojox/mvc/at", "dojox/mvc/getStateful", "dojox/mvc/Output"],
+function(dom, domStyle, connect, registry, at, getStateful, Output){
 	var _connectResults = []; // events connect result
 
 	var repeatmodel = null;	//repeat view data model
@@ -36,6 +36,10 @@ function(dom, connect, registry, at, getStateful, Output){
 			// if this.params["cursor"] is set use it to set the selected Details Context
 			if(this.params["cursor"]){
 				setDetailsContext(this.params["cursor"]);
+			}
+			if(dom.byId("tab1WrapperA")){ 
+				domStyle.set(dom.byId("tab1WrapperA"), "visibility", "visible");  // show the nav view if it being used
+				domStyle.set(dom.byId("tab1WrapperB"), "visibility", "visible");  // show the nav view if it being used
 			}
 		}
 	}

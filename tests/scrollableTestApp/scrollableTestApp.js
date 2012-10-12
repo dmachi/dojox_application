@@ -1,4 +1,4 @@
-define(["dojox/mobile/ProgressIndicator"], function(ProgressIndicator){
+define(["dojox/mobile/ProgressIndicator","dijit/registry"], function(ProgressIndicator, registry){
 	return function(){
 		// the default select_item is 0, or will throw an error if directly transition to #details,EditTodoItem view
 		this.selected_item = 0;
@@ -7,6 +7,7 @@ define(["dojox/mobile/ProgressIndicator"], function(ProgressIndicator){
 		/*
 	 	* show or hide global progress indicator
 	 	*/
+	 	
 		this.showProgressIndicator = function(show){
 				
 			if(!this.progressIndicator){

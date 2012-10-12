@@ -3,6 +3,16 @@ function(dom, domStyle, connect, lang, registry, at, TransitionEvent, Repeat, ge
 	var _connectResults = []; // events connect result
 
 	var repeatmodel = null;	//repeat view data model
+	
+	// these ids are updated here and in the html file to avoid duplicate ids
+	var backId = 'sc1back1';
+	var insert1Id = 'sc1insert1x';
+	var insert10Id = 'sc1insert10x';
+	var remove10Id = 'sc1remove10x';
+	var wrapperIdA = 'sc1WrapperA';
+	var wrapperIdB = 'sc1WrapperB';
+	var wrapperIdC = 'sc1WrapperC';
+	var wrapperIdD = 'sc1WrapperD';
 
 	// delete an item
 	deleteResult = function(index){
@@ -30,6 +40,15 @@ function(dom, domStyle, connect, lang, registry, at, TransitionEvent, Repeat, ge
 		var data = {id:Math.random(), "First": "", "Last": "", "Location": "CA", "Office": "", "Email": "", "Tel": "", "Fax": ""};
 		repeatmodel.model.splice(index+1, 0, new getStateful(data));
 		setDetailsContext(index+1);
+		var transOpts = {
+			title : "repeatDetails",
+			target : "repeatDetails",
+			url : "#repeatDetails", // this is optional if not set it will be created from target   
+			params : {"cursor":index+1}
+		};
+		var e = window.event;
+		new TransitionEvent(e.srcElement, transOpts, e).dispatch(); 
+		
 	};
 
 	// get index from dom node id
@@ -44,16 +63,16 @@ function(dom, domStyle, connect, lang, registry, at, TransitionEvent, Repeat, ge
 
 	return {
 		// repeate view init
-		init: function(){
+		init: function(){			
 			repeatmodel = this.loadedModels.repeatmodels;
 			var connectResult;
 
-			connectResult = connect.connect(dom.byId('insert1x'), "click", function(){
+			connectResult = connect.connect(dom.byId(insert1Id), "click", function(){
 				insertResult(repeatmodel.model.length-1);
 			});
 			_connectResults.push(connectResult);
 
-			connectResult = connect.connect(dom.byId('insert10x'), "click", function(){
+			connectResult = connect.connect(dom.byId(insert10Id), "click", function(){
 				//Add 10 items to the end of the model
 				app.showProgressIndicator(true);
 				setTimeout(lang.hitch(this,function(){
@@ -68,7 +87,7 @@ function(dom, domStyle, connect, lang, registry, at, TransitionEvent, Repeat, ge
 			});
 			_connectResults.push(connectResult);
 
-			connectResult = connect.connect(dom.byId('remove10x'), "click", function(){
+			connectResult = connect.connect(dom.byId(remove10Id), "click", function(){
 				//remove 10 items to the end of the model
 				app.showProgressIndicator(true);
 				setTimeout(lang.hitch(this,function(){				
@@ -90,9 +109,22 @@ function(dom, domStyle, connect, lang, registry, at, TransitionEvent, Repeat, ge
 			// description:
 			//		beforeActivate will call refreshData to create the
 			//		model/controller and show the list.
-			if(dom.byId("back1") && this.app.isTablet){ 
-				domStyle.set(dom.byId("back1"), "visibility", "hidden"); // hide the back button in tablet mode
+			if(dom.byId(backId) && this.app.isTablet){ 
+				domStyle.set(dom.byId(backId), "visibility", "hidden"); // hide the back button in tablet mode
 			}
+			if(dom.byId("tab1WrapperA")){ 
+				domStyle.set(dom.byId("tab1WrapperA"), "visibility", "visible");  // show the nav view if it being used
+				domStyle.set(dom.byId("tab1WrapperB"), "visibility", "visible");  // show the nav view if it being used
+			}
+			//domStyle.set(dom.byId(wrapperIdA), "visibility", "visible");  // show the view when it is ready
+			//domStyle.set(dom.byId(wrapperIdB), "visibility", "visible");  // show the view when it is ready
+			//domStyle.set(dom.byId(wrapperIdC), "visibility", "visible");  // show the view when it is ready
+			//domStyle.set(dom.byId(wrapperIdD), "visibility", "visible");  // show the view when it is ready
+		},
+
+		afterActivate: function(){
+			// summary:
+			//		view life cycle afterActivate()
 		},
 		
 		
