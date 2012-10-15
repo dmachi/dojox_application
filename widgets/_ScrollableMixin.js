@@ -4,7 +4,7 @@ define([
 	"dojo/_base/lang",
 	"dojo/dom-class",
 	"dojo/dom-construct",
-	"./scrollable"],
+	"dojox/mobile/scrollable"],
 	function(declare, lang, domClass, domConstruct, Scrollable){
 	// module:
 	//		dojox/mobile/_ScrollableMixin
@@ -15,7 +15,7 @@ define([
 		// summary:
 		//		Mixin for widgets to have a touch scrolling capability.
 		// description:
-		//		Actual implementation is in scrollable.js.
+		//		Actual implementation is in dojox/mobile/scrollable.js.
 		//		scrollable.js is not a dojo class, but just a collection
 		//		of functions. This module makes scrollable.js a dojo class.
 
