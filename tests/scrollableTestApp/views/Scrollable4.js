@@ -5,10 +5,10 @@ function(dom, domStyle, connect, lang, registry, at, TransitionEvent, Repeat, ge
 	var repeatmodel = null;	//repeat view data model
 	
 	// these ids are updated here and in the html file to avoid duplicate ids
-	var backId = 'sc2back1';
-	var insert1Id = 'sc2insert1x';
-	var insert10Id = 'sc2insert10x';
-	var remove10Id = 'sc2remove10x';
+	var backId = 'sc4back1';
+	var insert1Id = 'sc4insert1x';
+	var insert10Id = 'sc4insert10x';
+	var remove10Id = 'sc4remove10x';
 
 	// delete an item
 	deleteResult = function(index){

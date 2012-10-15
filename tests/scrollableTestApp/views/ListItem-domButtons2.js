@@ -91,6 +91,10 @@ function(dom, domStyle, connect, registry, at, TransitionEvent, Repeat, getState
 			if(dom.byId("back3r") && this.app.isTablet){ 
 				domStyle.set(dom.byId("back3r"), "visibility", "hidden"); // hide the back button in tablet mode
 			}
+			if(dom.byId("tab1WrapperA")){ 
+				domStyle.set(dom.byId("tab1WrapperA"), "visibility", "visible");  // show the nav view if it being used
+				domStyle.set(dom.byId("tab1WrapperB"), "visibility", "visible");  // show the nav view if it being used
+			}
 		},
 		
 		
