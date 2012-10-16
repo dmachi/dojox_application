@@ -26,7 +26,7 @@ define(["dojo/dom", "dojo/_base/lang", "dojo/dom-style", "dijit/registry", "dojo
 		afterDeactivate: function(){
 			//console.log("configuration/ScrollableListSelection afterDeactivate called this.app.selected_configuration_item=",this.app.selected_configuration_item);
 			//console.log("setting configurewrapper hidden");
-			domStyle.set(dom.byId("configurewrapper"), "visibility", "hidden"); // hide the items list 
+			//domStyle.set(dom.byId("configurewrapper"), "visibility", "hidden"); // hide the items list 
 		},
 
 		destroy: function(){
