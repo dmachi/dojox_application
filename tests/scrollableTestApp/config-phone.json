@@ -94,6 +94,9 @@
 		"Scrollable1": {
 			"template": "scrollableTestApp/templates/Scrollable1.html"
 		},
+		"Scrollable1P": {
+			"template": "scrollableTestApp/templates/Scrollable1P.html"
+		},
 		"Scrollable2": {
 			"template": "scrollableTestApp/templates/Scrollable2.html"
 		},
@@ -113,7 +116,6 @@
 			"template": "scrollableTestApp/templates/ListItem-domButtons2.html"
 		},
 
-		//repeatDetails view, include list view and date view
 		"repeatDetails": {
 			"template": "scrollableTestApp/templates/repeatDetails.html",
 			"defaultTransition": "slide"
