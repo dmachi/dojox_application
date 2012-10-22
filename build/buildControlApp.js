@@ -9,7 +9,7 @@ define(["build/buildControlDefault"], function(bc){
 		// json dojo app config files needs to go through depsAppConfig
 		function(resource, bc){
 			// parse all JSON files (some might not be app config but
-			// we will ignore them in the transform
+			// we will ignore them in the transform)
 			return /\.json$/.test(resource.src);
 			},
 			["read", "depsAppConfig", "write"]
