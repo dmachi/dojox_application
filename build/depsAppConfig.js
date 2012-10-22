@@ -1,7 +1,8 @@
 define([
+	"require",
 	"build/buildControl",
 	"dojox/json/ref"
-], function(bc, json){
+], function(require, bc, json){
 	var parseViews = function(mids, views){
 		for(var key in views){
 			// ignore naming starting with _ (jsonref adding is own stuff in there)
@@ -12,7 +13,7 @@ define([
 			// TODO deal with "./" shortcut?
 			if(view.definition && view.definition != "none"){
 				// TODO default view location?
-				mids.push(view.definition);
+				mids.push(view.definition.replace(/(\.js)$/, ""));
 			}
 			if(view.template){
 				mids.push(view.template);
@@ -32,10 +33,16 @@ define([
 		try{
 			var config = json.fromJson(str);
 		}catch(e){
+			// TODO better error reporting
 		}
 
 		if(!config){
 			return;
+		}
+
+		if(config.loaderConfig){
+			console.log("config: "+config.loaderConfig.paths);
+			require(config.loaderConfig);
 		}
 
 		if(config.dependencies){
