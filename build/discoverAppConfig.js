@@ -1,9 +1,10 @@
 define([
-	"require",
+	"build/argv",
+	"build/fs",
 	"build/buildControl",
 	"dojox/json/ref"
-], function(require, bc, json){
-	var parseViews = function(mids, views){
+], function(argv, fs, bc, json){
+	var parseViews = function(mids, mainLayer, views){
 		for(var key in views){
 			// ignore naming starting with _ (jsonref adding is own stuff in there)
 			if(key.indexOf("_") == 0){
@@ -13,7 +14,12 @@ define([
 			// TODO deal with "./" shortcut?
 			if(view.definition && view.definition != "none"){
 				// TODO default view location? (relies on "./" so need that first)
-				mids.push(view.definition.replace(/(\.js)$/, ""));
+				var mid = view.definition.replace(/(\.js)$/, "");
+				if(!bc.layers[mid] && bc.multipleAppConfigLayers){
+					bc.layers[mid] = { include: [], exclude: [ mainLayer ] };
+					mids = bc.layers[mid].include;
+				}
+				mids.push(mid);
 			}
 			if(view.template){
 				mids.push(view.template);
@@ -25,68 +31,47 @@ define([
 				parseViews(mids, view.views);
 			}
 		}
-	}
-	return function(resource){
-		var mids = [],
-			str = resource.text;
-
-		try{
-			var config = json.fromJson(str);
-		}catch(e){
-			// TODO better error reporting
-		}
-
-		if(!config){
-			return;
-		}
-
-		if(config.loaderConfig){
-			require(config.loaderConfig);
-		}
-
-		if(config.dependencies){
-			mids = mids.concat(config.dependencies);
-		}
-		if(config.controllers){
-			mids = mids.concat(config.controllers);
-		}
-		if(config.modules){
-			mids = mids.concat(config.modules);
-		}
-		if(config.template){
-			mids.push(config.template);
-		}
-		if(config.definition && config.definition != "none"){
-			mids.push(config.definition.replace(/(\.js)$/, ""));
-		}
-
-		// go into the view
-		if(config.views){
-			parseViews(mids, config.views);
-		}
-
-		// depsDeclarative.js
-		// Iterate through the layers, identify those that contain this resource.mid, 
-		// remove it from the include array and then add this resource's includes
-		for(var mid in bc.amdResources){
-			if(bc.amdResources[mid].layer){ // This resource is a layer
-				var includes = bc.amdResources[mid].layer.include,
-					idx = includes.indexOf(resource.mid);
-				// Bitwise operator that returns true if the layer contains this resource
-				if(~idx){
-					// Remove this resources mid from the layer's include array
-					includes.splice(idx, 1);
-					mids.forEach(function(dep){
-						// Uniquely add appropriate mids to the layer's include array
-						if(!(/^(require|exports|module)$/.test(dep))){
-							if(!~includes.indexOf(dep)){
-								includes.push(dep);
-							}
-						}
-					});
+	};
+	return function(){
+		var config = json.fromJson(fs.readFileSync(bc.getSrcModuleInfo(argv.args.appConfigFile, null, true).url));
+		if(config){
+			var mids = [];
+			if(config.loaderConfig){
+				require(config.loaderConfig);
+			}
+			// main layer
+			var mainLayer;
+			if(!argv.args.appConfigLayer){
+				// no layer specified, take the first one
+				for(var l in bc.layers){
+					mainLayer = l;
+					break;
 				}
 			}
+			if(!mainLayer && !bc.layers[argv.args.appConfigLayer]){
+				bc.layers[mainLayer = argv.args.appConfigLayer] = { include: [], exclude: [] };
+			}
+			if(config.dependencies){
+				mids = mids.concat(config.dependencies);
+			}
+			if(config.controllers){
+				mids = mids.concat(config.controllers);
+			}
+			if(config.modules){
+				mids = mids.concat(config.modules);
+			}
+			if(config.template){
+				mids.push(config.template);
+			}
+			if(config.definition && config.definition != "none"){
+				mids.push(config.definition.replace(/(\.js)$/, ""));
+			}
+			// go into the view children
+			if(config.views){
+				parseViews(mids, mainLayer, config.views);
+			}
+			Array.prototype.splice.apply(bc.layers[mainLayer].include, [bc.layers[mainLayer].length, 0].concat(mids));
 		}
-
 	};
 });
+
