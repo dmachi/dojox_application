@@ -5,6 +5,7 @@ var profile = {
 	basePath: "..",
 	releaseDir: "./layoutApp/release",
 	action: "release",
+/*	multipleAppConfigLayers: true,*/
 	packages:[{
 		name: "dojo",
 		location: "../../../dojo"
@@ -21,7 +22,10 @@ var profile = {
 	}],
 	layers: {
 		"layoutApp/layoutApp": {
-			include: [ "layoutApp/config.json", "layoutApp/index.html" ]
+			include: [ "layoutApp/index.html" ]
 		}
 	}
 };
+
+
+
