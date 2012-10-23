@@ -15,7 +15,6 @@
 		"dojox/mobile/RoundRect",
 		"dojox/mobile/Heading",
 		"dojo/store/Memory",
-		"dijit/form/Textbox",
 		"dojo/store/JsonRest",
 		"dojo/store/Memory",
 		"dojo/data/ItemFileWriteStore",
@@ -89,6 +88,7 @@
 						"datastore": {"$ref":"#stores.repeatItemStore"}
 					}
 		},
+		// The query param will not work with a file, but you should be able to see it passed to the service. 
 		"jsonRestModel": {
 					"modelLoader": "dojox/app/utils/mvcModel",
 					"type": "dojox/mvc/EditStoreRefListController",
