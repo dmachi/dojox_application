@@ -12,7 +12,7 @@ define([
 			var view = views[key];
 			// TODO deal with "./" shortcut?
 			if(view.definition && view.definition != "none"){
-				// TODO default view location?
+				// TODO default view location? (relies on "./" so need that first)
 				mids.push(view.definition.replace(/(\.js)$/, ""));
 			}
 			if(view.template){
@@ -41,7 +41,6 @@ define([
 		}
 
 		if(config.loaderConfig){
-			console.log("config: "+config.loaderConfig.paths);
 			require(config.loaderConfig);
 		}
 
@@ -54,10 +53,14 @@ define([
 		if(config.modules){
 			mids = mids.concat(config.modules);
 		}
+		if(config.template){
+			mids.push(config.template);
+		}
+		if(config.definition && config.definition != "none"){
+			mids.push(config.definition.replace(/(\.js)$/, ""));
+		}
 
-		// TODO top level view / template
-
-		// go into the vieww
+		// go into the view
 		if(config.views){
 			parseViews(mids, config.views);
 		}
