@@ -2,8 +2,10 @@ define([
 	"build/argv",
 	"build/fs",
 	"build/buildControl",
+	"build/messages",
+	"build/process",
 	"dojox/json/ref"
-], function(argv, fs, bc, json){
+], function(argv, fs, bc, messages, process, json){
 	var parseViews = function(mids, mainLayer, views){
 		for(var key in views){
 			// ignore naming starting with _ (jsonref adding is own stuff in there)
@@ -11,9 +13,8 @@ define([
 				continue;
 			}
 			var view = views[key];
-			// TODO deal with "./" shortcut?
+			// TODO deal with "./" shortcut & default view location (which relies on "./")
 			if(view.definition && view.definition != "none"){
-				// TODO default view location? (relies on "./" so need that first)
 				var mid = view.definition.replace(/(\.js)$/, "");
 				if(!bc.layers[mid] && bc.multipleAppConfigLayers){
 					bc.layers[mid] = { include: [], exclude: [ mainLayer ] };
@@ -33,7 +34,11 @@ define([
 		}
 	};
 	return function(){
-		var config = json.fromJson(fs.readFileSync(bc.getSrcModuleInfo(argv.args.appConfigFile, null, true).url));
+		var config;
+		try{
+			config = json.fromJson(fs.readFileSync(bc.getSrcModuleInfo(argv.args.appConfigFile, null, true).url));
+		}catch(e){
+		}
 		if(config){
 			var mids = [];
 			if(config.loaderConfig){
@@ -71,6 +76,9 @@ define([
 				parseViews(mids, mainLayer, config.views);
 			}
 			Array.prototype.splice.apply(bc.layers[mainLayer].include, [bc.layers[mainLayer].length, 0].concat(mids));
+		}else{
+			messages.log("pacify", argv.args.appConfigFile+" is not a valid dojox/app JSON config file");
+			process.exit(-1);
 		}
 	};
 });
