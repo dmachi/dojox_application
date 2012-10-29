@@ -4,6 +4,12 @@
 	"description": "A layout App",
 	"splash": "splash",
 
+	loaderConfig: {
+		"paths": {
+			"layoutApp": "../dojox/app/tests/layoutApp"
+		}
+	},
+
 	"dependencies": [
 		"dojox/app/utils/mvcModel",
 		"dojox/mobile/_base",
@@ -57,7 +63,7 @@
 	   }
 	}, 
 
-	"template": "./templates/navigation.html",
+	"template": "layoutApp/templates/navigation.html",
 	"definition" : "none",
 
 	//the name of the scene to load when the app is initialized.
@@ -67,8 +73,8 @@
 	//scenes are groups of views and models loaded at once	
 	"views": {
 		"simple":{
-			"definition" : "./views/simple.js",
-			"template": "./templates/simple.html",
+			"definition" : "layoutApp/views/simple.js",
+			"template": "layoutApp/templates/simple.html",
 			"dependencies":["dojox/mobile/TextBox"]
 		},
 
@@ -88,20 +94,21 @@
 
 			"views": {
 				"repeatList":{
-					"definition" : "./views/repeat.js",
-					"template": "./templates/repeat.html",
+					"definition" : "layoutApp/views/repeat.js",
+					"template": "layoutApp/templates/repeat.html",
 					"dependencies":["dojox/mobile/TextBox"]
 				},
 				"repeatDetails":{
-					"definition" : "./views/repeatDetails.js",
-					"template": "./templates/repeatDetails.html",
+					"definition" : "layoutApp/views/repeatDetails.js",
+					"template": "layoutApp/templates/repeatDetails.html",
 					"dependencies":["dojox/mobile/TextBox"]
 				}
 			}
 		},
 
 		"generate": {
-            "template": "./templates/generate.html",
+			"definition": "layoutApp/views/generate",
+            "template": "layoutApp/templates/generate.html",
             "dependencies":["dojox/mobile/TextBox", "dojox/mobile/TextArea", "dojox/mvc/Generate"]
 		}
 	}	
