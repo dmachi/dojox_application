@@ -5,6 +5,7 @@ var profile = {
 	basePath: "..",
 	releaseDir: "./layoutApp/release",
 	action: "release",
+	cssOptimize: "comments",
 /*	multipleAppConfigLayers: true,*/
 	packages:[{
 		name: "dojo",
