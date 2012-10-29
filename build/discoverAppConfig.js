@@ -29,7 +29,7 @@ define([
 				Array.prototype.splice.apply(mids, [ mids.length, 0 ].concat(view.dependencies));
 			}
 			if(view.views){
-				parseViews(mids, view.views);
+				parseViews(mids, mainLayer, view.views);
 			}
 		}
 	};
