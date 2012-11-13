@@ -1,5 +1,5 @@
 require(["dojo/_base/window","dojox/app/main", "dojox/json/ref", "dojo/text!./config.json", "dojo/sniff"],
-function(win, Application, jsonRef, config, has){
+	function(win, Application, jsonRef, config, has){
 	win.global.modelApp = {};
 	modelApp.names = {
 		identifier: "id",

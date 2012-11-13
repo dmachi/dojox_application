@@ -1,6 +1,6 @@
 define(["dojo/_base/kernel",  "require", "dojo/_base/lang", "dojo/_base/declare", "dojo/Deferred", "dojo/when", "dojo/has", "dojo/_base/config",
 	"dojo/on", "dojo/ready", "dojo/_base/window", "dojo/dom-construct", "./model", "./View", "./controllers/Load", "./controllers/Transition",
-	"./controllers/Layout"],
+	"./controllers/Layout", "./module/lifecycle"],
 function(kernel, require, lang, declare, Deferred, when, has, config, on, ready, baseWindow, dom, Model, View,
 		 LoadController, TransitionController, LayoutController){
 	kernel.experimental("dojox.app");
@@ -267,7 +267,7 @@ function(kernel, require, lang, declare, Deferred, when, has, config, on, ready,
 			config.modules = [];
 		}
 		// add dojox/app lifecycle module by default
-		config.modules.push("dojox/app/module/lifecycle");
+		config.modules.push("./module/lifecycle");
 		var modules = config.modules.concat(config.dependencies);
 
 		if(config.template){

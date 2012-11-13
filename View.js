@@ -1,4 +1,5 @@
-define(["dojo/_base/declare", "dojo/_base/lang", "dojo/Deferred", "dojo/when", "require", "dojo/dom-attr", "dijit/_TemplatedMixin", "dijit/_WidgetsInTemplateMixin", "./model"],
+define(["dojo/_base/declare", "dojo/_base/lang", "dojo/Deferred", "dojo/when", "require", "dojo/dom-attr",
+	"dijit/_TemplatedMixin", "dijit/_WidgetsInTemplateMixin", "./model"],
 function(declare, lang, Deferred, when, require, dattr, TemplatedMixin, WidgetsInTemplateMixin, Model){
 	// module:
 	//		dojox/app/View
@@ -142,30 +143,43 @@ function(declare, lang, Deferred, when, require, dattr, TemplatedMixin, WidgetsI
 					tpl = "app/"+tpl;
 				}
 				var deps = this.template ? this.dependencies.concat(["dojo/text!"+tpl]) : this.dependencies.concat([]);
-				var def = new Deferred();
-				if(deps.length > 0){
-					var requireSignal;
-					try{
-						requireSignal = require.on("error", lang.hitch(this, function(error){
-							if(def.isResolved() || def.isRejected()){
-								return;
-							}
-							if(error.info[0] && error.info[0].indexOf(this.template)>=0 ){
-								def.resolve(false);
-								requireSignal.remove();
-							}
-						}));
-						require(deps, function(){
-							def.resolve.call(def, arguments);
-							requireSignal.remove();
-						});
-					}catch(e){
-						def.resolve(false);
-						requireSignal.remove();
-					}
-				}else{
-					def.resolve(true);
+				// if we have a build and that the view layer is built into the view definition this is good to have it
+				// loaded here as well to avoid loading the dependencies from outside the layer
+				var path;
+				if(this.definition && this.definition != "none"){
+					path = this.definition.replace(/(\.js)$/, "");
+				}else if(!this.definition){
+					path = this.id.split("_");
+					path.shift();
+					path = path.join("/");
+					path = "./views/" + path;
 				}
+				var def = new Deferred();
+				require(path?[path]:[], function(){
+					if(deps.length > 0){
+						var requireSignal;
+						try{
+							requireSignal = require.on("error", lang.hitch(this, function(error){
+								if(def.isResolved() || def.isRejected()){
+									return;
+								}
+								if(error.info[0] && error.info[0].indexOf(this.template)>=0 ){
+									def.resolve(false);
+									requireSignal.remove();
+								}
+							}));
+							require(deps, function(){
+								def.resolve.call(def, arguments);
+								requireSignal.remove();
+							});
+						}catch(e){
+							def.resolve(false);
+							requireSignal.remove();
+						}
+					}else{
+						def.resolve(true);
+					}
+				});
 
 				var loadViewDeferred = new Deferred();
 				when(def, lang.hitch(this, function(){
