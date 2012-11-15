@@ -154,7 +154,7 @@ function(declare, lang, Deferred, when, require, dattr, TemplatedMixin, WidgetsI
 					path = path.join("/");
 					path = "./views/" + path;
 				}
-				if(path.indexOf("./") == 0){
+				if(path && path.indexOf("./") == 0){
 					path = "app/"+path;
 				}
 				var def = new Deferred();
