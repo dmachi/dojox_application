@@ -22,6 +22,7 @@
 		"dojox/app/utils/simpleModel",
 		"dojox/app/utils/mvcModel",
 		"dojox/mvc/EditStoreRefListController",
+		"dojox/mvc/EditModelRefController",
 		"dojox/mobile/deviceTheme"
 	],
 	// Modules for the application.  The are basically used as the second
