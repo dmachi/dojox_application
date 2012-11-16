@@ -138,7 +138,7 @@ function(lang, declare, has, on, win, array, config, topic, query, domStyle, dom
 
 			// Compute and save the size of my border box and content box
 			// (w/out calling dojo/_base/html.contentBox() since that may fail if size was recently set)
-			if(view == this.app){
+			if(view !== this.app){
 				var cs = domStyle.getComputedStyle(node);
 				var me = domGeom.getMarginExtents(node, cs);
 				var be = domGeom.getBorderExtents(node, cs);
