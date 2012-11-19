@@ -28,7 +28,7 @@ define([
 		allowNestedScrolls: true,
 
 		constructor: function(){
-			this.scrollableParams = {};
+			this.scrollableParams = {noResize: true}; // set noResize to true to match the way it was done in app/widgets/scrollable.js
 		},
 
 		destroy: function(){
