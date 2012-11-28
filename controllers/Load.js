@@ -1,5 +1,5 @@
-define(["dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/Deferred", "dojo/when", "../Controller", "../View"],
-function(lang, declare, on, Deferred, when, Controller, View){
+define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/Deferred", "dojo/when", "../Controller"],
+	function(require, lang, declare, on, Deferred, when, Controller, View){
 	// module:
 	//		dojox/app/controllers/Load
 	// summary:
@@ -54,7 +54,8 @@ function(lang, declare, on, Deferred, when, Controller, View){
 
 		createChild: function(parent, childId, subIds, params){
 			// summary:
-			//		Create dojox.app.view instance if it is not loaded.
+			//		Create a view instance if not already loaded by calling createView. This is typically a
+			//		dojox/app/View.
 			//
 			// parent: Object
 			//		parent of the view.
@@ -70,15 +71,33 @@ function(lang, declare, on, Deferred, when, Controller, View){
 			if(parent.children[id]){
 				return parent.children[id];
 			}
+			var def = new Deferred();
 			//create and start child. return Deferred
-			var newView = new View(lang.mixin({
-				"app": this.app,
-				"id": id,
-				"name": childId,
-				"parent": parent
-			},{"params": params}));
-			parent.children[id] = newView;
-			return newView.start();
+			when(this.createView(parent, childId, subIds, params), function(newView){
+				parent.children[id] = newView;
+				when(newView.start(), function(view){
+					def.resolve(view);
+				});
+			});
+			return def;
+		},
+
+		createView: function(parent, childId, subIds, params){
+			// summary:
+			//		Create a dojox/app/View instance. Can be overridden to create different type of views.
+			// tags:
+			//		protected
+			var def = new Deferred();
+			require(["../View"], function(View){
+				var newView = new View(lang.mixin({
+					"app": this.app,
+					"id": id,
+					"name": childId,
+					"parent": parent
+				},{"params": params}));
+				def.resolve(newView);
+			});
+			return def;
 		},
 
 		loadChild: function(parent, childId, subIds, params){
