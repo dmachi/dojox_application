@@ -1,8 +1,6 @@
 define(["dojo/_base/kernel",  "require", "dojo/_base/lang", "dojo/_base/declare", "dojo/Deferred", "dojo/when", "dojo/has", "dojo/_base/config",
-	"dojo/on", "dojo/ready", "dojo/_base/window", "dojo/dom-construct", "./model", "./View", "./controllers/Load", "./controllers/Transition",
-	"./controllers/Layout", "./module/lifecycle"],
-function(kernel, require, lang, declare, Deferred, when, has, config, on, ready, baseWindow, dom, Model, View,
-		 LoadController, TransitionController, LayoutController){
+	"dojo/on", "dojo/ready", "dojo/_base/window", "dojo/dom-construct", "./model", "./View", "./module/lifecycle"],
+function(kernel, require, lang, declare, Deferred, when, has, config, on, ready, baseWindow, dom, Model, View){
 	kernel.experimental("dojox.app");
 
 	has.add("app-log-api", (config["app"] || {}).debugApp);
@@ -139,17 +137,12 @@ function(kernel, require, lang, declare, Deferred, when, has, config, on, ready,
 				loadModelLoaderDeferred.reject(e);
 				return loadModelLoaderDeferred.promise;
 			}
-			if(createPromise.then){
-				when(createPromise, lang.hitch(this, function(newModel){
-					this.loadedModels = newModel;
-					this.setupAppView();
-				}), function(){
-					loadModelLoaderDeferred.reject("load model error.")
-				});
-			}else{
-				this.loadedModels = createPromise;
+			when(createPromise, lang.hitch(this, function(newModel){
+				this.loadedModels = newModel;
 				this.setupAppView();
-			}
+			}), function(){
+				loadModelLoaderDeferred.reject("load model error.")
+			});
 		},
 
 		setupAppView: function(){
@@ -199,11 +192,9 @@ function(kernel, require, lang, declare, Deferred, when, has, config, on, ready,
 		setupControllers: function(){
 			// create application controller instance
 			if(!this.noAutoLoadControllers){
-				this.controllers.push(new LoadController(this));
-				this.controllers.push(new TransitionController(this));
-				this.controllers.push(new LayoutController(this));
+				this.params.controllers =
+					["./controllers/Load", "./controllers/Transition", "./controllers/Layout"].concat(this.params.controllers);
 			}
-
 			// move set _startView operation from history module to application
 			var hash = window.location.hash;
 			this._startView = (((hash && hash.charAt(0) == "#") ? hash.substr(1) : hash) || this.defaultView).split('&')[0];
