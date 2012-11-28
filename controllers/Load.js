@@ -73,7 +73,7 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/Def
 			}
 			var def = new Deferred();
 			//create and start child. return Deferred
-			when(this.createView(parent, childId, subIds, params), function(newView){
+			when(this.createView(parent, id, childId, subIds, params), function(newView){
 				parent.children[id] = newView;
 				when(newView.start(), function(view){
 					def.resolve(view);
@@ -82,7 +82,7 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/Def
 			return def;
 		},
 
-		createView: function(parent, childId, subIds, params){
+		createView: function(parent, id, childId, subIds, params){
 			// summary:
 			//		Create a dojox/app/View instance. Can be overridden to create different type of views.
 			// tags:
