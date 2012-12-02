@@ -34,7 +34,7 @@ function(lang, declare, on, Deferred, when, Controller, View){
 			//		Load event parameter. It should be like this: {"parent":parent, "viewId":viewId, "callback":function(){...}}
 			// returns:
 			//		A dojo/Deferred object.
-			//		The return value cannot return directly. 
+			//		The return value cannot return directly.
 			//		If the caller need to use the return value, pass callback function in event parameter and process return value in callback function.
 
 			var parent = event.parent || this.app;
@@ -43,7 +43,7 @@ function(lang, declare, on, Deferred, when, Controller, View){
 			var childId = parts.shift();
 			var subIds = parts.join(",");
 			var params = event.params || "";
-			
+
 			var def = this.loadChild(parent, childId, subIds, params);
 			// call Load event callback
 			if(event.callback){
@@ -70,15 +70,34 @@ function(lang, declare, on, Deferred, when, Controller, View){
 			if(parent.children[id]){
 				return parent.children[id];
 			}
-			//create and start child. return Deferred
-			var newView = new View(lang.mixin({
+
+			params = lang.mixin({
 				"app": this.app,
 				"id": id,
 				"name": childId,
 				"parent": parent
-			},{"params": params}));
-			parent.children[id] = newView;
-			return newView.start();
+			},{"params": params});
+
+			//create and start child. return Deferred
+			if (parent && parent.views && parent.views[childId] && typeof parent.views[childId] == "string") {
+				var dfd = new Deferred();
+
+				require([parent.views[childId]], function(child) {
+					var newView = new child(params);
+					parent.children[id] = newView;
+					newView.start().then(function(result) {
+						dfd.resolve(result);
+					}, function(err) {
+						dfd.reject(err);
+					});
+				});
+
+				return dfd;
+			} else {
+				var newView = new View(params);
+				parent.children[id] = newView;
+				return newView.start();
+			}
 		},
 
 		loadChild: function(parent, childId, subIds, params){
