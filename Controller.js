@@ -18,20 +18,13 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/on"], function(lang, decl
 			this.events = this.events || events;
 			this._boundEvents = [];
 			this.app = app;
-
-			if(this.events){
-				for(var item in this.events){
-					if(item.charAt(0) !== "_"){//skip the private properties
-						this.bind(this.app, item, lang.hitch(this, this.events[item]));
-					}
-				}
-			}
 		},
 
 		bind: function(evented, event, handler){
 			// summary:
 			//		Bind event on dojo/Evented instance, document, domNode or window.
-			//		Save event signal in controller instance.
+			//		Save event signal in controller instance. If no parameter is provided
+			//		automatically bind all events registered in controller events property.
 			//
 			// evented: Object
 			//		dojo/Evented instance, document, domNode or window
@@ -39,16 +32,23 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/on"], function(lang, decl
 			//		event
 			// handler: Function
 			//		event handler
-
-			if(!handler){
-				console.warn("bind event '"+event+"' without callback function.");
+			if(arguments.length == 0){
+				if(this.events){
+					for(var item in this.events){
+						if(item.charAt(0) !== "_"){//skip the private properties
+							this.bind(this.app, item, lang.hitch(this, this.events[item]));
+						}
+					}
+				}
+			}else{
+				var signal = on(evented, event, handler);
+				this._boundEvents.push({
+					"event": event,
+					"evented": evented,
+					"signal": signal
+				});
 			}
-			var signal = on(evented, event, handler);
-			this._boundEvents.push({
-				"event": event,
-				"evented": evented,
-				"signal": signal
-			});
+			return this;
 		},
 
 		unbind: function(evented, event){
@@ -69,6 +69,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/on"], function(lang, decl
 				}
 			}
 			console.warn("event '"+event+"' not bind on ", evented);
+			return this;
 		}
 	});
 });

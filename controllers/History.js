@@ -21,7 +21,6 @@ function(lang, declare, on, Controller){
 			this.events = {
 				"domNode": this.onDomNodeChange
 			};
-			this.inherited(arguments);
 			if(this.app.domNode){
 				this.onDomNodeChange({oldNode: null, newNode: this.app.domNode});
 			}

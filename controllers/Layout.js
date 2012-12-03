@@ -20,7 +20,6 @@ function(lang, declare, has, on, win, array, config, topic, query, domStyle, dom
 				"layout": this.layout,
 				"select": this.select
 			};
-			this.inherited(arguments);
 			// if we are using dojo mobile & we are hiding adress bar we need to be bit smarter and listen to
 			// dojo mobile events instead
 			if(config.mblHideAddressBar){

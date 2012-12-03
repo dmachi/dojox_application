@@ -97,8 +97,8 @@ function(require, kernel, lang, declare, config, win, Evented, Deferred, when, h
 				var controllerDef = new Deferred();
 				when(def, lang.hitch(this, function(){
 					for(var i = 0; i < arguments[0].length; i++){
-						// Store Application object on each controller.
-						this.controllers.push(new arguments[0][i](this));
+						// instantiate controllers, set Application object, and perform auto binding
+						this.controllers.push((new arguments[0][i](this)).bind());
 					}
 					controllerDef.resolve(this);
 				}), function(){

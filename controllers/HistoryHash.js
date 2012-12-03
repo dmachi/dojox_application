@@ -21,7 +21,6 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/topic", "dojo/on", "../Co
 			this.events = {
 				"domNode": this.onDomNodeChange
 			};
-			this.inherited(arguments);
 			if(this.app.domNode){
 				this.onDomNodeChange({oldNode: null, newNode: this.app.domNode});
 			}

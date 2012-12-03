@@ -20,7 +20,6 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/Def
 				"init": this.init,
 				"load": this.load
 			};
-			this.inherited(arguments);
 		},
 
 		init: function(event){
