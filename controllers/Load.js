@@ -3,23 +3,37 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/Def
 	// module:
 	//		dojox/app/controllers/Load
 	// summary:
-	//		Bind "load" event on dojox/app application's domNode.
+	//		Bind "load" event on dojox/app application instance.
 	//		Load child view and sub children at one time.
 
 	return declare("dojox.app.controllers.Load", Controller, {
 
 		constructor: function(app, events){
 			// summary:
-			//		bind "load" event on application's domNode.
+			//		bind "load" event on application instance.
 			//
 			// app:
 			//		dojox/app application instance.
 			// events:
 			//		{event : handler}
 			this.events = {
+				"init": this.init,
 				"load": this.load
 			};
 			this.inherited(arguments);
+		},
+
+		init: function(event){
+			// when the load controller received "init", before the lifecycle really starts we create the root view
+			// if any. This used to be done in main.js but must be done in Load to be able to create custom
+			// views from the Load controller.
+			//create and start child. return Deferred
+			when(this.createView(event.parent, null, event.app, {
+					templateString: event.templateString,
+					definition: event.definition
+			}), function(newView){
+				when(newView.start(), event.callback);
+			});
 		},
 
 		load: function(event){
@@ -73,7 +87,7 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/Def
 			}
 			var def = new Deferred();
 			//create and start child. return Deferred
-			when(this.createView(parent, id, childId, subIds, params), function(newView){
+			when(this.createView(parent, id, childId, null, params), function(newView){
 				parent.children[id] = newView;
 				when(newView.start(), function(view){
 					def.resolve(view);
@@ -82,7 +96,7 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/Def
 			return def;
 		},
 
-		createView: function(parent, id, childId, subIds, params){
+		createView: function(parent, id, childId, mixin, params){
 			// summary:
 			//		Create a dojox/app/View instance. Can be overridden to create different type of views.
 			// tags:
@@ -94,7 +108,7 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/Def
 					"id": id,
 					"name": childId,
 					"parent": parent
-				},{"params": params}));
+				}, { "params": params }, mixin));
 				def.resolve(newView);
 			});
 			return def;
@@ -113,7 +127,7 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/Def
 			// params: Object
 			//		params of this view.
 			// returns:
-			//		A dojo/Deferred instance which will be resovled when all views loaded.
+			//		A dojo/Deferred instance which will be resolved when all views loaded.
 
 			if(!parent){
 				throw Error("No parent for Child '" + childId + "'.");

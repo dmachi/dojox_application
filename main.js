@@ -1,29 +1,27 @@
-define(["dojo/_base/kernel",  "require", "dojo/_base/lang", "dojo/_base/declare", "dojo/Deferred", "dojo/when", "dojo/has", "dojo/_base/config",
-	"dojo/on", "dojo/ready", "dojo/_base/window", "dojo/dom-construct", "./model", "./View", "./module/lifecycle"],
-function(kernel, require, lang, declare, Deferred, when, has, config, on, ready, baseWindow, dom, Model, View){
-	kernel.experimental("dojox.app");
+define(["require", "dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/config",  "dojo/_base/window",
+	"dojo/Evented", "dojo/Deferred", "dojo/when", "dojo/has", "dojo/on", "dojo/ready", "dojo/dom-construct", "./model", "./module/lifecycle"],
+function(require, kernel, lang, declare, config, win, Evented, Deferred, when, has, on, ready, dom, Model){
+	kernel.experimental("dojox/app");
 
 	has.add("app-log-api", (config["app"] || {}).debugApp);
 
-	var Application = declare(null, {
+	var Application = declare(Evented, {
 		constructor: function(params, node){
 			lang.mixin(this, params);
 			this.params = params;
 			this.id = params.id;
 			this.defaultView = params.defaultView;
-			this.widgetId = params.id;
 			this.controllers = [];
 			this.children = {};
 			this.loadedModels = {};
-
 			// Create a new domNode and append to body
 			// Need to bind startTransition event on application domNode,
 			// Because dojox/mobile/ViewController bind startTransition event on document.body
 			// Make application's root domNode id unique because this id can be visited by window namespace on Chrome 18.
-			this.domNode = dom.create("div", {
+			this.setDomNode(dom.create("div", {
 				id: this.id+"_Root",
 				style: "width:100%; height:100%; overflow-y:hidden; overflow-x:hidden;"
-			});
+			}));
 			node.appendChild(this.domNode);
 		},
 
@@ -113,13 +111,14 @@ function(kernel, require, lang, declare, Deferred, when, has, config, on, ready,
 
 		trigger: function(event, params){
 			// summary:
-			//		trigger an event
+			//		trigger an event. Deprecated, use emit instead.
 			//
 			// event: String
 			//		event name. The event is binded by controller.bind() method.
 			// params: Object
 			//		event params.
-			on.emit(this.domNode, event, params);
+			kernel.deprecated("dojox.app.Application.trigger", "Use dojox.app.Application.emit instead", "2.0");
+			this.emit(event, params);
 		},
 
 		// setup default view and Controllers and startup the default view
@@ -139,32 +138,20 @@ function(kernel, require, lang, declare, Deferred, when, has, config, on, ready,
 			}
 			when(createPromise, lang.hitch(this, function(newModel){
 				this.loadedModels = newModel;
-				this.setupAppView();
+				this.setupControllers();
+				this.startup();
 			}), function(){
 				loadModelLoaderDeferred.reject("load model error.")
 			});
 		},
 
-		setupAppView: function(){
-			//create application level view
-			//
-			if(this.template){
-				this.view = new View({
-					app: this,  // pass the app into the View so it can have easy access to app
-					name: this.name,
-					parent: this,
-					templateString: this.templateString,
-					definition: this.definition
-				});
-				when(this.view.start(), lang.hitch(this, function(){
-					this.domNode = this.view.domNode;
-					this.setupControllers();
-					this.startup();
-				}));
-			}else{
-				this.setupControllers();
-				this.startup();
-			}
+		setDomNode: function(domNode){
+			var oldNode = this.domNode;
+			this.domNode = domNode;
+			this.emit("domNode", {
+				oldNode: oldNode,
+				newNode: domNode
+			});
 		},
 
 		getParamsFromHash: function(hash){
@@ -202,29 +189,46 @@ function(kernel, require, lang, declare, Deferred, when, has, config, on, ready,
 		},
 
 		startup: function(){
-			// load controllers in configuration file
+			// load controllers and views
 			//
 			var controllers = this.createControllers(this.params.controllers);
-			when(controllers, lang.hitch(this, function(result){
-				// emit load event and let controller to load view.
-				this.trigger("load", {
-					"viewId": this.defaultView,
-					"params": this._startParams,
-					"callback": lang.hitch(this, function(){
-						var selectId = this.defaultView.split(",");
-						selectId = selectId.shift();
-						this.selectedChild = this.children[this.id + '_' + selectId];
+			var emitLoad = function(){
+				// emit "load" event and let controller to load view.
+				this.emit("load", {
+					viewId: this.defaultView,
+					params: this._startParams,
+					callback: lang.hitch(this, function (){
+						var selectId=this.defaultView.split(",");
+						selectId=selectId.shift();
+						this.selectedChild=this.children[this.id + '_' + selectId];
 						// transition to startView. If startView==defaultView, that means initial the default view.
-						this.trigger("transition", {
-							"viewId": this._startView,
-							"params": this._startParams
+						this.emit("transition", {
+							viewId:this._startView,
+							params:this._startParams
 						});
 						this.setStatus(this.lifecycle.STARTED);
 					})
 				});
+			};
+			when(controllers, lang.hitch(this, function(result){
+				if(this.template){
+					// emit "init" event so that the Load controller can initialize root view
+					this.emit("init", {
+						app: this,  // pass the app into the View so it can have easy access to app
+						name: this.name,
+						parent: this,
+						templateString: this.templateString,
+						definition: this.definition,
+						callback: lang.hitch(this, function(view){
+							this.setDomNode(view.domNode);
+							emitLoad.call(this);
+						})
+					});
+				}else{
+					emitLoad.call(this);
+				}
 			}));
 		}		
-		
 	});
 
 	function generateApp(config, node, appSchema, validate){
@@ -283,7 +287,7 @@ function(kernel, require, lang, declare, Deferred, when, has, config, on, ready,
 			App = declare(modules, ext);
 
 			ready(function(){
-				var app = new App(config, node || baseWindow.body());
+				var app = new App(config, node || win.body());
 
 				if(has("app-log-api")){
 					app.log = function(){  

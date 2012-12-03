@@ -22,7 +22,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/on"], function(lang, decl
 			if(this.events){
 				for(var item in this.events){
 					if(item.charAt(0) !== "_"){//skip the private properties
-						this.bind(this.app.domNode, item, lang.hitch(this, this.events[item]));
+						this.bind(this.app, item, lang.hitch(this, this.events[item]));
 					}
 				}
 			}

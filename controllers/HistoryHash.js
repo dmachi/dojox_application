@@ -3,7 +3,8 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/topic", "dojo/on", "../Co
 	// module:
 	//		dojox/app/controllers/HistoryHash
 	// summary:
-	//		Bind "startTransition" event on dojox/app application's domNode,
+	//		Bind "domNode" event on dojox/app application instance,
+	//		Bind "startTransition" event on dojox/app application domNode,
 	//		Bind "/dojo/hashchange" event on window object.
 	//		Maintain history by history hash.
 
@@ -11,16 +12,19 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/topic", "dojo/on", "../Co
 
 		constructor: function(app){
 			// summary:
-			//		Bind "startTransition" event on dojox/app application's domNode,
+			//		Bind "domNode" event on dojox/app application instance,
+			//		Bind "startTransition" event on dojox/app application domNode,
 			//		subscribe "/dojo/hashchange" event.
 			//
 			// app:
 			//		dojox/app application instance.
 			this.events = {
-				"startTransition": this.onStartTransition
+				"domNode": this.onDomNodeChange
 			};
 			this.inherited(arguments);
-
+			if(this.app.domNode){
+				this.onDomNodeChange({oldNode: null, newNode: this.app.domNode});
+			}
 			topic.subscribe("/dojo/hashchange", lang.hitch(this, function(newhash){
 				this._onHashChange(newhash);
 			}));
@@ -34,7 +38,6 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/topic", "dojo/on", "../Co
 			this._oldHistoryLen = 0;// window.history stack length before hash change
 			this._newHistoryLen = 0;// window.history stack length after hash change
 			this._addToHistoryStack = false;
-			this._detail = null;
 			this._startTransitionEvent = false;
 
 			// push the default page to the history stack
@@ -53,6 +56,13 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/topic", "dojo/on", "../Co
 
 			// get the diff of window.history and application history
 			this._historyDiff = window.history.length - this._historyStack.length;
+		},
+
+		onDomNodeChange: function(evt){
+			if(evt.oldNode != null){
+				this.unbind(evt.oldNode, "startTransition");
+			}
+			this.bind(evt.newNode, "startTransition", lang.hitch(this, this.onStartTransition));
 		},
 
 		onStartTransition: function(evt){
@@ -91,7 +101,6 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/topic", "dojo/on", "../Co
 			// Use _addToHistoryStack flag to indicate the _onHashChange method should add this hash to history stack.
 			// When add hash to history stack, this flag should be set to false, we do this in _addHistory.
 			this._addToHistoryStack = true;
-			this._detail = evt.detail;
 			//set startTransition event flag to true if the hash change from startTransition event.
 			this._startTransitionEvent = true;
 		},
@@ -163,7 +172,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/topic", "dojo/on", "../Co
 				this._addHistory(currentHash);
 				if (!this._startTransitionEvent) {
 					// transition to the target view
-					this.app.trigger("transition", {
+					this.app.emit("transition", {
 						"viewId": currentHash
 					});
 				}
@@ -220,7 +229,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/topic", "dojo/on", "../Co
 			topic.publish("/app/history/back", {"viewId": currentHash, "detail": detail});
 
 			// transition to the target view
-			this.app.trigger("transition", {
+			this.app.emit("transition", {
 				"viewId": currentHash,
 				"opts": {reverse: true}
 			});
@@ -241,7 +250,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/topic", "dojo/on", "../Co
 			topic.publish("/app/history/forward", {"viewId": currentHash, "detail": detail});
 
 			// transition to the target view
-			this.app.trigger("transition", {
+			this.app.emit("transition", {
 				"viewId": currentHash,
 				"opts": {reverse: false}
 			});
@@ -273,7 +282,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/topic", "dojo/on", "../Co
 				};
 			}
 			// transition to the target view
-			this.app.trigger("transition", param);
+			this.app.emit("transition", param);
 		}
 	});
 });
