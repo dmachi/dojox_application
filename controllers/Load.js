@@ -96,9 +96,21 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/Def
 			return def;
 		},
 
-		createView: function(parent, id, childId, mixin, params){
+		createView: function(parent, id, name, mixin, params){
 			// summary:
 			//		Create a dojox/app/View instance. Can be overridden to create different type of views.
+			// parent: Object
+			//		parent of this view.
+			// id: String
+			//		view id.
+			// name: String
+			//		view name.
+			// mixin: String
+			//		additional property to be mixed into the view (templateString, definition...)
+			// params: Object
+			//		params of this view.
+			// returns:
+			//		A dojo/Deferred instance which will be resolved when the view will be instantiated.
 			// tags:
 			//		protected
 			var def = new Deferred();
@@ -106,7 +118,7 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/Def
 				var newView = new View(lang.mixin({
 					"app": this.app,
 					"id": id,
-					"name": childId,
+					"name": name,
 					"parent": parent
 				}, { "params": params }, mixin));
 				def.resolve(newView);
