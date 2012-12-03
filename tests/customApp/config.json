@@ -1,0 +1,34 @@
+{
+	"id": "customApp",
+	"name": "customApp",
+	"description": "A simple app to show how to plug custom controllers",
+
+	loaderConfig: {
+		"paths": {
+			"customApp": "../dojox/app/tests/customApp"
+		}
+	},
+
+	"dependencies": [
+	],
+
+	"modules": [],
+	
+	"noAutoLoadControllers" : true,
+	
+	"controllers": [
+		"dojox/app/controllers/History",
+		"customApp/DtlLoad",
+		"dojox/app/controllers/Transition",
+		"dojox/app/controllers/Layout"
+	],
+
+	"defaultView": "home",
+
+	"views": {
+		"home": {
+			"definition" : "customApp/main",
+			"template": "customApp/main.html"
+		}
+	}
+}
