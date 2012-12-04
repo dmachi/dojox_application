@@ -30,7 +30,7 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/Def
 			when(this.createView(event.parent, null, event.app, {
 					templateString: event.templateString,
 					definition: event.definition
-			}), function(newView){
+			}, null, event.type), function(newView){
 				when(newView.start(), event.callback);
 			});
 		},
@@ -85,8 +85,8 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/Def
 				return parent.children[id];
 			}
 			var def = new Deferred();
-			//create and start child. return Deferred
-			when(this.createView(parent, id, childId, null, params), function(newView){
+			// create and start child. return Deferred
+			when(this.createView(parent, id, childId, null, params, parent.views[childId].type), function(newView){
 				parent.children[id] = newView;
 				when(newView.start(), function(view){
 					def.resolve(view);
@@ -95,7 +95,7 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/Def
 			return def;
 		},
 
-		createView: function(parent, id, name, mixin, params){
+		createView: function(parent, id, name, mixin, params, type){
 			// summary:
 			//		Create a dojox/app/View instance. Can be overridden to create different type of views.
 			// parent: Object
@@ -108,12 +108,14 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/Def
 			//		additional property to be mixed into the view (templateString, definition...)
 			// params: Object
 			//		params of this view.
+			// type: String
+			//		the MID of the View. If not provided "dojox/app/View".
 			// returns:
 			//		A dojo/Deferred instance which will be resolved when the view will be instantiated.
 			// tags:
 			//		protected
 			var def = new Deferred();
-			require(["../View"], function(View){
+			require([type?type:"../View"], function(View){
 				var newView = new View(lang.mixin({
 					"app": this.app,
 					"id": id,

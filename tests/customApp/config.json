@@ -9,24 +9,13 @@
 		}
 	},
 
-	"dependencies": [
-	],
-
 	"modules": [],
 	
-	"noAutoLoadControllers" : true,
-	
-	"controllers": [
-		"dojox/app/controllers/History",
-		"customApp/DtlLoad",
-		"dojox/app/controllers/Transition",
-		"dojox/app/controllers/Layout"
-	],
-
 	"defaultView": "home",
 
 	"views": {
 		"home": {
+			"type": "customApp/DtlView",
 			"definition" : "customApp/main",
 			"template": "customApp/main.html"
 		}

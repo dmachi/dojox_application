@@ -180,7 +180,7 @@ function(require, kernel, lang, declare, config, win, Evented, Deferred, when, h
 			// create application controller instance
 			if(!this.noAutoLoadControllers){
 				this.params.controllers =
-					["./controllers/Load", "./controllers/Transition", "./controllers/Layout"].concat(this.params.controllers);
+					["./controllers/Load", "./controllers/Transition", "./controllers/Layout"].concat(this.params.controllers?this.params.controllers:[]);
 			}
 			// move set _startView operation from history module to application
 			var hash = window.location.hash;
@@ -198,9 +198,9 @@ function(require, kernel, lang, declare, config, win, Evented, Deferred, when, h
 					viewId: this.defaultView,
 					params: this._startParams,
 					callback: lang.hitch(this, function (){
-						var selectId=this.defaultView.split(",");
-						selectId=selectId.shift();
-						this.selectedChild=this.children[this.id + '_' + selectId];
+						var selectId = this.defaultView.split(",");
+						selectId = selectId.shift();
+						this.selectedChild = this.children[this.id + '_' + selectId];
 						// transition to startView. If startView==defaultView, that means initial the default view.
 						this.emit("transition", {
 							viewId:this._startView,
@@ -216,6 +216,7 @@ function(require, kernel, lang, declare, config, win, Evented, Deferred, when, h
 					this.emit("init", {
 						app: this,  // pass the app into the View so it can have easy access to app
 						name: this.name,
+						type: this.type,
 						parent: this,
 						templateString: this.templateString,
 						definition: this.definition,

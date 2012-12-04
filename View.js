@@ -146,7 +146,7 @@ function(require, when, on, domAttr, declare, lang, Deferred, Destroyable, _Temp
 				if(tpl.indexOf("./") == 0){
 					tpl = "app/"+tpl;
 				}
-				var deps = this.template ? this.dependencies.concat(["dojo/text!"+tpl]) : this.dependencies.concat([]);
+				var deps = this.dependencies.concat(this.template?["dojo/text!"+tpl]:[]);
 				// if we have a build and that the view layer is built into the view definition this is good to have it
 				// loaded here as well to avoid loading the dependencies from outside the layer
 				var path;
