@@ -264,7 +264,7 @@ function(require, kernel, lang, declare, config, win, Evented, Deferred, when, h
 		}
 		// add dojox/app lifecycle module by default
 		config.modules.push("./module/lifecycle");
-		var modules = config.modules.concat(config.dependencies);
+		var modules = config.modules.concat(config.dependencies?config.dependencies:[]);
 
 		if(config.template){
 			path = config.template;
