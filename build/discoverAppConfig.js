@@ -36,8 +36,9 @@ define([
 	return function(){
 		var config;
 		try{
-			config = json.fromJson(fs.readFileSync(bc.getSrcModuleInfo(argv.args.appConfigFile, null, true).url));
+			config = json.fromJson(fs.readFileSync(bc.getSrcModuleInfo(argv.args.appConfigFile, null, false).url));
 		}catch(e){
+			console.log(e);
 		}
 		if(config){
 			var mids = [];
@@ -70,6 +71,17 @@ define([
 			}
 			if(config.definition && config.definition != "none"){
 				mids.push(config.definition.replace(/(\.js)$/, ""));
+			}
+			if(config.view){
+				// we use a custom view class
+				mids.push(config.view);
+			}else{
+				// regular view
+				mids.push("dojox/app/View");
+			}
+			if(!config.noAutoLoadControllers){
+				// add auto loaded controllers
+				mids = ["dojox/app/controllers/Load", "dojox/app/controllers/Transition", "dojox/app/controllers/Layout"].concat(mids);
 			}
 			// go into the view children
 			if(config.views){

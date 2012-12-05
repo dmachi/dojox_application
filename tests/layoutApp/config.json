@@ -4,7 +4,7 @@
 	"description": "A layout App",
 	"splash": "splash",
 
-	loaderConfig: {
+	"loaderConfig": {
 		"paths": {
 			"layoutApp": "../dojox/app/tests/layoutApp"
 		}
@@ -35,7 +35,7 @@
 		"dojox/app/controllers/History"
 	],
 
-	//stores we are using 
+	//stores we are using
 	"stores": {
 	   "namesStore":{
 	       "type": "dojo/store/Memory",
@@ -67,10 +67,10 @@
 	"definition" : "none",
 
 	//the name of the scene to load when the app is initialized.
-	"defaultView": "simple", 
+	"defaultView": "simple",
 
 	"defaultTransition": "slide",
-	//scenes are groups of views and models loaded at once	
+	//scenes are groups of views and models loaded at once
 	"views": {
 		"simple":{
 			"definition" : "layoutApp/views/simple.js",
