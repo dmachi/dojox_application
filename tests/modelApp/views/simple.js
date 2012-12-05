@@ -14,21 +14,20 @@ function(dom, connect, registry, at){
 			currentModel = this.loadedModels.names;
 			var connectResult;
 
-			connectResult = connect.connect(dom.byId('shipto'), "click", function(){
-				setRef('addrGroup', 'ShipTo');
+			connectResult = connect.connect(dom.byId("billto"), "click", function(){
+				setRef("addrGroup", "BillTo");
 			});
 			_connectResults.push(connectResult);
 
-			connectResult = connect.connect(dom.byId('billto'), "click", function(){
-				setRef('addrGroup', 'BillTo');
-			});
-			_connectResults.push(connectResult);
-
-			connectResult = connect.connect(dom.byId('reset1'), "click", function(){
+			connectResult = connect.connect(dom.byId("reset1"), "click", function(){
 				currentModel.reset();
 				//console.log("reset done. ");
 			});
 			_connectResults.push(connectResult);
+		},
+
+		shipTo: function(){
+			setRef("addrGroup", "ShipTo");
 		},
 
 		// simple view destroy

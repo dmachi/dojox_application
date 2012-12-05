@@ -1,12 +1,12 @@
-define(["dojo/_base/declare", "dojo/_base/lang", "dojo/Deferred", "dojo/when", "require", "dojo/dom-attr",
-	"dijit/_TemplatedMixin", "dijit/_WidgetsInTemplateMixin", "./model"],
-function(declare, lang, Deferred, when, require, dattr, TemplatedMixin, WidgetsInTemplateMixin, Model){
+define(["require", "dojo/when", "dojo/on", "dojo/dom-attr", "dojo/_base/declare", "dojo/_base/lang", "dojo/Deferred",
+	"dijit/Destroyable", "dijit/_TemplatedMixin", "dijit/_WidgetsInTemplateMixin", "./model"],
+function(require, when, on, domAttr, declare, lang, Deferred, Destroyable, _TemplatedMixin, _WidgetsInTemplateMixin, Model){
 	// module:
 	//		dojox/app/View
 	// summary:
 	//		dojox/app view object, each view can have one parent view and several children views.
 
-	return declare("dojox.app.View", null, {
+	return declare("dojox.app.View", [_TemplatedMixin, _WidgetsInTemplateMixin, Destroyable], {
 		constructor: function(params){
 			// summary:
 			//		init view object. A user can use configuration file or programing type to create a view instance.
@@ -55,7 +55,6 @@ function(declare, lang, Deferred, when, require, dattr, TemplatedMixin, WidgetsI
 			//		- children: children views
 			this.id = "";
 			this.name = "";
-			this.templateString = "";
 			this.template = "";
 			this.definition = "";
 			this.parent = null;
@@ -70,6 +69,11 @@ function(declare, lang, Deferred, when, require, dattr, TemplatedMixin, WidgetsI
 			if(this.parent.views){
 				lang.mixin(this, this.parent.views[this.name]);
 			}
+		},
+
+		// _TemplatedMixin requires a connect method if data-dojo-attach-* are used
+		connect: function(obj, event, method){
+			return this.own(on(obj, event, lang.hitch(this, method)))[0];  // handle
 		},
 
 		_loadViewDefinition: function(){
@@ -142,7 +146,7 @@ function(declare, lang, Deferred, when, require, dattr, TemplatedMixin, WidgetsI
 				if(tpl.indexOf("./") == 0){
 					tpl = "app/"+tpl;
 				}
-				var deps = this.template ? this.dependencies.concat(["dojo/text!"+tpl]) : this.dependencies.concat([]);
+				var deps = this.dependencies.concat(this.template?["dojo/text!"+tpl]:[]);
 				// if we have a build and that the view layer is built into the view definition this is good to have it
 				// loaded here as well to avoid loading the dependencies from outside the layer
 				var path;
@@ -256,26 +260,20 @@ function(declare, lang, Deferred, when, require, dattr, TemplatedMixin, WidgetsI
 			// tags:
 			//		private
 
-			this._widget = this.render(this.templateString);
+			this.render(this.templateString);
 			// bind view level data model
-			this.domNode = this._widget.domNode;
 			this.parent.domNode.appendChild(this.domNode);
 
 			//start widget
-			this._widget.startup();
+			this.startup();
 
 			// set widget attributes
-			dattr.set(this.domNode, "id", this.id);
-			dattr.set(this.domNode, "data-app-region", "center");
+			domAttr.set(this.domNode, "id", this.id);
+			domAttr.set(this.domNode, "data-app-region", "center");
 			// TODO here we are overriding the entire style of the node, instead of just width & height
 			// maybe we could be a bit smarter
-			dattr.set(this.domNode, "style", "width:100%; height:100%");
-			this._widget.region = "center";
-
-			//mixin view lifecycle implement
-			if (this._definition) {
-				lang.mixin(this, this._definition);
-			}
+			domAttr.set(this.domNode, "style", "width:100%; height:100%");
+			this.region = "center";
 
 			// call view assistant's init() method to initialize view
 			this.app.log("  > in app/View calling init() name=[",this.name,"], parent.name=[",this.parent.name,"]");
@@ -291,16 +289,14 @@ function(declare, lang, Deferred, when, require, dattr, TemplatedMixin, WidgetsI
 			//		rendering view template HTML
 			// templateString:
 			//		template string
-			var widgetTemplate = new TemplatedMixin();
-			var widgetInTemplate = new WidgetsInTemplateMixin();
-			// set the loadedModels here to be able to access the model on the parse.
-			if(this.loadedModels){
-				widgetInTemplate.loadedModels = this.loadedModels;
+
+			// TODO: we could  get rid of that method and use buildRendering directly...
+			// mixin lifecycle implementation into view, we need that early for datat-dojo-attach-* to work correctly
+			if(this._definition){
+				lang.mixin(this, this._definition);
 			}
-			lang.mixin(widgetTemplate, widgetInTemplate);
-			widgetTemplate.templateString = templateString;
-			widgetTemplate.buildRendering();
-			return widgetTemplate;
+			this.templateString = templateString;
+			this.buildRendering();
 		},
 		
 		init: function(){
