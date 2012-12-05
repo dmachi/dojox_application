@@ -4,13 +4,13 @@ function(lang, declare, has, on, win, array, config, topic, query, domStyle, dom
 	// module:
 	//		dojox/app/controllers/Layout
 	// summary:
-	//		Bind "layout" and "select" events on dojox/app application's dojo/Evented instance.
+	//		Bind "layout" and "select" events on dojox/app application instance.
 
 	return declare("dojox.app.controllers.Layout", Controller, {
 
 		constructor: function(app, events){
 			// summary:
-			//		bind "layout" and "select" events on application's domNode.
+			//		bind "layout" and "select" events on application instance.
 			//
 			// app:
 			//		dojox/app application instance.
@@ -20,8 +20,6 @@ function(lang, declare, has, on, win, array, config, topic, query, domStyle, dom
 				"layout": this.layout,
 				"select": this.select
 			};
-			this.inherited(arguments);
-
 			// if we are using dojo mobile & we are hiding adress bar we need to be bit smarter and listen to
 			// dojo mobile events instead
 			if(config.mblHideAddressBar){

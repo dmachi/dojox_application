@@ -1,25 +1,38 @@
-define(["dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/Deferred", "dojo/when", "../Controller", "../View"],
-function(lang, declare, on, Deferred, when, Controller, View){
+define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/Deferred", "dojo/when", "../Controller"],
+	function(require, lang, declare, on, Deferred, when, Controller, View){
 	// module:
 	//		dojox/app/controllers/Load
 	// summary:
-	//		Bind "load" event on dojox/app application's domNode.
+	//		Bind "load" event on dojox/app application instance.
 	//		Load child view and sub children at one time.
 
 	return declare("dojox.app.controllers.Load", Controller, {
 
 		constructor: function(app, events){
 			// summary:
-			//		bind "load" event on application's domNode.
+			//		bind "load" event on application instance.
 			//
 			// app:
 			//		dojox/app application instance.
 			// events:
 			//		{event : handler}
 			this.events = {
+				"init": this.init,
 				"load": this.load
 			};
-			this.inherited(arguments);
+		},
+
+		init: function(event){
+			// when the load controller received "init", before the lifecycle really starts we create the root view
+			// if any. This used to be done in main.js but must be done in Load to be able to create custom
+			// views from the Load controller.
+			//create and start child. return Deferred
+			when(this.createView(event.parent, null, event.app, {
+					templateString: event.templateString,
+					definition: event.definition
+			}, null, event.type), function(newView){
+				when(newView.start(), event.callback);
+			});
 		},
 
 		load: function(event){
@@ -54,7 +67,8 @@ function(lang, declare, on, Deferred, when, Controller, View){
 
 		createChild: function(parent, childId, subIds, params){
 			// summary:
-			//		Create dojox.app.view instance if it is not loaded.
+			//		Create a view instance if not already loaded by calling createView. This is typically a
+			//		dojox/app/View.
 			//
 			// parent: Object
 			//		parent of the view.
@@ -70,15 +84,47 @@ function(lang, declare, on, Deferred, when, Controller, View){
 			if(parent.children[id]){
 				return parent.children[id];
 			}
-			//create and start child. return Deferred
-			var newView = new View(lang.mixin({
-				"app": this.app,
-				"id": id,
-				"name": childId,
-				"parent": parent
-			},{"params": params}));
-			parent.children[id] = newView;
-			return newView.start();
+			var def = new Deferred();
+			// create and start child. return Deferred
+			when(this.createView(parent, id, childId, null, params, parent.views[childId].type), function(newView){
+				parent.children[id] = newView;
+				when(newView.start(), function(view){
+					def.resolve(view);
+				});
+			});
+			return def;
+		},
+
+		createView: function(parent, id, name, mixin, params, type){
+			// summary:
+			//		Create a dojox/app/View instance. Can be overridden to create different type of views.
+			// parent: Object
+			//		parent of this view.
+			// id: String
+			//		view id.
+			// name: String
+			//		view name.
+			// mixin: String
+			//		additional property to be mixed into the view (templateString, definition...)
+			// params: Object
+			//		params of this view.
+			// type: String
+			//		the MID of the View. If not provided "dojox/app/View".
+			// returns:
+			//		A dojo/Deferred instance which will be resolved when the view will be instantiated.
+			// tags:
+			//		protected
+			var def = new Deferred();
+			require([type?type:"../View"], function(View){
+				var newView = new View(lang.mixin({
+					"app": this.app,
+					"id": id,
+					"name": name,
+					"parent": parent
+				}, { "params": params }, mixin));
+				def.resolve(newView);
+			});
+			return def;
 		},
 
 		loadChild: function(parent, childId, subIds, params){
@@ -94,7 +140,7 @@ function(lang, declare, on, Deferred, when, Controller, View){
 			// params: Object
 			//		params of this view.
 			// returns:
-			//		A dojo/Deferred instance which will be resovled when all views loaded.
+			//		A dojo/Deferred instance which will be resolved when all views loaded.
 
 			if(!parent){
 				throw Error("No parent for Child '" + childId + "'.");

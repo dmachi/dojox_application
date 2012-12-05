@@ -2,8 +2,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on", "dojo/De
 function(lang, declare, has, on, Deferred, when, transit, Controller){
 	// module:
 	//		dojox/app/controllers/transition
-	// summary:
-	//		Bind "transition" event on dojox/app application's domNode.
+	//		Bind "transition" event on dojox/app application instance.
 	//		Do transition from one view to another view.
 	return declare("dojox.app.controllers.Transition", Controller, {
 
@@ -13,7 +12,7 @@ function(lang, declare, has, on, Deferred, when, transit, Controller){
 
 		constructor: function(app, events){
 			// summary:
-			//		bind "transition" event on application's domNode.
+			//		bind "transition" event on application instance.
 			//
 			// app:
 			//		dojox/app application instance.
@@ -21,9 +20,11 @@ function(lang, declare, has, on, Deferred, when, transit, Controller){
 			//		{event : handler}
 			this.events = {
 				"transition": this.transition,
-				"startTransition": this.onStartTransition
+				"domNode": this.onDomNodeChange
 			};
-			this.inherited(arguments);
+			if(this.app.domNode){
+				this.onDomNodeChange({oldNode: null, newNode: this.app.domNode});
+			}
 		},
 
 		transition: function(event){
@@ -38,6 +39,13 @@ function(lang, declare, has, on, Deferred, when, transit, Controller){
 			//		"transition" event parameter. It should be like this: {"viewId":viewId, "opts":opts}
 
 			this.proceedTransition(event);
+		},
+
+		onDomNodeChange: function(evt){
+			if(evt.oldNode != null){
+				this.unbind(evt.oldNode, "startTransition");
+			}
+			this.bind(evt.newNode, "startTransition", lang.hitch(this, this.onStartTransition));
 		},
 
 		onStartTransition: function(evt){
@@ -96,7 +104,7 @@ function(lang, declare, has, on, Deferred, when, transit, Controller){
 			if(transitionEvt.opts && transitionEvt.opts.params){
 				params = transitionEvt.params || transitionEvt.opts.params;
 			}
-			this.app.trigger("load", {
+			this.app.emit("load", {
 				"viewId": transitionEvt.viewId,
 				"params": params,
 				"callback": lang.hitch(this, function(){
@@ -193,7 +201,7 @@ function(lang, declare, has, on, Deferred, when, transit, Controller){
 				this.app.log("> in Transition._doTransition calling next.afterActivate next name=[",next.name,"], parent.name=[",next.parent.name,"],  !current path");
 				next.afterActivate();
 				this.app.log("  > in Transition._doTransition calling app.triggger select view next name=[",next.name,"], parent.name=[",next.parent.name,"], !current path");
-				this.app.trigger("select", {"parent":parent, "view":next});
+				this.app.emit("select", {"parent":parent, "view":next});
 				return;
 			}
 			// next is not a Deferred object, so Deferred.when is no needed.
@@ -224,7 +232,7 @@ function(lang, declare, has, on, Deferred, when, transit, Controller){
 				next.beforeActivate();
 
 				this.app.log("> in Transition._doTransition calling app.triggger select view next name=[",next.name,"], parent.name=[",next.parent.name,"], next!==current path");
-				this.app.trigger("select", {"parent":parent, "view":next});
+				this.app.emit("select", {"parent":parent, "view":next});
 				var result = true;
 				if(!has("ie")){
 					// if we are on IE CSS3 transitions are not supported (yet). So just skip the transition itself.
@@ -267,7 +275,7 @@ function(lang, declare, has, on, Deferred, when, transit, Controller){
 				next.afterActivate();
 				// layout current view
 				this.app.log("> in Transition._doTransition calling app.triggger select view next name=[",next.name,"], parent.name=[",next.parent.name,"], next==current path");
-				this.app.trigger("select", {"parent":parent, "view":next});
+				this.app.emit("select", {"parent":parent, "view":next});
 			}
 
 			// do sub transition like transition from "tabScene,tab1" to "tabScene,tab2"

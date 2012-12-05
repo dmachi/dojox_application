@@ -3,24 +3,27 @@ function(lang, declare, on, Controller){
 	// module:
 	//		dojox/app/controllers/History
 	// summary:
-	//		Bind "startTransition" event on dojox/app application's domNode,
+	//		Bind "domNode" event on dojox/app application instance,
+	//		Bind "startTransition" event on dojox/app application domNode,
 	//		Bind "popstate" event on window object.
 	//		Maintain history by HTML5 "pushState" method and "popstate" event.
 
 	return declare("dojox.app.controllers.History", Controller, {
 		constructor: function(app){
 			// summary:
-			//		Bind "startTransition" event on dojox/app application's domNode,
+			//		Bind "domNode" event on dojox/app application instance,
+			//		Bind "startTransition" event on dojox/app application domNode,
 			//		Bind "popstate" event on window object.
 			//
 			// app:
 			//		dojox/app application instance.
 
 			this.events = {
-				"startTransition": this.onStartTransition
+				"domNode": this.onDomNodeChange
 			};
-			this.inherited(arguments);
-
+			if(this.app.domNode){
+				this.onDomNodeChange({oldNode: null, newNode: this.app.domNode});
+			}
 			this.bind(window, "popstate", lang.hitch(this, this.onPopState));
 		},
 		
@@ -45,6 +48,13 @@ function(lang, declare, on, Controller){
 				}
 			}
 			return hash; // String			
+		},
+
+		onDomNodeChange: function(evt){
+			if(evt.oldNode != null){
+				this.unbind(evt.oldNode, "startTransition");
+			}
+			this.bind(evt.newNode, "startTransition", lang.hitch(this, this.onStartTransition));
 		},
 
 		onStartTransition: function(evt){
@@ -79,7 +89,7 @@ function(lang, declare, on, Controller){
 			}
 
 			// push states to history list
-			history.pushState(evt.detail,evt.detail.href, hash);
+			history.pushState(evt.detail, evt.detail.href, hash);
 		},
 
 		onPopState: function(evt){
@@ -123,7 +133,7 @@ function(lang, declare, on, Controller){
 			}
 
 			// transition to the target view
-			this.app.trigger("transition", {
+			this.app.emit("transition", {
 				"viewId": target,
 				"opts": lang.mixin({reverse: true}, evt.detail, {"params": params})
 			});
