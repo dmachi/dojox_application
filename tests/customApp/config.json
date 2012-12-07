@@ -9,15 +9,32 @@
 		}
 	},
 
-	"modules": [],
+	"modules": [
+	],
+
+	"controllers": [
+		"dojox/app/controllers/History"
+	],
 	
 	"defaultView": "home",
 
 	"views": {
 		"home": {
+			"definition" : "none",
+			"template": "customApp/home.html",
+			"dependencies":	[
+				"dojox/mobile/RoundRectList",
+				"dojox/mobile/ListItem"
+			]
+		},
+		"dtl": {
 			"type": "customApp/DtlView",
-			"definition" : "customApp/main",
-			"template": "customApp/main.html"
+			"definition" : "customApp/dtl",
+			"template": "customApp/dtl.html"
+		},
+		"widget": {
+			"type": "customApp/WidgetView",
+			"definition": "customApp/widget"
 		}
 	}
 }
