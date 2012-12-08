@@ -1,12 +1,12 @@
-define(["require", "dojo/when", "dojo/on", "dojo/dom-attr", "dojo/_base/declare", "dojo/_base/lang", "dojo/Deferred",
-	"dijit/Destroyable", "dijit/_TemplatedMixin", "dijit/_WidgetsInTemplateMixin", "./model"],
-function(require, when, on, domAttr, declare, lang, Deferred, Destroyable, _TemplatedMixin, _WidgetsInTemplateMixin, Model){
+define(["require", "dojo/when", "dojo/on", "dojo/_base/declare", "dojo/_base/lang", "dojo/Deferred",
+		"dijit/Destroyable", "dijit/_TemplatedMixin", "dijit/_WidgetsInTemplateMixin", "./ViewBase"],
+	function(require, when, on, declare, lang, Deferred, Destroyable, _TemplatedMixin, _WidgetsInTemplateMixin, ViewBase){
 	// module:
 	//		dojox/app/View
 	// summary:
 	//		dojox/app view object, each view can have one parent view and several children views.
 
-	return declare("dojox.app.View", [_TemplatedMixin, _WidgetsInTemplateMixin, Destroyable], {
+	return declare("dojox.app.View", [_TemplatedMixin, _WidgetsInTemplateMixin, Destroyable, ViewBase], {
 		constructor: function(params){
 			// summary:
 			//		init view object. A user can use configuration file or programing type to create a view instance.
@@ -53,80 +53,11 @@ function(require, when, on, domAttr, declare, lang, Deferred, Destroyable, _Temp
 			//		- definition: view definition url
 			//		- parent: parent view
 			//		- children: children views
-			this.id = "";
-			this.name = "";
-			this.template = "";
-			this.definition = "";
-			this.parent = null;
-			this.children = {};
-			this.selectedChild = null;
-			// private
-			this._started = false;
-			this._definition = null;
-
-			lang.mixin(this, params);
-			// mixin views configuration to current view instance.
-			if(this.parent.views){
-				lang.mixin(this, this.parent.views[this.name]);
-			}
 		},
 
 		// _TemplatedMixin requires a connect method if data-dojo-attach-* are used
 		connect: function(obj, event, method){
 			return this.own(on(obj, event, lang.hitch(this, method)))[0];  // handle
-		},
-
-		_loadViewDefinition: function(){
-			// summary:
-			//		Load view definition by configuration or by default.
-			// tags:
-			//		private
-			//
-			var _definitionDef = new Deferred();
-			var path;
-
-			if(this.definition && (this.definition === "none")){
-				_definitionDef.resolve(true);
-				return _definitionDef;
-			}else if(this.definition){
-				path = this.definition.replace(/(\.js)$/, "");
-			}else{
-				path = this.id.split("_");
-				path.shift();
-				path = path.join("/");
-				path = "./views/" + path;
-			}
-
-			var requireSignal;
-			try{
-				var loadFile = path;
-				var index = loadFile.indexOf("./");
-				if(index >= 0){
-					loadFile = path.substring(index+2);
-				}
-				requireSignal = require.on("error", function(error){
-					if (_definitionDef.isResolved() || _definitionDef.isRejected()) {
-						return;
-					}
-					if(error.info[0] && (error.info[0].indexOf(loadFile)>= 0)){
-						_definitionDef.resolve(false);
-						requireSignal.remove();
-					}
-				});
-
-				if(path.indexOf("./") == 0){
-					path = "app/"+path;
-				}
-
-				require([path], function(definition){
-					_definitionDef.resolve(definition);
-					requireSignal.remove();
-				});
-			}catch(e){
-				_definitionDef.reject(e);
-				requireSignal.remove();
-			}
-			return _definitionDef;
 		},
 
 		_loadViewTemplate: function(){
@@ -139,55 +70,38 @@ function(require, when, on, domAttr, declare, lang, Deferred, Destroyable, _Temp
 			if(this.templateString){
 				return true;
 			}else{
-				if(!this.dependencies){
-					this.dependencies = [];
-				}
 				var tpl = this.template;
-				if(tpl.indexOf("./") == 0){
-					tpl = "app/"+tpl;
-				}
-				var deps = this.dependencies.concat(this.template?["dojo/text!"+tpl]:[]);
-				// if we have a build and that the view layer is built into the view definition this is good to have it
-				// loaded here as well to avoid loading the dependencies from outside the layer
-				var path;
-				if(this.definition && this.definition != "none"){
-					path = this.definition.replace(/(\.js)$/, "");
-				}else if(!this.definition){
-					path = this.id.split("_");
-					path.shift();
-					path = path.join("/");
-					path = "./views/" + path;
-				}
-				if(path && path.indexOf("./") == 0){
-					path = "app/"+path;
+				var deps = this.dependencies?this.dependencies:[];
+				if(tpl){
+					if(tpl.indexOf("./") == 0){
+						tpl = "app/"+tpl;
+					}
+					deps = deps.concat(["dojo/text!"+tpl]);
 				}
 				var def = new Deferred();
-				require(path?[path]:[], function(){
-					if(deps.length > 0){
-						var requireSignal;
-						try{
-							requireSignal = require.on("error", lang.hitch(this, function(error){
-								if(def.isResolved() || def.isRejected()){
-									return;
-								}
-								if(error.info[0] && error.info[0].indexOf(this.template)>=0 ){
-									def.resolve(false);
-									requireSignal.remove();
-								}
-							}));
-							require(deps, function(){
-								def.resolve.call(def, arguments);
+				if(deps.length > 0){
+					var requireSignal;
+					try{
+						requireSignal = require.on("error", lang.hitch(this, function(error){
+							if(def.isResolved() || def.isRejected()){
+								return;
+							}
+							if(error.info[0] && error.info[0].indexOf(this.template)>=0 ){
+								def.resolve(false);
 								requireSignal.remove();
-							});
-						}catch(e){
-							def.resolve(false);
+							}
+						}));
+						require(deps, function(){
+							def.resolve.call(def, arguments);
 							requireSignal.remove();
-						}
-					}else{
-						def.resolve(true);
+						});
+					}catch(e){
+						def.resolve(false);
+						requireSignal.remove();
 					}
-				});
-
+				}else{
+					def.resolve(true);
+				}
 				var loadViewDeferred = new Deferred();
 				when(def, lang.hitch(this, function(){
 					this.templateString = this.template ? arguments[0][arguments[0].length - 1] : "<div></div>";
@@ -198,60 +112,18 @@ function(require, when, on, domAttr, declare, lang, Deferred, Destroyable, _Temp
 		},
 
 		// start view
-		start: function(){
-			// summary:
-			//		start view object.
-			//		load view template, view definition implement and startup all widgets in view template.
-			if(this._started){
-				return this;
-			}
-
-			var _definitionDef = this._loadViewDefinition();
-			var _templateDef = this._loadViewTemplate();
-
-			this._startDef = new Deferred();
-			when(_definitionDef, lang.hitch(this, function(definition){
-				this._definition = definition;
-				when(_templateDef, lang.hitch(this, function(){
-					// call setupModel, after setupModel startup will be called after startup the loadViewDeferred will be resolved
-					this._setupModel();
-				}));
+		load: function(){
+			var tplDef = new Deferred();
+			var defDef = this.inherited(arguments);
+			// when parent loading is done (definition), proceed with template
+			// (for data-dojo-* to work we need to wait for definition to be here, this is also
+			// useful when the definition is used as a layer for the view)
+			when(defDef, lang.hitch(this, function(){
+				when(this._loadViewTemplate(), function(value){
+					tplDef.resolve(value);
+				});
 			}));
-			return this._startDef;
-		},
-
-		_setupModel: function(){
-			// summary:
-			//		Load views model if it is not already loaded then call _startup.
-			// tags:
-			//		private
-			
-			if (!this.loadedModels) {
-				var loadModelLoaderDeferred = new Deferred();
-				var createPromise;
-				try{
-					createPromise = Model(this.models, this.parent, this.app);
-				}catch(e){
-					loadModelLoaderDeferred.reject(e);
-					return loadModelLoaderDeferred.promise;
-				}
-				if(createPromise.then){  // model returned a promise, so set loadedModels and call startup after the .when
-					when(createPromise, lang.hitch(this, function(newModel){
-						if(newModel){
-							this.loadedModels = newModel;
-						}
-						this._startup();
-					}),
-					function(err){
-						loadModelLoaderDeferred.reject(err);
-					});
-				}else{ // model returned the actual model not a promise, so set loadedModels and call _startup
-					this.loadedModels = createPromise;
-					this._startup();
-				}
-			}else{ // loadedModels already created so call _startup
-				this._startup();				
-			}		
+			return tplDef;
 		},
 
 		_startup: function(){
@@ -259,74 +131,8 @@ function(require, when, on, domAttr, declare, lang, Deferred, Destroyable, _Temp
 			//		startup widgets in view template.
 			// tags:
 			//		private
-
-			this.render(this.templateString);
-			// bind view level data model
-			this.parent.domNode.appendChild(this.domNode);
-
-			//start widget
-			this.startup();
-
-			// set widget attributes
-			domAttr.set(this.domNode, "id", this.id);
-			domAttr.set(this.domNode, "data-app-region", "center");
-			// TODO here we are overriding the entire style of the node, instead of just width & height
-			// maybe we could be a bit smarter
-			domAttr.set(this.domNode, "style", "width:100%; height:100%");
-			this.region = "center";
-
-			// call view assistant's init() method to initialize view
-			this.app.log("  > in app/View calling init() name=[",this.name,"], parent.name=[",this.parent.name,"]");
-			this.init();
-			this._started = true;
-			if(this._startDef){
-				this._startDef.resolve(this);
-			}
-		},
-
-		render: function(templateString){
-			// summary:
-			//		rendering view template HTML
-			// templateString:
-			//		template string
-
-			// TODO: we could  get rid of that method and use buildRendering directly...
-			// mixin lifecycle implementation into view, we need that early for datat-dojo-attach-* to work correctly
-			if(this._definition){
-				lang.mixin(this, this._definition);
-			}
-			this.templateString = templateString;
 			this.buildRendering();
-		},
-		
-		init: function(){
-			// summary:
-			//		view life cycle init()
-		},
-
-		beforeActivate: function(){
-			// summary:
-			//		view life cycle beforeActivate()
-		},
-
-		afterActivate: function(){
-			// summary:
-			//		view life cycle afterActivate()
-		},
-
-		beforeDeactivate: function(){
-			// summary:
-			//		view life cycle beforeDeactivate()
-		},
-
-		afterDeactivate: function(){
-			// summary:
-			//		view life cycle afterDeactivate()
-		},
-
-		destroy: function(){
-			// summary:
-			//		view life cycle destroy()
+			this.inherited(arguments);
 		}
 	});
 });

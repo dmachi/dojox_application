@@ -4,6 +4,7 @@
 	<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no"/> 
 		<meta name="apple-mobile-web-app-capable" content="yes" /> 
 		<title>Custom App Test</title>
+		<link rel="stylesheet" href="../../../../dijit/themes/claro/claro.css">
 		<style>
 			html,body {
 				width: 100%;
@@ -14,10 +15,10 @@
 				overflow: hidden;
 				margin: 0px;
 				padding: 0px;
-				visibility: visible;
 			}
 		</style>
-		<script type="text/javascript" src="../../../../dojo/dojo.js"></script>
+		<script type="text/javascript" src="../../../../dojox/mobile/deviceTheme.js"></script>
+		<script type="text/javascript" data-dojo-type="async: true" src="../../../../dojo/dojo.js"></script>
 		<script>
 			require(["dojox/app/main", "dojox/json/ref", "dojo/text!./config.json"],
 			function(Application, jsonRef, config){
@@ -28,6 +29,6 @@
         </script>
 
 	</head>
-	<body>
+	<body class="claro">
 	</body>
 </html>
