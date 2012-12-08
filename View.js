@@ -70,14 +70,14 @@ define(["require", "dojo/when", "dojo/on", "dojo/_base/declare", "dojo/_base/lan
 			if(this.templateString){
 				return true;
 			}else{
-				if(!this.dependencies){
-					this.dependencies = [];
-				}
 				var tpl = this.template;
-				if(tpl.indexOf("./") == 0){
-					tpl = "app/"+tpl;
+				var deps = this.dependencies?this.dependencies:[];
+				if(tpl){
+					if(tpl.indexOf("./") == 0){
+						tpl = "app/"+tpl;
+					}
+					deps = deps.concat(["dojo/text!"+tpl]);
 				}
-				var deps = this.dependencies.concat(this.template?["dojo/text!"+tpl]:[]);
 				var def = new Deferred();
 				if(deps.length > 0){
 					var requireSignal;
