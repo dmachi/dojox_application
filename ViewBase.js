@@ -2,9 +2,11 @@ define(["require", "dojo/when", "dojo/on", "dojo/dom-attr", "dojo/_base/declare"
 	"dojo/Deferred",  "./model"],
 	function(require, when, on, domAttr, declare, lang, Deferred, Model){
 	return declare("dojox.app.ViewBase", null, {
+		// summary:
+		//		View base class with model & definition capabilities. Subclass must implement rendering capabilities.
 		constructor: function(params){
 			// summary:
-			//		View base classe with model & definition capabilities. Subclass must implement rendering capabilities.
+			//		Constructs a ViewBase instance.
 			// params:
 			//		view parameters, include:
 			//
@@ -12,7 +14,7 @@ define(["require", "dojo/when", "dojo/on", "dojo/dom-attr", "dojo/_base/declare"
 			//		- id: view id
 			//		- name: view name
 			//		- parent: parent view
-			//		- definition: view definition url
+			//		- definition: view definition module identifier
 			//		- children: children views
 			this.id = "";
 			this.name = "";
@@ -43,7 +45,7 @@ define(["require", "dojo/when", "dojo/on", "dojo/dom-attr", "dojo/_base/declare"
 		},
 
 		load: function(){
-			var defDef = this._loadViewDefinition();
+			var defDef = this._loadDefinition();
 			when(defDef, lang.hitch(this, function(definition){
 				if(definition){
 					lang.mixin(this, definition);
@@ -117,18 +119,18 @@ define(["require", "dojo/when", "dojo/on", "dojo/dom-attr", "dojo/_base/declare"
 			}
 		},
 
-		_loadViewDefinition: function(){
+		_loadDefinition: function(){
 			// summary:
 			//		Load view definition by configuration or by default.
 			// tags:
 			//		private
 			//
-			var _definitionDef = new Deferred();
+			var definitionDef = new Deferred();
 			var path;
 
 			if(this.definition && (this.definition === "none")){
-				_definitionDef.resolve(true);
-				return _definitionDef;
+				definitionDef.resolve(true);
+				return definitionDef;
 			}else if(this.definition){
 				path = this.definition.replace(/(\.js)$/, "");
 			}else{
@@ -146,11 +148,11 @@ define(["require", "dojo/when", "dojo/on", "dojo/dom-attr", "dojo/_base/declare"
 					loadFile = path.substring(index+2);
 				}
 				requireSignal = require.on("error", function(error){
-					if (_definitionDef.isResolved() || _definitionDef.isRejected()) {
+					if (definitionDef.isResolved() || definitionDef.isRejected()) {
 						return;
 					}
 					if(error.info[0] && (error.info[0].indexOf(loadFile)>= 0)){
-						_definitionDef.resolve(false);
+						definitionDef.resolve(false);
 						requireSignal.remove();
 					}
 				});
@@ -160,14 +162,14 @@ define(["require", "dojo/when", "dojo/on", "dojo/dom-attr", "dojo/_base/declare"
 				}
 
 				require([path], function(definition){
-					_definitionDef.resolve(definition);
+					definitionDef.resolve(definition);
 					requireSignal.remove();
 				});
 			}catch(e){
-				_definitionDef.reject(e);
+				definitionDef.reject(e);
 				requireSignal.remove();
 			}
-			return _definitionDef;
+			return definitionDef;
 		},
 
 		init: function(){

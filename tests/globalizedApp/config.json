@@ -1,0 +1,32 @@
+{
+	"id": "globalizedApp",
+	"name": "globalizedApp",
+	"description": "A simple app to show how to plug custom controllers",
+
+	"loaderConfig": {
+		"paths": {
+			"globalizedApp": "../dojox/app/tests/globalizedApp"
+		}
+	},
+
+	"modules": [
+	],
+
+	"controllers": [
+		"dojox/app/controllers/History"
+	],
+	
+	"defaultView": "home",
+
+	"views": {
+		"home": {
+			"definition" : "none",
+			"template": "globalizedApp/home.html",
+			"nls": "globalizedApp/nls/home",
+			"dependencies":	[
+				"dojox/mobile/RoundRectList",
+				"dojox/mobile/ListItem"
+			]
+		}
+	}
+}
