@@ -6,7 +6,7 @@ define([
 	"build/process",
 	"dojox/json/ref"
 ], function(argv, fs, bc, messages, process, json){
-	var parseViews = function(mids, mainLayer, views){
+	var parseViews = function(mids, mainLayer, views, params){
 		for(var key in views){
 			// ignore naming starting with _ (jsonref adding is own stuff in there)
 			if(key.indexOf("_") == 0){
@@ -23,13 +23,27 @@ define([
 				mids.push(mid);
 			}
 			if(view.template){
+				// we need dojo/text to load templates, let's put it in the main layer in all cases
+				// as this will be shared by a lot of views
+				if(!params.text){
+					params.text = true;
+					bc.layers[mainLayer].include.push("dojo/text");
+				}
 				mids.push(view.template);
+			}
+			if(view.nls){
+				// we use nls let's add dojo/i18n to the main layer as it will be shared by a lot of views
+				if(!params.nls){
+					params.nls = true;
+					bc.layers[mainLayer].include.push("dojo/i18n");
+				}
+				mids.push(view.nls);
 			}
 			if(view.dependencies){
 				Array.prototype.splice.apply(mids, [ mids.length, 0 ].concat(view.dependencies));
 			}
 			if(view.views){
-				parseViews(mids, mainLayer, view.views);
+				parseViews(mids, mainLayer, view.views, params);
 			}
 		}
 	};
@@ -85,7 +99,7 @@ define([
 			}
 			// go into the view children
 			if(config.views){
-				parseViews(mids, mainLayer, config.views);
+				parseViews(mids, mainLayer, config.views, {});
 			}
 			Array.prototype.splice.apply(bc.layers[mainLayer].include, [bc.layers[mainLayer].length, 0].concat(mids));
 		}else{
