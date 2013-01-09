@@ -100,7 +100,7 @@ function(lang, declare, has, on, Deferred, when, transit, Controller){
 			this.proceeding = true;
 
 			this.app.log("in app/controllers/Transition proceedTransition calling trigger load", transitionEvt);
-			var params = {};
+			var params;
 			if(transitionEvt.opts && transitionEvt.opts.params){
 				params = transitionEvt.opts.params;
 			}

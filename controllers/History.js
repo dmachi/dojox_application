@@ -88,7 +88,7 @@ function(lang, declare, on, Controller, hash){
 					state = {
 						target: hash.getTarget(window.location.hash),
 						url: location.hash,
-						params: hash.getParams(location.hash) || {}
+						params: hash.getParams(location.hash)
 					}
 				}else{
 					state = {};
@@ -96,7 +96,7 @@ function(lang, declare, on, Controller, hash){
 			}
 
 			var target = state.target || this.app._startView || this.app.defaultView;
-			var params = state.params || this.app._startParams || {};
+			var params = state.params || this.app._startParams;
 
 			// after the first pass we don't care anymore about startView
 			if(this.app._startView){

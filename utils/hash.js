@@ -9,11 +9,12 @@ define({
 			// returns:
 			//		the params object
 			//
-			var params = {};
+			var params;
 			if(hash && hash.length){
 				for(var parts= hash.split("&"), x= 0; x<parts.length; x++){
 					var tp = parts[x].split("="), name=tp[0], value = encodeURIComponent(tp[1]||"");
 					if(name && value) {
+                        if(!params){ params = {}; }
 						params[name] = value;
 					}
 				}
