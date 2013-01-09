@@ -1,5 +1,5 @@
-define(["dojo/_base/lang", "dojo/_base/declare", "dojo/on", "../Controller"],
-function(lang, declare, on, Controller){
+define(["dojo/_base/lang", "dojo/_base/declare", "dojo/on", "../Controller", "../utils/hash"],
+function(lang, declare, on, Controller, hash){
 	// module:
 	//		dojox/app/controllers/History
 	// summary:
@@ -25,29 +25,6 @@ function(lang, declare, on, Controller){
 				this.onDomNodeChange({oldNode: null, newNode: this.app.domNode});
 			}
 			this.bind(window, "popstate", lang.hitch(this, this.onPopState));
-		},
-		
-		_buildHashWithParams: function(hash, params){
-			// summary:
-			//		build up the url hash adding the params
-			// hash: String
-			//		the url hash
-			// params: Object
-			//		the params object
-			//
-			// returns:
-	 		//		the params object
-			//
-			if(hash.charAt(0) !== "#"){
-				hash = "#"+hash;
-			}
-			for(var item in params){
-				var value = params[item];
-				if(item && value != null){
-					hash = hash+"&"+item+"="+params[item];
-				}
-			}
-			return hash; // String			
 		},
 
 		onDomNodeChange: function(evt){
@@ -83,13 +60,12 @@ function(lang, declare, on, Controller){
 			}
 			
 			// create url hash from target if it is not set
-			var hash = evt.detail.url || "#"+evt.detail.target;
+			var currentHash = evt.detail.url || "#"+evt.detail.target;
 			if(evt.detail.params){
-				hash = this._buildHashWithParams(hash, evt.detail.params);
+				currentHash = hash.buildWithParams(currentHash, evt.detail.params);
 			}
-
 			// push states to history list
-			history.pushState(evt.detail, evt.detail.href, hash);
+			history.pushState(evt.detail, evt.detail.href, currentHash);
 		},
 
 		onPopState: function(evt){
@@ -100,7 +76,7 @@ function(lang, declare, on, Controller){
 			//		transition options parameter
 
 			// Clean browser's cache and refresh the current page will trigger popState event,
-			// but in this situation the application not start and throw an error.
+			// but in this situation the application has not started and throws an error.
 			// so we need to check application status, if application not STARTED, do nothing.
 			if(this.app.getStatus() !== this.app.lifecycle.STARTED){
 				return;
@@ -110,9 +86,9 @@ function(lang, declare, on, Controller){
 			if(!state){
 				if(!this.app._startView && window.location.hash){
 					state = {
-						target: ((location.hash && location.hash.charAt(0) == "#") ? location.hash.substr(1) : location.hash).split('&')[0],
+						target: hash.getTarget(window.location.hash),
 						url: location.hash,
-						params: this.app.getParamsFromHash(location.hash) || this.defaultParams || {}
+						params: hash.getParams(location.hash) || {}
 					}
 				}else{
 					state = {};
@@ -120,14 +96,16 @@ function(lang, declare, on, Controller){
 			}
 
 			var target = state.target || this.app._startView || this.app.defaultView;
-			var params = state.params || this.app._startParams || this.app.defaultParams || {};
+			var params = state.params || this.app._startParams || {};
 
+			// after the first pass we don't care anymore about startView
 			if(this.app._startView){
 				this.app._startView = null;
 			}
 			var title = state.title || null;
 			var href = state.url || null;
 
+			// TODO explain what is the purpose of this, _sim is never set in dojox/app
 			if(evt._sim){
 				history.replaceState(state, title, href);
 			}
