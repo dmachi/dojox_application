@@ -112,8 +112,8 @@ function(lang, declare, on, Controller, hash){
 
 			// transition to the target view
 			this.app.emit("transition", {
-				"viewId": target,
-				"opts": lang.mixin({reverse: true}, evt.detail, {"params": params})
+				viewId: target,
+				opts: lang.mixin({reverse: true}, evt.detail, {"params": params})
 			});
 		}
 	});

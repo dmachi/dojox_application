@@ -182,8 +182,8 @@ function(require, kernel, lang, declare, config, win, Evented, Deferred, when, h
 						this.selectedChild = this.children[this.id + '_' + selectId];
 						// transition to startView. If startView==defaultView, that means initial the default view.
 						this.emit("transition", {
-							viewId:this._startView,
-							params:this._startParams
+							viewId: this._startView,
+							opts: { params: this._startParams }
 						});
 						this.setStatus(this.lifecycle.STARTED);
 					})

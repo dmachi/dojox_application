@@ -177,8 +177,8 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/topic", "dojo/on", "../Co
 				if (!this._startTransitionEvent) {
 					// transition to the target view
 					this.app.emit("transition", {
-						"viewId": hash.getTarget(currentHash),
-						params: hash.getParams(currentHash) || {}
+						viewId: hash.getTarget(currentHash),
+						opts: { params: hash.getParams(currentHash) || {} }
 					});
 				}
 			}else{
@@ -237,8 +237,8 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/topic", "dojo/on", "../Co
 
 			// transition to the target view
 			this.app.emit("transition", {
-				"viewId": target,
- 				"opts": lang.mixin({reverse: true}, detail, {"params": hash.getParams(currentHash) || {}})
+				viewId: target,
+ 				opts: lang.mixin({reverse: true}, detail, {"params": hash.getParams(currentHash) || {}})
 			});
 		},
 
@@ -260,9 +260,8 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/topic", "dojo/on", "../Co
 
 			// transition to the target view
 			this.app.emit("transition", {
-				"viewId": target,
- 				"opts": lang.mixin({reverse: false}, detail, {"params": this.app.getParamsFromHash(currentHash) || {}})
-
+				viewId: target,
+ 				opts: lang.mixin({reverse: false}, detail, {"params": this.app.getParamsFromHash(currentHash) || {}})
 			});
 		},
 
@@ -283,8 +282,8 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/topic", "dojo/on", "../Co
 
 			// transition to the target view
 			this.app.emit("transition", {
-				"viewId": target,
-				"opts": lang.mixin({reverse: (step <= 0)}, this._historyStack[index]["detail"], {"params": hash.getParams(this._current) || {}})
+				viewId: target,
+				opts: lang.mixin({reverse: (step <= 0)}, this._historyStack[index]["detail"], {"params": hash.getParams(this._current) || {}})
 			});
 		}
 	});
