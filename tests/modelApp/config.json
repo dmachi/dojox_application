@@ -70,7 +70,6 @@
 
 	//the name of the scene to load when the app is initialized.
 	"defaultView": "home", 
-	"defaultParameters": {"cursor":"0"}, 
 
 	"defaultTransition": "slide",
 	//scenes are groups of views and models loaded at once	
@@ -97,7 +96,8 @@
 				"repeatDetails":{
 					"definition" : "./views/repeatDetails.js",
 					"template": "./templates/repeatDetails.html",
-					"dependencies":["dojox/mobile/TextBox"]
+					"dependencies":["dojox/mobile/TextBox"],
+					"defaultParams": {"cursor":"2"}
 				}
 			}
 		},

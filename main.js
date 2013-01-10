@@ -1,6 +1,7 @@
-define(["require", "dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/config",  "dojo/_base/window",
-	"dojo/Evented", "dojo/Deferred", "dojo/when", "dojo/has", "dojo/on", "dojo/ready", "dojo/dom-construct", "./model", "./module/lifecycle"],
-function(require, kernel, lang, declare, config, win, Evented, Deferred, when, has, on, ready, dom, Model){
+define(["require", "dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/config",
+	"dojo/_base/window", "dojo/Evented", "dojo/Deferred", "dojo/when", "dojo/has", "dojo/on", "dojo/ready",
+	"dojo/dom-construct", "./model", "./module/lifecycle", "./utils/hash"],
+function(require, kernel, lang, declare, config, win, Evented, Deferred, when, has, on, ready, dom, Model, lifecycle, hash){
 	kernel.experimental("dojox/app");
 
 	has.add("app-log-api", (config["app"] || {}).debugApp);
@@ -154,28 +155,6 @@ function(require, kernel, lang, declare, config, win, Evented, Deferred, when, h
 			});
 		},
 
-		getParamsFromHash: function(hash){
-			// summary:
-			//		get the params from the hash
-			//
-			// hash: String
-			//		the url hash
-			//
-			// returns:
-			//		the params object
-			//
-			var params = {};
-			if(hash && hash.length){
-				for(var parts= hash.split("&"), x= 0; x<parts.length; x++){
-					var tp = parts[x].split("="), name=tp[0], value=encodeURIComponent(tp[1]||""); 
-					if(name && value) {
-						params[name] = value;
-					}
-				}
-			}
-			return params; // Object
-		},
-
 		setupControllers: function(){
 			// create application controller instance
 			if(!this.noAutoLoadControllers){
@@ -183,9 +162,9 @@ function(require, kernel, lang, declare, config, win, Evented, Deferred, when, h
 					["./controllers/Load", "./controllers/Transition", "./controllers/Layout"].concat(this.params.controllers?this.params.controllers:[]);
 			}
 			// move set _startView operation from history module to application
-			var hash = window.location.hash;
-			this._startView = (((hash && hash.charAt(0) == "#") ? hash.substr(1) : hash) || this.defaultView).split('&')[0];
-			this._startParams = this.getParamsFromHash(hash) || this.defaultParams || {};
+			var currentHash = window.location.hash;
+			this._startView = (((currentHash && currentHash.charAt(0) == "#") ? currentHash.substr(1) : currentHash) || this.defaultView).split('&')[0];
+			this._startParams = hash.getParams(currentHash);
 		},
 
 		startup: function(){
@@ -203,8 +182,8 @@ function(require, kernel, lang, declare, config, win, Evented, Deferred, when, h
 						this.selectedChild = this.children[this.id + '_' + selectId];
 						// transition to startView. If startView==defaultView, that means initial the default view.
 						this.emit("transition", {
-							viewId:this._startView,
-							params:this._startParams
+							viewId: this._startView,
+							opts: { params: this._startParams }
 						});
 						this.setStatus(this.lifecycle.STARTED);
 					})
