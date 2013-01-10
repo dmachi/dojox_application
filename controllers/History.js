@@ -84,36 +84,28 @@ function(lang, declare, on, Controller, hash){
 
 			var state = evt.state;
 			if(!state){
-				if(!this.app._startView && window.location.hash){
+				if(window.location.hash){
 					state = {
-						target: hash.getTarget(window.location.hash),
+						target: hash.getTarget(location.hash),
 						url: location.hash,
 						params: hash.getParams(location.hash)
 					}
 				}else{
-					state = {};
+					state = {
+						target: this.app.defaultView,
+					};
 				}
 			}
 
-			var target = state.target || this.app._startView || this.app.defaultView;
-			var params = state.params || this.app._startParams;
-
-			// after the first pass we don't care anymore about startView
-			if(this.app._startView){
-				this.app._startView = null;
-			}
-			var title = state.title || null;
-			var href = state.url || null;
-
 			// TODO explain what is the purpose of this, _sim is never set in dojox/app
 			if(evt._sim){
-				history.replaceState(state, title, href);
+				history.replaceState(state, state.title, state.href);
 			}
 
 			// transition to the target view
 			this.app.emit("transition", {
-				viewId: target,
-				opts: lang.mixin({reverse: true}, evt.detail, {"params": params})
+				viewId: state.target,
+				opts: lang.mixin({reverse: true}, evt.detail, {"params": state.params})
 			});
 		}
 	});
