@@ -14,7 +14,7 @@ function(dom, connect, registry, at, TransitionEvent, Repeat, getStateful, Outpu
 		repeatmodel.set("cursorIndex", nextIndex);		
 	};
 	// show an item detail
-	var setDetailsContext = function(index){
+	var setDetailsContext = function(index, e){
 		repeatmodel.set("cursorIndex", index);
 
 		// transition to repeatDetails view with the &cursor=index
@@ -24,12 +24,11 @@ function(dom, connect, registry, at, TransitionEvent, Repeat, getStateful, Outpu
 			url : "#repeat,repeatDetails", // this is optional if not set it will be created from target   
 			params : {"cursor":index}
 		};
-		var e = window.event;
-		new TransitionEvent(e.srcElement, transOpts, e).dispatch(); 
+		new TransitionEvent(e.target, transOpts, e).dispatch(); 
 		
 	};
 	// insert an item
-	var insertResult = function(index){
+	var insertResult = function(index, e){
 		if(index<0 || index>repeatmodel.model.length){
 			throw Error("index out of data model.");
 		}
@@ -39,7 +38,7 @@ function(dom, connect, registry, at, TransitionEvent, Repeat, getStateful, Outpu
 		}
 		var data = {id:Math.random(), "First": "", "Last": "", "Location": "CA", "Office": "", "Email": "", "Tel": "", "Fax": ""};
 		repeatmodel.model.splice(index+1, 0, new getStateful(data));
-		setDetailsContext(index+1);
+		setDetailsContext(index+1, e);
 	};
 	// get index from dom node id
 	var getIndexFromId = function(nodeId, perfix){
@@ -59,13 +58,13 @@ function(dom, connect, registry, at, TransitionEvent, Repeat, getStateful, Outpu
 			var connectResult;
 			connectResult = connect.connect(repeatDom, "button[id^=\"detail\"]:click", function(e){
 				var index = getIndexFromId(e.target.id, "detail");
-				setDetailsContext(index);
+				setDetailsContext(index, e);
 			});
 			_connectResults.push(connectResult);
 
 			connectResult = connect.connect(repeatDom, "button[id^=\"insert\"]:click", function(e){
 				var index = getIndexFromId(e.target.id, "insert");
-				insertResult(index);
+				insertResult(index, e);
 			});
 			_connectResults.push(connectResult);
 

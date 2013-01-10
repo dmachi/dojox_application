@@ -261,7 +261,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/topic", "dojo/on", "../Co
 			// transition to the target view
 			this.app.emit("transition", {
 				viewId: target,
- 				opts: lang.mixin({reverse: false}, detail, {"params": this.app.getParamsFromHash(currentHash)})
+ 				opts: lang.mixin({reverse: false}, detail, {"params": hash.getParams(currentHash)})
 			});
 		},
 

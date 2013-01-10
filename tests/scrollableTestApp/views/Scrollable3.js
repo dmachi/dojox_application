@@ -25,7 +25,7 @@ function(dom, domStyle, connect, lang, registry, at, TransitionEvent, Repeat, ge
 	};
 
 	// insert an item
-	var insertResult = function(index){
+	var insertResult = function(index, e){
 		if(index<0 || index>repeatmodel.model.length){
 			throw Error("index out of data model.");
 		}
@@ -42,8 +42,7 @@ function(dom, domStyle, connect, lang, registry, at, TransitionEvent, Repeat, ge
 			url : "#repeatDetails", // this is optional if not set it will be created from target   
 			params : {"cursor":index+1}
 		};
-		var e = window.event;
-		new TransitionEvent(e.srcElement, transOpts, e).dispatch(); 
+		new TransitionEvent(e.target, transOpts, e).dispatch(); 
 		
 	};
 
@@ -63,8 +62,8 @@ function(dom, domStyle, connect, lang, registry, at, TransitionEvent, Repeat, ge
 			repeatmodel = this.loadedModels.repeatmodels;
 			var connectResult;
 
-			connectResult = connect.connect(dom.byId(insert1Id), "click", function(){
-				insertResult(repeatmodel.model.length-1);
+			connectResult = connect.connect(dom.byId(insert1Id), "click", function(e){
+				insertResult(repeatmodel.model.length-1,e);
 			});
 			_connectResults.push(connectResult);
 
