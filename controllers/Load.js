@@ -81,8 +81,17 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/Def
 			//		Otherwise, create the view and return a dojo.Deferred instance.
 
 			var id = parent.id + '_' + childId;
-			if(parent.children[id]){
-				return parent.children[id];
+			// check for possible default params if no params were provided
+			if(!params && parent.views[childId].defaultParams){
+				params = parent.views[childId].defaultParams;
+			}
+			var view = parent.children[id];
+			if(view){
+				// set params to new value before returning
+				if(params){
+					view.params = params;
+				}
+				return view;
 			}
 			var def = new Deferred();
 			// create and start child. return Deferred

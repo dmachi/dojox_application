@@ -1,5 +1,5 @@
-define(["dojo/_base/lang", "dojo/_base/declare", "dojo/topic", "dojo/on", "../Controller", "dojo/hash"],
-	function(lang, declare, topic, on, Controller){
+define(["dojo/_base/lang", "dojo/_base/declare", "dojo/topic", "dojo/on", "../Controller", "../utils/hash", "dojo/hash"],
+	function(lang, declare, topic, on, Controller, hash){
 	// module:
 	//		dojox/app/controllers/HistoryHash
 	// summary:
@@ -45,9 +45,9 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/topic", "dojo/on", "../Co
 				currentHash = currentHash.substr(1);
 			}
 			this._historyStack.push({
-				'hash': currentHash,
-				'url': window.location.href,
-				'detail': {target:currentHash}
+				"hash": currentHash,
+				"url": window.location.href,
+				"detail": {target:currentHash}
 			});
 			this._historyLen = window.history.length;
 			this._index = this._historyStack.length - 1;
@@ -74,6 +74,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/topic", "dojo/on", "../Co
 			//		|		title:"List",
 			//		|		target:"items,list",
 			//		|		url: "#items,list"
+			//		|		params: {"param1":"p1value"}
 			//		|	};
 			//		|	new TransitionEvent(domNode, transOpts, e).dispatch();
 			//
@@ -86,7 +87,11 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/topic", "dojo/on", "../Co
 				target = evt.detail.href.match(regex)[1];
 			}
 
-			var currentHash = evt.detail.url || '#' + target;
+			var currentHash = evt.detail.url || "#" + target;
+
+			if(evt.detail.params){
+				currentHash = hash.buildWithParams(currentHash, evt.detail.params);
+			}
 
 			this._oldHistoryLen = window.history.length;
 			// pushState on iOS will not change location bar hash because of security.
@@ -111,9 +116,9 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/topic", "dojo/on", "../Co
 			// hash:
 			//		new hash should be added to _historyStack.
 			this._historyStack.push({
-				'hash': hash,
-				'url': window.location.href,
-				'detail': {target:hash}
+				"hash": hash,
+				"url": window.location.href,
+				"detail": {target:hash}
 			});
 
 			this._historyLen = window.history.length;
@@ -157,7 +162,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/topic", "dojo/on", "../Co
 			}
 
 			// this._oldHistoryLen === this._newHistoryLen, it maybe need to refresh history stack or do history go, back and forward,
-			// so we use _addToHistoryStack to indentify the refresh operation.
+			// so we use _addToHistoryStack to identify the refresh operation.
 			if(this._addToHistoryStack && (this._oldHistoryLen === this._newHistoryLen)){
 				this._historyStack.splice((this._newHistoryLen - this._historyDiff - 1), (this._historyStack.length - 1));
 				this._addHistory(currentHash);
@@ -172,30 +177,31 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/topic", "dojo/on", "../Co
 				if (!this._startTransitionEvent) {
 					// transition to the target view
 					this.app.emit("transition", {
-						"viewId": currentHash
+						viewId: hash.getTarget(currentHash),
+						opts: { params: hash.getParams(currentHash) || {} }
 					});
 				}
 			}else{
 				if(currentHash == this._current){
-					console.log("do nothing.");
+					// console.log("do nothing.");
 				}else if(currentHash === this._previous){ // back
-					this._back(currentHash, this._historyStack[this._index]['detail']);
+					this._back(currentHash, this._historyStack[this._index]["detail"]);
 				}else if(currentHash === this._next){ //forward
-					this._forward(currentHash, this._historyStack[this._index]['detail']);
+					this._forward(currentHash, this._historyStack[this._index]["detail"]);
 				}else{ // go
-					//search in 'back' first, then 'forward'
+					//search in "back" first, then "forward"
 					var index = -1;
 					for(var i = this._index; i > 0; i--){
-						if(currentHash === this._historyStack[i]['hash']){
+						if(currentHash === this._historyStack[i]["hash"]){
 							index = i;
 							break;
 						}
 					}
 
-					//search in 'forward'
+					//search in "forward"
 					if(-1 === index){
 						for(var i = this._index; i < this._historyStack.length; i++){
-							if(currentHash === this._historyStack[i]['hash']){
+							if(currentHash === this._historyStack[i]["hash"]){
 								index = i;
 								break;
 							}
@@ -205,7 +211,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/topic", "dojo/on", "../Co
 					if(0 < index < this._historyStack.length){
 						this._go(index, (index - this._index));
 					}else{
-						console.log("go error. index out of history stack.");
+						this.app.log("go error. index out of history stack.");
 					}
 				}
 			}
@@ -214,74 +220,71 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/topic", "dojo/on", "../Co
 		},
 
 		_back: function(currentHash, detail){
-			console.log("back");
-			this._next = this._historyStack[this._index]['hash'];
+			this.app.log("back");
+			this._next = this._historyStack[this._index]["hash"];
 			this._index--;
 			if(this._index > 0){
-				this._previous = this._historyStack[this._index - 1]['hash'];
+				this._previous = this._historyStack[this._index - 1]["hash"];
 			}else{
 				this._previous = null;
 			}
 			this._current = currentHash;
 
+			var target = hash.getTarget(currentHash);
+
 			// publish history back event
-			topic.publish("/app/history/back", {"viewId": currentHash, "detail": detail});
+			topic.publish("/app/history/back", {"viewId": target, "detail": detail});
 
 			// transition to the target view
 			this.app.emit("transition", {
-				"viewId": currentHash,
-				"opts": {reverse: true}
+				viewId: target,
+ 				opts: lang.mixin({reverse: true}, detail, {"params": hash.getParams(currentHash)})
 			});
 		},
 
 		_forward: function(currentHash, detail){
-			console.log("forward");
-			this._previous = this._historyStack[this._index]['hash'];
+			this.app.log("forward");
+			this._previous = this._historyStack[this._index]["hash"];
 			this._index++;
 			if(this._index < this._historyStack.length - 1){
-				this._next = this._historyStack[this._index + 1]['hash'];
+				this._next = this._historyStack[this._index + 1]["hash"];
 			}else{
 				this._next = null;
 			}
 			this._current = currentHash;
 
+			var target = hash.getTarget(currentHash);
+
 			// publish history forward event
-			topic.publish("/app/history/forward", {"viewId": currentHash, "detail": detail});
+			topic.publish("/app/history/forward", {"viewId": target, "detail": detail});
 
 			// transition to the target view
 			this.app.emit("transition", {
-				"viewId": currentHash,
-				"opts": {reverse: false}
+				viewId: target,
+ 				opts: lang.mixin({reverse: false}, detail, {"params": this.app.getParamsFromHash(currentHash)})
 			});
 		},
 
 		_go: function(index, step){
 			if(index < 0 || (index > window.history.length - 1)){
-				throw Error("Application history.go steps out of management.");
+				throw Error("Application history.go steps out of management, index: "+index+" length: "+window.history.length);
 			}
 
 			this._index = index;
-			this._current = this._historyStack[index]['hash'];
-			this._previous = this._historyStack[index - 1] ? this._historyStack[index - 1]['hash'] : null;
-			this._next = this._historyStack[index + 1] ? this._historyStack[index + 1]['hash'] : null;
+			this._current = this._historyStack[index]["hash"];
+			this._previous = this._historyStack[index - 1] ? this._historyStack[index - 1]["hash"] : null;
+			this._next = this._historyStack[index + 1] ? this._historyStack[index + 1]["hash"] : null;
+
+			var target = hash.getTarget(this._current);
 
 			// publish history go event
-			topic.publish("/app/history/go", {"viewId": this._current, "step": step, "detail": this._historyStack[index]["detail"]});
+			topic.publish("/app/history/go", {"viewId": target, "step": step, "detail": this._historyStack[index]["detail"]});
 
-			var param;
-			if(step > 0){
-				param = {
-					"viewId": this._current,
-					"opts": {reverse: false}
-				};
-			}else{
-				param = {
-					"viewId": this._current,
-					"opts": {reverse: true}
-				};
-			}
 			// transition to the target view
-			this.app.emit("transition", param);
+			this.app.emit("transition", {
+				viewId: target,
+				opts: lang.mixin({reverse: (step <= 0)}, this._historyStack[index]["detail"], {"params": hash.getParams(this._current)})
+			});
 		}
 	});
 });
