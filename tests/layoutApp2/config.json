@@ -1,0 +1,131 @@
+{
+	"id": "layoutApp2",
+	"name": "layout App2",
+	"description": "A layout App2",
+	"splash": "splash",
+
+	"loaderConfig": {
+		"paths": {
+			"layoutApp2": "../dojox/app/tests/layoutApp2"
+		}
+	},
+
+	"dependencies": [
+		"dojox/app/utils/mvcModel",
+		"dojox/mobile/_base",
+		"dojox/mobile/compat",
+		"dojox/mobile/TabBar",
+		"dojox/mobile/RoundRect",
+		"dojox/mobile/TabBarButton",
+		"dojox/mobile/Button",
+		"dojox/mobile/RoundRect",
+		"dojox/mobile/Heading",
+		"dojo/store/Memory",
+		"dojox/mvc/EditStoreRefListController",
+		"dojox/mvc/Group",
+        "dojox/mvc/Repeat",
+        "dojox/mvc/Output",
+		"dojox/mobile/View",
+		"dojox/app/widgets/Container"
+	],
+
+	"modules": [],
+	
+	"noAutoLoadControllers" : true,  
+	
+	"controllers": [
+		"dojox/app/controllers/History",
+		"dojox/app/controllers/Load",
+		"dojox/app/controllers/Transition",
+		"dojox/app/controllers/Layout"
+	],
+
+	//stores we are using
+	"stores": {
+	   "namesStore":{
+	       "type": "dojo/store/Memory",
+		   "params": {
+		      "data": "modelApp.names"
+		   }
+	   },
+       "repeatStore":{
+           "type": "dojo/store/Memory",
+           "params": {
+                "data": "modelApp.repeatData"
+           }
+       }
+	},
+
+	//models and instantiation parameters for the models. Including 'type' as a property allows
+	//one to overide the class that will be used for the model.  By default it is dojox/mvc/model
+	"models": {
+	   "names": {
+			"modelLoader": "dojox/app/utils/mvcModel",
+			"type": "dojox/mvc/EditStoreRefListController",
+			"params":{
+				"store": {"$ref":"#stores.namesStore"}
+			}	       
+	   }
+	}, 
+
+// this app uses regions and visble instead of an outer template for a table layout
+//	"template": "layoutApp2/templates/navigation.html",
+//	"definition" : "none",
+
+	//the name of the scene to load when the app is initialized.
+	"defaultView": "simple",
+
+	"defaultTransition": "slide",
+	//views are groups of views and models loaded at once
+	"views": {
+		"navigation":{
+			"definition" : "none",
+			"visible": true,
+			"region" : "left",
+			"template": "layoutApp2/templates/navigation.html"
+		},
+		"simple":{
+			"definition" : "layoutApp2/views/simple.js",
+			"region" : "center",
+			"visible": true,
+			"template": "layoutApp2/templates/simple.html",
+			"dependencies":["dojox/mobile/TextBox"]
+		},
+
+		"repeat": {
+            "models": {
+                "repeatmodels": {
+					"modelLoader": "dojox/app/utils/mvcModel",
+					"type": "dojox/mvc/EditStoreRefListController",
+					"params":{
+						"store": {"$ref":"#stores.repeatStore"}
+					}           
+                }
+            },
+			"defaultView": "repeatList",
+			"defaultTransition": "slide",
+			"definition": "none",
+			"region" : "center",
+
+			"views": {
+				"repeatList":{
+					"definition" : "layoutApp2/views/repeat.js",
+					"template": "layoutApp2/templates/repeat.html",
+					"dependencies":["dojox/mobile/TextBox"]
+				},
+				"repeatDetails":{
+					"definition" : "layoutApp2/views/repeatDetails.js",
+					"template": "layoutApp2/templates/repeatDetails.html",
+					"dependencies":["dojox/mobile/TextBox"]
+				}
+			}
+		},
+
+		"generate": {
+			"definition": "layoutApp2/views/generate",
+            "template": "layoutApp2/templates/generate.html",
+			"region" : "center",            
+            "dependencies":["dojox/mobile/TextBox", "dojox/mobile/TextArea", "dojox/mvc/Generate"]
+		}
+	}	
+}

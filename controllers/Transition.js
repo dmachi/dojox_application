@@ -37,8 +37,10 @@ function(lang, declare, has, on, Deferred, when, transit, Controller){
 			//
 			// event: Object
 			//		"transition" event parameter. It should be like this: {"viewId":viewId, "opts":opts}
-
+			
+			this.proceeding = (event.opts.params && event.opts.params.waitToProceed); // waitToProceed passed when visible is true to delay processing.
 			this.proceedTransition(event);
+			
 		},
 
 		onDomNodeChange: function(evt){
@@ -95,8 +97,17 @@ function(lang, declare, has, on, Deferred, when, transit, Controller){
 			if(this.proceeding){
 				this.app.log("in app/controllers/Transition proceedTransition push event", transitionEvt);
 				this.waitingQueue.push(transitionEvt);
+				this.processingQueue = false;  
 				return;
 			}
+			// If there are events waiting, needed to have the last in be the last processed, so add it to waitingQueue
+			// process the events in order.
+			if(this.waitingQueue.length > 0 && !this.processingQueue){
+				this.processingQueue = true;
+				this.waitingQueue.push(transitionEvt);
+				transitionEvt = this.waitingQueue.shift();	
+			}
+			
 			this.proceeding = true;
 
 			this.app.log("in app/controllers/Transition proceedTransition calling trigger load", transitionEvt);
@@ -138,6 +149,20 @@ function(lang, declare, has, on, Deferred, when, transit, Controller){
 			}
 			return defaultTransition;
 		},
+		
+		_getSelectedChild: function(view, region){
+			// summary:
+			//		return the selectedChild for this region.
+			//
+			this.app.log("in Transition _getSelectedChild view.id="+view.id+"  region = "+region);
+			if(view.selectedChildren && view.selectedChildren[region]){
+				this.app.log("in Transition _getSelectedChild got id ="+view.selectedChildren[region].id+" for selectedChild for view",view);
+				return view.selectedChildren[region];				
+			}else{
+				this.app.log("in Transition _getSelectedChild got null for selectedChild for view",view);
+				return null;
+			}
+		},
 
 		_doTransition: function(transitionTo, opts, params, parent){
 			// summary:
@@ -168,7 +193,7 @@ function(lang, declare, has, on, Deferred, when, transit, Controller){
 			if(!parent){
 				throw Error("view parent not found in transition.");
 			}
-			var parts, toId, subIds, next, params, current = parent.selectedChild;
+			var parts, toId, subIds, next, params; 
 			if(transitionTo){
 				parts = transitionTo.split(",");
 			}else{
@@ -185,6 +210,9 @@ function(lang, declare, has, on, Deferred, when, transit, Controller){
 				throw Error("child view must be loaded before transition.");
 			}
 
+
+			var current = this._getSelectedChild(parent, next.region);
+			
 			// set params on next view.
 			next.params = params || next.params;
 
@@ -220,11 +248,12 @@ function(lang, declare, has, on, Deferred, when, transit, Controller){
 				//activate or deactivate views and refresh layout.
 
 				// deactivate sub child of current view, then deactivate current view
-				var subChild = current.selectedChild;
+				// TODO: ELC NEED A LOOP HERE TO deactivate all children
+				var subChild = this._getSelectedChild(current, "center");
 				while(subChild){
 				this.app.log("< in Transition._doTransition calling subChild.beforeDeactivate subChild name=[",subChild.name,"], parent.name=[",subChild.parent.name,"], next!==current path");
 					subChild.beforeDeactivate();
-					subChild = subChild.selectedChild;
+					subChild = this._getSelectedChild(subChild, "center");
 				}
 				this.app.log("< in Transition._doTransition calling current.beforeDeactivate current name=[",current.name,"], parent.name=[",current.parent.name,"], next!==current path");
 				current.beforeDeactivate();
@@ -245,11 +274,12 @@ function(lang, declare, has, on, Deferred, when, transit, Controller){
 				}
 				when(result, lang.hitch(this, function(){
 					// deactivate sub child of current view, then deactivate current view
-					var subChild = current.selectedChild;
+					subChild = this._getSelectedChild(current, "center");
+					
 					while(subChild){
 						this.app.log("  < in Transition._doTransition calling subChild.afterDeactivate subChild name=[",subChild.name,"], parent.name=[",subChild.parent.name,"], next!==current path");
 						subChild.afterDeactivate();
-						subChild = subChild.selectedChild;
+						subChild = this._getSelectedChild(subChild, "center");
 					}
 					this.app.log("  < in Transition._doTransition calling current.afterDeactivate current name=[",current.name,"], parent.name=[",current.parent.name,"], next!==current path");
 					current.afterDeactivate();

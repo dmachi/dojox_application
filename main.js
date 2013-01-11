@@ -164,27 +164,41 @@ function(require, kernel, lang, declare, config, win, Evented, Deferred, when, h
 			// move set _startView operation from history module to application
 			var currentHash = window.location.hash;
 			this._startView = (((currentHash && currentHash.charAt(0) == "#") ? currentHash.substr(1) : currentHash) || this.defaultView).split('&')[0];
-			this._startParams = hash.getParams(currentHash);
+			this._startParams = hash.getParams(currentHash) || {};
 		},
 
 		startup: function(){
 			// load controllers and views
 			//
+			// TODO: It has gotten a bit ugly working with selectedChildren, but we need a way to load and show all of the visible views
+			// We also need a way to indicate multiple visible views in the url, and to be able to show the correct views based upon the url.
+			// TODO: There is currently a problem if a view is set to visible and a different view is selected by the url hash.
+			this.selectedChildren = {};
+						
 			var controllers = this.createControllers(this.params.controllers);
-			var emitLoad = function(){
+			
+			var emitLoad = function(defaultView, waitToProceed){ // waitToProceed true to avoid doing the transition before children are all loaded
 				// emit "load" event and let controller to load view.
+				// emitLoad will be called for each visible view, and then it will be called with the _startView or the defaultView 
+				// the visible views will have waitToProceed true to have the Transition controller wait to process those views
+				// until it is called with the _startView or the defaultView with waitToProceed false 
 				this.emit("load", {
-					viewId: this.defaultView,
+					viewId: defaultView,
 					params: this._startParams,
 					callback: lang.hitch(this, function (){
-						var selectId = this.defaultView.split(",");
+						var selectId = defaultView.split(",");
 						selectId = selectId.shift();
 						this.selectedChild = this.children[this.id + '_' + selectId];
+
+						// set the region
+						this.children[this.id + '_' + selectId].region = this.children[this.id + '_' + selectId].region || domAttr.get(this.children[this.id + '_' + selectId].domNode, "data-app-region") || domAttr.get(this.children[this.id + '_' + selectId].domNode, "region") || "center"; 
+						this.selectedChildren[this.children[this.id + '_' + selectId].region] = this.children[this.id + '_' + selectId];
+						this._startParams.waitToProceed = waitToProceed;
 						// transition to startView. If startView==defaultView, that means initial the default view.
 						this.emit("transition", {
-							viewId: this._startView,
+							viewId: defaultView, // this._startView,
 							opts: { params: this._startParams }
-						});
+						});						
 						this.setStatus(this.lifecycle.STARTED);
 					})
 				});
@@ -201,11 +215,27 @@ function(require, kernel, lang, declare, config, win, Evented, Deferred, when, h
 						definition: this.definition,
 						callback: lang.hitch(this, function(view){
 							this.setDomNode(view.domNode);
-							emitLoad.call(this);
+							if(this.views){
+								for(var item in this.views){  // need this to handle all visible views
+									if(this.views[item].visible && ((this.views[item] !== this.views[this._startView]) 
+										&& (!this.views[this._startView] || this.views[item].region !== this.views[this._startView].region))){
+										emitLoad.call(this, item, true); // waitToProceed true to avoid dotransition before view is loaded 
+									}
+								}
+							}	
+							emitLoad.call(this, this._startView, false); // waitToProceed false to complete the transitions to _startView
 						})
 					});
 				}else{
-					emitLoad.call(this);
+					if(this.views){
+						for(var item in this.views){  // need this to handle all visible views
+							if(this.views[item].visible && ((this.views[item] !== this.views[this._startView]) 
+								&& (!this.views[this._startView] || this.views[item].region !== this.views[this._startView].region))){
+								emitLoad.call(this, item, true); // waitToProceed true to avoid dotransition before view is loaded 
+							}
+						}
+					}	
+					emitLoad.call(this, this._startView, false); // waitToProceed false to complete the transitions to _startView
 				}
 			}));
 		}		

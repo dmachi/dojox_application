@@ -81,6 +81,7 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/Def
 			//		Otherwise, create the view and return a dojo.Deferred instance.
 
 			var id = parent.id + '_' + childId;
+			
 			// check for possible default params if no params were provided
 			if(!params && parent.views[childId].defaultParams){
 				params = parent.views[childId].defaultParams;
@@ -170,24 +171,62 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/Def
 				return loadChildDeferred.promise;
 			}
 			when(createPromise, lang.hitch(this, function(child){
-				// if no subIds and current view has default view, load the default view.
-				if(!subIds && child.defaultView){
-					subIds = child.defaultView;
-				}
-
-				var parts = subIds.split(',');
-				childId = parts.shift();
-				subIds = parts.join(',');
-				if(childId){
-					var subLoadDeferred = this.loadChild(child, childId, subIds, params);
-					when(subLoadDeferred, function(){
+				// if no subIds and current view has default view or visible subViews, load the default view and visible subViews.
+				// TODO: should be able to clean this section up some....
+				if(!subIds){
+					if(child.views){
+						for(var item in child.views){  // need this to handle all visible views
+							if(child.views[item].visible && child.views[item] !== child.views[child.defaultView]){
+								subIds = item;
+								var parts = subIds.split(',');
+								childId = parts.shift();
+								subIds = parts.join(',');
+								if(childId){
+									this.loadChild(child, childId, subIds, params);
+								}
+							}
+						}
+					}
+					if(child.defaultView) {
+						subIds = child.defaultView;
+						var parts = subIds.split(',');
+						childId = parts.shift();
+						subIds = parts.join(',');
+						if(childId){
+							var subLoadDeferred = this.loadChild(child, childId, subIds, params);
+							when(subLoadDeferred, function(){
+								// need to setup selectedChildren for visible ones here.
+								for(var item in child.children){  // need this to handle all visible views
+									if(child.selectedChildren && child.children[item].visible){
+										child.selectedChildren[child.children[item].region] = child.children[item];
+									}	
+								}								
+								loadChildDeferred.resolve();
+							},
+							function(){
+								loadChildDeferred.reject("load child '"+childId+"' error.");
+							});
+						}else{
+							loadChildDeferred.resolve();
+						}
+					}else{
 						loadChildDeferred.resolve();
-					},
-					function(){
-						loadChildDeferred.reject("load child '"+childId+"' error.");
-					});
+					}	
 				}else{
-					loadChildDeferred.resolve();
+					var parts = subIds.split(',');
+					childId = parts.shift();
+					subIds = parts.join(',');
+					if(childId){
+						var subLoadDeferred = this.loadChild(child, childId, subIds, params);
+						when(subLoadDeferred, function(){
+							loadChildDeferred.resolve();
+						},
+						function(){
+							loadChildDeferred.reject("load child '"+childId+"' error.");
+						});
+					}else{
+						loadChildDeferred.resolve();
+					}
 				}
 			}),
 			function(){
