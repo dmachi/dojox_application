@@ -38,7 +38,7 @@ function(lang, declare, has, on, Deferred, when, transit, Controller){
 			// event: Object
 			//		"transition" event parameter. It should be like this: {"viewId":viewId, "opts":opts}
 			
-			this.proceeding = (event.opts.params && event.opts.params.waitToProceed); // waitToProceed passed when visible is true to delay processing.
+			this.proceeding = (event.opts && event.opts.params && event.opts.params.waitToProceed); // waitToProceed passed when visible is true to delay processing.
 			this.proceedTransition(event);
 			
 		},

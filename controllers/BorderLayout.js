@@ -49,72 +49,23 @@ function(lang, declare, has, on, when, win, array, config, topic, query, domStyl
         	var region = event.view.region;
 			
 			if(event.view.parent.id == this.app.id){  
-		/*		var reg = registry.byId("app-"+region);
-				if(reg && region == "center"){
-					reg.addChild(event.view);
-					//reg.set("content", event.view);
-				}else if(reg && reg.domNode.children.length > 0){
-					reg.addChild(event.view);
-					//reg.set("content", event.view);			
-				}else{
-					cp1 = new ContentPane({region:region,  splitter:false, id:"app-"+region});
-					cp1.addChild(event.view); // important to add the widget to the cp before adding cp to BorderContainer for height
-					//cp1.set("content", event.view);
-					bc.addChild(cp1);
-				}
-		*/		
-		//		if(reg && reg.hasChildren()){  // already has a view, remove it and add the new one
-		//			reg.removeChild(reg.getChildren()[0]);
-		//			reg.addChild(event.view);
-		//		}else{
 				var reg = registry.byId(event.view.parent.id+"-"+region);			
 				if(reg){  // already has a stackContainer, just create the contentPane for this one.
-					//cp1 = new ContentPane({region:region,  splitter:false, id:"app-"+region});
 					cp1 = new ContentPane({id:event.view.id+"-cp-"+region});
 					cp1.addChild(event.view); // important to add the widget to the cp before adding cp to BorderContainer for height
-					//cp1.set("content", event.view);
-					//bc.addChild(cp1);
 					reg.addChild(cp1);
 					bc.addChild(reg);
 				}else{
-				//	if(!event.view.parent.wrapChildViewsInContentPanes){ // wrapChildViewsInContentPanes is set in the config to indicate that a ContentPane and should be used to add the child views
-						if(registry.byId(event.view.parent.id+"-"+region)){
-						//	registry.byId(event.view.parent.id+"-"+region).domNode.appendChild(event.view.domNode);
-						}else{ // need a contentPane
+					if(!registry.byId(event.view.parent.id+"-"+region)){ // need a contentPane
 							sc1 = new StackContainer({doLayout: false, region:region,  splitter:false, id:event.view.parent.id+"-"+region});
-							//cp1 = new ContentPane({region:region,  splitter:false, id:event.view.parent.id+"-"+region});
 							cp1 = new ContentPane({id:event.view.id+"-cp-"+region});
 							cp1.addChild(event.view); // should we use addChild or appendChild?
 							sc1.addChild(cp1);
-							//cp1.domNode.appendChild(event.view.domNode);
 							bc.addChild(sc1);
-							//event.view.parent.addChild(sc1);  //???? is this right?
-						}
-											
-				/*	}else{
-						//event.view.parent.domNode.appendChild(event.view.domNode);
-					}
-				*/	
+					}											
 				}
 			}else{ // not a top level page transition.
 				event.view.parent.domNode.appendChild(event.view.domNode);
-		/*		if(!event.view.parent.wrapChildViewsInContentPanes){ // wrapChildViewsInContentPanes is set in the config to indicate that a ContentPane and should be used to add the child views
-					if(registry.byId(event.view.parent.id+"-"+region)){
-				//		registry.byId(event.view.parent.id+"-"+region).domNode.appendChild(event.view.domNode);
-					}else{ // need a contentPane
-						sc1 = new StackContainer({doLayout: false, region:region,  splitter:false, id:event.view.parent.id+"-"+region});
-						//cp1 = new ContentPane({region:region,  splitter:false, id:event.view.parent.id+"-"+region});
-						cp1 = new ContentPane({id:event.view.id+"-cp-"+region});
-						cp1.addChild(event.view); // should we use addChild or appendChild?
-						sc1.addChild(cp1);
-						//cp1.domNode.appendChild(event.view.domNode);
-						//event.view.parent.addChild(sc1);  //???? is this right?
-						bc.addChild(sc1);
-					}					
-				}else{
-				//	event.view.parent.domNode.appendChild(event.view.domNode);
-				}
-			*/	
 			}
 			
 			domAttr.set(event.view.domNode, "id", event.view.id);
@@ -167,32 +118,17 @@ function(lang, declare, has, on, when, win, array, config, topic, query, domStyl
 			var reg = registry.byId("app-"+event.view.region);
 			var sc = registry.byId(event.view.parent.id+"-"+event.view.region);
 			var cp = registry.byId(event.view.id+"-cp-"+event.view.region);
-			
-			if(reg && reg.domNode.children.length > 0){  // already has a view, remove it and add the new one
-		//		reg.removeChild(reg.domNode.children[0]);
-		//		reg.addChild(event.view);
-		//	} else{
-		//		reg.addChild(event.view);
-			}
-			
+						
 			var parentSelChild = this._getSelectedChild(parent, view.region); 
 			if(view !== parentSelChild){
-				if(parentSelChild){
-					//reg.removeChild(parentSelChild);
-				//	domStyle.set(parentSelChild.domNode, "zIndex", 25);
-				//	domStyle.set(parentSelChild.domNode, "display", "none");
-				}
 				if(sc && cp){
 					sc.selectChild(cp);				
 				}
-			//	domStyle.set(view.domNode, "display", "");
-			//	domStyle.set(view.domNode, "zIndex", 50);
 				parent.selectedChildren[view.region] = view;
 			}
 			// do selected view layout
 			this._doResize(parent);
-			
-			
+						
 		//	this.inherited(arguments);
 		}
 		
