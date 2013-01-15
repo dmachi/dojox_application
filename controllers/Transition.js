@@ -278,7 +278,7 @@ function(lang, declare, has, on, Deferred, when, transit, Controller){
 				this.app.log("> in Transition._doTransition calling next.beforeActivate next name=[",next.name,"], parent.name=[",next.parent.name,"], next!==current path");
 				next.beforeActivate();
 				this.app.log("> in Transition._doTransition calling app.triggger select view next name=[",next.name,"], parent.name=[",next.parent.name,"], next!==current path");
-				this.app.emit("select", {"parent":parent, "view":next});			
+				this.app.emit("select", {"parent":parent, "view":next});
 				var result = true;
 				if(!has("ie")){
 					// if we are on IE CSS3 transitions are not supported (yet). So just skip the transition itself.
