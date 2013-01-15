@@ -86,7 +86,7 @@ function(lang, declare, has, on, when, win, array, config, topic, query, domStyl
 			if(!view){
 				console.warn("layout empty view.");
 				return;
-			}
+			}			
 			// nothing to layout here since it was added to the right place in layout.
 		},
 

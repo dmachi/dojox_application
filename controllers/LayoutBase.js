@@ -69,6 +69,7 @@ function(lang, declare, has, on, when, win, array, config, topic, query, domStyl
 			//
 			// view: Object
 			//		view instance needs to do layout.
+			this.app.log("in LayoutBase _doResize called for view.id="+view.id+" view=",view);
 			var node = view.domNode;
 			if(!node){
 				this.app.log("Warning - View has not been loaded, in LayoutBase _doResize view.domNode is not set for view.id="+view.id+" view=",view);
@@ -167,15 +168,16 @@ function(lang, declare, has, on, when, win, array, config, topic, query, domStyl
 				return;
 			}
 			
+			// if the parent has a child in the view region it has to be hidden, and this view displayed.
 			var parentSelChild = this._getSelectedChild(parent, view.region); 
 			if(view !== parentSelChild){
 				if(parentSelChild){
-					domStyle.set(parentSelChild.domNode, "zIndex", 25);
+				//	domStyle.set(parentSelChild.domNode, "zIndex", 25);
 					domStyle.set(parentSelChild.domNode, "display", "none");
 				}
 
 				domStyle.set(view.domNode, "display", "");
-				domStyle.set(view.domNode, "zIndex", 50);
+				//domStyle.set(view.domNode, "zIndex", 50);
 				parent.selectedChildren[view.region] = view;
 			}
 			// do selected view layout

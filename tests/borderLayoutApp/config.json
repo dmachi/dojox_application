@@ -41,6 +41,7 @@
 		"dojox/app/controllers/History",
 		"dojox/app/controllers/Load",
 		"dojox/app/controllers/Transition",
+	//	"dojox/app/controllers/Layout"         // can work with either Layout or BorderLayout
 		"dojox/app/controllers/BorderLayout"
 	],
 
@@ -83,7 +84,8 @@
 	// this app uses regions and visble instead of an outer template for the layout
 
 	//the name of the view to load when the app is initialized.
-	"defaultView": "view1+view3+view7+view9+view5", 
+	//"defaultView": "view1+view3+view7+view9+view5", 
+	"defaultView": "view1+view9+view3+view7+view5", 
 
 	"defaultTransition": "slide",
 		

@@ -65,10 +65,11 @@ function(lang, declare, has, on, when, win, array, config, topic, query, domStyl
 				console.warn("layout empty view.");
 				return;
 			}
+			this.app.log("in Layout _doLayout called for view.id="+view.id+" view=",view);
 
 			var fullScreenScene, children;
 			//TODO: probably need to handle selectedChildren here, not just selected child...
-			var selectedChild = this._getSelectedChild(view, "center");
+			var selectedChild = this._getSelectedChild(view, view.region || "center");
 			if(selectedChild && selectedChild.isFullScreen){
 				console.warn("fullscreen sceen layout");
 				/*
@@ -95,17 +96,9 @@ function(lang, declare, has, on, when, win, array, config, topic, query, domStyl
 					};
 				});
 				
-				//TODO: probably need to handle selectedChildren here, not just selected child...
 				if(selectedChild){
 					children = array.filter(children, function(c){
-						if((c.region == "center") && selectedChild && (selectedChild.domNode !== c.domNode)){
-							domStyle.set(c.domNode, "zIndex", 25);
-							domStyle.set(c.domNode, "display", "none");
-							return false;
-						}else if(c.region != "center"){
-							domStyle.set(c.domNode, "display", "");
-							domStyle.set(c.domNode, "zIndex", 100);
-						}
+						// do not need to set display none here it is set in select.
 						return c.domNode && c.region;
 					}, view);
 				}
