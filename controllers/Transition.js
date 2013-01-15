@@ -39,8 +39,25 @@ function(lang, declare, has, on, Deferred, when, transit, Controller){
 			//		"transition" event parameter. It should be like this: {"viewId":viewId, "opts":opts}
 			
 			this.proceeding = (event.opts && event.opts.params && event.opts.params.waitToProceed); // waitToProceed passed when visible is true to delay processing.
-			this.proceedTransition(event);
-			
+
+			var viewsId = event.viewId || "";
+			this.proceedingSaved = this.proceeding;	
+			var parts = viewsId.split('+');
+			if(parts.length > 0){		
+				while(parts.length > 1){ 	
+					var viewId = parts.shift();
+					var newEvent = lang.clone(event);
+					newEvent.viewId = viewId;
+					this.proceeding = true;
+					this.proceedTransition(newEvent);					
+				}				
+				this.proceeding = this.proceedingSaved;
+				var viewId = parts.shift();
+				event.viewId = viewId;	
+				this.proceedTransition(event);
+			}else{
+				this.proceedTransition(event);
+			}
 		},
 
 		onDomNodeChange: function(evt){
@@ -188,6 +205,7 @@ function(lang, declare, has, on, Deferred, when, transit, Controller){
 			// returns:
 			//		transit dojo/DeferredList object.
 
+			//TODO: Can this be called with a viewId which includes multiple views with a "+"?  Need to handle that!
 			this.app.log("in app/controllers/Transition._doTransition transitionTo=[",transitionTo,"], parent.name=[",parent.name,"], opts=",opts);
 
 			if(!parent){
@@ -259,9 +277,8 @@ function(lang, declare, has, on, Deferred, when, transit, Controller){
 				current.beforeDeactivate();
 				this.app.log("> in Transition._doTransition calling next.beforeActivate next name=[",next.name,"], parent.name=[",next.parent.name,"], next!==current path");
 				next.beforeActivate();
-
 				this.app.log("> in Transition._doTransition calling app.triggger select view next name=[",next.name,"], parent.name=[",next.parent.name,"], next!==current path");
-				this.app.emit("select", {"parent":parent, "view":next});
+				this.app.emit("select", {"parent":parent, "view":next});			
 				var result = true;
 				if(!has("ie")){
 					// if we are on IE CSS3 transitions are not supported (yet). So just skip the transition itself.

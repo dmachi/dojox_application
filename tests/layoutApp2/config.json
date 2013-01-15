@@ -73,21 +73,19 @@
 //	"definition" : "none",
 
 	//the name of the scene to load when the app is initialized.
-	"defaultView": "simple",
+	"defaultView": "navigation+simple",
 
 	"defaultTransition": "slide",
 	//views are groups of views and models loaded at once
 	"views": {
 		"navigation":{
 			"definition" : "none",
-			"visible": true,
 			"region" : "left",
 			"template": "layoutApp2/templates/navigation.html"
 		},
 		"simple":{
 			"definition" : "layoutApp2/views/simple.js",
 			"region" : "center",
-			"visible": true,
 			"template": "layoutApp2/templates/simple.html",
 			"dependencies":["dojox/mobile/TextBox"]
 		},

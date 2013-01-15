@@ -83,7 +83,7 @@
 	// this app uses regions and visble instead of an outer template for the layout
 
 	//the name of the view to load when the app is initialized.
-	"defaultView": "view5", 
+	"defaultView": "view1+view3+view7+view9+view5", 
 
 	"defaultTransition": "slide",
 		
@@ -91,7 +91,6 @@
 		"view1":{
 			"definition" : "none",
 			"region" : "top",
-			"visible": true,
 			"template": "layoutApp/templates/view1.html"
 		},
 		"view2":{
@@ -102,7 +101,6 @@
 		"view3":{
 			"definition" : "none",
 			"region" : "left",
-			"visible": true,
 			"template": "layoutApp/templates/view3.html"
 		},
 		"view4":{
@@ -113,7 +111,6 @@
 		"view5":{
 			"definition" : "none",
 			"region" : "center",
-			"visible": true,
 			"template": "layoutApp/templates/view5.html"
 		},
 		"view6":{
@@ -124,7 +121,6 @@
 		"view7":{
 			"definition" : "none",
 			"region" : "right",
-			"visible": true,
 			"template": "layoutApp/templates/view7.html"
 		},
 		"view8":{
@@ -135,7 +131,6 @@
 		"view9":{
 			"definition" : "none",
 			"region" : "bottom",
-			"visible": true,
 			"template": "layoutApp/templates/view9.html"
 		},
 		"view10":{

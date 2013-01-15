@@ -71,8 +71,8 @@ function(lang, declare, has, on, when, win, array, config, topic, query, domStyl
 			//		view instance needs to do layout.
 			var node = view.domNode;
 			if(!node){
-				this.app.log("in LayoutBase _doResize view.domNode is not defined WHY? for view.id="+view.id+" view=",view);
-			//	return;
+				this.app.log("Warning - View has not been loaded, in LayoutBase _doResize view.domNode is not set for view.id="+view.id+" view=",view);
+				return;
 			}
 			// set margin box size, unless it wasn't specified, in which case use current size
 			if(changeSize){
