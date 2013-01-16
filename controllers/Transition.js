@@ -285,7 +285,7 @@ function(lang, declare, has, on, Deferred, when, transit, Controller){
 					var mergedOpts = lang.mixin({}, opts); // handle reverse from mergedOpts or transitionDir 
 					mergedOpts = lang.mixin({}, mergedOpts, {
 						reverse: (mergedOpts.reverse || mergedOpts.transitionDir===-1)?true:false,
-						transition: mergedOpts.transition || this._getDefaultTransition(parent) || "none"
+						transition: this._getDefaultTransition(parent) || "none"
 					}); 
 					result = transit(current.domNode, next.domNode, mergedOpts);
 				}
@@ -311,9 +311,9 @@ function(lang, declare, has, on, Deferred, when, transit, Controller){
 			}else{
 				// next view == current view, refresh current view
 				// deactivate next view
-				this.app.log("< in Transition._doTransition calling next.beforeDeactivate next name=[",next.name,"], parent.name=[",next.parent.name,"], next==current path");
+				this.app.log("< in Transition._doTransition calling next.beforeDeactivate refresh current view next name=[",next.name,"], parent.name=[",next.parent.name,"], next==current path");
 				next.beforeDeactivate();
-				this.app.log("  < in Transition._doTransition calling next.afterDeactivate next name=[",next.name,"], parent.name=[",next.parent.name,"], next==current path");
+				this.app.log("  < in Transition._doTransition calling next.afterDeactivate refresh current view next name=[",next.name,"], parent.name=[",next.parent.name,"], next==current path");
 				next.afterDeactivate();
 				// activate next view
 				this.app.log("> in Transition._doTransition calling next.beforeActivate next name=[",next.name,"], parent.name=[",next.parent.name,"], next==current path");

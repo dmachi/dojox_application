@@ -127,7 +127,8 @@ function(lang, declare, has, on, when, win, array, config, topic, query, domStyl
 				parent.selectedChildren[view.region] = view;
 			}
 			// do selected view layout
-			this._doResize(parent);
+			this._doResize(parent);  // call for parent and view here, doResize will no longer call it for all children.
+			this._doResize(view);  // try calling resize on the view, and in resize call it for the parent.
 						
 		//	this.inherited(arguments);
 		}

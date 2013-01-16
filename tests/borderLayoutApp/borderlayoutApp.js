@@ -52,9 +52,6 @@ function(win, Application, jsonRef, config, has){
 	// on IE use the HistoryHash controller instead of the History controller.
 	//console.log("has(ie)="+has("ie"));
 	config.controllers[0] = has("ie") ? "dojox/app/controllers/HistoryHash" : "dojox/app/controllers/History";		
-	//console.log("config.controllers[0]="+config.controllers[0]);
-	config.controllers[3] = "dojox/app/controllers/Layout";		
-	console.log("config.controllers[3] was set to Layout to force it to use Layout="+config.controllers[3]);	
 	Application(config);
 	
 });

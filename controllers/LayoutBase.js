@@ -20,7 +20,7 @@ function(lang, declare, has, on, when, win, array, config, topic, query, domStyl
 				"layout": this.layout,
 				"select": this.select
 			};
-			// if we are using dojo mobile & we are hiding adress bar we need to be bit smarter and listen to
+			// if we are using dojo mobile & we are hiding address bar we need to be bit smarter and listen to
 			// dojo mobile events instead
 			if(config.mblHideAddressBar){
 				topic.subscribe("/dojox/mobile/afterResizeAll", lang.hitch(this, this.onResize));
@@ -32,6 +32,12 @@ function(lang, declare, has, on, when, win, array, config, topic, query, domStyl
 
 		onResize: function(){
 			this._doResize(this.app);
+			// this is needed to resize the children on an orientation change or a resize of the browser.
+			// it was being done in _doResize, but was not needed for every call to _doResize.
+			for(var item in this.app.selectedChildren){  // need this to handle all selectedChildren
+				this._doResize(this.app.selectedChildren[item]);  // is this needed????
+			}
+			
 		},
 		
 		layout: function(event){
@@ -122,19 +128,6 @@ function(lang, declare, has, on, when, win, array, config, topic, query, domStyl
 
 			this._doLayout(view);
 
-			// do selectedChild layout 
-			// TODO: need to handle all selectedChildren here:
-			for(var item in view.selectedChildren){  // need this to handle all selectedChildren
-				if(view.selectedChildren[item]){
-					this._doResize(view.selectedChildren[item]);
-				}
-			}
-		/*
-			var selectedChild = this._getSelectedChild(view, "center");
-			if(selectedChild){
-				this._doResize(selectedChild);
-			}
-		*/	
 		},
 				
 		_getSelectedChild: function(view, region){
@@ -181,7 +174,9 @@ function(lang, declare, has, on, when, win, array, config, topic, query, domStyl
 				parent.selectedChildren[view.region] = view;
 			}
 			// do selected view layout
-			this._doResize(parent);
+			// call _doResize for parent and view here, doResize will no longer call it for all children.
+			this._doResize(parent);  
+			this._doResize(view);  
 		}
 	});
 });

@@ -41,9 +41,15 @@
 		"dojox/app/controllers/History",
 		"dojox/app/controllers/Load",
 		"dojox/app/controllers/Transition",
-	//	"dojox/app/controllers/Layout"         // can work with either Layout or BorderLayout
-		"dojox/app/controllers/BorderLayout"
+		"dojox/app/controllers/BorderLayout"   
+	//	"dojox/app/controllers/Layout"         // this test can work with either Layout or BorderLayout
 	],
+
+	// these are the possilbe defaultTransitions
+	"defaultTransition": "slide",
+	//"defaultTransition": "none",
+	//"defaultTransition": "fade",
+	//"defaultTransition": "flip",     // Note: flip does not work with a BorderLayout Controller
 
 
 	//stores we are using 
@@ -86,13 +92,12 @@
 	//the name of the view to load when the app is initialized.
 	//"defaultView": "view1+view3+view7+view9+view5", 
 	"defaultView": "view1+view9+view3+view7+view5", 
-
-	"defaultTransition": "slide",
 		
 	"views": {
 		"view1":{
 			"definition" : "none",
 			"region" : "top",
+			"definition" : "layoutApp/views/view1.js",			
 			"template": "layoutApp/templates/view1.html"
 		},
 		"view2":{
@@ -113,6 +118,7 @@
 		"view5":{
 			"definition" : "none",
 			"region" : "center",
+			"definition" : "layoutApp/views/view5.js",
 			"template": "layoutApp/templates/view5.html"
 		},
 		"view6":{

@@ -72,11 +72,15 @@
 //	"template": "layoutApp2/templates/navigation.html",
 //	"definition" : "none",
 
-	//the name of the scene to load when the app is initialized.
+	//the name of the view to load when the app is initialized.
 	"defaultView": "navigation+simple",
 
-	"defaultTransition": "slide",
-	//views are groups of views and models loaded at once
+	// these are the possilbe defaultTransitions
+	//"defaultTransition": "slide",
+	//"defaultTransition": "none",
+	//"defaultTransition": "fade",
+	"defaultTransition": "flip",     
+
 	"views": {
 		"navigation":{
 			"definition" : "none",
