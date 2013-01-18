@@ -38,27 +38,24 @@ function(lang, declare, has, on, when, win, array, config, topic, query, domStyl
 				bc = new BorderContainer({style:'height:100%;width:100%;border:1px solid black'});
 				event.view.parent.domNode.appendChild(bc.domNode);  // put the border container into the parent (app)
 
-            	var region = domAttr.get(event.view.domNode, "data-app-region") || domAttr.get(event.view.domNode, "region");
-            	var configRegion = event.view.region;
-				this.app.log("in BorderLayout.js layout configRegion="+configRegion+" and region="+region);
-				
 				bc.startup();
 			}
 
-			this.app.log("in app/controllers/BorderLayout.layout event.view.region=",event.view.region);			
-        	var region = event.view.region;
+			this.app.log("in app/controllers/BorderLayout.layout event.view.constraint=",event.view.constraint);			
+        	var constraint = event.view.constraint;
 			
 			if(event.view.parent.id == this.app.id){  
-				var reg = registry.byId(event.view.parent.id+"-"+region);			
+				var reg = registry.byId(event.view.parent.id+"-"+constraint);			
 				if(reg){  // already has a stackContainer, just create the contentPane for this one.
-					cp1 = new ContentPane({id:event.view.id+"-cp-"+region});
+					cp1 = new ContentPane({id:event.view.id+"-cp-"+constraint});
 					cp1.addChild(event.view); // important to add the widget to the cp before adding cp to BorderContainer for height
 					reg.addChild(cp1);
 					bc.addChild(reg);
 				}else{
-					if(!registry.byId(event.view.parent.id+"-"+region)){ // need a contentPane
-							sc1 = new StackContainer({doLayout: false, region:region,  splitter:false, id:event.view.parent.id+"-"+region});
-							cp1 = new ContentPane({id:event.view.id+"-cp-"+region});
+					if(!registry.byId(event.view.parent.id+"-"+constraint)){ // need a contentPane
+							// this is where the constraint (constraint) is set for the BorderContainer's StackContainer
+							sc1 = new StackContainer({doLayout: false, region:constraint,  splitter:false, id:event.view.parent.id+"-"+constraint});
+							cp1 = new ContentPane({id:event.view.id+"-cp-"+constraint});
 							cp1.addChild(event.view); // should we use addChild or appendChild?
 							sc1.addChild(cp1);
 							bc.addChild(sc1);
@@ -115,16 +112,16 @@ function(lang, declare, has, on, when, win, array, config, topic, query, domStyl
 			if(!view){
 				return;
 			}
-			var reg = registry.byId("app-"+event.view.region);
-			var sc = registry.byId(event.view.parent.id+"-"+event.view.region);
-			var cp = registry.byId(event.view.id+"-cp-"+event.view.region);
+			var reg = registry.byId("app-"+event.view.constraint);
+			var sc = registry.byId(event.view.parent.id+"-"+event.view.constraint);
+			var cp = registry.byId(event.view.id+"-cp-"+event.view.constraint);
 						
-			var parentSelChild = this._getSelectedChild(parent, view.region); 
+			var parentSelChild = this._getSelectedChild(parent, view.constraint); 
 			if(view !== parentSelChild){
 				if(sc && cp){
 					sc.selectChild(cp);				
 				}
-				parent.selectedChildren[view.region] = view;
+				parent.selectedChildren[view.constraint] = view;
 			}
 			// do selected view layout
 			this._doResize(parent);  // call for parent and view here, doResize will no longer call it for all children.

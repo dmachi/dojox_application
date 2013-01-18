@@ -87,7 +87,7 @@
 		}
 	}, 
 
-	// this app uses regions and visble instead of an outer template for the layout
+	// this app uses constraint (region) and multiple files in defaultView instead of an outer template for the layout
 
 	//the name of the view to load when the app is initialized.
 	//"defaultView": "view1+view3+view7+view9+view5", 
@@ -96,81 +96,81 @@
 	"views": {
 		"view1":{
 			"definition" : "none",
-			"region" : "top",
+			"constraint" : "top",
 			"definition" : "layoutApp/views/view1.js",			
 			"template": "layoutApp/templates/view1.html"
 		},
 		"view2":{
 			"definition" : "none",
-			"region" : "top",
+			"constraint" : "top",
 			"template": "layoutApp/templates/view2.html"
 		},
 		"view3":{
 			"definition" : "none",
-			"region" : "left",
+			"constraint" : "left",
 			"template": "layoutApp/templates/view3.html"
 		},
 		"view4":{
 			"definition" : "none",
-			"region" : "left",
+			"constraint" : "left",
 			"template": "layoutApp/templates/view4.html"
 		},
 		"view5":{
 			"definition" : "none",
-			"region" : "center",
+			"constraint" : "center",
 			"definition" : "layoutApp/views/view5.js",
 			"template": "layoutApp/templates/view5.html"
 		},
 		"view6":{
 			"definition" : "none",
-			"region" : "center",
+			"constraint" : "center",
 			"template": "layoutApp/templates/view6.html"
 		},
 		"view7":{
 			"definition" : "none",
-			"region" : "right",
+			"constraint" : "right",
 			"template": "layoutApp/templates/view7.html"
 		},
 		"view8":{
 			"definition" : "none",
-			"region" : "right",
+			"constraint" : "right",
 			"template": "layoutApp/templates/view8.html"
 		},
 		"view9":{
 			"definition" : "none",
-			"region" : "bottom",
+			"constraint" : "bottom",
 			"template": "layoutApp/templates/view9.html"
 		},
 		"view10":{
 			"definition" : "none",
-			"region" : "bottom",
+			"constraint" : "bottom",
 			"template": "layoutApp/templates/view10.html"
 		},
 		"simple":{
 			"definition" : "layoutApp/views/simple.js",
 			"template": "layoutApp/templates/simple.html",
-			"region" : "center",
+			"constraint" : "center",
 			"dependencies":["dojox/mobile/TextBox"]
 		},
 
 		"repeat": {
 			"definition" : "layoutApp/views/repeat.js",
 			"template": "layoutApp/templates/repeat.html",
-			"region" : "center",			
+			"constraint" : "center",			
 			"dependencies":["dojox/mobile/TextBox"]
 		},
 		
 		"repeatDetails":{
 					"definition" : "layoutApp/views/repeatDetails.js",
 					"template": "layoutApp/templates/repeatDetails.html",
-					"region" : "center",
+					"constraint" : "center",
 					"dependencies":["dojox/mobile/TextBox"]
 		},
 
 		"generate": {
 			"definition": "layoutApp/views/generate",
 			"template": "layoutApp/templates/generate.html",
-			"region" : "center",
+			"constraint" : "center",
 			"dependencies":["dojox/mobile/TextBox", "dojox/mobile/TextArea", "dojox/mvc/Generate"]
 		}
 	}	

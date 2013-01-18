@@ -130,13 +130,13 @@ function(lang, declare, has, on, when, win, array, config, topic, query, domStyl
 
 		},
 				
-		_getSelectedChild: function(view, region){
+		_getSelectedChild: function(view, constraint){
 			// summary:
-			//		return the selectedChild for this region.
+			//		return the selectedChild for this constraint.
 			//
-			this.app.log("in Layout _getSelectedChild view.id="+view.id+"  region = "+region);
-			if(view.selectedChildren && view.selectedChildren[region]){
-				return view.selectedChildren[region];				
+			this.app.log("in Layout _getSelectedChild view.id="+view.id+"  constraint = "+constraint);
+			if(view.selectedChildren && view.selectedChildren[constraint]){
+				return view.selectedChildren[constraint];				
 			}else{
 				return null;
 			}
@@ -161,8 +161,8 @@ function(lang, declare, has, on, when, win, array, config, topic, query, domStyl
 				return;
 			}
 			
-			// if the parent has a child in the view region it has to be hidden, and this view displayed.
-			var parentSelChild = this._getSelectedChild(parent, view.region); 
+			// if the parent has a child in the view constraint it has to be hidden, and this view displayed.
+			var parentSelChild = this._getSelectedChild(parent, view.constraint); 
 			if(view !== parentSelChild){
 				if(parentSelChild){
 				//	domStyle.set(parentSelChild.domNode, "zIndex", 25);
@@ -171,7 +171,7 @@ function(lang, declare, has, on, when, win, array, config, topic, query, domStyl
 
 				domStyle.set(view.domNode, "display", "");
 				//domStyle.set(view.domNode, "zIndex", 50);
-				parent.selectedChildren[view.region] = view;
+				parent.selectedChildren[view.constraint] = view;
 			}
 			// do selected view layout
 			// call _doResize for parent and view here, doResize will no longer call it for all children.

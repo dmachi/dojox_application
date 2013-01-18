@@ -68,7 +68,7 @@
 	   }
 	}, 
 
-// this app uses regions and visble instead of an outer template for a table layout
+// this app uses constraints and multiple files in defaultView instead of an outer template for a table layout
 //	"template": "layoutApp2/templates/navigation.html",
 //	"definition" : "none",
 
@@ -84,12 +84,12 @@
 	"views": {
 		"navigation":{
 			"definition" : "none",
-			"region" : "left",
+			"constraint" : "left",
 			"template": "layoutApp2/templates/navigation.html"
 		},
 		"simple":{
 			"definition" : "layoutApp2/views/simple.js",
-			"region" : "center",
+			"constraint" : "center",
 			"template": "layoutApp2/templates/simple.html",
 			"dependencies":["dojox/mobile/TextBox"]
 		},
@@ -107,7 +107,7 @@
 			"defaultView": "repeatList",
 			"defaultTransition": "slide",
 			"definition": "none",
-			"region" : "center",
+			"constraint" : "center",
 
 			"views": {
 				"repeatList":{
@@ -126,7 +126,7 @@
 		"generate": {
 			"definition": "layoutApp2/views/generate",
             "template": "layoutApp2/templates/generate.html",
-			"region" : "center",            
+			"constraint" : "center",            
             "dependencies":["dojox/mobile/TextBox", "dojox/mobile/TextArea", "dojox/mvc/Generate"]
 		}
 	}	

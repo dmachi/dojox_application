@@ -1,7 +1,7 @@
 <div class="view mblView">
 	<script type="dojo/require">at: "dojox/mvc/at"</script>
 
-	<h1 data-dojo-type="dojox/mobile/Heading" data-dojo-props='label:"Scrollable List Two"' data-app-region="top">
+	<h1 data-dojo-type="dojox/mobile/Heading" data-dojo-props='label:"Scrollable List Two"' data-app-constraint="top">
 		<span id="sc2back1" data-dojo-type="dojox.mobile.ToolBarButton" arrow="left" 
 		data-dojo-props="transitionOptions: {title: 'Configure', target: 'configuration,ScrollableListSelection', url: '#configuration,ScrollableListSelection', transitionDir: -1}">Back</span>
 		<span data-dojo-type="dojox/mobile/ToolBarButton" id="sc2insert1x" data-dojo-props='icon:"mblDomButtonWhitePlus"' style="float:right;">1</span>
@@ -10,7 +10,7 @@
 
 	</h1>
 
-	<div data-dojo-type="dojox/app/widgets/Container" data-app-region="center" data-dojo-props="scrollable: true">
+	<div data-dojo-type="dojox/app/widgets/Container" data-app-constraint="center" data-dojo-props="scrollable: true">
 
 		<div class="field-title">Should scroll between the header and footer, this text will also scroll.</div>
 
@@ -37,5 +37,5 @@
 				</ul>
 		</form>
 	</div>
-	<h1 data-dojo-type="dojox/mobile/Heading" data-dojo-props="label: 'Scrollable List Two Footer Bar'" data-app-region="bottom">
+	<h1 data-dojo-type="dojox/mobile/Heading" data-dojo-props="label: 'Scrollable List Two Footer Bar'" data-app-constraint="bottom">
 </div>

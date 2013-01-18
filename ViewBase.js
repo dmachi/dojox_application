@@ -106,7 +106,7 @@ define(["require", "dojo/when", "dojo/on", "dojo/dom-attr", "dojo/_base/declare"
 
 			// set widget attributes
 			domAttr.set(this.domNode, "id", this.id);
-			domAttr.set(this.domNode, "data-app-region", "center");
+			domAttr.set(this.domNode, "data-app-constraint", "center");
 			// TODO here we are overriding the entire style of the node, instead of just width & height
 			// maybe we could be a bit smarter
 			domAttr.set(this.domNode, "style", "width:100%; height:100%");
@@ -130,7 +130,7 @@ define(["require", "dojo/when", "dojo/on", "dojo/dom-attr", "dojo/_base/declare"
 			//		private
 			this.app.log("  > in app/ViewBask _startLayout firing layout for name=[",this.name,"], parent.name=[",this.parent.name,"]");
 
-			this.region = this.region || domAttr.get(this.domNode, "data-app-region") || domAttr.get(this.domNode, "region") || "center";
+			this.constraint = this.constraint || domAttr.get(this.domNode, "data-app-constraint") || "center";
 		
 			this.app.emit("layout", {
 				"view": this, 

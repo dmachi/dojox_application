@@ -167,14 +167,14 @@ function(lang, declare, has, on, Deferred, when, transit, Controller){
 			return defaultTransition;
 		},
 		
-		_getSelectedChild: function(view, region){
+		_getSelectedChild: function(view, constraint){
 			// summary:
-			//		return the selectedChild for this region.
+			//		return the selectedChild for this constraint.
 			//
-			this.app.log("in Transition _getSelectedChild view.id="+view.id+"  region = "+region);
-			if(view.selectedChildren && view.selectedChildren[region]){
-				this.app.log("in Transition _getSelectedChild got id ="+view.selectedChildren[region].id+" for selectedChild for view",view);
-				return view.selectedChildren[region];				
+			this.app.log("in Transition _getSelectedChild view.id="+view.id+"  constraint = "+constraint);
+			if(view.selectedChildren && view.selectedChildren[constraint]){
+				this.app.log("in Transition _getSelectedChild got id ="+view.selectedChildren[constraint].id+" for selectedChild for view",view);
+				return view.selectedChildren[constraint];				
 			}else{
 				this.app.log("in Transition _getSelectedChild got null for selectedChild for view",view);
 				return null;
@@ -229,7 +229,7 @@ function(lang, declare, has, on, Deferred, when, transit, Controller){
 			}
 
 
-			var current = this._getSelectedChild(parent, next.region);
+			var current = this._getSelectedChild(parent, next.constraint);
 			
 			// set params on next view.
 			next.params = params || next.params;

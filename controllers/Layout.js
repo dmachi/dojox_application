@@ -32,21 +32,20 @@ function(lang, declare, has, on, when, win, array, config, topic, query, domStyl
 			this.app.log("in app/controllers/Layout.layout event=",event);
 			this.app.log("in app/controllers/Layout.layout event.view.parent.name=[",event.view.parent.name,"]");
 
-			this.app.log("in app/controllers/Layout.layout event.view.region=",event.view.region);
-        	var region = event.view.region || domAttr.get(event.view.domNode, "data-app-region") || domAttr.get(event.view.domNode, "region") || "center";
-			event.view.region = region;
-			this.app.log("in Layout.js layout event.view.region set to ="+event.view.region);
+			this.app.log("in app/controllers/Layout.layout event.view.constraint=",event.view.constraint);
+        	var constraint = event.view.constraint || domAttr.get(event.view.domNode, "data-app-constraint") || "center";
+			event.view.constraint = constraint;
+			this.app.log("in Layout.js layout event.view.constraint set to ="+event.view.constraint);
 
 			event.view.parent.domNode.appendChild(event.view.domNode);
 
 			domAttr.set(event.view.domNode, "id", event.view.id);
-	//		domAttr.set(event.view.domNode, "region", event.view.region);
+			domAttr.set(event.view.domNode, "data-app-constraint", event.view.constraint);
 
 			// set widget attributes
-			domAttr.set(event.view.domNode, "data-app-region", event.view.region);
 			// TODO here we are overriding the entire style of the node, instead of just width & height
 			// maybe we could be a bit smarter
-			//domAttr.set(event.view.domNode, "style", "width:100%; height:100%");
+			//domAttr.set(event.view.domNode, "style", "width:100%; height:100%"); // I dont think this is needed
 			
 			if(event.callback){
 				event.callback();
@@ -69,37 +68,36 @@ function(lang, declare, has, on, when, win, array, config, topic, query, domStyl
 
 			var fullScreenScene, children;
 			//TODO: probably need to handle selectedChildren here, not just selected child...
-			var selectedChild = this._getSelectedChild(view, view.region || "center");
+			var selectedChild = this._getSelectedChild(view, view.constraint || "center");
 			if(selectedChild && selectedChild.isFullScreen){
 				console.warn("fullscreen sceen layout");
 				/*
 				 fullScreenScene=true;
-				 children=[{domNode: selectedChild.domNode,region: "center"}];
-				 query("> [region]",this.domNode).forEach(function(c){
+				 children=[{domNode: selectedChild.domNode,constraint: "center"}];
+				 query("> [constraint]",this.domNode).forEach(function(c){
 				 if(selectedChild.domNode!==c.domNode){
 				 dstyle(c.domNode,"display","none");
 				 }
 				 })
 				 */
 			}else{
-				// TODO: remove non HTML5 "region" in future versions
-				children = query("> [data-app-region], > [region]", view.domNode).map(function(node){
+				children = query("> [data-app-constraint]", view.domNode).map(function(node){
 					var w = registry.getEnclosingWidget(node);
 					if(w){
-						w.region = domAttr.get(node, "data-app-region") || domAttr.get(node, "region");
+						w._constraint = domAttr.get(node, "data-app-constraint");
 						return w;
 					}
 
 					return {
 						domNode: node,
-						region: domAttr.get(node, "data-app-region") || domAttr.get(node, "region")
+						_constraint: domAttr.get(node, "data-app-constraint")
 					};
 				});
 				
 				if(selectedChild){
 					children = array.filter(children, function(c){
 						// do not need to set display none here it is set in select.
-						return c.domNode && c.region;
+						return c.domNode && c._constraint;
 					}, view);
 				}
 			}

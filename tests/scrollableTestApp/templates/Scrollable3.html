@@ -1,7 +1,7 @@
 <div class="view mblView">
 	<script type="dojo/require">at: "dojox/mvc/at"</script>
 
-	<h1 data-dojo-type="dojox/mobile/Heading" data-dojo-props='label:"Scrollable List Three"' data-app-region="top">
+	<h1 data-dojo-type="dojox/mobile/Heading" data-dojo-props='label:"Scrollable List Three"' data-app-constraint="top">
 		<span id="sc3back1" data-dojo-type="dojox.mobile.ToolBarButton" arrow="left" 
 		data-dojo-props="transitionOptions: {title: 'Configure', target: 'configuration,ScrollableListSelection', url: '#configuration,ScrollableListSelection', transitionDir: -1}">Back</span>
 		<span data-dojo-type="dojox/mobile/ToolBarButton" id="sc3insert1x" data-dojo-props='icon:"mblDomButtonWhitePlus"' style="float:right;">1</span>
@@ -9,10 +9,10 @@
 		<span data-dojo-type="dojox/mobile/ToolBarButton" id="sc3remove10x" data-dojo-props='icon:"mblDomButtonWhiteMinus"' style="float:right;">10</span>
 
 	</h1>
-	<div data-app-region="top">
+	<div data-app-constraint="top">
 	</div>
 
-	<div data-dojo-type="dojox/app/widgets/Container" data-app-region="center" data-dojo-props="scrollable: true">
+	<div data-dojo-type="dojox/app/widgets/Container" data-app-constraint="center" data-dojo-props="scrollable: true">
 
 		<div class="field-title">Should scroll from under the top header to the end of the page, this text will also scroll.</div>
 
