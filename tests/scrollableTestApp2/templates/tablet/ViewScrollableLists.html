@@ -1,11 +1,18 @@
-<div>
+<div class="navPane">
 	<script type="dojo/require">at: "dojox/mvc/at"</script>
 	<!-- left -->
-	<div data-dojo-type="dojox/app/widgets/Container" class="navPane" data-app-constraint="left">
-	<!--	<div  id="tab1WrapperB" style="visibility:visible" 
-			data-dojo-type="dojox/app/widgets/Container" data-app-constraint="center" data-dojo-props="scrollable: true"> -->
-		<div  id="tab1WrapperB" style="visibility:hidden">
+	<h1 id="tab1WrapperA" data-dojo-type="dojox/mobile/Heading" style="visibility:hidden" data-dojo-props='label:"Select Scrollable List"' data-app-constraint="top"></h1>
+	<div data-dojo-type="dojox/app/widgets/Container"  class="navPane" 
+		data-app-constraint="left" id="tab1WrapperB" style="visibility:hidden">
+
+	
+	<!--<div data-dojo-type="dojox/app/widgets/Container" class="navPane" data-app-constraint="left">
+		<div  id="tab1WrapperB" style="visibility:visible" 
+			data-dojo-type="dojox/app/widgets/Container" data-app-constraint="center" data-dojo-props="scrollable: true"> 
+		<div  id="tab1WrapperB" style="visibility:hidden"> 
+
 		<h1 id="tab1WrapperA" style="visibility:visible" data-dojo-type="dojox/mobile/Heading" data-app-constraint="top">Select Scrollable List</h1>
+		-->
 		<ul data-dojo-type="dojox/mobile/RoundRectList" data-dojo-props='variableHeight:true'>
 			<li data-dojo-type="dojox/mobile/ListItem"
 				data-dojo-props="clickable: true, noArrow: true, 
