@@ -1,28 +1,19 @@
-define(["dojo/_base/lang", "dojo/_base/declare", "dojo/sniff", "dojo/on", "dojo/when", "dojo/_base/window", "dojo/_base/array", 
-	"dojo/_base/config", "dojo/topic", "dojo/query", "dojo/dom-style", "dojo/dom-attr", "dojo/dom-geometry", "dojox/app/controllers/LayoutBase",
-	"dijit/layout/BorderContainer", "dijit/layout/StackContainer", "dijit/layout/ContentPane", "dijit/registry", "../Controller", "../layout/utils"],
-function(lang, declare, has, on, when, win, array, config, topic, query, domStyle, domAttr, domGeom, LayoutBase, BorderContainer, 
-	StackContainer, ContentPane, registry, Controller, layoutUtils){
+define(["dojo/_base/declare", "dojo/dom-attr", "dojox/app/controllers/LayoutBase","dijit/layout/BorderContainer",
+		"dijit/layout/StackContainer", "dijit/layout/ContentPane", "dijit/registry"],
+function(declare, domAttr, LayoutBase, BorderContainer, StackContainer, ContentPane, registry){
 	// module:
 	//		dojox/app/controllers/BorderLayout
 	// summary:
-	//		Bind "layout" and "select" events on dojox/app application instance.
+	//		Will layout an application with a BorderContainer.  
+	//		Each view to be shown in a region of the BorderContainer will be wrapped in a StackContainer and a ContentPane.
+	//		
 
 	return declare("dojox.app.controllers.BorderLayout", LayoutBase, {
 
-		constructor: function(app, events){
-			// summary:
-			//		bind "layout" and "select" events on application instance.
-			//
-			// app:
-			//		dojox/app application instance.
-			// events:
-			//		{event : handler}
-		},
-
 		layout: function(event){
 			// summary:
-			//		Response to dojox/app "layout" event.
+			//		Response to dojox/app "layout" event which is setup in LayoutBase.  
+			//		The layout event is called once when the View is being created the first time.
 			//
 			// example:
 			//		Use dojo/on.emit to trigger "layout" event, and this function will respond to the event. For example:
@@ -33,41 +24,41 @@ function(lang, declare, has, on, when, win, array, config, topic, query, domStyl
 			this.app.log("in app/controllers/BorderLayout.layout event=",event);
 			this.app.log("in app/controllers/BorderLayout.layout event.view.parent.name=[",event.view.parent.name,"]");
 
-			if(!this.app.borderLayoutCreated){
-				this.app.borderLayoutCreated = true;
+			if(!this.borderLayoutCreated){ // If the BorderContainer has not been created yet, create it.
+				this.borderLayoutCreated = true;
 				bc = new BorderContainer({style:'height:100%;width:100%;border:1px solid black'});
 				event.view.parent.domNode.appendChild(bc.domNode);  // put the border container into the parent (app)
 
-				bc.startup();
+				bc.startup();  // startup the BorderContainer
 			}
 
 			this.app.log("in app/controllers/BorderLayout.layout event.view.constraint=",event.view.constraint);			
-        	var constraint = event.view.constraint;
+        	var constraint = event.view.constraint;  // constraint holds the region for this view, center, top etc. 
 			
-			if(event.view.parent.id == this.app.id){  
+			if(event.view.parent.id == this.app.id){  // If the parent of this view is the app we are working with the BorderContainer
 				var reg = registry.byId(event.view.parent.id+"-"+constraint);			
-				if(reg){  // already has a stackContainer, just create the contentPane for this one.
+				if(reg){  // already has a stackContainer, just create the contentPane for this view and add it to the stackContainer.
 					cp1 = new ContentPane({id:event.view.id+"-cp-"+constraint});
 					cp1.addChild(event.view); // important to add the widget to the cp before adding cp to BorderContainer for height
 					reg.addChild(cp1);
 					bc.addChild(reg);
-				}else{
-					if(!registry.byId(event.view.parent.id+"-"+constraint)){ // need a contentPane
-							// this is where the constraint (constraint) is set for the BorderContainer's StackContainer
-							sc1 = new StackContainer({doLayout: false, region:constraint,  splitter:false, id:event.view.parent.id+"-"+constraint});
-							cp1 = new ContentPane({id:event.view.id+"-cp-"+constraint});
-							cp1.addChild(event.view); // should we use addChild or appendChild?
-							sc1.addChild(cp1);
-							bc.addChild(sc1);
-					}											
+				}else{ // need a contentPane
+					// this is where the region (constraint) is set for the BorderContainer's StackContainer
+					// TODO: may need a way to make doLayout and splitter configurable
+					sc1 = new StackContainer({doLayout: true, splitter:true, region:constraint, id:event.view.parent.id+"-"+constraint});
+					cp1 = new ContentPane({id:event.view.id+"-cp-"+constraint});
+					cp1.addChild(event.view); // should we use addChild or appendChild?
+					sc1.addChild(cp1);
+					bc.addChild(sc1);
 				}
-			}else{ // not a top level page transition.
+			}else{ // Not a top level page transition, so not changing a page in the BorderContainer, so handle it like Layout.
 				event.view.parent.domNode.appendChild(event.view.domNode);
+				domAttr.set(event.view.domNode, "data-app-constraint", event.view.constraint);
 			}
 			
-			domAttr.set(event.view.domNode, "id", event.view.id);
+			domAttr.set(event.view.domNode, "id", event.view.id);  // Set the id for the domNode
 			
-			if(event.callback){
+			if(event.callback){   // if the event has a callback, call it.
 				event.callback();
 			}
 		},
@@ -112,7 +103,7 @@ function(lang, declare, has, on, when, win, array, config, topic, query, domStyl
 			if(!view){
 				return;
 			}
-			var reg = registry.byId("app-"+event.view.constraint);
+			//var reg = registry.byId("app-"+event.view.constraint);
 			var sc = registry.byId(event.view.parent.id+"-"+event.view.constraint);
 			var cp = registry.byId(event.view.id+"-cp-"+event.view.constraint);
 						
@@ -124,10 +115,10 @@ function(lang, declare, has, on, when, win, array, config, topic, query, domStyl
 				parent.selectedChildren[view.constraint] = view;
 			}
 			// do selected view layout
-			this._doResize(parent);  // call for parent and view here, doResize will no longer call it for all children.
-			this._doResize(view);  // try calling resize on the view, and in resize call it for the parent.
-						
-		//	this.inherited(arguments);
+			// Do not need to call _doResize when setting doLayout: true on the StackContainer
+			// If doLayout is set to false the calls below should be made
+			//	this._doResize(view);    // call for parent and view here, doResize will no longer call it for all children.
+			//	this._doResize(parent);  
 		}
 		
 	});

@@ -1,0 +1,78 @@
+<div>
+	<script type="dojo/require">at: "dojox/mvc/at"</script>
+	<!-- left -->
+	<div data-dojo-type="dojox/app/widgets/Container" class="navPane" data-app-constraint="left">
+	<!--	<div  id="tab1WrapperB" style="visibility:visible" 
+			data-dojo-type="dojox/app/widgets/Container" data-app-constraint="center" data-dojo-props="scrollable: true"> -->
+		<div  id="tab1WrapperB" style="visibility:hidden">
+		<h1 id="tab1WrapperA" style="visibility:visible" data-dojo-type="dojox/mobile/Heading" data-app-constraint="top">Select Scrollable List</h1>
+		<ul data-dojo-type="dojox/mobile/RoundRectList" data-dojo-props='variableHeight:true'>
+			<li data-dojo-type="dojox/mobile/ListItem"
+				data-dojo-props="clickable: true, noArrow: true, 
+				transitionOptions: {title:'List',target: 'navigation+TestInfo', url: '#navigation+TestInfo'}">
+				<div class="textBox">
+					<div class="subject">Test Instructions</div>
+						Test instructions, notes and known problems				
+				</div>				
+			</li>
+			<li data-dojo-type="dojox/mobile/ListItem"
+				data-dojo-props="clickable: true, noArrow: true, 
+				transitionOptions: {title:'List',target: 'navigation+Scrollable1', url: '#navigation+Scrollable1'}">
+				<div class="textBox">
+					<div class="subject">Scrollable list One</div>
+					Uses app/widgets/Container with a fixed Header and a fixed Footer both with data-app-constraint					
+				</div>				
+			</li>
+				<li data-dojo-type="dojox/mobile/ListItem"
+					data-dojo-props="clickable: true, noArrow: true, 
+					transitionOptions: {title:'List',target: 'navigation+Scrollable1P', url: '#navigation+Scrollable1P'}">
+					<div class="textBox">
+						<div class="subject">Scrollable list OneP</div>
+						Programmatic creation of WidgetList uses app/widgets/Container with a fixed Header and a fixed Footer both with data-app-constraint					
+					</div>				
+				</li>
+			<li data-dojo-type="dojox/mobile/ListItem"
+				data-dojo-props="clickable: true, noArrow: true, 
+				transitionOptions: {title:'List',target: 'navigation+Scrollable2', url: '#navigation+Scrollable2'}">
+				<div class="textBox">
+					<div class="subject">Scrollable list Two</div>
+					Uses app/widgets/Container with a fixed Header and a fixed Footer both with data-app-constraint					
+				</div>				
+			</li>
+			
+			<li data-dojo-type="dojox/mobile/ListItem"
+				data-dojo-props="clickable: true, noArrow: true, 
+				transitionOptions: {title:'List',target: 'navigation+Scrollable3', url: '#navigation+Scrollable3'}">
+				<div class="textBox">
+					<div class="subject">Scrollable list Three</div>
+					Uses app/widgets/Container with a fixed Header no footer with data-app-constraint					
+				</div>				
+			</li>
+			<li data-dojo-type="dojox/mobile/ListItem"
+				data-dojo-props="clickable: true, noArrow: true, 
+				transitionOptions: {title:'List',target: 'navigation+Scrollable4', url: '#navigation+Scrollable4'}">
+				<div class="textBox">
+					<div class="subject">Scrollable list Four</div>
+					Uses dojox.mobile.ScrollableView (removed height="auto") with a fixed Header and a fixed Footer					
+				</div>				
+			</li>
+			<li data-dojo-type="dojox/mobile/ListItem"
+				data-dojo-props="clickable: true, noArrow: true, 
+				transitionOptions: {title:'List',target: 'navigation+Scrollable5', url: '#navigation+Scrollable5'}">
+				<div class="textBox">
+					<div class="subject">Scrollable list Five</div>
+					Uses dojox.mobile.ScrollableView (removed height="auto") with a fixed Header and No Footer				
+				</div>				
+			</li>
+			<li data-dojo-type="dojox/mobile/ListItem"
+				data-dojo-props="clickable: true, noArrow: true, 
+				transitionOptions: {title:'List',target: 'navigation+ListItem-domButtons', url: '#navigation+ListItem-domButtons'}">
+				<div class="textBox">
+					<div class="subject">Dojox Mobile Test</div>
+					A copy of the dojox/mobile test test_ListItem-domButtons, (removed height="auto"), had used it to avoid problem with initially showing this page.					
+				</div>				
+			</li>
+		</ul>
+	</div>
+</div>
+

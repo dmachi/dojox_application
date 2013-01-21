@@ -24,7 +24,6 @@
 		"dojox/mobile/ScrollableView",
 		"dojo/store/Memory",
 		"dijit/layout/BorderContainer",
-		"dijit/layout/StackContainer",
 		"dojox/mvc/EditStoreRefListController",
 		"dojox/mvc/Group",
         "dojox/mvc/Repeat",

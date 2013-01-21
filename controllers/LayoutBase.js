@@ -1,6 +1,6 @@
-define(["dojo/_base/lang", "dojo/_base/declare", "dojo/sniff", "dojo/on", "dojo/when", "dojo/_base/window", "dojo/_base/array", "dojo/_base/config",
-	"dojo/topic", "dojo/query", "dojo/dom-style", "dojo/dom-attr", "dojo/dom-geometry", "dijit/registry", "../Controller", "../layout/utils"],
-function(lang, declare, has, on, when, win, array, config, topic, query, domStyle, domAttr, domGeom, registry, Controller, layoutUtils){
+define(["dojo/_base/lang", "dojo/_base/declare", "dojo/sniff", "dojo/_base/window", "dojo/_base/config",
+		"dojo/topic", "dojo/dom-style", "dojo/dom-geometry", "../Controller"],
+function(lang, declare, has, win, config, topic, domStyle, domGeom, Controller){
 	// module:
 	//		dojox/app/controllers/LayoutBase
 	// summary:
