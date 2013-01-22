@@ -1,12 +1,11 @@
 <div class="view mblView navPane">
 	
 	<script type="dojo/require">at: "dojox/mvc/at"</script>
-
 	<h1 data-dojo-type="dojox/mobile/Heading" data-dojo-props="label: 'Scrollable List Selection'" data-app-constraint="top"></h1>
 	<h2 data-dojo-type="dojox/mobile/RoundRectCategory" data-app-constraint="top">Select a Scrollable List</h2>
-
-	<div data-dojo-type="dojox/app/widgets/Container" class="navPane" data-app-constraint="center" data-dojo-props="scrollable: true"> 
+	<div data-dojo-type="dojox/app/widgets/Container" data-app-constraint="center" data-dojo-props="scrollable: true">
 		
+		<div>
 			<ul data-dojo-type="dojox/mobile/RoundRectList"  data-dojo-props='variableHeight:true'>
 				<li data-dojo-type="dojox/mobile/ListItem"
 					data-dojo-props="clickable: true, noArrow: true, 
@@ -74,5 +73,6 @@
 					</div>				
 				</li>
 			</ul>
+		</div>
 	</div>
 </div>

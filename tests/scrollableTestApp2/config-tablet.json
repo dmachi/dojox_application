@@ -82,7 +82,8 @@
 	//the name of the view to load when the app is initialized.
 	//"defaultView": "configuration,ScrollableListSelection+TestInfo",
 	//"defaultView": "navigation",
-	//"defaultView": "navigation+TestInfo",
+	//"defaultView": "TestInfo+navigation",  
+	//"defaultView": "navigation+TestInfo",   
 	"defaultView": "configuration+TestInfo",
 	//"defaultView": "configuration+Scrollable5",
 
@@ -106,6 +107,8 @@
 
 			//"defaultView": "ScrollableListSelection",
 			//"defaultTransition": "slide",
+			//"definition": "none",
+			//"constraint" : "left",
 			//
 			//"views": {
 			//	"ScrollableListSelection": {

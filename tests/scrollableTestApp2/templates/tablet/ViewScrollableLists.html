@@ -1,22 +1,14 @@
 <div class="navPane">
 	<script type="dojo/require">at: "dojox/mvc/at"</script>
 	<!-- left -->
-	<h1 id="tab1WrapperA" data-dojo-type="dojox/mobile/Heading" style="visibility:hidden" data-dojo-props='label:"Select Scrollable List"' data-app-constraint="top"></h1>
-	<div data-dojo-type="dojox/app/widgets/Container"  class="navPane" 
-		data-app-constraint="left" id="tab1WrapperB" style="visibility:hidden">
-
-	
-	<!--<div data-dojo-type="dojox/app/widgets/Container" class="navPane" data-app-constraint="left">
-		<div  id="tab1WrapperB" style="visibility:visible" 
-			data-dojo-type="dojox/app/widgets/Container" data-app-constraint="center" data-dojo-props="scrollable: true"> 
-		<div  id="tab1WrapperB" style="visibility:hidden"> 
-
-		<h1 id="tab1WrapperA" style="visibility:visible" data-dojo-type="dojox/mobile/Heading" data-app-constraint="top">Select Scrollable List</h1>
-		-->
+	<div data-dojo-type="dojox/app/widgets/Container" class="navPane" data-app-constraint="left">
+		<h1 id="tab1WrapperA" style="visibility:hidden" data-dojo-type="dojox/mobile/Heading" data-app-constraint="top">Select Scrollable List</h1>
+		<div  id="tab1WrapperB" style="visibility:hidden" 
+			data-dojo-type="dojox/app/widgets/Container" data-app-constraint="center" data-dojo-props="scrollable: true">
 		<ul data-dojo-type="dojox/mobile/RoundRectList" data-dojo-props='variableHeight:true'>
 			<li data-dojo-type="dojox/mobile/ListItem"
 				data-dojo-props="clickable: true, noArrow: true, 
-				transitionOptions: {title:'List',target: 'navigation+TestInfo', url: '#navigation+TestInfo'}">
+				transitionOptions: {title:'List',target: 'TestInfo', url: '#TestInfo'}">
 				<div class="textBox">
 					<div class="subject">Test Instructions</div>
 						Test instructions, notes and known problems				
@@ -24,7 +16,7 @@
 			</li>
 			<li data-dojo-type="dojox/mobile/ListItem"
 				data-dojo-props="clickable: true, noArrow: true, 
-				transitionOptions: {title:'List',target: 'navigation+Scrollable1', url: '#navigation+Scrollable1'}">
+				transitionOptions: {title:'List',target: 'Scrollable1', url: '#Scrollable1'}">
 				<div class="textBox">
 					<div class="subject">Scrollable list One</div>
 					Uses app/widgets/Container with a fixed Header and a fixed Footer both with data-app-constraint					
@@ -32,7 +24,7 @@
 			</li>
 				<li data-dojo-type="dojox/mobile/ListItem"
 					data-dojo-props="clickable: true, noArrow: true, 
-					transitionOptions: {title:'List',target: 'navigation+Scrollable1P', url: '#navigation+Scrollable1P'}">
+					transitionOptions: {title:'List',target: 'Scrollable1P', url: '#Scrollable1P'}">
 					<div class="textBox">
 						<div class="subject">Scrollable list OneP</div>
 						Programmatic creation of WidgetList uses app/widgets/Container with a fixed Header and a fixed Footer both with data-app-constraint					
@@ -40,7 +32,7 @@
 				</li>
 			<li data-dojo-type="dojox/mobile/ListItem"
 				data-dojo-props="clickable: true, noArrow: true, 
-				transitionOptions: {title:'List',target: 'navigation+Scrollable2', url: '#navigation+Scrollable2'}">
+				transitionOptions: {title:'List',target: 'Scrollable2', url: '#Scrollable2'}">
 				<div class="textBox">
 					<div class="subject">Scrollable list Two</div>
 					Uses app/widgets/Container with a fixed Header and a fixed Footer both with data-app-constraint					
@@ -49,7 +41,7 @@
 			
 			<li data-dojo-type="dojox/mobile/ListItem"
 				data-dojo-props="clickable: true, noArrow: true, 
-				transitionOptions: {title:'List',target: 'navigation+Scrollable3', url: '#navigation+Scrollable3'}">
+				transitionOptions: {title:'List',target: 'Scrollable3', url: '#Scrollable3'}">
 				<div class="textBox">
 					<div class="subject">Scrollable list Three</div>
 					Uses app/widgets/Container with a fixed Header no footer with data-app-constraint					
@@ -57,7 +49,7 @@
 			</li>
 			<li data-dojo-type="dojox/mobile/ListItem"
 				data-dojo-props="clickable: true, noArrow: true, 
-				transitionOptions: {title:'List',target: 'navigation+Scrollable4', url: '#navigation+Scrollable4'}">
+				transitionOptions: {title:'List',target: 'Scrollable4', url: '#Scrollable4'}">
 				<div class="textBox">
 					<div class="subject">Scrollable list Four</div>
 					Uses dojox.mobile.ScrollableView (removed height="auto") with a fixed Header and a fixed Footer					
@@ -65,7 +57,7 @@
 			</li>
 			<li data-dojo-type="dojox/mobile/ListItem"
 				data-dojo-props="clickable: true, noArrow: true, 
-				transitionOptions: {title:'List',target: 'navigation+Scrollable5', url: '#navigation+Scrollable5'}">
+				transitionOptions: {title:'List',target: 'Scrollable5', url: '#Scrollable5'}">
 				<div class="textBox">
 					<div class="subject">Scrollable list Five</div>
 					Uses dojox.mobile.ScrollableView (removed height="auto") with a fixed Header and No Footer				
@@ -73,7 +65,7 @@
 			</li>
 			<li data-dojo-type="dojox/mobile/ListItem"
 				data-dojo-props="clickable: true, noArrow: true, 
-				transitionOptions: {title:'List',target: 'navigation+ListItem-domButtons', url: '#navigation+ListItem-domButtons'}">
+				transitionOptions: {title:'List',target: 'ListItem-domButtons', url: '#ListItem-domButtons'}">
 				<div class="textBox">
 					<div class="subject">Dojox Mobile Test</div>
 					A copy of the dojox/mobile test test_ListItem-domButtons, (removed height="auto"), had used it to avoid problem with initially showing this page.					
