@@ -90,7 +90,10 @@
 
 	//the name of the view to load when the app is initialized.
 	//"defaultView": "view1+view3+view7+view9+view5", 
-	"defaultView": "view1+view9+view3+view7+view5", 
+	//"defaultView": "view1+view9+view3+view7+view5", 
+	//"defaultView": "view9+view1+view7+view3+view5", 
+	"defaultView": "view2+view10+view4+view8+view6", 
+	
 		
 	"views": {
 		"view1":{

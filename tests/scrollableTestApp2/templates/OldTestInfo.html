@@ -2,12 +2,13 @@
 
 	<script type="dojo/require">at: "dojox/mvc/at"</script>
 
-	<h1 id="tst1WrapperA" style="visibility:hidden" data-dojo-type="dojox/mobile/Heading" data-dojo-props='label:"Test Info for Scrollable tests."' data-app-constraint="top">
+	<div data-dojo-type="dojox.mobile.ScrollableView">
+
+		<h1 id="tst1WrapperA" style="visibility:hidden"
+			data-dojo-type="dojox/mobile/Heading" data-dojo-props='label:"Test Info for Scrollable tests.", fixed:"top"'>
 			<span id="ti1back1" data-dojo-type="dojox.mobile.ToolBarButton" arrow="left"
 				data-dojo-props="transitionOptions: {title: 'Configure', target: 'configuration,ScrollableListSelection', url: '#configuration,ScrollableListSelection', transitionDir: -1}">Back</span>
-	</h1>
-
-	<div data-dojo-type="dojox/app/widgets/Container" data-app-constraint="center" data-dojo-props="scrollable: true">
+		</h1>
 
 		<div id="tst1WrapperB" style="visibility:hidden">
 			<div class="field-title">Each test will indicate which area should scroll.</div>

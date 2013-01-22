@@ -54,8 +54,10 @@ function(lang, declare, has, on, Deferred, when, transit, Controller){
 				this.proceeding = this.proceedingSaved;
 				var viewId = parts.shift();
 				event.viewId = viewId;	
+				event.opts.doResize = true; // at the end of the last transition call resize
 				this.proceedTransition(event);
 			}else{
+				event.opts.doResize = true; // at the end of the last transition call resize
 				this.proceedTransition(event);
 			}
 		},
@@ -248,6 +250,9 @@ function(lang, declare, has, on, Deferred, when, transit, Controller){
 				next.afterActivate();
 				this.app.log("  > in Transition._doTransition calling app.triggger select view next name=[",next.name,"], parent.name=[",next.parent.name,"], !current path");
 				this.app.emit("select", {"parent":parent, "view":next});
+				if(opts.doResize){
+					this.app.emit("resize"); // after last select call resize.
+				}
 				return;
 			}
 			// next is not a Deferred object, so Deferred.when is no needed.
@@ -279,6 +284,10 @@ function(lang, declare, has, on, Deferred, when, transit, Controller){
 				next.beforeActivate();
 				this.app.log("> in Transition._doTransition calling app.triggger select view next name=[",next.name,"], parent.name=[",next.parent.name,"], next!==current path");
 				this.app.emit("select", {"parent":parent, "view":next});
+				if(opts.doResize){  
+					this.app.emit("resize"); // after last select call resize			
+				}
+				
 				var result = true;
 				if(!has("ie")){
 					// if we are on IE CSS3 transitions are not supported (yet). So just skip the transition itself.
@@ -323,6 +332,10 @@ function(lang, declare, has, on, Deferred, when, transit, Controller){
 				// layout current view
 				this.app.log("> in Transition._doTransition calling app.triggger select view next name=[",next.name,"], parent.name=[",next.parent.name,"], next==current path");
 				this.app.emit("select", {"parent":parent, "view":next});
+				if(opts.doResize){
+					this.app.emit("resize"); // after last select call resize			
+				}
+				
 			}
 
 			// do sub transition like transition from "tabScene,tab1" to "tabScene,tab2"

@@ -18,7 +18,8 @@ function(lang, declare, has, win, config, topic, domStyle, domGeom, Controller){
 			//		{event : handler}
 			this.events = {
 				"layout": this.layout,
-				"select": this.select
+				"select": this.select,
+				"resize": this.onResize
 			};
 			// if we are using dojo mobile & we are hiding address bar we need to be bit smarter and listen to
 			// dojo mobile events instead
@@ -35,7 +36,7 @@ function(lang, declare, has, win, config, topic, domStyle, domGeom, Controller){
 			// this is needed to resize the children on an orientation change or a resize of the browser.
 			// it was being done in _doResize, but was not needed for every call to _doResize.
 			for(var item in this.app.selectedChildren){  // need this to handle all selectedChildren
-				this._doResize(this.app.selectedChildren[item]);  // is this needed????
+				this._doResize(this.app.selectedChildren[item]);
 			}
 			
 		},
@@ -176,7 +177,7 @@ function(lang, declare, has, win, config, topic, domStyle, domGeom, Controller){
 			// do selected view layout
 			// call _doResize for parent and view here, doResize will no longer call it for all children.
 			this._doResize(parent);  
-			this._doResize(view);  
+			this._doResize(view);
 		}
 	});
 });

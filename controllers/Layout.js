@@ -1,5 +1,5 @@
 define(["dojo/_base/declare", "dojo/_base/array", "dojo/query", "dojo/dom-attr", "dijit/registry", 
-		"dojox/app/controllers/LayoutBase", "../layout/utils"],
+		"./LayoutBase", "../layout/utils"],
 function(declare, array, query, domAttr, registry, LayoutBase, layoutUtils){
 	// module:
 	//		dojox/app/controllers/Layout

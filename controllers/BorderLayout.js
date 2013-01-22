@@ -1,4 +1,4 @@
-define(["dojo/_base/declare", "dojo/dom-attr", "dojox/app/controllers/LayoutBase","dijit/layout/BorderContainer",
+define(["dojo/_base/declare", "dojo/dom-attr", "./LayoutBase","dijit/layout/BorderContainer",
 		"dijit/layout/StackContainer", "dijit/layout/ContentPane", "dijit/registry"],
 function(declare, domAttr, LayoutBase, BorderContainer, StackContainer, ContentPane, registry){
 	// module:

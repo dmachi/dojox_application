@@ -80,8 +80,11 @@
 	//"definition": "scrollableTestApp/views/tablet/ViewScrollableLists",
 
 	//the name of the view to load when the app is initialized.
-	"defaultView": "navigation+TestInfo",
+	//"defaultView": "configuration,ScrollableListSelection+TestInfo",
 	//"defaultView": "navigation",
+	//"defaultView": "navigation+TestInfo",
+	"defaultView": "configuration+TestInfo",
+	//"defaultView": "configuration+Scrollable5",
 
 	// these are the possilbe defaultTransitions
 	//"defaultTransition": "slide",
@@ -97,26 +100,27 @@
 			"constraint" : "left"
 		},
 		"configuration": {
-			"defaultView": "ScrollableListSelection",
-			"defaultTransition": "slide",
-			"definition": "none",
-			"constraint" : "center",
+			"constraint" : "left",
+			"template": "scrollableTestApp/templates/configuration/ScrollableListSelection.html",
+			"definition": "scrollableTestApp/views/configuration/ScrollableListSelection.js"
 
-			"views": {
-				"ScrollableListSelection": {
-					"template": "scrollableTestApp/templates/configuration/ScrollableListSelection.html"
-				}
-			}
+			//"defaultView": "ScrollableListSelection",
+			//"defaultTransition": "slide",
+			//
+			//"views": {
+			//	"ScrollableListSelection": {
+			//		"template": "scrollableTestApp/templates/configuration/ScrollableListSelection.html",
+			//		"constraint" : "left"		
+			//	}
+			//}
 		},
 		
 		
 		"TestInfo": {
-			"template": "scrollableTestApp/templates/TestInfo.html",
-			"constraint" : "center"
+			"template": "scrollableTestApp/templates/TestInfo.html"
 		},
 		"Scrollable1": {
-			"template": "scrollableTestApp/templates/Scrollable1.html",
-			"constraint" : "center"
+			"template": "scrollableTestApp/templates/Scrollable1.html"
 		},
 		"Scrollable1P": {
 			"template": "scrollableTestApp/templates/Scrollable1P.html",
@@ -135,8 +139,7 @@
 			"constraint" : "center"
 		},
 		"Scrollable5": {
-			"template": "scrollableTestApp/templates/Scrollable5.html",
-			"constraint" : "center"
+			"template": "scrollableTestApp/templates/Scrollable5.html"
 		},
 		"ListItem-domButtons": {
 			"template": "scrollableTestApp/templates/ListItem-domButtons.html",
