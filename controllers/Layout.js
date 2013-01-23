@@ -4,13 +4,13 @@ function(declare, array, query, domAttr, registry, LayoutBase, layoutUtils){
 	// module:
 	//		dojox/app/controllers/Layout
 	// summary:
-	//		Bind "layout" and "select" events on dojox/app application instance.
+	//		Bind "initLayout" and "layoutView" events on dojox/app application instance.
 
 	return declare("dojox.app.controllers.Layout", LayoutBase, {
 
 		constructor: function(app, events){
 			// summary:
-			//		bind "layout" and "select" events on application instance.
+			//		bind "initLayout" and "layoutView" events on application instance.
 			//
 			// app:
 			//		dojox/app application instance.
@@ -18,23 +18,23 @@ function(declare, array, query, domAttr, registry, LayoutBase, layoutUtils){
 			//		{event : handler}
 		},
 
-		layout: function(event){
+		initLayout: function(event){
 			// summary:
-			//		Response to dojox/app "layout" event.
+			//		Response to dojox/app "initLayout" event.
 			//
 			// example:
-			//		Use dojo/on.emit to trigger "layout" event, and this function will respond to the event. For example:
-			//		|	on.emit(this.app.evented, "layout", view);
+			//		Use dojo/on.emit to trigger "initLayout" event, and this function will respond to the event. For example:
+			//		|	on.emit(this.app.evented, "initLayout", view);
 			//
 			// event: Object
 			// |		{"view": view, "callback": function(){}};
-			this.app.log("in app/controllers/Layout.layout event=",event);
-			this.app.log("in app/controllers/Layout.layout event.view.parent.name=[",event.view.parent.name,"]");
+			this.app.log("in app/controllers/Layout.initLayout event=",event);
+			this.app.log("in app/controllers/Layout.initLayout event.view.parent.name=[",event.view.parent.name,"]");
 
-			this.app.log("in app/controllers/Layout.layout event.view.constraint=",event.view.constraint);
+			this.app.log("in app/controllers/Layout.initLayout event.view.constraint=",event.view.constraint);
         	var constraint = event.view.constraint || domAttr.get(event.view.domNode, "data-app-constraint") || "center";
 			event.view.constraint = constraint;
-			this.app.log("in Layout.js layout event.view.constraint set to ="+event.view.constraint);
+			this.app.log("in Layout.js initLayout event.view.constraint set to ="+event.view.constraint);
 
 			event.view.parent.domNode.appendChild(event.view.domNode);
 
@@ -115,13 +115,13 @@ function(declare, array, query, domAttr, registry, LayoutBase, layoutUtils){
 			this.inherited(arguments);
 		},
 
-		select: function(event){
+		layoutView: function(event){
 			// summary:
-			//		Response to dojox/app "select" event.
+			//		Response to dojox/app "layoutView" event.
 			//
 			// example:
-			//		Use dojo/on.emit to trigger "select" event, and this function will response the event. For example:
-			//		|	on.emit(this.app.evented, "select", view);
+			//		Use dojo/on.emit to trigger "layoutView" event, and this function will response the event. For example:
+			//		|	on.emit(this.app.evented, "layoutView", view);
 			//
 			// event: Object
 			// |		{"parent":parent, "view":view}

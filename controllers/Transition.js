@@ -248,10 +248,10 @@ function(lang, declare, has, on, Deferred, when, transit, Controller){
 				next.beforeActivate();
 				this.app.log("> in Transition._doTransition calling next.afterActivate next name=[",next.name,"], parent.name=[",next.parent.name,"],  !current path");
 				next.afterActivate();
-				this.app.log("  > in Transition._doTransition calling app.triggger select view next name=[",next.name,"], parent.name=[",next.parent.name,"], !current path");
-				this.app.emit("select", {"parent":parent, "view":next});
+				this.app.log("  > in Transition._doTransition calling app.triggger layoutView view next name=[",next.name,"], parent.name=[",next.parent.name,"], !current path");
+				this.app.emit("layoutView", {"parent":parent, "view":next});
 				if(opts.doResize){
-					this.app.emit("resize"); // after last select call resize.
+					this.app.emit("resize"); // after last layoutView call resize.
 				}
 				return;
 			}
@@ -282,10 +282,10 @@ function(lang, declare, has, on, Deferred, when, transit, Controller){
 				current.beforeDeactivate();
 				this.app.log("> in Transition._doTransition calling next.beforeActivate next name=[",next.name,"], parent.name=[",next.parent.name,"], next!==current path");
 				next.beforeActivate();
-				this.app.log("> in Transition._doTransition calling app.triggger select view next name=[",next.name,"], parent.name=[",next.parent.name,"], next!==current path");
-				this.app.emit("select", {"parent":parent, "view":next});
+				this.app.log("> in Transition._doTransition calling app.triggger layoutView view next name=[",next.name,"], parent.name=[",next.parent.name,"], next!==current path");
+				this.app.emit("layoutView", {"parent":parent, "view":next});
 				if(opts.doResize){  
-					this.app.emit("resize"); // after last select call resize			
+					this.app.emit("resize"); // after last layoutView call resize			
 				}
 				
 				var result = true;
@@ -330,10 +330,10 @@ function(lang, declare, has, on, Deferred, when, transit, Controller){
 				this.app.log("  > in Transition._doTransition calling next.afterActivate next name=[",next.name,"], parent.name=[",next.parent.name,"], next==current path");
 				next.afterActivate();
 				// layout current view
-				this.app.log("> in Transition._doTransition calling app.triggger select view next name=[",next.name,"], parent.name=[",next.parent.name,"], next==current path");
-				this.app.emit("select", {"parent":parent, "view":next});
+				this.app.log("> in Transition._doTransition calling app.triggger layoutView view next name=[",next.name,"], parent.name=[",next.parent.name,"], next==current path");
+				this.app.emit("layoutView", {"parent":parent, "view":next});
 				if(opts.doResize){
-					this.app.emit("resize"); // after last select call resize			
+					this.app.emit("resize"); // after last layoutView call resize			
 				}
 				
 			}

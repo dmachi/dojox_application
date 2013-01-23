@@ -10,19 +10,19 @@ function(declare, domAttr, LayoutBase, BorderContainer, StackContainer, ContentP
 
 	return declare("dojox.app.controllers.BorderLayout", LayoutBase, {
 
-		layout: function(event){
+		initLayout: function(event){
 			// summary:
-			//		Response to dojox/app "layout" event which is setup in LayoutBase.  
-			//		The layout event is called once when the View is being created the first time.
+			//		Response to dojox/app "initLayout" event which is setup in LayoutBase.  
+			//		The initLayout event is called once when the View is being created the first time.
 			//
 			// example:
-			//		Use dojo/on.emit to trigger "layout" event, and this function will respond to the event. For example:
-			//		|	on.emit(this.app.evented, "layout", view);
+			//		Use dojo/on.emit to trigger "initLayout" event, and this function will respond to the event. For example:
+			//		|	on.emit(this.app.evented, "initLayout", view);
 			//
 			// event: Object
 			// |		{"view": view, "callback": function(){}};
-			this.app.log("in app/controllers/BorderLayout.layout event=",event);
-			this.app.log("in app/controllers/BorderLayout.layout event.view.parent.name=[",event.view.parent.name,"]");
+			this.app.log("in app/controllers/BorderLayout.initLayout event=",event);
+			this.app.log("in app/controllers/BorderLayout.initLayout event.view.parent.name=[",event.view.parent.name,"]");
 
 			if(!this.borderLayoutCreated){ // If the BorderContainer has not been created yet, create it.
 				this.borderLayoutCreated = true;
@@ -32,7 +32,7 @@ function(declare, domAttr, LayoutBase, BorderContainer, StackContainer, ContentP
 				bc.startup();  // startup the BorderContainer
 			}
 
-			this.app.log("in app/controllers/BorderLayout.layout event.view.constraint=",event.view.constraint);			
+			this.app.log("in app/controllers/BorderLayout.initLayout event.view.constraint=",event.view.constraint);			
         	var constraint = event.view.constraint;  // constraint holds the region for this view, center, top etc. 
 			
 			if(event.view.parent.id == this.app.id){  // If the parent of this view is the app we are working with the BorderContainer
@@ -87,13 +87,13 @@ function(declare, domAttr, LayoutBase, BorderContainer, StackContainer, ContentP
 			this.inherited(arguments);
 		},
 
-		select: function(event){
+		layoutView: function(event){
 			// summary:
-			//		Response to dojox/app "select" event.
+			//		Response to dojox/app "layoutView" event.
 			//
 			// example:
-			//		Use dojo/on.emit to trigger "select" event, and this function will response the event. For example:
-			//		|	on.emit(this.app.evented, "select", view);
+			//		Use dojo/on.emit to trigger "layoutView" event, and this function will response the event. For example:
+			//		|	on.emit(this.app.evented, "layoutView", view);
 			//
 			// event: Object
 			// |		{"parent":parent, "view":view}

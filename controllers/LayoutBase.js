@@ -10,15 +10,15 @@ function(lang, declare, has, win, config, topic, domStyle, domGeom, Controller){
 
 		constructor: function(app, events){
 			// summary:
-			//		bind "layout" and "select" events on application instance.
+			//		bind "initLayout" and "layoutView" events on application instance.
 			//
 			// app:
 			//		dojox/app application instance.
 			// events:
 			//		{event : handler}
 			this.events = {
-				"layout": this.layout,
-				"select": this.select,
+				"initLayout": this.initLayout,
+				"layoutView": this.layoutView,
 				"resize": this.onResize
 			};
 			// if we are using dojo mobile & we are hiding address bar we need to be bit smarter and listen to
@@ -41,18 +41,18 @@ function(lang, declare, has, win, config, topic, domStyle, domGeom, Controller){
 			
 		},
 		
-		layout: function(event){
+		initLayout: function(event){
 			// summary:
-			//		Response to dojox/app "layout" event.
+			//		Response to dojox/app "initLayout" event.
 			//
 			// example:
-			//		Use dojo/on.emit to trigger "layout" event, and this function will respond to the event. For example:
-			//		|	on.emit(this.app.evented, "layout", view);
+			//		Use dojo/on.emit to trigger "initLayout" event, and this function will respond to the event. For example:
+			//		|	on.emit(this.app.evented, "initLayout", view);
 			//
 			// event: Object
 			// |		{"view": view, "callback": function(){}};
-			this.app.log("in app/controllers/LayoutBase.layout event=",event);
-			this.app.log("in app/controllers/LayoutBase.layout event.view.parent.name=[",event.view.parent.name,"]");
+			this.app.log("in app/controllers/LayoutBase.initLayout event=",event);
+			this.app.log("in app/controllers/LayoutBase.initLayout event.view.parent.name=[",event.view.parent.name,"]");
 		},
 
 
@@ -144,13 +144,13 @@ function(lang, declare, has, win, config, topic, domStyle, domGeom, Controller){
 		},
 
 
-		select: function(event){
+		layoutView: function(event){
 			// summary:
-			//		Response to dojox/app "select" event.
+			//		Response to dojox/app "layoutView" event.
 			//
 			// example:
-			//		Use dojo/on.emit to trigger "select" event, and this function will response the event. For example:
-			//		|	on.emit(this.app.evented, "select", view);
+			//		Use dojo/on.emit to trigger "layoutView" event, and this function will response the event. For example:
+			//		|	on.emit(this.app.evented, "layoutView", view);
 			//
 			// event: Object
 			// |		{"parent":parent, "view":view}
