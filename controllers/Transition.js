@@ -54,10 +54,10 @@ function(lang, declare, has, on, Deferred, when, transit, Controller){
 				this.proceeding = this.proceedingSaved;
 				var viewId = parts.shift();
 				event.viewId = viewId;	
-				event.opts.doResize = true; // at the end of the last transition call resize
+				event._doResize = true; // at the end of the last transition call resize
 				this.proceedTransition(event);
 			}else{
-				event.opts.doResize = true; // at the end of the last transition call resize
+				event._doResize = true; // at the end of the last transition call resize
 				this.proceedTransition(event);
 			}
 		},
@@ -138,7 +138,7 @@ function(lang, declare, has, on, Deferred, when, transit, Controller){
 				"viewId": transitionEvt.viewId,
 				"params": params,
 				"callback": lang.hitch(this, function(){
-					var transitionDef = this._doTransition(transitionEvt.viewId, transitionEvt.opts, params, this.app);
+					var transitionDef = this._doTransition(transitionEvt.viewId, transitionEvt.opts, params, this.app, transitionEvt.doResize);
 					when(transitionDef, lang.hitch(this, function(){
 						this.proceeding = false;
 						var nextEvt = this.waitingQueue.shift();
@@ -173,17 +173,16 @@ function(lang, declare, has, on, Deferred, when, transit, Controller){
 			// summary:
 			//		return the selectedChild for this constraint.
 			//
-			this.app.log("in Transition _getSelectedChild view.id="+view.id+"  constraint = "+constraint);
 			if(view.selectedChildren && view.selectedChildren[constraint]){
-				this.app.log("in Transition _getSelectedChild got id ="+view.selectedChildren[constraint].id+" for selectedChild for view",view);
+				this.app.log("in Transition _getSelectedChild got view name =["+view.selectedChildren[constraint].name+"] for constraint =["+constraint +"] as selectedChild for view.name=["+view.name+"]");
 				return view.selectedChildren[constraint];				
 			}else{
-				this.app.log("in Transition _getSelectedChild got null for selectedChild for view",view);
+				this.app.log("in Transition _getSelectedChild got null for constraint =["+constraint +"] as selectedChild for view.name=["+view.name+"]");
 				return null;
 			}
 		},
 
-		_doTransition: function(transitionTo, opts, params, parent){
+		_doTransition: function(transitionTo, opts, params, parent, doResize){
 			// summary:
 			//		Transitions from the currently visible scene to the defined scene.
 			//		It should determine what would be the best transition unless
@@ -203,6 +202,8 @@ function(lang, declare, has, on, Deferred, when, transit, Controller){
 			//		params
 			// parent: Object
 			//		view's parent
+			// doResize: Boolean
+			//		emit a resize event
 			//
 			// returns:
 			//		transit dojo/DeferredList object.
@@ -250,7 +251,8 @@ function(lang, declare, has, on, Deferred, when, transit, Controller){
 				next.afterActivate();
 				this.app.log("  > in Transition._doTransition calling app.triggger layoutView view next name=[",next.name,"], parent.name=[",next.parent.name,"], !current path");
 				this.app.emit("layoutView", {"parent":parent, "view":next});
-				if(opts.doResize){
+				if(doResize){
+					this.app.log("  > in Transition._doTransition calling app.emit resize");
 					this.app.emit("resize"); // after last layoutView call resize.
 				}
 				return;
@@ -284,7 +286,7 @@ function(lang, declare, has, on, Deferred, when, transit, Controller){
 				next.beforeActivate();
 				this.app.log("> in Transition._doTransition calling app.triggger layoutView view next name=[",next.name,"], parent.name=[",next.parent.name,"], next!==current path");
 				this.app.emit("layoutView", {"parent":parent, "view":next});
-				if(opts.doResize){  
+				if(doResize){  
 					this.app.emit("resize"); // after last layoutView call resize			
 				}
 				
@@ -313,7 +315,7 @@ function(lang, declare, has, on, Deferred, when, transit, Controller){
 					next.afterActivate();
 
 					if(subIds){
-						this._doTransition(subIds, opts, params, next);
+						this._doTransition(subIds, opts, params, next, doResize);
 					}
 				}));
 				return result; // dojo/DeferredList
@@ -332,7 +334,7 @@ function(lang, declare, has, on, Deferred, when, transit, Controller){
 				// layout current view
 				this.app.log("> in Transition._doTransition calling app.triggger layoutView view next name=[",next.name,"], parent.name=[",next.parent.name,"], next==current path");
 				this.app.emit("layoutView", {"parent":parent, "view":next});
-				if(opts.doResize){
+				if(doResize){
 					this.app.emit("resize"); // after last layoutView call resize			
 				}
 				
