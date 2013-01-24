@@ -62,7 +62,7 @@ define([
 		//		An array of Widgets or at least objects containing:
 		//
 		//		- domNode: pointer to DOM node to position
-		//		- region or layoutAlign: position to place DOM node
+		//		- constraint or layoutAlign: position to place DOM node
 		//		- resize(): (optional) method to set size of node
 		//		- id: (optional) Id of widgets, referenced from resize object, below.
 		// changedRegionId:
@@ -79,15 +79,15 @@ define([
 		// Move "client" elements to the end of the array for layout.  a11y dictates that the author
 		// needs to be able to put them in the document in tab-order, but this algorithm requires that
 		// client be last.    TODO: move these lines to LayoutContainer?   Unneeded other places I think.
-		children = array.filter(children, function(item){ return item.region != "center" && item.layoutAlign != "client"; })
-			.concat(array.filter(children, function(item){ return item.region == "center" || item.layoutAlign == "client"; }));
+		children = array.filter(children, function(item){ return item._constraint != "center" && item.layoutAlign != "client"; })
+			.concat(array.filter(children, function(item){ return item._constraint == "center" || item.layoutAlign == "client"; }));
 
 		// set positions/sizes
 		array.forEach(children, function(child){
 			var elm = child.domNode,
-				pos = (child.region || child.layoutAlign);
+				pos = (child._constraint || child.layoutAlign);
 			if(!pos){
-				throw new Error("No region setting for " + child.id)
+				throw new Error("No constraint setting for " + child.id)
 			}
 
 			// set elem to upper left corner of unused space; may move it later
@@ -104,7 +104,7 @@ define([
 			// Check for optional size adjustment due to splitter drag (height adjustment for top/bottom align
 			// panes and width adjustment for left/right align panes.
 			if(changedRegionId && changedRegionId == child.id){
-				sizeSetting[child.region == "top" || child.region == "bottom" ? "h" : "w"] = changedRegionSize;
+				sizeSetting[child._constraint == "top" || child._constraint == "bottom" ? "h" : "w"] = changedRegionSize;
 			}
 
 			// set size && adjust record of remaining space.

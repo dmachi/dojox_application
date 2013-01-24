@@ -19,6 +19,7 @@ define(["require", "dojo/when", "dojo/on", "dojo/dom-attr", "dojo/_base/declare"
 			this.id = "";
 			this.name = "";
 			this.children = {};
+			this.selectedChildren = {};
 			// private
 			this._started = false;
 			lang.mixin(this, params);
@@ -94,30 +95,35 @@ define(["require", "dojo/when", "dojo/on", "dojo/dom-attr", "dojo/_base/declare"
 			// tags:
 			//		private
 
-				// bind view level data model
-			this.parent.domNode.appendChild(this.domNode);
-
-			// start widget
-			this.startup();
-
-
-
-			// set widget attributes
-			domAttr.set(this.domNode, "id", this.id);
-			domAttr.set(this.domNode, "data-app-region", "center");
-			// TODO here we are overriding the entire style of the node, instead of just width & height
-			// maybe we could be a bit smarter
-			domAttr.set(this.domNode, "style", "width:100%; height:100%");
-			this.region = "center";
-
-			// call view assistant's init() method to initialize view
-			this.app.log("  > in app/View calling init() name=[",this.name,"], parent.name=[",this.parent.name,"]");
-			this.init();
-			this._started = true;
-			if(this._startDef){
-				this._startDef.resolve(this);
-			}
+			this._startLayout();			
 		},
+
+		_startLayout: function(){
+			// summary:
+			//		startup widgets in view template.
+			// tags:
+			//		private
+			this.app.log("  > in app/ViewBase _startLayout firing layout for name=[",this.name,"], parent.name=[",this.parent.name,"]");
+
+			this.constraint = this.constraint || domAttr.get(this.domNode, "data-app-constraint") || "center";
+		
+			this.app.emit("initLayout", {
+				"view": this, 
+				"callback": lang.hitch(this, function(){
+						//start widget
+						this.startup();
+
+						// call view assistant's init() method to initialize view
+						this.app.log("  > in app/ViewBase calling init() name=[",this.name,"], parent.name=[",this.parent.name,"]");
+						this.init();
+						this._started = true;
+						if(this._startDef){
+							this._startDef.resolve(this);
+						}
+				})
+			});
+		},
+
 
 		_loadDefinition: function(){
 			// summary:

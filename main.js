@@ -170,6 +170,7 @@ function(require, kernel, lang, declare, config, win, Evented, Deferred, when, h
 		startup: function(){
 			// load controllers and views
 			//
+			this.selectedChildren = {};			
 			var controllers = this.createControllers(this.params.controllers);
 			var emitLoad = function(){
 				// emit "load" event and let controller to load view.
@@ -177,9 +178,27 @@ function(require, kernel, lang, declare, config, win, Evented, Deferred, when, h
 					viewId: this.defaultView,
 					params: this._startParams,
 					callback: lang.hitch(this, function (){
-						var selectId = this.defaultView.split(",");
-						selectId = selectId.shift();
-						this.selectedChild = this.children[this.id + '_' + selectId];
+						var parts = this.defaultView.split('+');
+						if(parts.length > 0){		
+							while(parts.length > 0){ 	
+								var viewId = parts.shift();
+								var innerParts = viewId.split(",");
+								selectId = innerParts.shift();
+								// set the constraint
+								this.children[this.id + '_' + selectId].constraint = this.children[this.id + '_' + selectId].constraint || domAttr.get(this.children[this.id + '_' + selectId].domNode, "data-app-constraint") || "center"; 
+								this.selectedChildren[this.children[this.id + '_' + selectId].constraint] = this.children[this.id + '_' + selectId];
+							}				
+						}else{
+							var selectId = this.defaultView.split(",");
+							selectId = selectId.shift();
+							this.selectedChild = this.children[this.id + '_' + selectId];
+							// set the constraint
+							this.children[this.id + '_' + selectId].constraint = this.children[this.id + '_' + selectId].constraint || domAttr.get(this.children[this.id + '_' + selectId].domNode, "data-app-constraint") || "center"; 
+							this.selectedChildren[this.children[this.id + '_' + selectId].constraint] = this.children[this.id + '_' + selectId];
+						}
+						
+						
+						
 						// transition to startView. If startView==defaultView, that means initial the default view.
 						this.emit("transition", {
 							viewId: this._startView,
