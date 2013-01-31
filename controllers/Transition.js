@@ -289,7 +289,7 @@ function(lang, declare, has, on, Deferred, when, transit, Controller){
 				}
 				
 				var result = true;
-				if(!has("ie")){
+				if(!has("ie") || has("ie") >= 10){
 					// if we are on IE CSS3 transitions are not supported (yet). So just skip the transition itself.
 					var mergedOpts = lang.mixin({}, opts); // handle reverse from mergedOpts or transitionDir 
 					mergedOpts = lang.mixin({}, mergedOpts, {
