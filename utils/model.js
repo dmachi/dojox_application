@@ -13,8 +13,6 @@ define(["dojo/_base/lang", "dojo/Deferred", "dojo/promise/all", "dojo/when"],  f
 		//		available to the view.
 		// returns: loadedModels 
 		//		 loadedModels is an object holding all of the available loaded models for this view.
-		// TODO remove
-		this.app = app;
 		var loadedModels = {};
 		if(parent.loadedModels){
 			lang.mixin(loadedModels, parent.loadedModels);
