@@ -1,7 +1,7 @@
 define(["require", "dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/config",
 	"dojo/_base/window", "dojo/Evented", "dojo/Deferred", "dojo/when", "dojo/has", "dojo/on", "dojo/ready",
-	"dojo/dom-construct", "./model", "./module/lifecycle", "./utils/hash"],
-function(require, kernel, lang, declare, config, win, Evented, Deferred, when, has, on, ready, dom, model, lifecycle, hash){
+	"dojo/dom-construct", "./utils/model", "./utils/nls", "./module/lifecycle", "./utils/hash"],
+function(require, kernel, lang, declare, config, win, Evented, Deferred, when, has, on, ready, dom, model, nls, lifecycle, hash){
 	kernel.experimental("dojox/app");
 
 	has.add("app-log-api", (config["app"] || {}).debugApp);
@@ -142,7 +142,13 @@ function(require, kernel, lang, declare, config, win, Evented, Deferred, when, h
 				// so pick slot 0.
 				this.loadedModels = lang.isArray(models)?models[0]:models;
 				this.setupControllers();
-				this.startup();
+				// if available load root NLS
+				when(nls(this.params), lang.hitch(this, function(nls){
+					if(nls){
+						lang.mixin(this.nls = {}, nls);
+					}
+					this.startup();
+				}));
 			}), function(){
 				loadModelLoaderDeferred.reject("load model error.")
 			});
