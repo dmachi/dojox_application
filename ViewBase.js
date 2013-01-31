@@ -100,7 +100,7 @@ define(["require", "dojo/when", "dojo/on", "dojo/dom-attr", "dojo/_base/declare"
 			//		startup widgets in view template.
 			// tags:
 			//		private
-			this.app.log("  > in app/ViewBask _startLayout firing layout for name=[",this.name,"], parent.name=[",this.parent.name,"]");
+			this.app.log("  > in app/ViewBase _startLayout firing layout for name=[",this.name,"], parent.name=[",this.parent.name,"]");
 
 			this.constraint = this.constraint || domAttr.get(this.domNode, "data-app-constraint") || "center";
 		

@@ -12,7 +12,7 @@ function(declare, domAttr, LayoutBase, BorderContainer, StackContainer, ContentP
 
 		initLayout: function(event){
 			// summary:
-			//		Response to dojox/app "initLayout" event which is setup in LayoutBase.  
+			//		Response to dojox/app "initLayout" event which is setup in LayoutBase.
 			//		The initLayout event is called once when the View is being created the first time.
 			//
 			// example:
@@ -21,8 +21,7 @@ function(declare, domAttr, LayoutBase, BorderContainer, StackContainer, ContentP
 			//
 			// event: Object
 			// |		{"view": view, "callback": function(){}};
-			this.app.log("in app/controllers/BorderLayout.initLayout event=",event);
-			this.app.log("in app/controllers/BorderLayout.initLayout event.view.parent.name=[",event.view.parent.name,"]");
+			this.app.log("in app/controllers/BorderLayout.initLayout event.view.name=[",event.view.name,"] event.view.parent.name=[",event.view.parent.name,"]");
 
 			if(!this.borderLayoutCreated){ // If the BorderContainer has not been created yet, create it.
 				this.borderLayoutCreated = true;
@@ -32,8 +31,8 @@ function(declare, domAttr, LayoutBase, BorderContainer, StackContainer, ContentP
 				bc.startup();  // startup the BorderContainer
 			}
 
-			this.app.log("in app/controllers/BorderLayout.initLayout event.view.constraint=",event.view.constraint);			
-        	var constraint = event.view.constraint;  // constraint holds the region for this view, center, top etc. 
+			this.app.log("in app/controllers/BorderLayout.initLayout event.view.constraint=",event.view.constraint);
+			var constraint = event.view.constraint;  // constraint holds the region for this view, center, top etc.
 			
 			if(event.view.parent.id == this.app.id){  // If the parent of this view is the app we are working with the BorderContainer
 				var reg = registry.byId(event.view.parent.id+"-"+constraint);			
@@ -63,30 +62,6 @@ function(declare, domAttr, LayoutBase, BorderContainer, StackContainer, ContentP
 			}
 		},
 
-
-		_doLayout: function(view){
-			// summary:
-			//		do view layout.
-			//
-			// view: Object
-			//		view instance needs to do layout.
-
-			if(!view){
-				console.warn("layout empty view.");
-				return;
-			}			
-			// nothing to layout here since it was added to the right place in layout.
-		},
-
-		_doResize: function(view, changeSize, resultSize){
-			// summary:
-			//		resize view.
-			//
-			// view: Object
-			//		view instance needs to do layout.
-			this.inherited(arguments);
-		},
-
 		layoutView: function(event){
 			// summary:
 			//		Response to dojox/app "layoutView" event.
@@ -103,24 +78,18 @@ function(declare, domAttr, LayoutBase, BorderContainer, StackContainer, ContentP
 			if(!view){
 				return;
 			}
-			//var reg = registry.byId("app-"+event.view.constraint);
 			var sc = registry.byId(event.view.parent.id+"-"+event.view.constraint);
 			var cp = registry.byId(event.view.id+"-cp-"+event.view.constraint);
-						
-			var parentSelChild = this._getSelectedChild(parent, view.constraint); 
+
+			var parentSelChild = this._getSelectedChild(parent, view.constraint);
 			if(view !== parentSelChild){
 				if(sc && cp){
-					sc.selectChild(cp);				
+					sc.selectChild(cp);
 				}
 				parent.selectedChildren[view.constraint] = view;
 			}
-			// do selected view layout
-			// Do not need to call _doResize when setting doLayout: true on the StackContainer
-			// If doLayout is set to false the calls below should be made
-			//	this._doResize(view);    // call for parent and view here, doResize will no longer call it for all children.
-			//	this._doResize(parent);  
 		}
-		
+
 	});
 
 });
