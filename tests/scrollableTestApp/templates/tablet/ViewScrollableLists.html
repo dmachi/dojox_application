@@ -1,10 +1,10 @@
 <div>
 	<script type="dojo/require">at: "dojox/mvc/at"</script>
 	<!-- left -->
-	<div data-dojo-type="dojox/app/widgets/Container" class="navPane" data-app-region="left">
-		<h1 id="tab1WrapperA" style="visibility:hidden" data-dojo-type="dojox/mobile/Heading" data-app-region="top">Select Scrollable List</h1>
+	<div data-dojo-type="dojox/app/widgets/Container" class="navPane" data-app-constraint="left">
+		<h1 id="tab1WrapperA" style="visibility:hidden" data-dojo-type="dojox/mobile/Heading" data-app-constraint="top">Select Scrollable List</h1>
 		<div  id="tab1WrapperB" style="visibility:hidden" 
-			data-dojo-type="dojox/app/widgets/Container" data-app-region="center" data-dojo-props="scrollable: true">
+			data-dojo-type="dojox/app/widgets/Container" data-app-constraint="center" data-dojo-props="scrollable: true">
 		<ul data-dojo-type="dojox/mobile/RoundRectList" data-dojo-props='variableHeight:true'>
 			<li data-dojo-type="dojox/mobile/ListItem"
 				data-dojo-props="clickable: true, noArrow: true, 
@@ -19,7 +19,7 @@
 				transitionOptions: {title:'List',target: 'Scrollable1', url: '#Scrollable1'}">
 				<div class="textBox">
 					<div class="subject">Scrollable list One</div>
-					Uses app/widgets/Container with a fixed Header and a fixed Footer both with data-app-region					
+					Uses app/widgets/Container with a fixed Header and a fixed Footer both with data-app-constraint					
 				</div>				
 			</li>
 				<li data-dojo-type="dojox/mobile/ListItem"
@@ -27,7 +27,7 @@
 					transitionOptions: {title:'List',target: 'Scrollable1P', url: '#Scrollable1P'}">
 					<div class="textBox">
 						<div class="subject">Scrollable list OneP</div>
-						Programmatic creation of WidgetList uses app/widgets/Container with a fixed Header and a fixed Footer both with data-app-region					
+						Programmatic creation of WidgetList uses app/widgets/Container with a fixed Header and a fixed Footer both with data-app-constraint					
 					</div>				
 				</li>
 			<li data-dojo-type="dojox/mobile/ListItem"
@@ -35,7 +35,7 @@
 				transitionOptions: {title:'List',target: 'Scrollable2', url: '#Scrollable2'}">
 				<div class="textBox">
 					<div class="subject">Scrollable list Two</div>
-					Uses app/widgets/Container with a fixed Header and a fixed Footer both with data-app-region					
+					Uses app/widgets/Container with a fixed Header and a fixed Footer both with data-app-constraint					
 				</div>				
 			</li>
 			
@@ -44,7 +44,7 @@
 				transitionOptions: {title:'List',target: 'Scrollable3', url: '#Scrollable3'}">
 				<div class="textBox">
 					<div class="subject">Scrollable list Three</div>
-					Uses app/widgets/Container with a fixed Header no footer with data-app-region					
+					Uses app/widgets/Container with a fixed Header no footer with data-app-constraint					
 				</div>				
 			</li>
 			<li data-dojo-type="dojox/mobile/ListItem"

@@ -1,5 +1,5 @@
-define(["dojo/dom", "dojo/_base/connect", "dijit/registry", "dojox/mvc/at", "dojox/mobile/TransitionEvent", "dojox/mvc/Repeat", "dojox/mvc/getStateful", "dojox/mvc/Output"],
-function(dom, connect, registry, at, TransitionEvent, Repeat, getStateful, Output){
+define(["dojo/_base/lang", "dojo/dom", "dojo/_base/connect", "dijit/registry", "dojox/mvc/at", "dojox/mobile/TransitionEvent", "dojox/mvc/Repeat", "dojox/mvc/getStateful", "dojox/mvc/Output"],
+function(lang, dom, connect, registry, at, TransitionEvent, Repeat, getStateful, Output){
 	var _connectResults = []; // events connect result
 
 	var repeatmodel = null;	//repeat view data model
@@ -14,15 +14,21 @@ function(dom, connect, registry, at, TransitionEvent, Repeat, getStateful, Outpu
 		repeatmodel.set("cursorIndex", nextIndex);		
 	};
 	// show an item detail
-	var setDetailsContext = function(index, e){
+	var setDetailsContext = function(index, e, params){
 		repeatmodel.set("cursorIndex", index);
 
+		if(params){
+			params.cursor = index;
+		}else{
+			params = {"cursor":index};
+		}
 		// transition to repeatDetails view with the &cursor=index
 		var transOpts = {
 			title : "repeatDetails",
 			target : "repeat,repeatDetails",
 			url : "#repeat,repeatDetails", // this is optional if not set it will be created from target   
-			params : {"cursor":index}
+		//	params : {"cursor":index}
+			params : params
 		};
 		new TransitionEvent(e.target, transOpts, e).dispatch(); 
 		
@@ -56,10 +62,10 @@ function(dom, connect, registry, at, TransitionEvent, Repeat, getStateful, Outpu
 			repeatmodel = this.loadedModels.repeatmodels;
 			var repeatDom = dom.byId('repeatWidget');
 			var connectResult;
-			connectResult = connect.connect(repeatDom, "button[id^=\"detail\"]:click", function(e){
+			connectResult = connect.connect(repeatDom, "button[id^=\"detail\"]:click", lang.hitch(this, function(e){
 				var index = getIndexFromId(e.target.id, "detail");
-				setDetailsContext(index, e);
-			});
+				setDetailsContext(index, e, this.params);
+			}));
 			_connectResults.push(connectResult);
 
 			connectResult = connect.connect(repeatDom, "button[id^=\"insert\"]:click", function(e){
