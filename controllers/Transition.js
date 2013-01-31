@@ -37,8 +37,29 @@ function(lang, declare, has, on, Deferred, when, transit, Controller){
 			//
 			// event: Object
 			//		"transition" event parameter. It should be like this: {"viewId":viewId, "opts":opts}
+			
+			this.proceeding = (event.opts && event.opts.params && event.opts.params.waitToProceed); // waitToProceed passed when visible is true to delay processing.
 
-			this.proceedTransition(event);
+			var viewsId = event.viewId || "";
+			this.proceedingSaved = this.proceeding;	
+			var parts = viewsId.split('+');
+			if(parts.length > 0){		
+				while(parts.length > 1){ 	
+					var viewId = parts.shift();
+					var newEvent = lang.clone(event);
+					newEvent.viewId = viewId;
+					this.proceeding = true;
+					this.proceedTransition(newEvent);					
+				}				
+				this.proceeding = this.proceedingSaved;
+				var viewId = parts.shift();
+				event.viewId = viewId;	
+				event.opts.doResize = true; // at the end of the last transition call resize
+				this.proceedTransition(event);
+			}else{
+				event.opts.doResize = true; // at the end of the last transition call resize
+				this.proceedTransition(event);
+			}
 		},
 
 		onDomNodeChange: function(evt){
@@ -95,8 +116,17 @@ function(lang, declare, has, on, Deferred, when, transit, Controller){
 			if(this.proceeding){
 				this.app.log("in app/controllers/Transition proceedTransition push event", transitionEvt);
 				this.waitingQueue.push(transitionEvt);
+				this.processingQueue = false;  
 				return;
 			}
+			// If there are events waiting, needed to have the last in be the last processed, so add it to waitingQueue
+			// process the events in order.
+			if(this.waitingQueue.length > 0 && !this.processingQueue){
+				this.processingQueue = true;
+				this.waitingQueue.push(transitionEvt);
+				transitionEvt = this.waitingQueue.shift();	
+			}
+			
 			this.proceeding = true;
 
 			this.app.log("in app/controllers/Transition proceedTransition calling trigger load", transitionEvt);
@@ -138,6 +168,20 @@ function(lang, declare, has, on, Deferred, when, transit, Controller){
 			}
 			return defaultTransition;
 		},
+		
+		_getSelectedChild: function(view, constraint){
+			// summary:
+			//		return the selectedChild for this constraint.
+			//
+			this.app.log("in Transition _getSelectedChild view.id="+view.id+"  constraint = "+constraint);
+			if(view.selectedChildren && view.selectedChildren[constraint]){
+				this.app.log("in Transition _getSelectedChild got id ="+view.selectedChildren[constraint].id+" for selectedChild for view",view);
+				return view.selectedChildren[constraint];				
+			}else{
+				this.app.log("in Transition _getSelectedChild got null for selectedChild for view",view);
+				return null;
+			}
+		},
 
 		_doTransition: function(transitionTo, opts, params, parent){
 			// summary:
@@ -163,12 +207,13 @@ function(lang, declare, has, on, Deferred, when, transit, Controller){
 			// returns:
 			//		transit dojo/DeferredList object.
 
+			//TODO: Can this be called with a viewId which includes multiple views with a "+"?  Need to handle that!
 			this.app.log("in app/controllers/Transition._doTransition transitionTo=[",transitionTo,"], parent.name=[",parent.name,"], opts=",opts);
 
 			if(!parent){
 				throw Error("view parent not found in transition.");
 			}
-			var parts, toId, subIds, next, params, current = parent.selectedChild;
+			var parts, toId, subIds, next, params; 
 			if(transitionTo){
 				parts = transitionTo.split(",");
 			}else{
@@ -185,6 +230,9 @@ function(lang, declare, has, on, Deferred, when, transit, Controller){
 				throw Error("child view must be loaded before transition.");
 			}
 
+
+			var current = this._getSelectedChild(parent, next.constraint);
+			
 			// set params on next view.
 			next.params = params || next.params;
 
@@ -200,8 +248,11 @@ function(lang, declare, has, on, Deferred, when, transit, Controller){
 				next.beforeActivate();
 				this.app.log("> in Transition._doTransition calling next.afterActivate next name=[",next.name,"], parent.name=[",next.parent.name,"],  !current path");
 				next.afterActivate();
-				this.app.log("  > in Transition._doTransition calling app.triggger select view next name=[",next.name,"], parent.name=[",next.parent.name,"], !current path");
-				this.app.emit("select", {"parent":parent, "view":next});
+				this.app.log("  > in Transition._doTransition calling app.triggger layoutView view next name=[",next.name,"], parent.name=[",next.parent.name,"], !current path");
+				this.app.emit("layoutView", {"parent":parent, "view":next});
+				if(opts.doResize){
+					this.app.emit("resize"); // after last layoutView call resize.
+				}
 				return;
 			}
 			// next is not a Deferred object, so Deferred.when is no needed.
@@ -220,36 +271,41 @@ function(lang, declare, has, on, Deferred, when, transit, Controller){
 				//activate or deactivate views and refresh layout.
 
 				// deactivate sub child of current view, then deactivate current view
-				var subChild = current.selectedChild;
+				// TODO: ELC NEED A LOOP HERE TO deactivate all children
+				var subChild = this._getSelectedChild(current, "center");
 				while(subChild){
 				this.app.log("< in Transition._doTransition calling subChild.beforeDeactivate subChild name=[",subChild.name,"], parent.name=[",subChild.parent.name,"], next!==current path");
 					subChild.beforeDeactivate();
-					subChild = subChild.selectedChild;
+					subChild = this._getSelectedChild(subChild, "center");
 				}
 				this.app.log("< in Transition._doTransition calling current.beforeDeactivate current name=[",current.name,"], parent.name=[",current.parent.name,"], next!==current path");
 				current.beforeDeactivate();
 				this.app.log("> in Transition._doTransition calling next.beforeActivate next name=[",next.name,"], parent.name=[",next.parent.name,"], next!==current path");
 				next.beforeActivate();
-
-				this.app.log("> in Transition._doTransition calling app.triggger select view next name=[",next.name,"], parent.name=[",next.parent.name,"], next!==current path");
-				this.app.emit("select", {"parent":parent, "view":next});
+				this.app.log("> in Transition._doTransition calling app.triggger layoutView view next name=[",next.name,"], parent.name=[",next.parent.name,"], next!==current path");
+				this.app.emit("layoutView", {"parent":parent, "view":next});
+				if(opts.doResize){  
+					this.app.emit("resize"); // after last layoutView call resize			
+				}
+				
 				var result = true;
-				if(!has("ie")){
+				if(!has("ie") || has("ie") >= 10){
 					// if we are on IE CSS3 transitions are not supported (yet). So just skip the transition itself.
 					var mergedOpts = lang.mixin({}, opts); // handle reverse from mergedOpts or transitionDir 
 					mergedOpts = lang.mixin({}, mergedOpts, {
 						reverse: (mergedOpts.reverse || mergedOpts.transitionDir===-1)?true:false,
-						transition: mergedOpts.transition || this._getDefaultTransition(parent) || "none"
+						transition: this._getDefaultTransition(parent) || "none"
 					}); 
 					result = transit(current.domNode, next.domNode, mergedOpts);
 				}
 				when(result, lang.hitch(this, function(){
 					// deactivate sub child of current view, then deactivate current view
-					var subChild = current.selectedChild;
+					subChild = this._getSelectedChild(current, "center");
+					
 					while(subChild){
 						this.app.log("  < in Transition._doTransition calling subChild.afterDeactivate subChild name=[",subChild.name,"], parent.name=[",subChild.parent.name,"], next!==current path");
 						subChild.afterDeactivate();
-						subChild = subChild.selectedChild;
+						subChild = this._getSelectedChild(subChild, "center");
 					}
 					this.app.log("  < in Transition._doTransition calling current.afterDeactivate current name=[",current.name,"], parent.name=[",current.parent.name,"], next!==current path");
 					current.afterDeactivate();
@@ -264,9 +320,9 @@ function(lang, declare, has, on, Deferred, when, transit, Controller){
 			}else{
 				// next view == current view, refresh current view
 				// deactivate next view
-				this.app.log("< in Transition._doTransition calling next.beforeDeactivate next name=[",next.name,"], parent.name=[",next.parent.name,"], next==current path");
+				this.app.log("< in Transition._doTransition calling next.beforeDeactivate refresh current view next name=[",next.name,"], parent.name=[",next.parent.name,"], next==current path");
 				next.beforeDeactivate();
-				this.app.log("  < in Transition._doTransition calling next.afterDeactivate next name=[",next.name,"], parent.name=[",next.parent.name,"], next==current path");
+				this.app.log("  < in Transition._doTransition calling next.afterDeactivate refresh current view next name=[",next.name,"], parent.name=[",next.parent.name,"], next==current path");
 				next.afterDeactivate();
 				// activate next view
 				this.app.log("> in Transition._doTransition calling next.beforeActivate next name=[",next.name,"], parent.name=[",next.parent.name,"], next==current path");
@@ -274,8 +330,12 @@ function(lang, declare, has, on, Deferred, when, transit, Controller){
 				this.app.log("  > in Transition._doTransition calling next.afterActivate next name=[",next.name,"], parent.name=[",next.parent.name,"], next==current path");
 				next.afterActivate();
 				// layout current view
-				this.app.log("> in Transition._doTransition calling app.triggger select view next name=[",next.name,"], parent.name=[",next.parent.name,"], next==current path");
-				this.app.emit("select", {"parent":parent, "view":next});
+				this.app.log("> in Transition._doTransition calling app.triggger layoutView view next name=[",next.name,"], parent.name=[",next.parent.name,"], next==current path");
+				this.app.emit("layoutView", {"parent":parent, "view":next});
+				if(opts.doResize){
+					this.app.emit("resize"); // after last layoutView call resize			
+				}
+				
 			}
 
 			// do sub transition like transition from "tabScene,tab1" to "tabScene,tab2"

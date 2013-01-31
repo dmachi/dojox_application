@@ -37,6 +37,53 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/Def
 
 		load: function(event){
 			// summary:
+			//		Response to dojox/app "loadArray" event.
+			//
+			// example:
+			//		Use trigger() to trigger "loadArray" event, and this function will response the event. For example:
+			//		|	this.trigger("load", {"parent":parent, "viewId":viewId, "viewArray":viewArray, "callback":function(){...}});
+			//
+			// event: Object
+			//		LoadArray event parameter. It should be like this: {"parent":parent, "viewId":viewId, "viewArray":viewArray, "callback":function(){...}}
+			// returns:
+			//		A dojo/Deferred object.
+			//		The return value cannot return directly. 
+			//		If the caller need to use the return value, pass callback function in event parameter and process return value in callback function.
+
+			this.app.log("in app/controllers/Load event.viewId="+event.viewId+" event =", event);
+			var parent = event.parent || this.app;
+			var views = event.viewId || "";
+			viewArray = [];
+			// create an array from the diff views in event.viewId (they are separated by +)
+			var parts = views.split('+');
+			while(parts.length > 0){ 	
+				var viewId = parts.shift();
+				viewArray.push(viewId);
+			}
+
+			var params = event.params || "";
+			var def;
+			if(viewArray && viewArray.length > 0){			
+				// loop thru the array calling loadView for each item in the array
+				for(var i=0; i<viewArray.length-1; i++){
+					var newEvent = lang.clone(event);
+					newEvent.callback = null;  // skip callback until after last view is loaded.
+					newEvent.viewId = viewArray[i];
+					this.loadView(newEvent);
+				}
+				// for last view leave the callback to be notified				
+				var newEvent = lang.clone(event);
+				newEvent.viewId = viewArray[i];
+				def = this.loadView(newEvent);
+				return def;
+			}else{
+				var def = this.loadView(event);
+				return def;
+			}
+		},
+
+		loadView: function(event){
+			// summary:
 			//		Response to dojox/app "load" event.
 			//
 			// example:
@@ -56,7 +103,7 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/Def
 			var childId = parts.shift();
 			var subIds = parts.join(",");
 			var params = event.params || "";
-			
+
 			var def = this.loadChild(parent, childId, subIds, params);
 			// call Load event callback
 			if(event.callback){
@@ -81,6 +128,7 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/Def
 			//		Otherwise, create the view and return a dojo.Deferred instance.
 
 			var id = parent.id + '_' + childId;
+			
 			// check for possible default params if no params were provided
 			if(!params && parent.views[childId].defaultParams){
 				params = parent.views[childId].defaultParams;
@@ -150,6 +198,8 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/Def
 			//		params of this view.
 			// returns:
 			//		A dojo/Deferred instance which will be resolved when all views loaded.
+
+			//TODO: Can this be called with a viewId or default view which includes multiple views with a "+"?  Need to handle that!
 
 			if(!parent){
 				throw Error("No parent for Child '" + childId + "'.");

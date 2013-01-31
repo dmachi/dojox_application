@@ -1,6 +1,6 @@
 define(["require", "dojo/when", "dojo/on", "dojo/dom-attr", "dojo/_base/declare", "dojo/_base/lang",
 	"dojo/Deferred",  "./model"],
-	function(require, when, on, domAttr, declare, lang, Deferred, Model){
+	function(require, when, on, domAttr, declare, lang, Deferred, model){
 	return declare("dojox.app.ViewBase", null, {
 		// summary:
 		//		View base class with model & definition capabilities. Subclass must implement rendering capabilities.
@@ -19,6 +19,7 @@ define(["require", "dojo/when", "dojo/on", "dojo/dom-attr", "dojo/_base/declare"
 			this.id = "";
 			this.name = "";
 			this.children = {};
+			this.selectedChildren = {};
 			// private
 			this._started = false;
 			lang.mixin(this, params);
@@ -60,29 +61,26 @@ define(["require", "dojo/when", "dojo/on", "dojo/dom-attr", "dojo/_base/declare"
 			// tags:
 			//		private
 			
-			if (!this.loadedModels) {
+			if(!this.loadedModels) {
 				var loadModelLoaderDeferred = new Deferred();
 				var createPromise;
 				try{
-					createPromise = Model(this.models, this.parent, this.app);
+					createPromise = model(this.models, this.parent, this.app);
 				}catch(e){
 					loadModelLoaderDeferred.reject(e);
 					return loadModelLoaderDeferred.promise;
 				}
-				if(createPromise.then){  // model returned a promise, so set loadedModels and call startup after the .when
-					when(createPromise, lang.hitch(this, function(newModel){
-						if(newModel){
-							this.loadedModels = newModel;
-						}
-						this._startup();
-					}),
-					function(err){
-						loadModelLoaderDeferred.reject(err);
-					});
-				}else{ // model returned the actual model not a promise, so set loadedModels and call _startup
-					this.loadedModels = createPromise;
+				when(createPromise, lang.hitch(this, function(models){
+					if(models){
+						// if models is an array it comes from dojo/promise/all. Each array slot contains the same result object
+						// so pick slot 0.
+						this.loadedModels = lang.isArray(models)?models[0]:models;
+					}
 					this._startup();
-				}
+				}),
+				function(err){
+					loadModelLoaderDeferred.reject(err);
+				});
 			}else{ // loadedModels already created so call _startup
 				this._startup();				
 			}		
@@ -94,30 +92,35 @@ define(["require", "dojo/when", "dojo/on", "dojo/dom-attr", "dojo/_base/declare"
 			// tags:
 			//		private
 
-				// bind view level data model
-			this.parent.domNode.appendChild(this.domNode);
-
-			// start widget
-			this.startup();
-
-
-
-			// set widget attributes
-			domAttr.set(this.domNode, "id", this.id);
-			domAttr.set(this.domNode, "data-app-region", "center");
-			// TODO here we are overriding the entire style of the node, instead of just width & height
-			// maybe we could be a bit smarter
-			domAttr.set(this.domNode, "style", "width:100%; height:100%");
-			this.region = "center";
-
-			// call view assistant's init() method to initialize view
-			this.app.log("  > in app/View calling init() name=[",this.name,"], parent.name=[",this.parent.name,"]");
-			this.init();
-			this._started = true;
-			if(this._startDef){
-				this._startDef.resolve(this);
-			}
+			this._startLayout();			
 		},
+
+		_startLayout: function(){
+			// summary:
+			//		startup widgets in view template.
+			// tags:
+			//		private
+			this.app.log("  > in app/ViewBask _startLayout firing layout for name=[",this.name,"], parent.name=[",this.parent.name,"]");
+
+			this.constraint = this.constraint || domAttr.get(this.domNode, "data-app-constraint") || "center";
+		
+			this.app.emit("initLayout", {
+				"view": this, 
+				"callback": lang.hitch(this, function(){
+						//start widget
+						this.startup();
+
+						// call view assistant's init() method to initialize view
+						this.app.log("  > in app/ViewBase calling init() name=[",this.name,"], parent.name=[",this.parent.name,"]");
+						this.init();
+						this._started = true;
+						if(this._startDef){
+							this._startDef.resolve(this);
+						}
+				})
+			});
+		},
+
 
 		_loadDefinition: function(){
 			// summary:

@@ -5,10 +5,10 @@ function(declare, lang, registry, domAttr, domGeom, domStyle, WidgetBase, Contai
 		scrollable: false,
 
 		buildRendering: function(){
-			//set default region="center"
-			if(!this.region){
-				this.region = "center";
-				domAttr.set(this.srcNodeRef, "data-app-region", "center");
+			//set default _constraint="center"
+			if(!this._constraint){
+				this._constraint = "center";
+				domAttr.set(this.srcNodeRef, "data-app-constraint", "center");
 			}
 			this.inherited(arguments);
 
@@ -116,17 +116,16 @@ function(declare, lang, registry, domAttr, domGeom, domStyle, WidgetBase, Contai
 			// summary:
 			//		layout container
 
-			// TODO: remove non HTML5 "region" in future versions
-			children = query("> [data-app-region], > [region]", this.domNode).map(function(node){
+			children = query("> [data-app-constraint]", this.domNode).map(function(node){
 				var w = registry.getEnclosingWidget(node);
 				if(w){
-					w.region = domAttr.get(node, "data-app-region") || domAttr.get(node, "region");
+					w._constraint = domAttr.get(node, "data-app-constraint");
 					return w;
 				}
 
 				return {
 					domNode: node,
-					region: domAttr.get(node, "data-app-region") || dom.Attr.get(node, "region")
+					_constraint: domAttr.get(node, "data-app-constraint")
 				};
 			});
 

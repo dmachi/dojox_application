@@ -1,7 +1,7 @@
 define(["require", "dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/config",
 	"dojo/_base/window", "dojo/Evented", "dojo/Deferred", "dojo/when", "dojo/has", "dojo/on", "dojo/ready",
 	"dojo/dom-construct", "./model", "./module/lifecycle", "./utils/hash"],
-function(require, kernel, lang, declare, config, win, Evented, Deferred, when, has, on, ready, dom, Model, lifecycle, hash){
+function(require, kernel, lang, declare, config, win, Evented, Deferred, when, has, on, ready, dom, model, lifecycle, hash){
 	kernel.experimental("dojox/app");
 
 	has.add("app-log-api", (config["app"] || {}).debugApp);
@@ -132,13 +132,15 @@ function(require, kernel, lang, declare, config, win, Evented, Deferred, when, h
 			var loadModelLoaderDeferred = new Deferred();
 			var createPromise;
 			try{
-				createPromise = Model(this.params.models, this);
+				createPromise = model(this.params.models, this, this);
 			}catch(e){
 				loadModelLoaderDeferred.reject(e);
 				return loadModelLoaderDeferred.promise;
 			}
-			when(createPromise, lang.hitch(this, function(newModel){
-				this.loadedModels = newModel;
+			when(createPromise, lang.hitch(this, function(models){
+				// if models is an array it comes from dojo/promise/all. Each array slot contains the same result object
+				// so pick slot 0.
+				this.loadedModels = lang.isArray(models)?models[0]:models;
 				this.setupControllers();
 				this.startup();
 			}), function(){
@@ -170,6 +172,7 @@ function(require, kernel, lang, declare, config, win, Evented, Deferred, when, h
 		startup: function(){
 			// load controllers and views
 			//
+			this.selectedChildren = {};			
 			var controllers = this.createControllers(this.params.controllers);
 			var emitLoad = function(){
 				// emit "load" event and let controller to load view.
@@ -177,9 +180,27 @@ function(require, kernel, lang, declare, config, win, Evented, Deferred, when, h
 					viewId: this.defaultView,
 					params: this._startParams,
 					callback: lang.hitch(this, function (){
-						var selectId = this.defaultView.split(",");
-						selectId = selectId.shift();
-						this.selectedChild = this.children[this.id + '_' + selectId];
+						var parts = this.defaultView.split('+');
+						if(parts.length > 0){		
+							while(parts.length > 0){ 	
+								var viewId = parts.shift();
+								var innerParts = viewId.split(",");
+								selectId = innerParts.shift();
+								// set the constraint
+								this.children[this.id + '_' + selectId].constraint = this.children[this.id + '_' + selectId].constraint || domAttr.get(this.children[this.id + '_' + selectId].domNode, "data-app-constraint") || "center"; 
+								this.selectedChildren[this.children[this.id + '_' + selectId].constraint] = this.children[this.id + '_' + selectId];
+							}				
+						}else{
+							var selectId = this.defaultView.split(",");
+							selectId = selectId.shift();
+							this.selectedChild = this.children[this.id + '_' + selectId];
+							// set the constraint
+							this.children[this.id + '_' + selectId].constraint = this.children[this.id + '_' + selectId].constraint || domAttr.get(this.children[this.id + '_' + selectId].domNode, "data-app-constraint") || "center"; 
+							this.selectedChildren[this.children[this.id + '_' + selectId].constraint] = this.children[this.id + '_' + selectId];
+						}
+						
+						
+						
 						// transition to startView. If startView==defaultView, that means initial the default view.
 						this.emit("transition", {
 							viewId: this._startView,
