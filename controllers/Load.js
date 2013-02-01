@@ -172,9 +172,10 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/Def
 			// tags:
 			//		protected
 			var def = new Deferred();
+			var app = this.app;
 			require([type?type:"../View"], function(View){
 				var newView = new View(lang.mixin({
-					"app": this.app,
+					"app": app,
 					"id": id,
 					"name": name,
 					"parent": parent

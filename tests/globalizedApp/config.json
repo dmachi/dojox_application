@@ -9,6 +9,8 @@
 		}
 	},
 
+	"nls": "globalizedApp/nls/app",
+
 	"modules": [
 	],
 

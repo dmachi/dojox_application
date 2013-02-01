@@ -92,7 +92,7 @@ function(lang, declare, on, Controller, hash){
 					}
 				}else{
 					state = {
-						target: this.app.defaultView,
+						target: this.app.defaultView
 					};
 				}
 			}

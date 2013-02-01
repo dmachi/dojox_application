@@ -1,6 +1,6 @@
 define(["require", "dojo/when", "dojo/on", "dojo/_base/declare", "dojo/_base/lang", "dojo/Deferred",
-		"dijit/Destroyable", "dijit/_TemplatedMixin", "dijit/_WidgetsInTemplateMixin", "./ViewBase"],
-	function(require, when, on, declare, lang, Deferred, Destroyable, _TemplatedMixin, _WidgetsInTemplateMixin, ViewBase){
+		"dijit/Destroyable", "dijit/_TemplatedMixin", "dijit/_WidgetsInTemplateMixin", "./ViewBase", "./utils/nls"],
+	function(require, when, on, declare, lang, Deferred, Destroyable, _TemplatedMixin, _WidgetsInTemplateMixin, ViewBase, nls){
 
 	return declare("dojox.app.View", [_TemplatedMixin, _WidgetsInTemplateMixin, Destroyable, ViewBase], {
 		// summary:
@@ -111,68 +111,26 @@ define(["require", "dojo/when", "dojo/on", "dojo/_base/declare", "dojo/_base/lan
 			}
 		},
 
-		_loadNls: function(){
-			// summary:
-			//		load view nls file.
-			// tags:
-			//		private
-			//
-			if(this.nls){
-				var nlsDef = new Deferred();
-				var path = this.nls;
-				var requireSignal;
-				try{
-					var loadFile = path;
-					var index = loadFile.indexOf("./");
-					if(index >= 0){
-						loadFile = path.substring(index+2);
-					}
-					requireSignal = require.on("error", function(error){
-						if (nlsDef.isResolved() || nlsDef.isRejected()) {
-							return;
-						}
-						if(error.info[0] && (error.info[0].indexOf(loadFile)>= 0)){
-							nlsDef.resolve(false);
-							requireSignal.remove();
-						}
-					});
-
-					if(path.indexOf("./") == 0){
-						path = "app/"+path;
-					}
-
-					require(["dojo/i18n!"+path], function(nls){
-						nlsDef.resolve(nls);
-						requireSignal.remove();
-					});
-				}catch(e){
-					nlsDef.reject(e);
-					requireSignal.remove();
-				}
-				return nlsDef;
-			}
-			return true;
-		},
-
 		// start view
 		load: function(){
 			var tplDef = new Deferred();
 			var defDef = this.inherited(arguments);
-			var nlsDef = this._loadNls();
+			var nlsDef = nls(this);
 			// when parent loading is done (definition), proceed with template
 			// (for data-dojo-* to work we need to wait for definition to be here, this is also
 			// useful when the definition is used as a layer for the view)
 			when(defDef, lang.hitch(this, function(){
 				when(nlsDef, lang.hitch(this, function(nls){
+					// we inherit from the parent NLS
+					this.nls = lang.mixin({}, this.parent.nls);
 					if(nls){
 						// make sure template can access nls doing ${nls.myprop}
-						this.nls = {};
 						lang.mixin(this.nls, nls);
 					}
+					when(this._loadTemplate(), function(value){
+						tplDef.resolve(value);
+					});
 				}));
-				when(this._loadTemplate(), function(value){
-					tplDef.resolve(value);
-				});
 			}));
 			return tplDef;
 		},

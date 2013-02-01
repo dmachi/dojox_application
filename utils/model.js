@@ -1,5 +1,4 @@
-define(["dojo/_base/lang", "dojo/Deferred", "dojo/when"], 
-function(lang, Deferred, when){
+define(["dojo/_base/lang", "dojo/Deferred", "dojo/promise/all", "dojo/when"],  function(lang, Deferred, all, when){
 	return function(/*Object*/ config, /*Object*/ parent, /*Object*/ app){
 		// summary:
 		//		model is called to create all of the models for the app, and all models for a view, it will
@@ -14,35 +13,24 @@ function(lang, Deferred, when){
 		//		available to the view.
 		// returns: loadedModels 
 		//		 loadedModels is an object holding all of the available loaded models for this view.
-
-		this.app = app || parent;
-		this.defCount = 0;
 		var loadedModels = {};
-		var allModelsLoadedDeferred = new Deferred();
 		if(parent.loadedModels){
 			lang.mixin(loadedModels, parent.loadedModels);
 		}
 		if(config){
-			for(var test in config){
-				if(test.charAt(0) !== "_"){
-					this.defCount++;
-				}
-			}
-			if(this.defCount == 0){
-				return loadedModels;
-			}
+			var allDeferred = [];
 			for(var item in config){
 				if(item.charAt(0) !== "_"){
-					setupModel(config, item, parent, allModelsLoadedDeferred, loadedModels);
+					allDeferred.push(setupModel(config, item, app, loadedModels));
 				}
 			}
-			return allModelsLoadedDeferred;
+			return (allDeferred.length == 0) ? loadedModels : all(allDeferred);
 		}else{
 			return loadedModels;
 		}
 	};
 
-	function setupModel(config, item, parent, allModelsLoadedDeferred, loadedModels){
+	function setupModel(config, item, app, loadedModels){
 		// Here we need to create the modelLoader and call it passing in the item and the config[item].params
 		var params = config[item].params ? config[item].params : {};
 
@@ -64,11 +52,7 @@ function(lang, Deferred, when){
 		}
 		when(createModelPromise, lang.hitch(this, function(newModel){
 			loadedModels[item] = newModel;
-			this.app.log("in app/model, for item=[",item,"] loadedModels =", loadedModels);
-			this.defCount--;
-			if(this.defCount == 0){
-				allModelsLoadedDeferred.resolve(loadedModels);
-			}
+			app.log("in app/model, for item=[",item,"] loadedModels =", loadedModels);
 			loadModelDeferred.resolve(loadedModels);
 			return loadedModels;
 		}), function(e){
