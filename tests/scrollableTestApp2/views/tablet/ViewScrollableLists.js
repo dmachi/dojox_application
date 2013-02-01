@@ -1,6 +1,5 @@
 define(["dojo/_base/lang", "dojo/dom", "dojo/dom-style", "dijit/registry", "dojox/mobile/TransitionEvent"],
 function(lang, dom, domStyle, registry, TransitionEvent){
-	this.app.stopTransition = false;
 
 	selectItems = function(node, index){
 		//if(this.app.selected_configuration_item == index){
