@@ -86,6 +86,14 @@ define([
 			if(config.definition && config.definition != "none"){
 				mids.push(config.definition.replace(/(\.js)$/, ""));
 			}
+			if(config.nls){
+				// we use nls let's add dojo/i18n to the main layer as it will be shared by a lot of views
+				if(!params.nls){
+					params.nls = true;
+					bc.layers[mainLayer].include.push("dojo/i18n");
+				}
+				mids.push(config.nls);
+			}
 			if(config.view){
 				// we use a custom view class
 				mids.push(config.view);
