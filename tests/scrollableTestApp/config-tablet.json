@@ -45,8 +45,12 @@
 	],
 
 	"controllers": [
-		"dojox/app/controllers/History"
+		"dojox/app/controllers/History",
+		"dojox/app/controllers/Load",
+		"dojox/app/controllers/Transition",
+		"dojox/app/controllers/Layout"
 	],
+
 	//stores we are using
 	"stores": {
 		"repeatStore":{

@@ -31,8 +31,6 @@
 
 	"modules": [],
 	
-	"noAutoLoadControllers" : true,  
-	
 	"controllers": [
 		"dojox/app/controllers/History",
 		"dojox/app/controllers/Load",
