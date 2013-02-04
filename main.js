@@ -165,10 +165,6 @@ function(require, kernel, lang, declare, config, win, Evented, Deferred, when, h
 
 		setupControllers: function(){
 			// create application controller instance
-			if(!this.noAutoLoadControllers){
-				this.params.controllers =
-					["./controllers/Load", "./controllers/Transition", "./controllers/Layout"].concat(this.params.controllers?this.params.controllers:[]);
-			}
 			// move set _startView operation from history module to application
 			var currentHash = window.location.hash;
 			this._startView = (((currentHash && currentHash.charAt(0) == "#") ? currentHash.substr(1) : currentHash) || this.defaultView).split('&')[0];
