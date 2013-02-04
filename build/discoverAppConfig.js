@@ -101,10 +101,6 @@ define([
 				// regular view
 				mids.push("dojox/app/View");
 			}
-			if(!config.noAutoLoadControllers){
-				// add auto loaded controllers
-				mids = ["dojox/app/controllers/Load", "dojox/app/controllers/Transition", "dojox/app/controllers/Layout"].concat(mids);
-			}
 			// go into the view children
 			if(config.views){
 				parseViews(mids, mainLayer, config.views, {});
