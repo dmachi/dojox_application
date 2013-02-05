@@ -138,7 +138,7 @@ function(lang, declare, has, on, Deferred, when, transit, Controller){
 				"viewId": transitionEvt.viewId,
 				"params": params,
 				"callback": lang.hitch(this, function(){
-					var transitionDef = this._doTransition(transitionEvt.viewId, transitionEvt.opts, params, this.app, transitionEvt.doResize);
+					var transitionDef = this._doTransition(transitionEvt.viewId, transitionEvt.opts, params, this.app, transitionEvt._doResize);
 					when(transitionDef, lang.hitch(this, function(){
 						this.proceeding = false;
 						var nextEvt = this.waitingQueue.shift();
