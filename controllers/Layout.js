@@ -1,6 +1,6 @@
 define(["dojo/_base/declare", "dojo/_base/array", "dojo/query", "dojo/dom-attr", "dijit/registry", 
-		"./LayoutBase", "../layout/utils"],
-function(declare, array, query, domAttr, registry, LayoutBase, layoutUtils){
+		"./LayoutBase", "../utils/layout", "../utils/constraints"],
+function(declare, array, query, domAttr, registry, LayoutBase, layout, constraints){
 	// module:
 	//		dojox/app/controllers/Layout
 	// summary:
@@ -30,11 +30,6 @@ function(declare, array, query, domAttr, registry, LayoutBase, layoutUtils){
 			// |		{"view": view, "callback": function(){}};
 			this.app.log("in app/controllers/Layout.initLayout event=",event);
 			this.app.log("in app/controllers/Layout.initLayout event.view.parent.name=[",event.view.parent.name,"]");
-
-			this.app.log("in app/controllers/Layout.initLayout event.view.constraint=",event.view.constraint);
-        	var constraint = event.view.constraint || domAttr.get(event.view.domNode, "data-app-constraint") || "center";
-			event.view.constraint = constraint;
-			this.app.log("in Layout.js initLayout event.view.constraint set to ="+event.view.constraint);
 
 			event.view.parent.domNode.appendChild(event.view.domNode);
 
@@ -66,8 +61,9 @@ function(declare, array, query, domAttr, registry, LayoutBase, layoutUtils){
 			this.app.log("in Layout _doLayout called for view.id="+view.id+" view=",view);
 
 			var fullScreenScene, children;
-			//TODO: probably need to handle selectedChildren here, not just selected child...
-			var selectedChild = this._getSelectedChild(view, view.constraint || "center");
+			// TODO: probably need to handle selectedChildren here, not just selected child...
+			// TODO: why are we passing view here? not parent? This call does not seem logical?
+			var selectedChild = constraints.getSelectedChild(view, view.constraint);
 			if(selectedChild && selectedChild.isFullScreen){
 				console.warn("fullscreen sceen layout");
 				/*
@@ -102,7 +98,7 @@ function(declare, array, query, domAttr, registry, LayoutBase, layoutUtils){
 			}
 			// We don't need to layout children if this._contentBox is null for the operation will do nothing.
 			if(view._contentBox){
-				layoutUtils.layoutChildren(view.domNode, view._contentBox, children);
+				layout.layoutChildren(view.domNode, view._contentBox, children);
 			}
 		},
 

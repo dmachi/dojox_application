@@ -1,5 +1,6 @@
-define(["dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on", "dojo/Deferred", "dojo/when", "dojox/css3/transit", "../Controller"],
-function(lang, declare, has, on, Deferred, when, transit, Controller){
+define(["dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on", "dojo/Deferred",
+	"dojo/when", "dojox/css3/transit", "../Controller", "../utils/constraints"],
+	function(lang, declare, has, on, Deferred, when, transit, Controller, constraints){
 	// module:
 	//		dojox/app/controllers/transition
 	//		Bind "transition" event on dojox/app application instance.
@@ -168,19 +169,6 @@ function(lang, declare, has, on, Deferred, when, transit, Controller){
 			}
 			return defaultTransition;
 		},
-		
-		_getSelectedChild: function(view, constraint){
-			// summary:
-			//		return the selectedChild for this constraint.
-			//
-			if(view.selectedChildren && view.selectedChildren[constraint]){
-				this.app.log("in Transition _getSelectedChild got view name =["+view.selectedChildren[constraint].name+"] for constraint =["+constraint +"] as selectedChild for view.name=["+view.name+"]");
-				return view.selectedChildren[constraint];				
-			}else{
-				this.app.log("in Transition _getSelectedChild got null for constraint =["+constraint +"] as selectedChild for view.name=["+view.name+"]");
-				return null;
-			}
-		},
 
 		_doTransition: function(transitionTo, opts, params, parent, doResize){
 			// summary:
@@ -232,7 +220,7 @@ function(lang, declare, has, on, Deferred, when, transit, Controller){
 			}
 
 
-			var current = this._getSelectedChild(parent, next.constraint);
+			var current = constraints.getSelectedChild(parent, next.constraint);
 			
 			// set params on next view.
 			next.params = params || next.params;
@@ -243,20 +231,6 @@ function(lang, declare, has, on, Deferred, when, transit, Controller){
 				subIds = next.defaultView;
 			}
 
-			if(!current){
-				// current view is null, set current view equals next view.
-				this.app.log("> in Transition._doTransition calling next.beforeActivate next name=[",next.name,"], parent.name=[",next.parent.name,"],  !current path,");
-				next.beforeActivate();
-				this.app.log("> in Transition._doTransition calling next.afterActivate next name=[",next.name,"], parent.name=[",next.parent.name,"],  !current path");
-				next.afterActivate();
-				this.app.log("  > in Transition._doTransition calling app.triggger layoutView view next name=[",next.name,"], parent.name=[",next.parent.name,"], !current path");
-				this.app.emit("layoutView", {"parent":parent, "view":next});
-				if(doResize){
-					this.app.log("  > in Transition._doTransition calling app.emit resize");
-					this.app.emit("resize"); // after last layoutView call resize.
-				}
-				return;
-			}
 			// next is not a Deferred object, so Deferred.when is no needed.
 			if(next !== current){
 				//When clicking fast, history module will cache the transition request que
@@ -274,14 +248,16 @@ function(lang, declare, has, on, Deferred, when, transit, Controller){
 
 				// deactivate sub child of current view, then deactivate current view
 				// TODO: ELC NEED A LOOP HERE TO deactivate all children
-				var subChild = this._getSelectedChild(current, "center");
+				var subChild = constraints.getSelectedChild(current, "center");
 				while(subChild){
-				this.app.log("< in Transition._doTransition calling subChild.beforeDeactivate subChild name=[",subChild.name,"], parent.name=[",subChild.parent.name,"], next!==current path");
+					this.app.log("< in Transition._doTransition calling subChild.beforeDeactivate subChild name=[",subChild.name,"], parent.name=[",subChild.parent.name,"], next!==current path");
 					subChild.beforeDeactivate();
-					subChild = this._getSelectedChild(subChild, "center");
+					subChild = constraints.getSelectedChild(subChild, "center");
 				}
-				this.app.log("< in Transition._doTransition calling current.beforeDeactivate current name=[",current.name,"], parent.name=[",current.parent.name,"], next!==current path");
-				current.beforeDeactivate();
+				if(current){
+					this.app.log("< in Transition._doTransition calling current.beforeDeactivate current name=[",current.name,"], parent.name=[",current.parent.name,"], next!==current path");
+					current.beforeDeactivate();
+				}
 				this.app.log("> in Transition._doTransition calling next.beforeActivate next name=[",next.name,"], parent.name=[",next.parent.name,"], next!==current path");
 				next.beforeActivate();
 				this.app.log("> in Transition._doTransition calling app.triggger layoutView view next name=[",next.name,"], parent.name=[",next.parent.name,"], next!==current path");
@@ -296,21 +272,23 @@ function(lang, declare, has, on, Deferred, when, transit, Controller){
 					var mergedOpts = lang.mixin({}, opts); // handle reverse from mergedOpts or transitionDir 
 					mergedOpts = lang.mixin({}, mergedOpts, {
 						reverse: (mergedOpts.reverse || mergedOpts.transitionDir===-1)?true:false,
-						transition: this._getDefaultTransition(parent) || "none"
-					}); 
-					result = transit(current.domNode, next.domNode, mergedOpts);
+						transition: mergedOpts.transition || this._getDefaultTransition(parent) || "none"
+					});
+					result = transit(current && current.domNode, next.domNode, mergedOpts);
 				}
 				when(result, lang.hitch(this, function(){
 					// deactivate sub child of current view, then deactivate current view
-					subChild = this._getSelectedChild(current, "center");
+					subChild = constraints.getSelectedChild(current, "center");
 					
 					while(subChild){
 						this.app.log("  < in Transition._doTransition calling subChild.afterDeactivate subChild name=[",subChild.name,"], parent.name=[",subChild.parent.name,"], next!==current path");
 						subChild.afterDeactivate();
-						subChild = this._getSelectedChild(subChild, "center");
+						subChild = constraints.getSelectedChild(subChild, "center");
 					}
-					this.app.log("  < in Transition._doTransition calling current.afterDeactivate current name=[",current.name,"], parent.name=[",current.parent.name,"], next!==current path");
-					current.afterDeactivate();
+					if(current){
+						this.app.log("  < in Transition._doTransition calling current.afterDeactivate current name=[",current.name,"], parent.name=[",current.parent.name,"], next!==current path");
+						current.afterDeactivate();
+					}
 					this.app.log("  > in Transition._doTransition calling next.afterActivate next name=[",next.name,"], parent.name=[",next.parent.name,"], next!==current path");
 					next.afterActivate();
 

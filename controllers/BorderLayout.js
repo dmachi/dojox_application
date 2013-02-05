@@ -1,6 +1,6 @@
 define(["dojo/_base/declare", "dojo/dom-attr", "./LayoutBase","dijit/layout/BorderContainer",
-		"dijit/layout/StackContainer", "dijit/layout/ContentPane", "dijit/registry"],
-function(declare, domAttr, LayoutBase, BorderContainer, StackContainer, ContentPane, registry){
+		"dijit/layout/StackContainer", "dijit/layout/ContentPane", "dijit/registry", "../utils/constraints"],
+function(declare, domAttr, LayoutBase, BorderContainer, StackContainer, ContentPane, registry, constraints){
 	// module:
 	//		dojox/app/controllers/BorderLayout
 	// summary:
@@ -81,12 +81,12 @@ function(declare, domAttr, LayoutBase, BorderContainer, StackContainer, ContentP
 			var sc = registry.byId(event.view.parent.id+"-"+event.view.constraint);
 			var cp = registry.byId(event.view.id+"-cp-"+event.view.constraint);
 
-			var parentSelChild = this._getSelectedChild(parent, view.constraint);
+			var parentSelChild = constraints.getSelectedChild(parent, view.constraint);
 			if(view !== parentSelChild){
 				if(sc && cp){
 					sc.selectChild(cp);
 				}
-				parent.selectedChildren[view.constraint] = view;
+				constraints.setSelectedChild(parent, view.constraint, view);
 			}
 		}
 

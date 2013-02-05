@@ -1,6 +1,6 @@
 define(["dojo/_base/lang", "dojo/_base/declare", "dojo/sniff", "dojo/_base/window", "dojo/_base/config",
-		"dojo/topic", "dojo/dom-style", "dojo/dom-geometry", "../Controller"],
-function(lang, declare, has, win, config, topic, domStyle, domGeom, Controller){
+		"dojo/topic", "dojo/dom-style", "dojo/dom-geometry", "../utils/constraints", "../Controller"],
+function(lang, declare, has, win, config, topic, domStyle, domGeom, constraints, Controller){
 	// module:
 	//		dojox/app/controllers/LayoutBase
 	// summary:
@@ -130,19 +130,6 @@ function(lang, declare, has, win, config, topic, domStyle, domGeom, Controller){
 			this._doLayout(view);
 
 		},
-				
-		_getSelectedChild: function(view, constraint){
-			// summary:
-			//		return the selectedChild for this constraint.
-			//
-			this.app.log("in Layout _getSelectedChild view.id="+view.id+"  constraint = "+constraint);
-			if(view.selectedChildren && view.selectedChildren[constraint]){
-				return view.selectedChildren[constraint];				
-			}else{
-				return null;
-			}
-		},
-
 
 		layoutView: function(event){
 			// summary:
@@ -163,7 +150,7 @@ function(lang, declare, has, win, config, topic, domStyle, domGeom, Controller){
 			}
 			
 			// if the parent has a child in the view constraint it has to be hidden, and this view displayed.
-			var parentSelChild = this._getSelectedChild(parent, view.constraint); 
+			var parentSelChild = constraints.getSelectedChild(parent, view.constraint);
 			if(view !== parentSelChild){
 				if(parentSelChild){
 				//	domStyle.set(parentSelChild.domNode, "zIndex", 25);
@@ -172,7 +159,7 @@ function(lang, declare, has, win, config, topic, domStyle, domGeom, Controller){
 
 				domStyle.set(view.domNode, "display", "");
 				//domStyle.set(view.domNode, "zIndex", 50);
-				parent.selectedChildren[view.constraint] = view;
+				constraints.setSelectedChild(parent, view.constraint, view);
 			}
 			// do selected view layout
 			// call _doResize for parent and view here, doResize will no longer call it for all children.

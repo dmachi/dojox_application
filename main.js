@@ -1,7 +1,8 @@
 define(["require", "dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/config",
 	"dojo/_base/window", "dojo/Evented", "dojo/Deferred", "dojo/when", "dojo/has", "dojo/on", "dojo/ready",
-	"dojo/dom-construct", "./utils/model", "./utils/nls", "./module/lifecycle", "./utils/hash"],
-function(require, kernel, lang, declare, config, win, Evented, Deferred, when, has, on, ready, dom, model, nls, lifecycle, hash){
+	"dojo/dom-construct", "./utils/model", "./utils/nls", "./module/lifecycle", "./utils/hash", "./utils/constraints"],
+function(require, kernel, lang, declare, config, win, Evented, Deferred, when, has, on, ready, dom, model,
+		 nls, lifecycle, hash, constraints){
 	kernel.experimental("dojox/app");
 
 	has.add("app-log-api", (config["app"] || {}).debugApp);
@@ -182,27 +183,29 @@ function(require, kernel, lang, declare, config, win, Evented, Deferred, when, h
 					viewId: this.defaultView,
 					params: this._startParams,
 					callback: lang.hitch(this, function (){
-						var parts = this.defaultView.split('+');
+						var parts = this.defaultView.split('+'), selectId, constraint;
+						// TODO all this code should be moved to a controller, there is no reason to do that here
+						// for initial view and somewhere else for the rest
 						if(parts.length > 0){		
 							while(parts.length > 0){ 	
 								var viewId = parts.shift();
-								var innerParts = viewId.split(",");
-								selectId = innerParts.shift();
+								selectId = viewId.split(",").shift();
 								// set the constraint
-								this.children[this.id + '_' + selectId].constraint = this.children[this.id + '_' + selectId].constraint || domAttr.get(this.children[this.id + '_' + selectId].domNode, "data-app-constraint") || "center"; 
-								this.selectedChildren[this.children[this.id + '_' + selectId].constraint] = this.children[this.id + '_' + selectId];
-							}				
+								if(!this.children[this.id + "_" + selectId].hasOwnProperty("constraint")){
+									this.children[this.id + '_' + selectId].constraint = domAttr.get(this.children[this.id + '_' + selectId].domNode, "data-app-constraint") || "center";
+								}
+								constraints.register(constraint = this.children[this.id + '_' + selectId].constraint);
+								constraints.setSelectedChild(this, constraint, this.children[this.id + '_' + selectId]);
+							}
 						}else{
-							var selectId = this.defaultView.split(",");
-							selectId = selectId.shift();
-							this.selectedChild = this.children[this.id + '_' + selectId];
+							var selectId = this.defaultView.split(",").shift();
 							// set the constraint
-							this.children[this.id + '_' + selectId].constraint = this.children[this.id + '_' + selectId].constraint || domAttr.get(this.children[this.id + '_' + selectId].domNode, "data-app-constraint") || "center"; 
-							this.selectedChildren[this.children[this.id + '_' + selectId].constraint] = this.children[this.id + '_' + selectId];
+							if(!this.children[this.id + "_" + selectId].hasOwnProperty("constraint")){
+								this.children[this.id + '_' + selectId].constraint = domAttr.get(this.children[this.id + '_' + selectId].domNode, "data-app-constraint") || "center";
+							}
+							constraints.register(constraint = this.children[this.id + '_' + selectId].constraint);
+							constraints.setSelectedChild(this, constraint, this.children[this.id + '_' + selectId]);
 						}
-						
-						
-						
 						// transition to startView. If startView==defaultView, that means initial the default view.
 						this.emit("transition", {
 							viewId: this._startView,
