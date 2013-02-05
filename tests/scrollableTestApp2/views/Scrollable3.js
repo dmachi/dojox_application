@@ -10,6 +10,8 @@ function(dom, domStyle, connect, lang, registry, at, TransitionEvent, Repeat, ge
 	var insert10Id = 'sc3insert10x';
 	var remove10Id = 'sc3remove10x';
 
+	var app = null;
+
 	// delete an item
 	deleteResult = function(index){
 		var nextIndex = repeatmodel.get("cursorIndex");
@@ -58,7 +60,9 @@ function(dom, domStyle, connect, lang, registry, at, TransitionEvent, Repeat, ge
 
 	return {
 		// repeate view init
-		init: function(){			
+		init: function(){
+			app = this.app;
+
 			repeatmodel = this.loadedModels.repeatmodels;
 			var connectResult;
 

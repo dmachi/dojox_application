@@ -14,6 +14,8 @@ function(dom, domStyle, connect, lang, registry, at, TransitionEvent, Repeat, ge
 	var wrapperIdC = 'sc1WrapperC';
 	var wrapperIdD = 'sc1WrapperD';
 
+	var app = null;
+	
 	// delete an item
 	deleteResult = function(index){
 		var nextIndex = repeatmodel.get("cursorIndex");
@@ -63,6 +65,8 @@ function(dom, domStyle, connect, lang, registry, at, TransitionEvent, Repeat, ge
 	return {
 		// repeate view init
 		init: function(){			
+			app = this.app;
+
 			repeatmodel = this.loadedModels.repeatmodels;
 			var connectResult;
 
