@@ -1,8 +1,7 @@
 define(["require", "dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/config",
 	"dojo/_base/window", "dojo/Evented", "dojo/Deferred", "dojo/when", "dojo/has", "dojo/on", "dojo/ready",
-	"dojo/dom-construct", "./utils/model", "./utils/nls", "./module/lifecycle", "./utils/hash", "./utils/constraints"],
-function(require, kernel, lang, declare, config, win, Evented, Deferred, when, has, on, ready, dom, model,
-		 nls, lifecycle, hash, constraints){
+	"dojo/dom-construct", "./utils/model", "./utils/nls", "./module/lifecycle", "./utils/hash"],
+function(require, kernel, lang, declare, config, win, Evented, Deferred, when, has, on, ready, dom, model, nls, lifecycle, hash){
 	kernel.experimental("dojox/app");
 
 	has.add("app-log-api", (config["app"] || {}).debugApp);
