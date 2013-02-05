@@ -3,13 +3,19 @@ define(["dojo/dom", "dojo/_base/lang", "dojo/dom-style", "dijit/registry", "dojo
 
 	var wrapperId = 'cfg1Wrapper';
 
+	var app = null;
+
 	selectCompleted = function(index){
-		this.app.selected_configuration_item = index;
+		app.selected_configuration_item = index;
 	};
 
 	return {
+		init: function(){
+			app = this.app;
+		},
+		
 		beforeActivate: function(){
-			this.app.stopTransition = false;
+			app.stopTransition = false;
 			//console.log("configuration/ScrollableListSelection beforeActivate called this.app.selected_configuration_item=",this.app.selected_configuration_item);
 		},
 		

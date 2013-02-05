@@ -87,10 +87,10 @@
 	//"defaultView": "configuration+Scrollable5",
 
 	// these are the possilbe defaultTransitions
-	//"defaultTransition": "slide",
+	"defaultTransition": "slide",
 	//"defaultTransition": "none",
 	//"defaultTransition": "fade",
-	"defaultTransition": "flip",     
+	//"defaultTransition": "flip",     
 
 	//views are groups of views and models loaded at once
 	"views": {
