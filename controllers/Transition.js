@@ -451,7 +451,7 @@ function(lang, declare, has, on, Deferred, when, domStyle, transit, Controller){
 			}
 			// remove is not a Deferred object, so Deferred.when is no needed.
 			if(remove !== current){
-				this.app.log("> in Transition._doRemoveTransition called _doRemoveTransition but remove !== current, it should be.");
+				this.app.log("> in Transition._doRemoveTransition called _doRemoveTransition but remove !== current, nothing to remove.");
 				return;
 			}else{
 				// remove view == current view, refresh current view
