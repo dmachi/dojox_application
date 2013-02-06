@@ -64,8 +64,8 @@ define(["dojo/_base/array"], function(arr){
 						}
 					}
 					constraint.__hash = hash;
-                    constraints.push(constraint);
-                }
+					constraints.push(constraint);
+				}
 			}
 		}
 	};
