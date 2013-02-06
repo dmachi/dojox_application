@@ -34,6 +34,12 @@ function(dom, domStyle, connect, lang, declare, registry, at, TransitionEvent, R
 		repeatmodel.set("cursorIndex", index);
 		
 	};
+	
+	removeScrollableItem = function(index){
+				var repeatmodel = app.loadedModels.repeatmodels;
+				repeatmodel.model.splice(index, 1);
+				return false; 	 		
+	};
 
 	// insert an item
 	var insertResult = function(index, e){

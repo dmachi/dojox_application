@@ -1,6 +1,6 @@
-define(["dojo/_base/declare", "dojo/dom-attr", "./LayoutBase","dijit/layout/BorderContainer",
+define(["dojo/_base/declare", "dojo/dom-attr", "dojo/dom-style", "./LayoutBase","dijit/layout/BorderContainer",
 		"dijit/layout/StackContainer", "dijit/layout/ContentPane", "dijit/registry"],
-function(declare, domAttr, LayoutBase, BorderContainer, StackContainer, ContentPane, registry){
+function(declare, domAttr, domStyle, LayoutBase, BorderContainer, StackContainer, ContentPane, registry){
 	// module:
 	//		dojox/app/controllers/BorderLayout
 	// summary:
@@ -25,7 +25,7 @@ function(declare, domAttr, LayoutBase, BorderContainer, StackContainer, ContentP
 
 			if(!this.borderLayoutCreated){ // If the BorderContainer has not been created yet, create it.
 				this.borderLayoutCreated = true;
-				bc = new BorderContainer({style:'height:100%;width:100%;border:1px solid black'});
+				bc = new BorderContainer({id:"App-BC", style:'height:100%;width:100%;border:1px solid black'});
 				event.view.parent.domNode.appendChild(bc.domNode);  // put the border container into the parent (app)
 
 				bc.startup();  // startup the BorderContainer
@@ -84,11 +84,50 @@ function(declare, domAttr, LayoutBase, BorderContainer, StackContainer, ContentP
 			var parentSelChild = this._getSelectedChild(parent, view.constraint);
 			if(view !== parentSelChild){
 				if(sc && cp){
+					if(sc.removedFromBc){
+						sc.removedFromBc = false;
+						registry.byId("App-BC").addChild(sc);
+					}
+					domStyle.set(cp.domNode, "display", "");
 					sc.selectChild(cp);
+					sc.resize();
 				}
 				parent.selectedChildren[view.constraint] = view;
 			}
+		},
+
+		removeView: function(event){
+			// summary:
+			//		Response to dojox/app "removeView" event.
+			//
+			// example:
+			//		Use dojo/on.emit to trigger "removeView" event, and this function will response the event. For example:
+			//		|	on.emit(this.app.evented, "removeView", view);
+			//
+			// event: Object
+			// |		{"parent":parent, "view":view}
+
+			var parent = event.parent || this.app;
+			var view = event.view;
+
+			if(!view){
+				return;
+			}
+			var bc = registry.byId("App-BC");
+			var sc = registry.byId(event.view.parent.id+"-"+event.view.constraint);
+			var cp = registry.byId(event.view.id+"-cp-"+event.view.constraint);
+
+			var parentSelChild = this._getSelectedChild(parent, view.constraint);
+			if(view == parentSelChild){
+				if(bc && sc){
+					sc.removedFromBc = true;
+					bc.removeChild(sc);
+					//domStyle.set(cp.domNode, "display", "none");
+				}
+				parent.selectedChildren[view.constraint] = null;
+			}
 		}
+		
 
 	});
 

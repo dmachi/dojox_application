@@ -29,6 +29,12 @@ function(dom, domStyle, connect, lang, registry, at, TransitionEvent, Repeat, ge
 	setDetailsContext = function(index){
 		repeatmodel.set("cursorId", index);
 	};
+	
+	removeScrollableItem = function(index){
+				var repeatmodel = app.loadedModels.repeatmodels;
+				repeatmodel.model.splice(index, 1);
+				return false; 	 		
+	};
 
 	// insert an item
 	var insertResult = function(index, e){
@@ -64,7 +70,7 @@ function(dom, domStyle, connect, lang, registry, at, TransitionEvent, Repeat, ge
 
 	return {
 		// repeate view init
-		init: function(){			
+		init: function(){
 			app = this.app;
 
 			repeatmodel = this.loadedModels.repeatmodels;
