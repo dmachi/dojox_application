@@ -13,7 +13,7 @@ define(["dojo/_base/array"], function(arr){
 			// returns:
 			//		the selected child view for this constraint
 			var type = typeof(constraint);
-			var hash = (type == "string" ||type == "number")?constraint:constraint.__hash;
+			var hash = (type == "string" || type == "number")?constraint:constraint.__hash;
 			return (view && view.selectedChildren && view.selectedChildren[hash])?
 				view.selectedChildren[hash]:null;
 		},
@@ -29,7 +29,7 @@ define(["dojo/_base/array"], function(arr){
 			// child: View
 			//		the child to select
 			var type = typeof(constraint);
-			var hash = (type == "string" ||type == "number")?constraint:constraint.__hash;
+			var hash = (type == "string" || type == "number")?constraint:constraint.__hash;
 			view.selectedChildren[hash] = child;
 		},
 
@@ -49,7 +49,7 @@ define(["dojo/_base/array"], function(arr){
 						}
 					}
 					if(ok == true){
-						match = constraint;
+						match = item;
 					}
 					return ok;
 				});
@@ -64,9 +64,9 @@ define(["dojo/_base/array"], function(arr){
 						}
 					}
 					constraint.__hash = hash;
-				}
+                    constraints.push(constraint);
+                }
 			}
-			constraints.push(constraint);
 		}
 	};
 })
