@@ -12,9 +12,10 @@ define(["dojo/_base/array"], function(arr){
 			//
 			// returns:
 			//		the selected child view for this constraint
-
-			return (view.selectedChildren && view.selectedChildren[constraint.__hash])?
-				view.selectedChildren[constraint.__hash]:null;
+			var type = typeof(constraint);
+			var hash = (type == "string" ||type == "number")?constraint:constraint.__hash;
+			return (view && view.selectedChildren && view.selectedChildren[hash])?
+				view.selectedChildren[hash]:null;
 		},
 
 		setSelectedChild: function(view, constraint, child){
@@ -27,46 +28,45 @@ define(["dojo/_base/array"], function(arr){
 			//		tbe constraint object
 			// child: View
 			//		the child to select
-			view.selectedChildren[constraint.__hash] = child;
+			var type = typeof(constraint);
+			var hash = (type == "string" ||type == "number")?constraint:constraint.__hash;
+			view.selectedChildren[hash] = child;
 		},
 
 		register: function(constraint){
 			// if the constraint has already been registered we don't care about it...
-			if(!constraint.__hash){
-				if(typeof(constraint) == "string" || typeof(constraint) == "number"){
-					constraints.__index = constraint;
-				}else{
-					var match = null;
-					arr.some(constraints, function(item){
-						var ok = true;
-						for(var prop in item){
-							if(prop.charAt(0) !== "_"){//skip the private properties
-								if(item[prop] != constraint[prop]){
-									ok = false;
-									break;
-								}
+			var type = typeof(constraint);
+			if(!constraint.__hash && type != "string" && type != "number"){
+				var match = null;
+				arr.some(constraints, function(item){
+					var ok = true;
+					for(var prop in item){
+						if(prop.charAt(0) !== "_"){//skip the private properties
+							if(item[prop] != constraint[prop]){
+								ok = false;
+								break;
 							}
 						}
-						if(ok == true){
-							match = constraint;
-						}
-						return ok;
-					});
-					if(match){
-						constraint.__hash = match.__hash;
-					}else{
-						// create a new "hash"
-						var hash = "";
-						for(var prop in constraint){
-							if(prop.charAt(0) !== "_"){
-								hash += constraint[prop];
-							}
-						}
-						constraint.__hash = hash;
 					}
+					if(ok == true){
+						match = constraint;
+					}
+					return ok;
+				});
+				if(match){
+					constraint.__hash = match.__hash;
+				}else{
+					// create a new "hash"
+					var hash = "";
+					for(var prop in constraint){
+						if(prop.charAt(0) !== "_"){
+							hash += constraint[prop];
+						}
+					}
+					constraint.__hash = hash;
 				}
-				constraints.push(constraint);
 			}
+			constraints.push(constraint);
 		}
 	};
 })
