@@ -1,7 +1,9 @@
 define(["require", "dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/config",
 	"dojo/_base/window", "dojo/Evented", "dojo/Deferred", "dojo/when", "dojo/has", "dojo/on", "dojo/ready",
-	"dojo/dom-construct", "./utils/model", "./utils/nls", "./module/lifecycle", "./utils/hash"],
-function(require, kernel, lang, declare, config, win, Evented, Deferred, when, has, on, ready, dom, model, nls, lifecycle, hash){
+	"dojo/dom-construct", "dojo/dom-attr", "./utils/model", "./utils/nls", "./module/lifecycle",
+	"./utils/hash", "./utils/constraints"],
+	function(require, kernel, lang, declare, config, win, Evented, Deferred, when, has, on, ready, domConstruct, domAttr,
+		 model, nls, lifecycle, hash, constraints){
 	kernel.experimental("dojox/app");
 
 	has.add("app-log-api", (config["app"] || {}).debugApp);
@@ -19,7 +21,7 @@ function(require, kernel, lang, declare, config, win, Evented, Deferred, when, h
 			// Need to bind startTransition event on application domNode,
 			// Because dojox/mobile/ViewController bind startTransition event on document.body
 			// Make application's root domNode id unique because this id can be visited by window namespace on Chrome 18.
-			this.setDomNode(dom.create("div", {
+			this.setDomNode(domConstruct.create("div", {
 				id: this.id+"_Root",
 				style: "width:100%; height:100%; overflow-y:hidden; overflow-x:hidden;"
 			}));
@@ -176,6 +178,12 @@ function(require, kernel, lang, declare, config, win, Evented, Deferred, when, h
 			//
 			this.selectedChildren = {};			
 			var controllers = this.createControllers(this.params.controllers);
+			// constraint on app
+			if(this.hasOwnProperty("constraint")){
+				constraints.register(this.params.constraints);
+			}else{
+				this.constraint = "center";
+			}
 			var emitLoad = function(){
 				// emit "load" event and let controller to load view.
 				this.emit("load", {
