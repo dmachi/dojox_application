@@ -170,7 +170,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on", "dojo/De
 			return defaultTransition;
 		},
 
-		_doTransition: function(transitionTo, opts, params, parent, doResize){
+		_doTransition: function(transitionTo, opts, params, parent, doResize, nested){
 			// summary:
 			//		Transitions from the currently visible scene to the defined scene.
 			//		It should determine what would be the best transition unless
@@ -192,9 +192,11 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on", "dojo/De
 			//		view's parent
 			// doResize: Boolean
 			//		emit a resize event
+			//	nested: Boolean
+			//		whether the method is called from the transitioning of a parent view
 			//
 			// returns:
-			//		transit dojo/DeferredList object.
+			//		transit dojo/promise/all object.
 
 			//TODO: Can this be called with a viewId which includes multiple views with a "+"?  Need to handle that!
 			this.app.log("in app/controllers/Transition._doTransition transitionTo=[",transitionTo,"], parent.name=[",parent.name,"], opts=",opts);
@@ -267,12 +269,14 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on", "dojo/De
 				}
 				
 				var result = true;
-				if(!has("ie") || has("ie") >= 10){
+				if((!has("ie") || has("ie") >= 10) && (!nested || current != null)){
 					// if we are on IE CSS3 transitions are not supported (yet). So just skip the transition itself.
+					// we also skip in we are transitioning to a nested view from a parent view and that nested view
+					// did not have any current
 					var mergedOpts = lang.mixin({}, opts); // handle reverse from mergedOpts or transitionDir 
 					mergedOpts = lang.mixin({}, mergedOpts, {
 						reverse: (mergedOpts.reverse || mergedOpts.transitionDir===-1)?true:false,
-						transition: mergedOpts.transition || this._getDefaultTransition(parent) || "none"
+						transition: this._getDefaultTransition(parent) || "none"
 					});
 					result = transit(current && current.domNode, next.domNode, mergedOpts);
 				}
@@ -293,10 +297,10 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on", "dojo/De
 					next.afterActivate();
 
 					if(subIds){
-						this._doTransition(subIds, opts, params, next, doResize);
+						this._doTransition(subIds, opts, params, next, doResize, true);
 					}
 				}));
-				return result; // dojo/DeferredList
+				return result; // dojo/promise/all
 			}else{
 				// next view == current view, refresh current view
 				// deactivate next view
@@ -315,12 +319,10 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on", "dojo/De
 				if(doResize){
 					this.app.emit("resize"); // after last layoutView call resize			
 				}
-				
-			}
-
-			// do sub transition like transition from "tabScene,tab1" to "tabScene,tab2"
-			if(subIds){
-				return this._doTransition(subIds, opts, params, next); //dojo.DeferredList
+				// do sub transition like transition from "tabScene,tab1" to "tabScene,tab2"
+				if(subIds){
+					return this._doTransition(subIds, opts, params, next); // dojo/promise/all
+				}
 			}
 		}
 	});
