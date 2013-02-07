@@ -71,7 +71,7 @@ function(declare, domAttr, domStyle, LayoutBase, BorderContainer, StackContainer
 			//		|	on.emit(this.app.evented, "layoutView", view);
 			//
 			// event: Object
-			// |		{"parent":parent, "view":view}
+			// |		{"parent":parent, "view":view, "removeView": false}
 			var parent = event.parent || this.app;
 			var view = event.view;
 
@@ -80,7 +80,17 @@ function(declare, domAttr, domStyle, LayoutBase, BorderContainer, StackContainer
 			}
 
 			var parentSelChild = this._getSelectedChild(parent, view.constraint);
-			if(view !== parentSelChild){
+			if(event.removeView){ // if the view is being removed flag it as removed and remove the child from the bc, and set selectedChildren entry to null
+				if(view == parentSelChild){
+					var bc = registry.byId(this.app.id+"-BC");
+					var sc = registry.byId(event.view.parent.id+"-"+event.view.constraint);
+					if(bc && sc){
+						sc.removedFromBc = true;
+						bc.removeChild(sc);
+					}
+					parent.selectedChildren[view.constraint] = null;
+				}
+			}else if(view !== parentSelChild){
 				var sc = registry.byId(event.view.parent.id+"-"+event.view.constraint);
 				var cp = registry.byId(event.view.id+"-cp-"+event.view.constraint);
 				if(sc && cp){
@@ -95,39 +105,6 @@ function(declare, domAttr, domStyle, LayoutBase, BorderContainer, StackContainer
 				}
 				parent.selectedChildren[view.constraint] = view;
 			}
-		},
-
-		removeView: function(event){
-			// summary:
-			//		Response to dojox/app "removeView" event.
-			//
-			// example:
-			//		Use dojo/on.emit to trigger "removeView" event, and this function will response the event. For example:
-			//		|	on.emit(this.app.evented, "removeView", view);
-			//
-			// event: Object
-			// |		{"parent":parent, "view":view}
-
-			var parent = event.parent || this.app;
-			var view = event.view;
-
-			if(!view){
-				return;
-			}
-
-			var parentSelChild = this._getSelectedChild(parent, view.constraint);
-			if(view == parentSelChild){
-				var bc = registry.byId(this.app.id+"-BC");
-				var sc = registry.byId(event.view.parent.id+"-"+event.view.constraint);
-				if(bc && sc){
-					sc.removedFromBc = true;
-					bc.removeChild(sc);
-				}
-				parent.selectedChildren[view.constraint] = null;
-			}
-		}
-		
-
+		}		
 	});
-
 });
