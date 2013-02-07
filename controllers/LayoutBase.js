@@ -35,9 +35,9 @@ function(lang, declare, has, win, config, topic, domStyle, domGeom, constraints,
 			this._doResize(this.app);
 			// this is needed to resize the children on an orientation change or a resize of the browser.
 			// it was being done in _doResize, but was not needed for every call to _doResize.
-			for(var item in this.app.selectedChildren){  // need this to handle all selectedChildren
-				if(this.app.selectedChildren[item]) {
-					this._doResize(this.app.selectedChildren[item]);
+			for(var hash in this.app.selectedChildren){  // need this to handle all selectedChildren
+				if(this.app.selectedChildren[hash]) {
+					this._doResize(this.app.selectedChildren[hash]);
 				}
 			}
 			
