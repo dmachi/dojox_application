@@ -75,7 +75,7 @@
 	
 	"has" : {
 		"phone" : {
-			"defaultView": "configuration,ScrollableListSelection",
+			"defaultView": "configuration",
 		},
 		"tablet" : {
 			"defaultView": "configuration+TestInfo"
@@ -122,28 +122,19 @@
 			"transition": "slide",
 			"constraint" : "left"
 		},
-	"has" : {
-		"phone" : {
-			"configuration": {
-				"defaultView": "ScrollableListSelection",
-				"transition": "slide",
-				"definition": "none",
-
-				"views": {
-					"ScrollableListSelection": {
-						"template": "scrollableTestApp/templates/configuration/ScrollableListSelection.html"
-					}
-				}
-			},
-		},
-		"tablet" : { 
-			"configuration": {
-				"constraint" : "left",
+		"configuration": {
 				"template": "scrollableTestApp/templates/configuration/ScrollableListSelection.html",
-				"definition": "scrollableTestApp/views/configuration/ScrollableListSelection.js"
-			}
-		},	
-	},
+				"definition": "scrollableTestApp/views/configuration/ScrollableListSelection.js",
+				"has" : {
+					"phone" : {
+						"constraint" : "center",
+					},
+					"tablet" : { 
+						"constraint" : "left",
+					},	
+				},
+		},
+		
 
 				
 		"TestInfo": {
