@@ -74,11 +74,19 @@
 	},
 	
 	"has" : {
+		"phone,ios,andriod" : {
+			"configTestPhone": "iosOrAndroidOrPhone",
+		},
+		"ios,andriod,tablet" : {
+			"configTestTablet": "iosOrAndroidOrTablet",
+		},
 		"phone" : {
 			"defaultView": "configuration",
+			"isTablet" : false
 		},
 		"tablet" : {
-			"defaultView": "configuration+TestInfo"
+			"defaultView": "configuration+TestInfo",
+			"isTablet" : true
 		},
 		"ie" : {
 			"controllers": [

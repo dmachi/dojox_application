@@ -13,23 +13,27 @@ var configUtils = {
 		// description:
 		//		configMerge will merge the source config into the target config with a deep copy.
 		//		anything starting with __ will be skipped and if the target is an array the source items will be pushed into the target.
-		//var target = lang.clone(source);
 		for(var name in source){
 			var	sval = source[name];
-			if(name == "has"){ // process this has check
-				console.log("in has check need to handle sval = ",sval);
-				for(var hasname in sval){
-					var hasval = sval[hasname];
-					if(!(hasname.charAt(0) == '_' && hasname.charAt(1) == '_')&& sval && typeof sval === 'object'){
-						// test to see if this hasname should be merged, test for true in hasList, "default" hasname or has(hasname)
-						if(hasList[hasname] || hasname == "default" || has(hasname)) { // if true this one should be merged
-							console.log("in has check need to merge hasname = "+hasname+" with hasval=",hasval);
-							var temptest = this.configMerge(source, hasval); // merge this has section into the source config 
-							console.log("in has check after merge of hasname ="+hasname+" got temptest = ",temptest);
-							delete source["has"];  // after merge remove this has section from the config
+			if(name == "has"){ // found a "has" section in source
+				for(var hasname in sval){ // get the hasnames from the has section
+					if(!(hasname.charAt(0) == '_' && hasname.charAt(1) == '_') && sval && typeof sval === 'object'){
+						// need to handle multiple has checks separated by a ",".
+						var parts = hasname.split(',');
+						if(parts.length > 0){
+							while(parts.length > 0){ 	
+								var haspart = parts.shift();
+								if(hasList[haspart] || has(haspart)) { // if true this one should be merged
+									var hasval = sval[hasname];
+									this.configMerge(source, hasval); // merge this has section into the source config
+									break;  // found a match for this multiple has test, so go to the next one
+								}
+							}
 						}
 					}
 				}
+				delete source["has"];  // after merge remove this has section from the config
+				//console.log("in has check after all merge and remove of has for hasname ="+hasname+" got source = ",source);
 			}else{
 				if(!(name.charAt(0) == '_' && name.charAt(1) == '_')&& sval && typeof sval === 'object'){
 						this.configProcessHas(sval, hasList);
