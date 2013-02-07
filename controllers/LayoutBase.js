@@ -36,7 +36,9 @@ function(lang, declare, has, win, config, topic, domStyle, domGeom, Controller){
 			// this is needed to resize the children on an orientation change or a resize of the browser.
 			// it was being done in _doResize, but was not needed for every call to _doResize.
 			for(var item in this.app.selectedChildren){  // need this to handle all selectedChildren
-				this._doResize(this.app.selectedChildren[item]);
+				if(this.app.selectedChildren[item]) {
+					this._doResize(this.app.selectedChildren[item]);
+				}
 			}
 			
 		},
@@ -153,7 +155,7 @@ function(lang, declare, has, win, config, topic, domStyle, domGeom, Controller){
 			//		|	on.emit(this.app.evented, "layoutView", view);
 			//
 			// event: Object
-			// |		{"parent":parent, "view":view}
+			// |		{"parent":parent, "view":view, "removeView": boolean}
 
 			var parent = event.parent || this.app;
 			var view = event.view;
@@ -164,7 +166,12 @@ function(lang, declare, has, win, config, topic, domStyle, domGeom, Controller){
 			
 			// if the parent has a child in the view constraint it has to be hidden, and this view displayed.
 			var parentSelChild = this._getSelectedChild(parent, view.constraint); 
-			if(view !== parentSelChild){
+			if(event.removeView){  // if this view is being removed set display to none and the selectedChildren entry to null
+				if(view == parentSelChild){
+					domStyle.set(view.domNode, "display", "none");
+					parent.selectedChildren[view.constraint] = null;  // remove from selectedChildren
+				}
+			}else if(view !== parentSelChild){
 				if(parentSelChild){
 				//	domStyle.set(parentSelChild.domNode, "zIndex", 25);
 					domStyle.set(parentSelChild.domNode, "display", "none");
@@ -178,6 +185,6 @@ function(lang, declare, has, win, config, topic, domStyle, domGeom, Controller){
 			// call _doResize for parent and view here, doResize will no longer call it for all children.
 			this._doResize(parent);  
 			this._doResize(view);
-		}
+		}		
 	});
 });
