@@ -19,7 +19,6 @@ function(lang, declare, has, win, config, topic, domStyle, domGeom, Controller){
 			this.events = {
 				"initLayout": this.initLayout,
 				"layoutView": this.layoutView,
-				"removeView": this.removeView,
 				"resize": this.onResize
 			};
 			// if we are using dojo mobile & we are hiding address bar we need to be bit smarter and listen to
@@ -156,7 +155,7 @@ function(lang, declare, has, win, config, topic, domStyle, domGeom, Controller){
 			//		|	on.emit(this.app.evented, "layoutView", view);
 			//
 			// event: Object
-			// |		{"parent":parent, "view":view}
+			// |		{"parent":parent, "view":view, "removeView": boolean}
 
 			var parent = event.parent || this.app;
 			var view = event.view;
@@ -167,7 +166,12 @@ function(lang, declare, has, win, config, topic, domStyle, domGeom, Controller){
 			
 			// if the parent has a child in the view constraint it has to be hidden, and this view displayed.
 			var parentSelChild = this._getSelectedChild(parent, view.constraint); 
-			if(view !== parentSelChild){
+			if(event.removeView){  // if this view is being removed set display to none and the selectedChildren entry to null
+				if(view == parentSelChild){
+					domStyle.set(view.domNode, "display", "none");
+					parent.selectedChildren[view.constraint] = null;  // remove from selectedChildren
+				}
+			}else if(view !== parentSelChild){
 				if(parentSelChild){
 				//	domStyle.set(parentSelChild.domNode, "zIndex", 25);
 					domStyle.set(parentSelChild.domNode, "display", "none");
@@ -181,37 +185,6 @@ function(lang, declare, has, win, config, topic, domStyle, domGeom, Controller){
 			// call _doResize for parent and view here, doResize will no longer call it for all children.
 			this._doResize(parent);  
 			this._doResize(view);
-		},
-
-		removeView: function(event){
-			// summary:
-			//		Response to dojox/app "removeView" event.
-			//
-			// example:
-			//		Use dojo/on.emit to trigger "removeView" event, and this function will response the event. For example:
-			//		|	on.emit(this.app.evented, "removeView", view);
-			//
-			// event: Object
-			// |		{"parent":parent, "view":view}
-
-			var parent = event.parent || this.app;
-			var view = event.view;
-
-			if(!view){
-				return;
-			}
-			
-			// if the parent has a child in the view constraint it has to be hidden, and this view displayed.
-			var parentSelChild = this._getSelectedChild(parent, view.constraint); 
-			if(view == parentSelChild){
-				domStyle.set(view.domNode, "display", "none");
-				parent.selectedChildren[view.constraint] = null;  // remove from selectedChildren
-			}
-			// do selected view layout
-			// call _doResize for parent and view here, doResize will no longer call it for all children.
-			this._doResize(parent);  
-			this._doResize(view);
-		}
-		
+		}		
 	});
 });

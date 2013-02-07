@@ -60,7 +60,8 @@ function(lang, declare, has, on, Deferred, when, domStyle, transit, Controller){
 						var remViewId = removeParts.shift();
 						var newEvent = lang.clone(event);
 						newEvent.viewId = remViewId;
-						this._doRemoveTransition(newEvent.viewId, newEvent.opts, newEvent.opts.params, this.app, newEvent._doResize);				
+				//		this._doRemoveTransition(newEvent.viewId, newEvent.opts, newEvent.opts.params, this.app, newEvent._doResize);				
+						this._doTransition(newEvent.viewId, newEvent.opts, newEvent.opts.params, this.app, true, newEvent._doResize);				
 					}
 				}
 				if(viewId.length > 0){ // check for a transition with only -viewId.
@@ -151,7 +152,7 @@ function(lang, declare, has, on, Deferred, when, domStyle, transit, Controller){
 				"viewId": transitionEvt.viewId,
 				"params": params,
 				"callback": lang.hitch(this, function(){
-					var transitionDef = this._doTransition(transitionEvt.viewId, transitionEvt.opts, params, this.app, transitionEvt._doResize);
+					var transitionDef = this._doTransition(transitionEvt.viewId, transitionEvt.opts, params, this.app, false, transitionEvt._doResize);
 					when(transitionDef, lang.hitch(this, function(){
 						this.proceeding = false;
 						var nextEvt = this.waitingQueue.shift();
@@ -221,7 +222,7 @@ function(lang, declare, has, on, Deferred, when, domStyle, transit, Controller){
 			}
 		},
 
-		_doTransition: function(transitionTo, opts, params, parent, doResize){
+		_doTransition: function(transitionTo, opts, params, parent, removeView, doResize){
 			// summary:
 			//		Transitions from the currently visible scene to the defined scene.
 			//		It should determine what would be the best transition unless
@@ -241,6 +242,8 @@ function(lang, declare, has, on, Deferred, when, domStyle, transit, Controller){
 			//		params
 			// parent: Object
 			//		view's parent
+			// removeView: Boolean
+			//		remove the view instead of transition to it
 			// doResize: Boolean
 			//		emit a resize event
 			//
@@ -248,7 +251,7 @@ function(lang, declare, has, on, Deferred, when, domStyle, transit, Controller){
 			//		transit dojo/DeferredList object.
 
 			//TODO: Can this be called with a viewId which includes multiple views with a "+"?  Need to handle that!
-			this.app.log("in app/controllers/Transition._doTransition transitionTo=[",transitionTo,"], parent.name=[",parent.name,"], opts=",opts);
+			this.app.log("in app/controllers/Transition._doTransition transitionTo=[",transitionTo,"], removeView = [",removeView,"] parent.name=[",parent.name,"], opts=",opts);
 
 			if(!parent){
 				throw Error("view parent not found in transition.");
@@ -267,9 +270,12 @@ function(lang, declare, has, on, Deferred, when, domStyle, transit, Controller){
 			// next is loaded and ready for transition
 			next = parent.children[parent.id + '_' + toId];
 			if(!next){
+				if(removeView){
+					this.app.log("> in Transition._doTransition called with removeView true, but that view is not available to remove");
+					return;  // trying to remove a view which is not showing
+				}				
 				throw Error("child view must be loaded before transition.");
 			}
-
 
 			var current = this._getSelectedChild(parent, next.constraint);
 			
@@ -283,13 +289,19 @@ function(lang, declare, has, on, Deferred, when, domStyle, transit, Controller){
 			}
 
 			if(!current){
+				if(removeView){
+					// if current view is not set for a removeView we have nothing to do, so return
+					this.app.log("> in Transition._doTransition called with removeView true, but there is no current view set, nothing to remove");
+					return;
+				}
+				
 				// current view is null, set current view equals next view.
 				this.app.log("> in Transition._doTransition calling next.beforeActivate next name=[",next.name,"], parent.name=[",next.parent.name,"],  !current path,");
 				next.beforeActivate();
 				this.app.log("> in Transition._doTransition calling next.afterActivate next name=[",next.name,"], parent.name=[",next.parent.name,"],  !current path");
 				next.afterActivate();
 				this.app.log("  > in Transition._doTransition calling app.triggger layoutView view next name=[",next.name,"], parent.name=[",next.parent.name,"], !current path");
-				this.app.emit("layoutView", {"parent":parent, "view":next});
+				this.app.emit("layoutView", {"parent":parent, "view":next, "removeView":removeView});
 				if(doResize){
 					this.app.log("  > in Transition._doTransition calling app.emit resize");
 					this.app.emit("resize"); // after last layoutView call resize.
@@ -297,7 +309,7 @@ function(lang, declare, has, on, Deferred, when, domStyle, transit, Controller){
 
 				// do sub transition like transition from "tabScene,tab1" to "tabScene,tab2"
 				if(subIds){
-					return this._doTransition(subIds, opts, params, next); //dojo.DeferredList
+					return this._doTransition(subIds, opts, params, next, removeView); //dojo.DeferredList
 				}
 				
 				return;
@@ -319,6 +331,11 @@ function(lang, declare, has, on, Deferred, when, domStyle, transit, Controller){
 
 				// deactivate sub child of current view, then deactivate current view
 				// TODO: ELC NEED A LOOP HERE TO deactivate all children
+				if(removeView){ // if removeView and next !== current then there is nothing to remove.
+					this.app.log("> in Transition._doTransition called with removeView true, but next !== current, nothing to remove");
+					return;
+				}
+				
 				var subChild = this._getSelectedChild(current, "center");
 				while(subChild){
 				this.app.log("< in Transition._doTransition calling subChild.beforeDeactivate subChild name=[",subChild.name,"], parent.name=[",subChild.parent.name,"], next!==current path");
@@ -330,7 +347,7 @@ function(lang, declare, has, on, Deferred, when, domStyle, transit, Controller){
 				this.app.log("> in Transition._doTransition calling next.beforeActivate next name=[",next.name,"], parent.name=[",next.parent.name,"], next!==current path");
 				next.beforeActivate();
 				this.app.log("> in Transition._doTransition calling app.triggger layoutView view next name=[",next.name,"], parent.name=[",next.parent.name,"], next!==current path");
-				this.app.emit("layoutView", {"parent":parent, "view":next});
+				this.app.emit("layoutView", {"parent":parent, "view":next, "removeView":removeView});
 				if(doResize){  
 					this.app.emit("resize"); // after last layoutView call resize			
 				}
@@ -361,7 +378,7 @@ function(lang, declare, has, on, Deferred, when, domStyle, transit, Controller){
 					next.afterActivate();
 
 					if(subIds){
-						this._doTransition(subIds, opts, params, next, doResize);
+						this._doTransition(subIds, opts, params, next, removeView, doResize);
 					}
 				}));
 				return result; // dojo/DeferredList
@@ -372,14 +389,16 @@ function(lang, declare, has, on, Deferred, when, domStyle, transit, Controller){
 				next.beforeDeactivate();
 				this.app.log("  < in Transition._doTransition calling next.afterDeactivate refresh current view next name=[",next.name,"], parent.name=[",next.parent.name,"], next==current path");
 				next.afterDeactivate();
-				// activate next view
-				this.app.log("> in Transition._doTransition calling next.beforeActivate next name=[",next.name,"], parent.name=[",next.parent.name,"], next==current path");
-				next.beforeActivate();
-				this.app.log("  > in Transition._doTransition calling next.afterActivate next name=[",next.name,"], parent.name=[",next.parent.name,"], next==current path");
-				next.afterActivate();
-				// layout current view
-				this.app.log("> in Transition._doTransition calling app.triggger layoutView view next name=[",next.name,"], parent.name=[",next.parent.name,"], next==current path");
-				this.app.emit("layoutView", {"parent":parent, "view":next});
+				if(!removeView){
+					// activate next view
+					this.app.log("> in Transition._doTransition calling next.beforeActivate next name=[",next.name,"], parent.name=[",next.parent.name,"], next==current path");
+					next.beforeActivate();
+					this.app.log("  > in Transition._doTransition calling next.afterActivate next name=[",next.name,"], parent.name=[",next.parent.name,"], next==current path");
+					next.afterActivate();
+				}
+				// layout current view, or remove it
+				this.app.log("> in Transition._doTransition calling app.triggger layoutView view next name=[",next.name,"], removeView = [",removeView,"], parent.name=[",next.parent.name,"], next==current path");
+				this.app.emit("layoutView", {"parent":parent, "view":next, "removeView":removeView});
 				if(doResize){
 					this.app.emit("resize"); // after last layoutView call resize			
 				}
@@ -388,91 +407,7 @@ function(lang, declare, has, on, Deferred, when, domStyle, transit, Controller){
 
 			// do sub transition like transition from "tabScene,tab1" to "tabScene,tab2"
 			if(subIds){
-				return this._doTransition(subIds, opts, params, next); //dojo.DeferredList
-			}
-		},
-
-		_doRemoveTransition: function(removeId, opts, params, parent, doResize){
-			// summary:
-			//		Transitions from the currently visible view to nothing, called to remove a view.
-			//
-			// removeId: Object
-			//		transition to view id. It looks like #tabScene,tab1
-			// opts: Object
-			//		transition options
-			// params: Object
-			//		params
-			// parent: Object
-			//		view's parent
-			// doResize: Boolean
-			//		emit a resize event
-			//
-			// returns:
-			//		transit dojo/DeferredList object.
-
-			this.app.log("in app/controllers/Transition._doRemoveTransition removeId=[",removeId,"], parent.name=[",parent.name,"], opts=",opts);
-
-			if(!parent){
-				throw Error("view parent not found in transition.");
-			}
-			var parts, removeId, subIds, remove, params; 
-			if(removeId){
-				parts = removeId.split(",");
-			}else{
-				// If parent.defaultView is like "main,main", we also need to split it and set the value to removeId and subIds.
-				// Or cannot get the remove view by "parent.children[parent.id + '_' + removeId]"
-				parts = parent.defaultView.split(",");
-			}
-			removeId = parts.shift();
-			subIds = parts.join(',');
-
-			// remove is loaded and ready to be removed
-			remove = parent.children[parent.id + '_' + removeId];
-			if(!remove){
-				this.app.log("> in Transition._doRemoveTransition called but that view is not available to remove");
-				return;  // trying to remove a view which is not showing
-			}
-
-			var current = this._getSelectedChild(parent, remove.constraint);
-			
-			// set params on remove view.
-			remove.params = params || remove.params;
-
-			// if no subIds and remove has default view, 
-			// set the subIds to the default view and transition to default view.
-			if(!subIds && remove.defaultView){
-				subIds = remove.defaultView;
-			}
-
-			if(!current){
-				// current view is null, set current view equals remove view.
-				this.app.log("> in Transition._doRemoveTransition called but there is no current view set, nothing to remove");
-				return;
-			}
-			// remove is not a Deferred object, so Deferred.when is no needed.
-			if(remove !== current){
-				this.app.log("> in Transition._doRemoveTransition called _doRemoveTransition but remove !== current, nothing to remove.");
-				return;
-			}else{
-				// remove view == current view, refresh current view
-				// deactivate remove view
-				this.app.log("< in Transition._doRemoveTransition calling remove.beforeDeactivate refresh current view remove name=[",remove.name,"], parent.name=[",remove.parent.name,"], remove==current path");
-				remove.beforeDeactivate();
-				// remove view
-				this.app.log("> in Transition._doRemoveTransition calling remove.beforeActivate remove name=[",remove.name,"], parent.name=[",remove.parent.name,"], remove==current path");
-				this.app.emit("removeView", {"parent":parent, "view":remove});
-
-				this.app.log("  < in Transition._doRemoveTransition calling remove.afterDeactivate refresh current view remove name=[",remove.name,"], parent.name=[",remove.parent.name,"], remove==current path");
-				remove.afterDeactivate();
-
-				if(doResize){
-					this.app.emit("resize"); // after last layoutView call resize			
-				}				
-			}
-
-			// do sub transition like transition from "tabScene,tab1" to "tabScene,tab2"
-			if(subIds){
-				return this._doRemoveTransition(subIds, opts, params, remove); //dojo.DeferredList
+				return this._doTransition(subIds, opts, params, next, removeView); //dojo.DeferredList
 			}
 		}
 		
