@@ -1,6 +1,9 @@
-define(["dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on", "dojo/Deferred",
-	"dojo/when", "dojox/css3/transit", "../Controller", "../utils/constraints"],
-	function(lang, declare, has, on, Deferred, when, transit, Controller, constraints){
+define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on", "dojo/Deferred", "dojo/when",
+	"../Controller", "../utils/constraints"],
+	function(require, lang, declare, has, on, Deferred, when, Controller, constraints){
+
+	var transit;
+
 	// module:
 	//		dojox/app/controllers/transition
 	//		Bind "transition" event on dojox/app application instance.
@@ -23,6 +26,9 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on", "dojo/De
 				"transition": this.transition,
 				"domNode": this.onDomNodeChange
 			};
+			require([this.app.transit || "dojox/css3/transit"], function(t){
+				transit = t;
+			});
 			if(this.app.domNode){
 				this.onDomNodeChange({oldNode: null, newNode: this.app.domNode});
 			}
@@ -269,7 +275,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on", "dojo/De
 				}
 				
 				var result = true;
-				if((!has("ie") || has("ie") >= 10) && (!nested || current != null)){
+				if(transit && (!has("ie") || has("ie") >= 10) && (!nested || current != null)){
 					// if we are on IE CSS3 transitions are not supported (yet). So just skip the transition itself.
 					// we also skip in we are transitioning to a nested view from a parent view and that nested view
 					// did not have any current
