@@ -14,6 +14,8 @@ function(dom, domStyle, connect, lang, registry, at, TransitionEvent, Repeat, ge
 	var wrapperIdC = 'sc1WrapperC';
 	var wrapperIdD = 'sc1WrapperD';
 
+	var app = null;
+	
 	// delete an item
 	deleteResult = function(index){
 		var nextIndex = repeatmodel.get("cursorIndex");
@@ -26,6 +28,12 @@ function(dom, domStyle, connect, lang, registry, at, TransitionEvent, Repeat, ge
 	// show an item detail
 	setDetailsContext = function(index){
 		repeatmodel.set("cursorId", index);
+	};
+	
+	removeScrollableItem = function(index){
+				var repeatmodel = app.loadedModels.repeatmodels;
+				repeatmodel.model.splice(index, 1);
+				return false; 	 		
 	};
 
 	// insert an item
@@ -62,7 +70,9 @@ function(dom, domStyle, connect, lang, registry, at, TransitionEvent, Repeat, ge
 
 	return {
 		// repeate view init
-		init: function(){			
+		init: function(){
+			app = this.app;
+
 			repeatmodel = this.loadedModels.repeatmodels;
 			var connectResult;
 

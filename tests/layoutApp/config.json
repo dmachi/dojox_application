@@ -72,11 +72,19 @@
 	//the name of the view to load when the app is initialized.
 	"defaultView": "simple",
 
-	// these are the possilbe defaultTransitions
+	// these are the possible defaultTransitions, 
+	// the defaultTransition is only used if transition is not set in the config and it is not set or defaulted on the transitionEvent
 	//"defaultTransition": "slide",
 	//"defaultTransition": "none",
 	//"defaultTransition": "fade",
-	"defaultTransition": "flip",     
+	//"defaultTransition": "flip",     // Note: flip does not work with a BorderLayout Controller
+
+	// these are the possible transitions, 
+	// if a transition is set on a view or parent it will override the transition set on the transitionEvent or the defaultTransition in the config.
+	//"transition": "slide",
+	//"transition": "none",
+	//"transition": "fade",
+	"transition": "flip",
 
 	"views": {
 		"simple":{
@@ -95,17 +103,19 @@
 					}           
                 }
             },
+			"transition": "fade",
 			"defaultView": "repeatList",
-			"defaultTransition": "slide",
 			"definition": "none",
 
 			"views": {
 				"repeatList":{
+					"transition": "slide",
 					"definition" : "layoutApp/views/repeat.js",
 					"template": "layoutApp/templates/repeat.html",
 					"dependencies":["dojox/mobile/TextBox"]
 				},
 				"repeatDetails":{
+					"transition": "flip",
 					"definition" : "layoutApp/views/repeatDetails.js",
 					"template": "layoutApp/templates/repeatDetails.html",
 					"dependencies":["dojox/mobile/TextBox"]

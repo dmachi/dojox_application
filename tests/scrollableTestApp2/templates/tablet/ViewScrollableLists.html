@@ -11,7 +11,7 @@
 				transitionOptions: {title:'List',target: 'TestInfo', url: '#TestInfo'}">
 				<div class="textBox">
 					<div class="subject">Test Instructions</div>
-						Test instructions, notes and known problems				
+						Test instructions, notes and known problems (transition none)				
 				</div>				
 			</li>
 			<li data-dojo-type="dojox/mobile/ListItem"
@@ -19,7 +19,7 @@
 				transitionOptions: {title:'List',target: 'Scrollable1', url: '#Scrollable1'}">
 				<div class="textBox">
 					<div class="subject">Scrollable list One</div>
-					Uses app/widgets/Container with a fixed Header and a fixed Footer both with data-app-constraint					
+					Uses app/widgets/Container with a fixed Header and a fixed Footer both with data-app-constraint	 (transition slide)				
 				</div>				
 			</li>
 				<li data-dojo-type="dojox/mobile/ListItem"
@@ -27,7 +27,7 @@
 					transitionOptions: {title:'List',target: 'Scrollable1P', url: '#Scrollable1P'}">
 					<div class="textBox">
 						<div class="subject">Scrollable list OneP</div>
-						Programmatic creation of WidgetList uses app/widgets/Container with a fixed Header and a fixed Footer both with data-app-constraint					
+						Programmatic creation of WidgetList uses app/widgets/Container with a fixed Header and a fixed Footer both with data-app-constraint  (transition flip)					
 					</div>				
 				</li>
 			<li data-dojo-type="dojox/mobile/ListItem"
@@ -35,7 +35,7 @@
 				transitionOptions: {title:'List',target: 'Scrollable2', url: '#Scrollable2'}">
 				<div class="textBox">
 					<div class="subject">Scrollable list Two</div>
-					Uses app/widgets/Container with a fixed Header and a fixed Footer both with data-app-constraint					
+					Uses app/widgets/Container with a fixed Header and a fixed Footer both with data-app-constraint  (transition fade)
 				</div>				
 			</li>
 			
@@ -48,27 +48,27 @@
 				</div>				
 			</li>
 			<li data-dojo-type="dojox/mobile/ListItem"
-				data-dojo-props="clickable: true, noArrow: true, 
+				data-dojo-props="clickable: true, noArrow: true, transition:'fade',
 				transitionOptions: {title:'List',target: 'Scrollable4', url: '#Scrollable4'}">
 				<div class="textBox">
 					<div class="subject">Scrollable list Four</div>
-					Uses dojox.mobile.ScrollableView (removed height="auto") with a fixed Header and a fixed Footer					
+					Uses dojox.mobile.ScrollableView (removed height="auto") with a fixed Header and a fixed Footer (transition event fade)					
 				</div>				
 			</li>
 			<li data-dojo-type="dojox/mobile/ListItem"
-				data-dojo-props="clickable: true, noArrow: true, 
+				data-dojo-props="clickable: true, noArrow: true, transition:'flip', 
 				transitionOptions: {title:'List',target: 'Scrollable5', url: '#Scrollable5'}">
 				<div class="textBox">
 					<div class="subject">Scrollable list Five</div>
-					Uses dojox.mobile.ScrollableView (removed height="auto") with a fixed Header and No Footer				
+					Uses dojox.mobile.ScrollableView (removed height="auto") with a fixed Header and No Footer (transition event flip)				
 				</div>				
 			</li>
 			<li data-dojo-type="dojox/mobile/ListItem"
 				data-dojo-props="clickable: true, noArrow: true, 
-				transitionOptions: {title:'List',target: 'ListItem-domButtons', url: '#ListItem-domButtons'}">
+				transitionOptions: {title:'List',target: 'ListItemDomButtons', url: '#ListItemDomButtons'}">
 				<div class="textBox">
 					<div class="subject">Dojox Mobile Test</div>
-					A copy of the dojox/mobile test test_ListItem-domButtons, (removed height="auto"), had used it to avoid problem with initially showing this page.					
+					A copy of the dojox/mobile test test_ListItemDomButtons, (removed height="auto"), had used it to avoid problem with initially showing this page.					
 				</div>				
 			</li>
 		</ul>

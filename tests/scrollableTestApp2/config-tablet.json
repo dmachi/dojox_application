@@ -86,17 +86,26 @@
 	"defaultView": "configuration+TestInfo",
 	//"defaultView": "configuration+Scrollable5",
 
-	// these are the possilbe defaultTransitions
+	// these are the possible defaultTransitions, 
+	// the defaultTransition is only used if transition is not set in the config and it is not set or defaulted on the transitionEvent
 	//"defaultTransition": "slide",
 	//"defaultTransition": "none",
 	//"defaultTransition": "fade",
-	"defaultTransition": "flip",     
+	"defaultTransition": "flip",     // Note: flip does not work with a BorderLayout Controller
+
+	// these are the possible transitions, 
+	// if a transition is set on a view or parent it will override the transition set on the transitionEvent or the defaultTransition in the config.
+	//"transition": "slide",
+	//"transition": "none",
+	//"transition": "fade",
+	//"transition": "flip",
 
 	//views are groups of views and models loaded at once
 	"views": {
 		"navigation": {
 			"template": "scrollableTestApp/templates/tablet/ViewScrollableLists.html",
 			"definition" : "scrollableTestApp/views/tablet/ViewScrollableLists.js",
+			"transition": "slide",
 			"constraint" : "left"
 		},
 		"configuration": {
@@ -119,17 +128,21 @@
 		
 		
 		"TestInfo": {
+			"transition": "none",
 			"template": "scrollableTestApp/templates/TestInfo.html"
 		},
 		"Scrollable1": {
+			"transition": "slide",
 			"template": "scrollableTestApp/templates/Scrollable1.html"
 		},
 		"Scrollable1P": {
 			"template": "scrollableTestApp/templates/Scrollable1P.html",
+			"transition": "flip",
 			"constraint" : "center"
 		},
 		"Scrollable2": {
 			"template": "scrollableTestApp/templates/Scrollable2.html",
+			"transition": "fade",
 			"constraint" : "center"
 		},
 		"Scrollable3": {
@@ -143,18 +156,20 @@
 		"Scrollable5": {
 			"template": "scrollableTestApp/templates/Scrollable5.html"
 		},
-		"ListItem-domButtons": {
+		"ListItemDomButtons": {
+			"definition": "scrollableTestApp/views/ListItem-domButtons",
 			"template": "scrollableTestApp/templates/ListItem-domButtons.html",
 			"constraint" : "center"
 		},
-		"ListItem-domButtons2": {
+		"ListItemDomButtons2": {
+			"definition": "scrollableTestApp/views/ListItem-domButtons2",
 			"template": "scrollableTestApp/templates/ListItem-domButtons2.html",
 			"constraint" : "center"
 		},
 		
 		"repeatDetails": {
 			"template": "scrollableTestApp/templates/repeatDetails.html",
-			"defaultTransition": "slide",
+			"transition": "slide",
 			"constraint" : "center"
 		}
 	}
