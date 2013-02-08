@@ -100,28 +100,6 @@ function(declare, array, query, domAttr, registry, LayoutBase, layout, constrain
 			if(view._contentBox){
 				layout.layoutChildren(view.domNode, view._contentBox, children);
 			}
-		},
-
-		_doResize: function(view, changeSize, resultSize){
-			// summary:
-			//		resize view.
-			//
-			// view: Object
-			//		view instance needs to do layout.
-			this.inherited(arguments);
-		},
-
-		layoutView: function(event){
-			// summary:
-			//		Response to dojox/app "layoutView" event.
-			//
-			// example:
-			//		Use dojo/on.emit to trigger "layoutView" event, and this function will response the event. For example:
-			//		|	on.emit(this.app.evented, "layoutView", view);
-			//
-			// event: Object
-			// |		{"parent":parent, "view":view}
-			this.inherited(arguments);
 		}
 	});
 });
