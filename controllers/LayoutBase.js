@@ -76,7 +76,7 @@ function(lang, declare, has, win, config, topic, domStyle, constraints, Controll
 			//		resize view.
 			//
 			// view: Object
-			//		view instance needs to do layout
+			//		view instance needs to do resize.
 			this.app.log("in LayoutBase _doResize called for view.id="+view.id+" view=",view);
 			this._doLayout(view);
 		},
