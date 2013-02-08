@@ -62,49 +62,28 @@ function(declare, domAttr, LayoutBase, BorderContainer, StackContainer, ContentP
 			}
 		},
 
-		layoutView: function(event){
-			// summary:
-			//		Response to dojox/app "layoutView" event.
-			//
-			// example:
-			//		Use dojo/on.emit to trigger "layoutView" event, and this function will response the event. For example:
-			//		|	on.emit(this.app.evented, "layoutView", view);
-			//
-			// event: Object
-			// |		{"parent":parent, "view":view, "removeView": false}
-			var parent = event.parent || this.app;
-			var view = event.view;
-
-			if(!view){
-				return;
+		hideView: function(view){
+			var bc = registry.byId(this.app.id+"-BC");
+			var sc = registry.byId(view.parent.id+"-"+view.constraint);
+			if(bc && sc){
+				sc.removedFromBc = true;
+				bc.removeChild(sc);
 			}
+		},
 
-			var parentSelChild = constraints.getSelectedChild(parent, view.constraint);
-			if(event.removeView){ // if the view is being removed flag it as removed and remove the child from the bc, and set selectedChildren entry to null
-				if(view == parentSelChild){
-					var bc = registry.byId(this.app.id+"-BC");
-					var sc = registry.byId(view.parent.id+"-"+view.constraint);
-					if(bc && sc){
-						sc.removedFromBc = true;
-						bc.removeChild(sc);
-					}
-					constraints.setSelectedChild(parent, view.constraint, null);
+		showView: function(view){
+			var sc = registry.byId(view.parent.id+"-"+view.constraint);
+			var cp = registry.byId(view.id+"-cp-"+view.constraint);
+			if(sc && cp){
+				if(sc.removedFromBc){
+					sc.removedFromBc = false;
+					registry.byId(this.app.id+"-BC").addChild(sc);
+					domStyle.set(view.domNode, "display", "");
 				}
-			}else if(view !== parentSelChild){
-				var sc = registry.byId(view.parent.id+"-"+view.constraint);
-				var cp = registry.byId(view.id+"-cp-"+view.constraint);
-				if(sc && cp){
-					if(sc.removedFromBc){
-						sc.removedFromBc = false;
-						registry.byId(this.app.id+"-BC").addChild(sc);
-						domStyle.set(view.domNode, "display", "");
-					}
-					domStyle.set(cp.domNode, "display", "");
-					sc.selectChild(cp);
-					sc.resize();
-				}
-				constraints.setSelectedChild(parent, view.constraint, view);
+				domStyle.set(cp.domNode, "display", "");
+				sc.selectChild(cp);
+				sc.resize();
 			}
-		}		
+		}
 	});
 });
