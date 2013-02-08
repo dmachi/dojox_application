@@ -320,10 +320,7 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 					next.beforeActivate();
 				}
 				this.app.log("> in Transition._doTransition calling app.triggger layoutView view next");
-				if(!removeView){
-					// if we are removing the view we must delay the layout to _after_ the animation
-					this.app.emit("layoutView", {"parent": parent, "view": next });
-				}
+				this.app.emit("layoutView", {"parent": parent, "view": next || (removeView && current), "removeView": removeView});
 				if(doResize){  
 					this.app.emit("resize"); // after last layoutView call resize			
 				}
@@ -342,10 +339,6 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 					result = transit(current && current.domNode, next && next.domNode, mergedOpts);
 				}
 				when(result, lang.hitch(this, function(){
-					if(removeView){
-						this.app.emit("layoutView", {"parent": parent, "view": current, "removeView": true});
-					}
-
 					// deactivate sub child of current view, then deactivate current view
 					subChild = constraints.getSelectedChild(current, "center");
 					
@@ -382,7 +375,7 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 				next.afterActivate();
 				// layout current view, or remove it
 				this.app.log("> in Transition._doTransition calling app.triggger layoutView view next name=[",next.name,"], removeView = [",removeView,"], parent.name=[",next.parent.name,"], next==current path");
-				this.app.emit("layoutView", {"parent": parent, "view": next, "removeView": removeView});
+				this.app.emit("layoutView", {"parent":parent, "view":next, "removeView":removeView});
 				if(doResize){
 					this.app.emit("resize"); // after last layoutView call resize			
 				}
