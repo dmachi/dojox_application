@@ -283,33 +283,6 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 				subIds = next.defaultView;
 			}
 
-			if(!current){
-				if(removeView){
-					// if current view is not set for a removeView we have nothing to do, so return
-					this.app.log("> in Transition._doTransition called with removeView true, but there is no current view set, nothing to remove");
-					return;
-				}
-				
-				// current view is null, set current view equals next view.
-				this.app.log("> in Transition._doTransition calling next.beforeActivate next name=[",next.name,"], parent.name=[",next.parent.name,"],  !current path,");
-				next.beforeActivate();
-				this.app.log("> in Transition._doTransition calling next.afterActivate next name=[",next.name,"], parent.name=[",next.parent.name,"],  !current path");
-				next.afterActivate();
-				this.app.log("  > in Transition._doTransition calling app.triggger layoutView view next name=[",next.name,"], parent.name=[",next.parent.name,"], !current path");
-				this.app.emit("layoutView", {"parent":parent, "view":next, "removeView":removeView});
-				if(doResize){
-					this.app.log("  > in Transition._doTransition calling app.emit resize");
-					this.app.emit("resize"); // after last layoutView call resize.
-				}
-
-				// do sub transition like transition from "tabScene,tab1" to "tabScene,tab2"
-				if(subIds){
-					return this._doTransition(subIds, opts, params, next, removeView, false, true); //dojo.DeferredList
-				}
-				
-				return;
-			}
-
 			// next is not a Deferred object, so Deferred.when is no needed.
 			if(next !== current){
 				//When clicking fast, history module will cache the transition request que
