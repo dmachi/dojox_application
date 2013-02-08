@@ -34,17 +34,9 @@ function(declare, lang, array, win, query, domGeom, domAttr, domStyle, registry,
 
 			event.view.parent.domNode.appendChild(event.view.domNode);
 
-			domAttr.set(event.view.domNode, "id", event.view.id);
 			domAttr.set(event.view.domNode, "data-app-constraint", event.view.constraint);
 
-			// set widget attributes
-			// TODO here we are overriding the entire style of the node, instead of just width & height
-			// maybe we could be a bit smarter
-			//domAttr.set(event.view.domNode, "style", "width:100%; height:100%"); // I dont think this is needed
-			
-			if(event.callback){
-				event.callback();
-			}
+			this.inherited(arguments);
 		},
 
 		_doResize: function(view){

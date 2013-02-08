@@ -53,10 +53,11 @@ function(lang, declare, has, win, config, topic, domStyle, constraints, Controll
 			//
 			// event: Object
 			// |		{"view": view, "callback": function(){}};
-			this.app.log("in app/controllers/LayoutBase.initLayout event=",event);
-			this.app.log("in app/controllers/LayoutBase.initLayout event.view.parent.name=[",event.view.parent.name,"]");
+			domAttr.set(event.view.domNode, "id", event.view.id);  // Set the id for the domNode
+			if(event.callback){   // if the event has a callback, call it.
+				event.callback();
+			}
 		},
-
 
 		_doLayout: function(view){
 			// summary:

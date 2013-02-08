@@ -25,7 +25,7 @@ function(declare, domAttr, LayoutBase, BorderContainer, StackContainer, ContentP
 
 			if(!this.borderLayoutCreated){ // If the BorderContainer has not been created yet, create it.
 				this.borderLayoutCreated = true;
-				bc = new BorderContainer({id:this.app.id+"-BC", style:'height:100%;width:100%;border:1px solid black'});
+				bc = new BorderContainer({id:this.app.id+"-BC", style: "height:100%;width:100%;border:1px solid black"});
 				event.view.parent.domNode.appendChild(bc.domNode);  // put the border container into the parent (app)
 
 				bc.startup();  // startup the BorderContainer
@@ -54,12 +54,8 @@ function(declare, domAttr, LayoutBase, BorderContainer, StackContainer, ContentP
 				event.view.parent.domNode.appendChild(event.view.domNode);
 				domAttr.set(event.view.domNode, "data-app-constraint", event.view.constraint);
 			}
-			
-			domAttr.set(event.view.domNode, "id", event.view.id);  // Set the id for the domNode
-			
-			if(event.callback){   // if the event has a callback, call it.
-				event.callback();
-			}
+
+			this.inherited(arguments);
 		},
 
 		hideView: function(view){
