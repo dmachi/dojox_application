@@ -1,6 +1,6 @@
 define(["dojo/_base/lang", "dojo/_base/declare", "dojo/sniff", "dojo/_base/window", "dojo/_base/config",
-		"dojo/topic", "dojo/dom-style", "../utils/constraints", "../Controller"],
-function(lang, declare, has, win, config, topic, domStyle, constraints, Controller){
+		"dojo/dom-attr", "dojo/topic", "dojo/dom-style", "../utils/constraints", "../Controller"],
+function(lang, declare, has, win, config, domAttr, topic, domStyle, constraints, Controller){
 	// module:
 	//		dojox/app/controllers/LayoutBase
 	// summary:

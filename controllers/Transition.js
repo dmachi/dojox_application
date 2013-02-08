@@ -67,8 +67,7 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 						var remViewId = removeParts.shift();
 						var newEvent = lang.clone(event);
 						newEvent.viewId = remViewId;
-				//		this._doRemoveTransition(newEvent.viewId, newEvent.opts, newEvent.opts.params, this.app, newEvent._doResize);				
-						this._doTransition(newEvent.viewId, newEvent.opts, newEvent.opts.params, this.app, true, newEvent._doResize);				
+						this._doTransition(newEvent.viewId, newEvent.opts, newEvent.opts.params, this.app, true, newEvent._doResize);
 					}
 				}
 				if(viewId.length > 0){ // check for a transition with only -viewId.
@@ -251,7 +250,7 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 			if(!parent){
 				throw Error("view parent not found in transition.");
 			}
-			var parts, toId, subIds, next, params; 
+			var parts, toId, subIds, next;
 			if(transitionTo){
 				parts = transitionTo.split(",");
 			}else{
@@ -283,6 +282,11 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 				subIds = next.defaultView;
 			}
 
+			if(removeView){
+				// if we remove a view with not replacement
+				next = null;
+			}
+
 			// next is not a Deferred object, so Deferred.when is no needed.
 			if(next !== current){
 				//When clicking fast, history module will cache the transition request que
@@ -301,12 +305,6 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 				// deactivate sub child of current view, then deactivate current view
 				// TODO: ELC NEED A LOOP HERE TO deactivate all children
 
-
-				if(removeView){ // if removeView and next !== current then there is nothing to remove.
-					this.app.log("> in Transition._doTransition called with removeView true, but next !== current, nothing to remove");
-					return;
-				}
-
 				var subChild = constraints.getSelectedChild(current, "center");
 				while(subChild){
 					this.app.log("< in Transition._doTransition calling subChild.beforeDeactivate subChild name=[",subChild.name,"], parent.name=[",subChild.parent.name,"], next!==current path");
@@ -317,10 +315,12 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 					this.app.log("< in Transition._doTransition calling current.beforeDeactivate current name=[",current.name,"], parent.name=[",current.parent.name,"], next!==current path");
 					current.beforeDeactivate();
 				}
-				this.app.log("> in Transition._doTransition calling next.beforeActivate next name=[",next.name,"], parent.name=[",next.parent.name,"], next!==current path");
-				next.beforeActivate();
-				this.app.log("> in Transition._doTransition calling app.triggger layoutView view next name=[",next.name,"], parent.name=[",next.parent.name,"], next!==current path");
-				this.app.emit("layoutView", {"parent":parent, "view":next, "removeView":removeView});
+				if(next){
+					this.app.log("> in Transition._doTransition calling next.beforeActivate next name=[",next.name,"], parent.name=[",next.parent.name,"], next!==current path");
+					next.beforeActivate();
+				}
+				this.app.log("> in Transition._doTransition calling app.triggger layoutView view next");
+				this.app.emit("layoutView", {"parent": parent, "view": next || (removeView && current), "removeView": removeView});
 				if(doResize){  
 					this.app.emit("resize"); // after last layoutView call resize			
 				}
@@ -336,7 +336,7 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 						// if transition is set for the view (or parent) in the config use it, otherwise use it from the event or defaultTransition from the config
 						transition: this._getTransition(parent, transitionTo) || mergedOpts.transition || this._getDefaultTransition(parent) || "none"
 					}); 
-					result = transit(current && current.domNode, next.domNode, mergedOpts);
+					result = transit(current && current.domNode, next && next.domNode, mergedOpts);
 				}
 				when(result, lang.hitch(this, function(){
 					// deactivate sub child of current view, then deactivate current view
@@ -351,8 +351,10 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 						this.app.log("  < in Transition._doTransition calling current.afterDeactivate current name=[",current.name,"], parent.name=[",current.parent.name,"], next!==current path");
 						current.afterDeactivate();
 					}
-					this.app.log("  > in Transition._doTransition calling next.afterActivate next name=[",next.name,"], parent.name=[",next.parent.name,"], next!==current path");
-					next.afterActivate();
+					if(next){
+						this.app.log("  > in Transition._doTransition calling next.afterActivate next name=[",next.name,"], parent.name=[",next.parent.name,"], next!==current path");
+						next.afterActivate();
+					}
 
 					if(subIds){
 						this._doTransition(subIds, opts, params, next, removeView, doResize, true);
@@ -366,13 +368,11 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 				next.beforeDeactivate();
 				this.app.log("  < in Transition._doTransition calling next.afterDeactivate refresh current view next name=[",next.name,"], parent.name=[",next.parent.name,"], next==current path");
 				next.afterDeactivate();
-				if(!removeView){
-					// activate next view
-					this.app.log("> in Transition._doTransition calling next.beforeActivate next name=[",next.name,"], parent.name=[",next.parent.name,"], next==current path");
-					next.beforeActivate();
-					this.app.log("  > in Transition._doTransition calling next.afterActivate next name=[",next.name,"], parent.name=[",next.parent.name,"], next==current path");
-					next.afterActivate();
-				}
+				// activate next view
+				this.app.log("> in Transition._doTransition calling next.beforeActivate next name=[",next.name,"], parent.name=[",next.parent.name,"], next==current path");
+				next.beforeActivate();
+				this.app.log("  > in Transition._doTransition calling next.afterActivate next name=[",next.name,"], parent.name=[",next.parent.name,"], next==current path");
+				next.afterActivate();
 				// layout current view, or remove it
 				this.app.log("> in Transition._doTransition calling app.triggger layoutView view next name=[",next.name,"], removeView = [",removeView,"], parent.name=[",next.parent.name,"], next==current path");
 				this.app.emit("layoutView", {"parent":parent, "view":next, "removeView":removeView});
