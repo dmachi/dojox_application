@@ -170,35 +170,21 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 			});
 		},
 
-		_getDefaultTransition: function(parent){
+		_getTransition: function(parent, transitionTo, opts){
 			// summary:
-			//		Get view's default transition type from parent view.
-			//		Retrieve the parent chain and get the latest ancestor's default transition type.
+			//		Get view's transition type from the config for the view or from the parent view recursively.
+			//		If not available use the transition option otherwise get view default transition type in the
+			//		config from parent view.
 			//
 			// parent: Object
 			//		view's parent
+			// transitionTo: Object
+			//		view to transition to
+			//	opts: Object
+			//		transition options
 			//
 			// returns:
-			//		transition type like "slide", "fade", "flip" or undefined.
-			var parentView = parent;
-			var defaultTransition = parentView.defaultTransition;
-			while(!defaultTransition && parentView.parent){
-				parentView = parentView.parent;
-				defaultTransition = parentView.defaultTransition;
-			}
-			return defaultTransition;
-		},
-
-		_getTransition: function(parent, transitionTo){
-			// summary:
-			//		Get view's transition type from the config for the view or from the parent view.
-			//		Retrieve the parent chain and get the latest ancestor's transition type.
-			//
-			// parent: Object
-			//		view's parent
-			//
-			// returns:
-			//		transition type like "slide", "fade", "flip" or undefined.
+			//		transition type like "slide", "fade", "flip" or "none".
 			var parentView = parent;
 			var transition = null;
 			if(parentView.views[transitionTo]) {
@@ -207,11 +193,15 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 			if(!transition){
 				transition = parentView.transition;
 			}
+			var defaultTransition = parentView.defaultTransition;
 			while(!transition && parentView.parent){
 				parentView = parentView.parent;
 				transition = parentView.transition;
+				if(!defaultTransition){
+					defaultTransition = parentView.defaultTransition;
+				}
 			}
-			return transition;
+			return transition || opts.transition || defaultTransition || "none";
 		},
 
 		_doTransition: function(transitionTo, opts, params, parent, removeView, doResize, nested){
@@ -320,7 +310,10 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 					next.beforeActivate();
 				}
 				this.app.log("> in Transition._doTransition calling app.triggger layoutView view next");
-				this.app.emit("layoutView", {"parent": parent, "view": next || (removeView && current), "removeView": removeView});
+				if(!removeView){
+					// if we are removing the view we must delay the layout to _after_ the animation
+					this.app.emit("layoutView", {"parent": parent, "view": next });
+				}
 				if(doResize){  
 					this.app.emit("resize"); // after last layoutView call resize			
 				}
@@ -334,11 +327,15 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 					mergedOpts = lang.mixin({}, mergedOpts, {
 						reverse: (mergedOpts.reverse || mergedOpts.transitionDir===-1)?true:false,
 						// if transition is set for the view (or parent) in the config use it, otherwise use it from the event or defaultTransition from the config
-						transition: this._getTransition(parent, transitionTo) || mergedOpts.transition || this._getDefaultTransition(parent) || "none"
+						transition: this._getTransition(parent, transitionTo, mergedOpts)
 					}); 
 					result = transit(current && current.domNode, next && next.domNode, mergedOpts);
 				}
 				when(result, lang.hitch(this, function(){
+					if(removeView){
+						this.app.emit("layoutView", {"parent": parent, "view": current, "removeView": true});
+					}
+
 					// deactivate sub child of current view, then deactivate current view
 					subChild = constraints.getSelectedChild(current, "center");
 					
