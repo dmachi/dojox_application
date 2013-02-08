@@ -83,7 +83,7 @@ function(declare, domAttr, LayoutBase, BorderContainer, StackContainer, ContentP
 			if(event.removeView){ // if the view is being removed flag it as removed and remove the child from the bc, and set selectedChildren entry to null
 				if(view == parentSelChild){
 					var bc = registry.byId(this.app.id+"-BC");
-					var sc = registry.byId(event.view.parent.id+"-"+event.view.constraint);
+					var sc = registry.byId(view.parent.id+"-"+view.constraint);
 					if(bc && sc){
 						sc.removedFromBc = true;
 						bc.removeChild(sc);
@@ -91,8 +91,8 @@ function(declare, domAttr, LayoutBase, BorderContainer, StackContainer, ContentP
 					constraints.setSelectedChild(parent, view.constraint, null);
 				}
 			}else if(view !== parentSelChild){
-				var sc = registry.byId(event.view.parent.id+"-"+event.view.constraint);
-				var cp = registry.byId(event.view.id+"-cp-"+event.view.constraint);
+				var sc = registry.byId(view.parent.id+"-"+view.constraint);
+				var cp = registry.byId(view.id+"-cp-"+view.constraint);
 				if(sc && cp){
 					if(sc.removedFromBc){
 						sc.removedFromBc = false;
