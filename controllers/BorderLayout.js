@@ -1,6 +1,6 @@
-define(["dojo/_base/declare", "dojo/dom-attr", "./LayoutBase","dijit/layout/BorderContainer",
-		"dijit/layout/StackContainer", "dijit/layout/ContentPane", "dijit/registry", "../utils/constraints"],
-function(declare, domAttr, LayoutBase, BorderContainer, StackContainer, ContentPane, registry, constraints){
+define(["dojo/_base/declare", "dojo/dom-attr", "dojo/dom-style", "./LayoutBase","dijit/layout/BorderContainer",
+		"dijit/layout/StackContainer", "dijit/layout/ContentPane", "dijit/registry"],
+function(declare, domAttr, domStyle, LayoutBase, BorderContainer, StackContainer, ContentPane, registry){
 	// module:
 	//		dojox/app/controllers/BorderLayout
 	// summary:
