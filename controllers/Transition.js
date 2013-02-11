@@ -39,11 +39,11 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 			//		Response to dojox/app "transition" event.
 			//
 			// example:
-			//		Use trigger() to trigger "transition" event, and this function will response to the event. For example:
-			//		|	this.trigger("transition", {"viewId":viewId, "opts":opts});
+			//		Use emit to trigger "transition" event, and this function will response to the event. For example:
+			//		|	this.app.emit("transition", {"viewId": viewId, "opts": opts});
 			//
 			// event: Object
-			//		"transition" event parameter. It should be like this: {"viewId":viewId, "opts":opts}
+			//		"transition" event parameter. It should be like this: {"viewId": viewId, "opts": opts}
 			
 			this.proceeding = (event.opts && event.opts.params && event.opts.params.waitToProceed); // waitToProceed passed when visible is true to delay processing.
 
@@ -67,7 +67,7 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 						var remViewId = removeParts.shift();
 						var newEvent = lang.clone(event);
 						newEvent.viewId = remViewId;
-						this._doTransition(newEvent.viewId, newEvent.opts, newEvent.opts.params, this.app, true, newEvent._doResize);
+						this._doTransition(newEvent.viewId, newEvent.opts, newEvent.opts.params, event.opts.data, this.app, true, newEvent._doResize);
 					}
 				}
 				if(viewId.length > 0){ // check for a transition with only -viewId.
@@ -98,7 +98,8 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 			//		|	var transOpts = {
 			//		|		title:"List",
 			//		|		target:"items,list",
-			//		|		url: "#items,list"
+			//		|		url: "#items,list",
+			//		|		data: {}
 			//		|	};
 			//		|	new TransitionEvent(domNode, transOpts, e).dispatch();
 			//
@@ -122,7 +123,7 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 			}
 
 			// transition to the target view
-			this.transition({"viewId":target, opts: lang.mixin({},evt.detail)});
+			this.transition({ "viewId":target, opts: lang.mixin({}, evt.detail), data: evt.detail.data });
 		},
 
 		proceedTransition: function(transitionEvt){
@@ -150,15 +151,15 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 			this.proceeding = true;
 
 			this.app.log("in app/controllers/Transition proceedTransition calling trigger load", transitionEvt);
-			var params;
-			if(transitionEvt.opts && transitionEvt.opts.params){
-				params = transitionEvt.opts.params;
+			if(!transitionEvt.opts){
+				transitionEvt.opts = {};
 			}
+			var params = transitionEvt.params;
 			this.app.emit("load", {
 				"viewId": transitionEvt.viewId,
 				"params": params,
 				"callback": lang.hitch(this, function(){
-					var transitionDef = this._doTransition(transitionEvt.viewId, transitionEvt.opts, params, this.app, false, transitionEvt._doResize);
+					var transitionDef = this._doTransition(transitionEvt.viewId, transitionEvt.opts, params, transitionEvt.opts.data, this.app, false, transitionEvt._doResize);
 					when(transitionDef, lang.hitch(this, function(){
 						this.proceeding = false;
 						var nextEvt = this.waitingQueue.shift();
@@ -204,7 +205,7 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 			return transition || opts.transition || defaultTransition || "none";
 		},
 
-		_doTransition: function(transitionTo, opts, params, parent, removeView, doResize, nested){
+		_doTransition: function(transitionTo, opts, params, data, parent, removeView, doResize, nested){
 			// summary:
 			//		Transitions from the currently visible scene to the defined scene.
 			//		It should determine what would be the best transition unless
@@ -222,13 +223,15 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 			//		transition options
 			// params: Object
 			//		params
+			// data: Object
+			//		data object that will be passed on activate & de-activate methods of the view
 			// parent: Object
 			//		view's parent
 			// removeView: Boolean
 			//		remove the view instead of transition to it
 			// doResize: Boolean
 			//		emit a resize event
-			//	nested: Boolean
+			// nested: Boolean
 			//		whether the method is called from the transitioning of a parent view
 			//
 			// returns:
@@ -293,21 +296,21 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 				//activate or deactivate views and refresh layout.
 
 				// deactivate sub child of current view, then deactivate current view
-				// TODO: ELC NEED A LOOP HERE TO deactivate all children
-
+				// TODO: why is "center" hard coded here?
 				var subChild = constraints.getSelectedChild(current, "center");
 				while(subChild){
 					this.app.log("< in Transition._doTransition calling subChild.beforeDeactivate subChild name=[",subChild.name,"], parent.name=[",subChild.parent.name,"], next!==current path");
+					// TODO what to pass to beforeDeactivate here?
 					subChild.beforeDeactivate();
 					subChild = constraints.getSelectedChild(subChild, "center");
 				}
 				if(current){
 					this.app.log("< in Transition._doTransition calling current.beforeDeactivate current name=[",current.name,"], parent.name=[",current.parent.name,"], next!==current path");
-					current.beforeDeactivate();
+					current.beforeDeactivate(next, data);
 				}
 				if(next){
 					this.app.log("> in Transition._doTransition calling next.beforeActivate next name=[",next.name,"], parent.name=[",next.parent.name,"], next!==current path");
-					next.beforeActivate();
+					next.beforeActivate(current, data);
 				}
 				this.app.log("> in Transition._doTransition calling app.triggger layoutView view next");
 				if(!removeView){
@@ -323,7 +326,7 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 					// if we are on IE CSS3 transitions are not supported (yet). So just skip the transition itself.
 					// we also skip in we are transitioning to a nested view from a parent view and that nested view
 					// did not have any current
-					var mergedOpts = lang.mixin({}, opts); // handle reverse from mergedOpts or transitionDir 
+					var mergedOpts = lang.mixin({}, data); // handle reverse from mergedOpts or transitionDir
 					mergedOpts = lang.mixin({}, mergedOpts, {
 						reverse: (mergedOpts.reverse || mergedOpts.transitionDir===-1)?true:false,
 						// if transition is set for the view (or parent) in the config use it, otherwise use it from the event or defaultTransition from the config
@@ -341,20 +344,21 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 					
 					while(subChild){
 						this.app.log("  < in Transition._doTransition calling subChild.afterDeactivate subChild name=[",subChild.name,"], parent.name=[",subChild.parent.name,"], next!==current path");
+						// TODO what  to pass to beforeDeactivate here?
 						subChild.afterDeactivate();
 						subChild = constraints.getSelectedChild(subChild, "center");
 					}
 					if(current){
 						this.app.log("  < in Transition._doTransition calling current.afterDeactivate current name=[",current.name,"], parent.name=[",current.parent.name,"], next!==current path");
-						current.afterDeactivate();
+						current.afterDeactivate(next, data);
 					}
 					if(next){
 						this.app.log("  > in Transition._doTransition calling next.afterActivate next name=[",next.name,"], parent.name=[",next.parent.name,"], next!==current path");
-						next.afterActivate();
+						next.afterActivate(current, data);
 					}
 
 					if(subIds){
-						this._doTransition(subIds, opts, params, next, removeView, doResize, true);
+						this._doTransition(subIds, opts, params, data, next, removeView, doResize, true);
 					}
 				}));
 				return result; // dojo/promise/all
@@ -362,17 +366,17 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 				// next view == current view, refresh current view
 				// deactivate next view
 				this.app.log("< in Transition._doTransition calling next.beforeDeactivate refresh current view next name=[",next.name,"], parent.name=[",next.parent.name,"], next==current path");
-				next.beforeDeactivate();
+				next.beforeDeactivate(current, data);
 				this.app.log("  < in Transition._doTransition calling next.afterDeactivate refresh current view next name=[",next.name,"], parent.name=[",next.parent.name,"], next==current path");
-				next.afterDeactivate();
+				next.afterDeactivate(current, data);
 				// activate next view
 				this.app.log("> in Transition._doTransition calling next.beforeActivate next name=[",next.name,"], parent.name=[",next.parent.name,"], next==current path");
-				next.beforeActivate();
+				next.beforeActivate(current, data);
 				this.app.log("  > in Transition._doTransition calling next.afterActivate next name=[",next.name,"], parent.name=[",next.parent.name,"], next==current path");
-				next.afterActivate();
+				next.afterActivate(current, data);
 				// layout current view, or remove it
 				this.app.log("> in Transition._doTransition calling app.triggger layoutView view next name=[",next.name,"], removeView = [",removeView,"], parent.name=[",next.parent.name,"], next==current path");
-				this.app.emit("layoutView", {"parent":parent, "view":next, "removeView":removeView});
+				this.app.emit("layoutView", {"parent":parent, "view": next, "removeView": removeView});
 				if(doResize){
 					this.app.emit("resize"); // after last layoutView call resize			
 				}
@@ -380,7 +384,7 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 
 			// do sub transition like transition from "tabScene,tab1" to "tabScene,tab2"
 			if(subIds){
-				return this._doTransition(subIds, opts, params, next, removeView); //dojo.DeferredList
+				return this._doTransition(subIds, opts, params, data, next, removeView); //dojo.DeferredList
 			}
 		}
 	});
