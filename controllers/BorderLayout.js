@@ -16,8 +16,8 @@ function(declare, domAttr, LayoutBase, BorderContainer, StackContainer, ContentP
 			//		The initLayout event is called once when the View is being created the first time.
 			//
 			// example:
-			//		Use dojo/on.emit to trigger "initLayout" event, and this function will respond to the event. For example:
-			//		|	on.emit(this.app.evented, "initLayout", view);
+			//		Use emit to trigger "initLayout" event, and this function will respond to the event. For example:
+			//		|	this.app.emit("initLayout", view);
 			//
 			// event: Object
 			// |		{"view": view, "callback": function(){}};
