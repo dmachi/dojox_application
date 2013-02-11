@@ -146,7 +146,7 @@ Property descriptions
 
 	- modules -  The modules property defines application modules that will mixed into the Application class to control the lifecycle and behavior of the application. This property will become the array of mixins provided to a dojo/declare extending the base Application class. In other words, the Application class that is instantiated dynamically is created at run time using the base class and this list of modules.
 
-	- controllers -  The controllers property defines application controllers that will be loaded during application startup to respond to events of the application. The controllers bind events on application's root domNode and the events can be triggered by application's trigger() method and documented actions.
+	- controllers -  The controllers property defines application controllers that will be loaded during application startup to respond to events of the application. The controllers bind events on application's root domNode and the events can be triggered by application's emit() method and documented actions.
 
 	- template -  This is the template/HTML that is used for the application when defined at the root of the configuration.
 	 Within the context of a view, it is the template/HTML for defining the view.
