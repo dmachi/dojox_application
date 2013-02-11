@@ -16,8 +16,8 @@ function(declare, domAttr, domStyle, LayoutBase, BorderContainer, StackContainer
 			//		The initLayout event is called once when the View is being created the first time.
 			//
 			// example:
-			//		Use dojo/on.emit to trigger "initLayout" event, and this function will respond to the event. For example:
-			//		|	on.emit(this.app.evented, "initLayout", view);
+			//		Use emit to trigger "initLayout" event, and this function will respond to the event. For example:
+			//		|	this.app.emit("initLayout", view);
 			//
 			// event: Object
 			// |		{"view": view, "callback": function(){}};
@@ -25,7 +25,7 @@ function(declare, domAttr, domStyle, LayoutBase, BorderContainer, StackContainer
 
 			if(!this.borderLayoutCreated){ // If the BorderContainer has not been created yet, create it.
 				this.borderLayoutCreated = true;
-				bc = new BorderContainer({id:this.app.id+"-BC", style:'height:100%;width:100%;border:1px solid black'});
+				bc = new BorderContainer({id:this.app.id+"-BC", style: "height:100%;width:100%;border:1px solid black"});
 				event.view.parent.domNode.appendChild(bc.domNode);  // put the border container into the parent (app)
 
 				bc.startup();  // startup the BorderContainer
@@ -54,57 +54,32 @@ function(declare, domAttr, domStyle, LayoutBase, BorderContainer, StackContainer
 				event.view.parent.domNode.appendChild(event.view.domNode);
 				domAttr.set(event.view.domNode, "data-app-constraint", event.view.constraint);
 			}
-			
-			domAttr.set(event.view.domNode, "id", event.view.id);  // Set the id for the domNode
-			
-			if(event.callback){   // if the event has a callback, call it.
-				event.callback();
+
+			this.inherited(arguments);
+		},
+
+		hideView: function(view){
+			var bc = registry.byId(this.app.id+"-BC");
+			var sc = registry.byId(view.parent.id+"-"+view.constraint);
+			if(bc && sc){
+				sc.removedFromBc = true;
+				bc.removeChild(sc);
 			}
 		},
 
-		layoutView: function(event){
-			// summary:
-			//		Response to dojox/app "layoutView" event.
-			//
-			// example:
-			//		Use dojo/on.emit to trigger "layoutView" event, and this function will response the event. For example:
-			//		|	on.emit(this.app.evented, "layoutView", view);
-			//
-			// event: Object
-			// |		{"parent":parent, "view":view, "removeView": false}
-			var parent = event.parent || this.app;
-			var view = event.view;
-
-			if(!view){
-				return;
-			}
-
-			var parentSelChild = this._getSelectedChild(parent, view.constraint);
-			if(event.removeView){ // if the view is being removed flag it as removed and remove the child from the bc, and set selectedChildren entry to null
-				if(view == parentSelChild){
-					var bc = registry.byId(this.app.id+"-BC");
-					var sc = registry.byId(event.view.parent.id+"-"+event.view.constraint);
-					if(bc && sc){
-						sc.removedFromBc = true;
-						bc.removeChild(sc);
-					}
-					parent.selectedChildren[view.constraint] = null;
+		showView: function(view){
+			var sc = registry.byId(view.parent.id+"-"+view.constraint);
+			var cp = registry.byId(view.id+"-cp-"+view.constraint);
+			if(sc && cp){
+				if(sc.removedFromBc){
+					sc.removedFromBc = false;
+					registry.byId(this.app.id+"-BC").addChild(sc);
+					domStyle.set(view.domNode, "display", "");
 				}
-			}else if(view !== parentSelChild){
-				var sc = registry.byId(event.view.parent.id+"-"+event.view.constraint);
-				var cp = registry.byId(event.view.id+"-cp-"+event.view.constraint);
-				if(sc && cp){
-					if(sc.removedFromBc){
-						sc.removedFromBc = false;
-						registry.byId(this.app.id+"-BC").addChild(sc);
-						domStyle.set(view.domNode, "display", "");
-					}
-					domStyle.set(cp.domNode, "display", "");
-					sc.selectChild(cp);
-					sc.resize();
-				}
-				parent.selectedChildren[view.constraint] = view;
+				domStyle.set(cp.domNode, "display", "");
+				sc.selectChild(cp);
+				sc.resize();
 			}
-		}		
+		}
 	});
 });

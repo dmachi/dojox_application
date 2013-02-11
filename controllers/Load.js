@@ -27,7 +27,7 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/Def
 			// if any. This used to be done in main.js but must be done in Load to be able to create custom
 			// views from the Load controller.
 			//create and start child. return Deferred
-			when(this.createView(event.parent, null, event.app, {
+			when(this.createView(event.parent, null, null, {
 					templateString: event.templateString,
 					definition: event.definition
 			}, null, event.type), function(newView){
