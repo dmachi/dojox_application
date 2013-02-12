@@ -326,7 +326,7 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 					// if we are on IE CSS3 transitions are not supported (yet). So just skip the transition itself.
 					// we also skip in we are transitioning to a nested view from a parent view and that nested view
 					// did not have any current
-					var mergedOpts = lang.mixin({}, data); // handle reverse from mergedOpts or transitionDir
+					var mergedOpts = lang.mixin({}, opts); // handle reverse from mergedOpts or transitionDir
 					mergedOpts = lang.mixin({}, mergedOpts, {
 						reverse: (mergedOpts.reverse || mergedOpts.transitionDir===-1)?true:false,
 						// if transition is set for the view (or parent) in the config use it, otherwise use it from the event or defaultTransition from the config
