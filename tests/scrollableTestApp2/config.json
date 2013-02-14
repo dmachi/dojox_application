@@ -22,8 +22,6 @@
 		"dojox/mobile/RoundRectList",
 		"dojox/mobile/RoundRectCategory",
 		"dojox/app/widgets/Container",
-		"dijit/layout/BorderContainer",
-		"dojox/mobile/Container",
 		"dojo/data/ItemFileWriteStore",
 		"dojo/store/DataStore",
 		"dojox/app/utils/mvcModel",

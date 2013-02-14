@@ -8,7 +8,7 @@ require(["dojox/app/main","dojox/app/utils/configUtils",  "dojox/json/ref", "doj
 	require(["dojo/text!"+configurationFile], function(configJson){
 		var hasList = {};
 		hasList["tablet"] = isTablet;
-		hasList["phone"] = !isTablet;//ie9orLess
+		hasList["phone"] = !isTablet;
 		hasList["ie9orLess"] = has("ie") && !has("ie") >= 10;
 		hasList["notie9orLess"] = !has("ie") || has("ie") >= 10;
 		var config = json.fromJson(configJson);
