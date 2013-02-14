@@ -80,6 +80,11 @@ define([
 			if(config.modules){
 				mids = mids.concat(config.modules);
 			}
+			if(config.transit){
+				mids.push(config.transit);
+			}else{
+				mids.push("dojox/css3/transit");
+			}
 			if(config.template){
 				mids.push(config.template);
 			}

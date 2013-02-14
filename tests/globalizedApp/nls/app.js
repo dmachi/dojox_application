@@ -1,6 +1,7 @@
 define({
-  root: {
-   	label0: "Label Zero"
-  },
-  fr: true
+	root: {
+	  home: "Home",
+	  label0: "Label Zero"
+	},
+	fr: true
 });

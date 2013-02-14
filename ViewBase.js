@@ -1,6 +1,6 @@
 define(["require", "dojo/when", "dojo/on", "dojo/dom-attr", "dojo/_base/declare", "dojo/_base/lang",
-	"dojo/Deferred",  "./utils/model"],
-	function(require, when, on, domAttr, declare, lang, Deferred, model){
+	"dojo/Deferred",  "./utils/model", "./utils/constraints"],
+	function(require, when, on, domAttr, declare, lang, Deferred, model, constraints){
 	return declare("dojox.app.ViewBase", null, {
 		// summary:
 		//		View base class with model & definition capabilities. Subclass must implement rendering capabilities.
@@ -102,8 +102,12 @@ define(["require", "dojo/when", "dojo/on", "dojo/dom-attr", "dojo/_base/declare"
 			//		private
 			this.app.log("  > in app/ViewBase _startLayout firing layout for name=[",this.name,"], parent.name=[",this.parent.name,"]");
 
-			this.constraint = this.constraint || domAttr.get(this.domNode, "data-app-constraint") || "center";
-		
+			if(!this.hasOwnProperty("constraint")){
+				this.constraint = domAttr.get(this.domNode, "data-app-constraint") || "center";
+			}
+			constraints.register(this.constraint);
+
+
 			this.app.emit("initLayout", {
 				"view": this, 
 				"callback": lang.hitch(this, function(){

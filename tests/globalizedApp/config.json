@@ -32,6 +32,10 @@
 				"dojox/mobile/RoundRectList",
 				"dojox/mobile/ListItem"
 			]
+		},
+		"detail": {
+			"definition" : "globalizedApp/detail",
+			"template": "globalizedApp/detail.html"
 		}
 	}
 }
