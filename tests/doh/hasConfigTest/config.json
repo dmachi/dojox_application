@@ -1,0 +1,71 @@
+{
+	"id": "testApp",
+	"name": "Test App",
+	"description": "A testApp",
+	"splash": "splash",
+
+	"dependencies": [
+	],
+
+	"modules": [
+	],
+	
+	"controllers": [
+		"dojox/app/controllers/Load",
+		"dojox/app/controllers/Transition",
+		"dojox/app/controllers/Layout"
+	],
+
+	"configTestSetTrueInHas": "FAILED",
+	"configTestNotSetInHas": "InitOk",
+	"configTestTablet": "No",
+	"configTestPhone": "No",
+	"configTestPhoneIosOrAndroid": "No",
+	"configTestTabletIosOrAndroid": "No",
+
+	"has" : {
+		"testTrue" : {
+			"configTestSetTrueInHas": "SetInHasOk",
+		},
+		"testFalse" : {
+			"configTestNotSetInHas": "FAILED",
+		},
+		"phone,ios,andriod" : {
+			"configTestPhoneIosOrAndroid": "Yes",
+		},
+		"ios,andriod,tablet" : {
+			"configTestTabletIosOrAndroid": "Yes",
+		},
+		"phone" : {
+			"configTestPhone": "Yes",
+			"isTablet" : false
+		},
+		"tablet" : {
+			"configTestTablet": "Yes",
+			"isTablet" : true
+		},
+		"ie" : {
+			"controllers": [
+				"dojox/app/controllers/HistoryHash",
+			]
+		},
+		"notIE" : {
+			"controllers": [
+				"dojox/app/controllers/History",
+			]
+		}
+	},	
+
+	"defaultView": "home",
+
+	"defaultTransition": "slide",
+
+	"views": {
+
+		"home": { 
+			"definition" : "none",
+			"template": "dojox/app/tests/doh/config.html"
+		}
+
+	}
+}

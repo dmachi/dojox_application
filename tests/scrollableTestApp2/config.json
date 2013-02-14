@@ -74,12 +74,6 @@
 	},
 	
 	"has" : {
-		"phone,ios,andriod" : {
-			"configTestPhone": "iosOrAndroidOrPhone",
-		},
-		"ios,andriod,tablet" : {
-			"configTestTablet": "iosOrAndroidOrTablet",
-		},
 		"phone" : {
 			"defaultView": "configuration",
 			"isTablet" : false
@@ -88,25 +82,18 @@
 			"defaultView": "configuration+TestInfo",
 			"isTablet" : true
 		},
-		"ie" : {
+		"ie9orLess" : {
 			"controllers": [
 				"dojox/app/controllers/HistoryHash",
 			]
 		},
-		"notIE" : {
+		"notie9orLess" : {
 			"controllers": [
 				"dojox/app/controllers/History",
 			]
 		}
 	},	
 
-	//the name of the view to load when the app is initialized.
-	//"defaultView": "configuration,ScrollableListSelection+TestInfo",
-	//"defaultView": "navigation",
-	//"defaultView": "TestInfo+navigation",  
-	//"defaultView": "navigation+TestInfo",   
-	//"defaultView": "configuration+TestInfo",
-	//"defaultView": "configuration+Scrollable5",
 
 	// these are the possible defaultTransitions, 
 	// the defaultTransition is only used if transition is not set in the config and it is not set or defaulted on the transitionEvent
@@ -143,8 +130,6 @@
 				},
 		},
 		
-
-				
 		"TestInfo": {
 			"transition": "none",
 			"template": "scrollableTestApp/templates/TestInfo.html"
