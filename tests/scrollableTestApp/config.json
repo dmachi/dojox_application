@@ -22,6 +22,7 @@
 		"dojox/mobile/RoundRectList",
 		"dojox/mobile/RoundRectCategory",
 		"dojox/app/widgets/Container",
+		"dojox/mobile/Container",
 		"dojo/data/ItemFileWriteStore",
 		"dojo/store/DataStore",
 		"dojox/app/utils/mvcModel",
@@ -44,7 +45,6 @@
 	],
 
 	"controllers": [
-		"dojox/app/controllers/History",
 		"dojox/app/controllers/Load",
 		"dojox/app/controllers/Transition",
 		"dojox/app/controllers/Layout"
@@ -58,7 +58,6 @@
 				"url": "./resources/data/repeat.json"
 			}
 	   }
-	   
 	},
 
 	//models and instantiation parameters for the models. Including 'type' as a property allows
@@ -72,9 +71,30 @@
 					}
         }
 	},
+	
 
-	//the name of the view to load when the app is initialized.
-	"defaultView": "configuration,ScrollableListSelection",
+	"has" : {
+		"phone" : {
+			"defaultView": "configuration,ScrollableListSelection",
+			"isTablet" : false
+		},
+		"tablet" : {
+			"template": "scrollableTestApp/templates/tablet/ViewScrollableLists.html",
+			"definition": "scrollableTestApp/views/tablet/ViewScrollableLists",
+			"defaultView": "TestInfo",
+			"isTablet" : true
+		},
+		"ie9orLess" : {
+			"controllers": [
+				"dojox/app/controllers/HistoryHash",
+			]
+		},
+		"notie9orLess" : {
+			"controllers": [
+				"dojox/app/controllers/History",
+			]
+		}
+	},	
 
 	// these are the possible defaultTransitions, 
 	// the defaultTransition is only used if transition is not set in the config and it is not set or defaulted on the transitionEvent
@@ -103,7 +123,7 @@
 				}
 			}
 		},
-
+		
 		
 		"TestInfo": {
 			"transition": "none",
@@ -138,10 +158,10 @@
 			"definition": "scrollableTestApp/views/ListItem-domButtons2",
 			"template": "scrollableTestApp/templates/ListItem-domButtons2.html"
 		},
-
+		
 		"repeatDetails": {
 			"template": "scrollableTestApp/templates/repeatDetails.html",
-			"defaultTransition": "slide"
+			"transition": "slide"
 		}
 	}
 }
