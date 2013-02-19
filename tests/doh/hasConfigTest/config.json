@@ -16,6 +16,7 @@
 		"dojox/app/controllers/Layout"
 	],
 
+	// These configTest... lines are only used for the doh test, this is not typical for a config
 	"configTestSetTrueInHas": "FAILED",
 	"configTestNotSetInHas": "InitOk",
 	"configTestTablet": "No",
@@ -23,6 +24,7 @@
 	"configTestPhoneIosOrAndroid": "No",
 	"configTestTabletIosOrAndroid": "No",
 
+	// These configTest... lines are only used for the doh test, this is not typical for a config
 	"has" : {
 		"testTrue" : {
 			"configTestSetTrueInHas": "SetInHasOk",

@@ -1,9 +1,9 @@
 define(["require", "dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/config",
 	"dojo/_base/window", "dojo/Evented", "dojo/Deferred", "dojo/when", "dojo/has", "dojo/on", "dojo/ready",
 	"dojo/dom-construct", "dojo/dom-attr", "./utils/model", "./utils/nls", "./module/lifecycle",
-	"./utils/hash", "./utils/constraints"],
+	"./utils/hash", "./utils/constraints", "./utils/config"],
 	function(require, kernel, lang, declare, config, win, Evented, Deferred, when, has, on, ready, domConstruct, domAttr,
-		 model, nls, lifecycle, hash, constraints){
+		 model, nls, lifecycle, hash, constraints, configUtils){
 	kernel.experimental("dojox/app");
 
 	has.add("app-log-api", (config["app"] || {}).debugApp);
@@ -253,6 +253,10 @@ define(["require", "dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare",
 		// node: domNode
 		//		domNode.
 		var path;
+
+		// call configProcessHas to process any has blocks in the config
+		config = configUtils.configProcessHas(config);
+
 		if(!config.loaderConfig){
 			config.loaderConfig = {};
 		}

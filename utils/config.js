@@ -1,26 +1,23 @@
 define(["dojo/sniff",], function(has){
 
 // module:
-//		dojox/app/utils/configUtils
+//		dojox/app/utils/config
 
-var configUtils = {
+var config = {
 	// summary:
-	//		This module contains the configUtils
+	//		This module contains the config
 
-	configProcessHas: function(/*Object*/ source, /*Object?*/ hasList){
+	configProcessHas: function(/*Object*/ source){
 		// summary:
 		//		scan the source config for has checks and call configMerge to merge has sections, and remove the has sections from the source.
 		// description:
 		//		configProcessHas will scan the source config for has checks. 
-		//		For each has section the items inside the has section will be tested in the haslist and if not set 
-		//		it will be tested with a has call using sniff. 
+		//		For each has section the items inside the has section will be tested with has (sniff)
 		//		If the has test is true it will call configMerge to merge has sections back into the source config.
 		//		It will always remove the has section from the source after processing it.
 		//		The names in the has section can be separated by a comma, indicating that any of those being true will satisfy the test.
 		// source:
 		//		an object representing the config to be processed.
-		// hasList:
-		//		an object containing a list of has names and values (typically true or false) which indicate whether that has test passes or fails
 		// returns:
 		//		the updated source object.
 		for(var name in source){
@@ -33,7 +30,7 @@ var configUtils = {
 						if(parts.length > 0){
 							while(parts.length > 0){ 	
 								var haspart = parts.shift();
-								if(hasList[haspart] || has(haspart)) { // if true this one should be merged
+								if(has(haspart)) { // if true this one should be merged
 									var hasval = sval[hasname];
 									this.configMerge(source, hasval); // merge this has section into the source config
 									break;  // found a match for this multiple has test, so go to the next one
@@ -43,10 +40,9 @@ var configUtils = {
 					}
 				}
 				delete source["has"];  // after merge remove this has section from the config
-				//console.log("in has check after all merge and remove of has for hasname ="+hasname+" got source = ",source);
 			}else{
 				if(!(name.charAt(0) == '_' && name.charAt(1) == '_')&& sval && typeof sval === 'object'){
-						this.configProcessHas(sval, hasList);
+						this.configProcessHas(sval);
 				}
 			}
 		}
@@ -85,6 +81,6 @@ var configUtils = {
 	}
 };
 
-return configUtils;
+return config;
 
 });

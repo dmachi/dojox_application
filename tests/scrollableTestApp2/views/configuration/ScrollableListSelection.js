@@ -15,7 +15,9 @@ define(["dojo/dom", "dojo/_base/lang", "dojo/dom-style", "dijit/registry", "dojo
 		},
 		
 		beforeActivate: function(){
-			app.stopTransition = false;
+			if(app){
+				app.stopTransition = false;
+			}
 			//console.log("configuration/ScrollableListSelection beforeActivate called this.app.selected_configuration_item=",this.app.selected_configuration_item);
 		},
 		
