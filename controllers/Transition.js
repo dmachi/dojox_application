@@ -70,7 +70,7 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 						this._doTransition(newEvent.viewId, newEvent.opts, newEvent.opts.params, event.opts.data, this.app, true, newEvent._doResize);
 					}
 				}
-				if(viewId.length > 0){ // check for a transition with only -viewId.
+				if(viewId.length > 0){ // check viewId.length > 0 to skip this section for a transition with only -viewId
 					this.proceeding = this.proceedingSaved;
 					event.viewId = viewId;	
 					event._doResize = true; // at the end of the last transition call resize

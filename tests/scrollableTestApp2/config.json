@@ -44,11 +44,10 @@
 	],
 
 	"controllers": [
-		"dojox/app/controllers/History",
 		"dojox/app/controllers/Load",
 		"dojox/app/controllers/Transition",
 		"dojox/app/controllers/Layout"
-	],
+	],	
 
 	//stores we are using
 	"stores": {
@@ -58,7 +57,6 @@
 				"url": "./resources/data/repeat.json"
 			}
 	   }
-	   
 	},
 
 	//models and instantiation parameters for the models. Including 'type' as a property allows
@@ -72,9 +70,28 @@
 					}
         }
 	},
+	
+	"has" : {
+		"phone" : {
+			"defaultView": "configuration",
+			"isTablet" : false
+		},
+		"tablet" : {
+			"defaultView": "configuration+TestInfo",
+			"isTablet" : true
+		},
+		"ie9orLess" : {
+			"controllers": [
+				"dojox/app/controllers/HistoryHash",
+			]
+		},
+		"notie9orLess" : {
+			"controllers": [
+				"dojox/app/controllers/History",
+			]
+		}
+	},	
 
-	//the name of the view to load when the app is initialized.
-	"defaultView": "configuration,ScrollableListSelection",
 
 	// these are the possible defaultTransitions, 
 	// the defaultTransition is only used if transition is not set in the config and it is not set or defaulted on the transitionEvent
@@ -92,18 +109,24 @@
 
 	//views are groups of views and models loaded at once
 	"views": {
-		"configuration": {
-			"defaultView": "ScrollableListSelection",
+		"navigation": {
+			"template": "scrollableTestApp/templates/tablet/ViewScrollableLists.html",
+			"definition" : "scrollableTestApp/views/tablet/ViewScrollableLists.js",
 			"transition": "slide",
-			"definition": "none",
-
-			"views": {
-				"ScrollableListSelection": {
-					"template": "scrollableTestApp/templates/configuration/ScrollableListSelection.html"
-				}
-			}
+			"constraint" : "left"
 		},
-
+		"configuration": {
+				"template": "scrollableTestApp/templates/configuration/ScrollableListSelection.html",
+				"definition": "scrollableTestApp/views/configuration/ScrollableListSelection.js",
+				"has" : {
+					"phone" : {
+						"constraint" : "center",
+					},
+					"tablet" : { 
+						"constraint" : "left",
+					},	
+				},
+		},
 		
 		"TestInfo": {
 			"transition": "none",
@@ -114,34 +137,41 @@
 			"template": "scrollableTestApp/templates/Scrollable1.html"
 		},
 		"Scrollable1P": {
+			"template": "scrollableTestApp/templates/Scrollable1P.html",
 			"transition": "flip",
-			"template": "scrollableTestApp/templates/Scrollable1P.html"
+			"constraint" : "center"
 		},
 		"Scrollable2": {
+			"template": "scrollableTestApp/templates/Scrollable2.html",
 			"transition": "fade",
-			"template": "scrollableTestApp/templates/Scrollable2.html"
+			"constraint" : "center"
 		},
 		"Scrollable3": {
-			"template": "scrollableTestApp/templates/Scrollable3.html"
+			"template": "scrollableTestApp/templates/Scrollable3.html",
+			"constraint" : "center"
 		},
 		"Scrollable4": {
-			"template": "scrollableTestApp/templates/Scrollable4.html"
+			"template": "scrollableTestApp/templates/Scrollable4.html",
+			"constraint" : "center"
 		},
 		"Scrollable5": {
 			"template": "scrollableTestApp/templates/Scrollable5.html"
 		},
 		"ListItemDomButtons": {
 			"definition": "scrollableTestApp/views/ListItem-domButtons",
-			"template": "scrollableTestApp/templates/ListItem-domButtons.html"
+			"template": "scrollableTestApp/templates/ListItem-domButtons.html",
+			"constraint" : "center"
 		},
 		"ListItemDomButtons2": {
 			"definition": "scrollableTestApp/views/ListItem-domButtons2",
-			"template": "scrollableTestApp/templates/ListItem-domButtons2.html"
+			"template": "scrollableTestApp/templates/ListItem-domButtons2.html",
+			"constraint" : "center"
 		},
-
+		
 		"repeatDetails": {
 			"template": "scrollableTestApp/templates/repeatDetails.html",
-			"defaultTransition": "slide"
+			"transition": "slide",
+			"constraint" : "center"
 		}
 	}
 }
