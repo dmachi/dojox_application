@@ -1,0 +1,23 @@
+<div class="view mblView">
+
+	<script type="dojo/require">at: "dojox/mvc/at"</script>
+
+	<!--<div data-dojo-type="dojox/mobile/ScrollableView"> -->
+	<div>
+		<h2 data-dojo-type="dojox/mobile/EdgeToEdgeCategory" style="height: 32px;" data-app-constraint="top">Test Info for this test.</h2>
+
+		<div>
+			<div class="field-title">This test has been setup to use a custom layout controller (DivIdBasedLayout) along with mobile/SwapView and mobile/PageIndicator.</div>
+			<div class="field-title">The DivIdBasedLayout will try to layout views by appending them inside the div with the id that matches the value set in the constraints for the view.</div>
+			<br>
+			<div class="field-title">There are 3 views shown in the SwapViews, they can be seen by swipping from the left to the right in the main content area, the Header and Nav area are also added to the main area by div id.</div>
+			<div class="field-title">The 3rd view will transition to a details view, which will add a Back button to return to this view, the swapViews are still active after the transition.</div>
+			<br>
+			<div class="field-title">Some of the css from the mediaQueryLayout test is included, so on a desktop you can make the window smaller and the navigation area will become hidden when the screen gets less than max-width: 560px.</div>
+			<div class="field-title">And on a phone or tablet the Naviagtion will be hidden in portrait orientation and shown in landscape orientation.</div>
+			<br>
+			<div class="field-title">Should try to get rid of the FixedSplitters in main.html and just use css for positioning, also add nested footer and right side nav.</div>
+			<br><br>
+		</div>
+	</div>
+</div>

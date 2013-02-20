@@ -51,7 +51,6 @@ function(dom, connect, registry, at, TransitionEvent, Repeat, getStateful, Outpu
 	};
 
 	return {
-		// repeate view init
 		init: function(){
 			repeatmodel = this.loadedModels.repeatmodels;
 			var repeatDom = dom.byId('repeatWidget');
@@ -74,7 +73,6 @@ function(dom, connect, registry, at, TransitionEvent, Repeat, getStateful, Outpu
 			});
 			_connectResults.push(connectResult);
 		},
-		// repeate view destroy
 		destroy: function(){
 			var connectResult = _connectResults.pop();
 			while(connectResult){

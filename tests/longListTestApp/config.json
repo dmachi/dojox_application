@@ -1,0 +1,106 @@
+{
+	"id": "longListTestApp",
+	"name": "Scrollable Test App",
+	"description": "This is a test app for scrollable lists.",
+	"splash": "splash",
+
+	"loaderConfig": {
+		"paths": {
+			"longListTestApp": "../dojox/app/tests/longListTestApp"
+		}
+	},
+
+	"dependencies": [
+		"dojox/mobile/_base",
+		"dojox/mobile/_compat",
+		"dojox/mobile/Button",
+		"dojox/mobile/Heading",
+		"dojox/mobile/ListItem",
+		"dojox/mobile/RoundRectList",
+		"dojox/mobile/RoundRectCategory",
+		"dojox/mobile/EdgeToEdgeStoreList",
+		"dojox/mobile/LongListMixin",
+		"dojox/app/widgets/Container",
+		"dojo/store/Memory",
+		"dojo/store/Observable",
+		"dojox/mobile/ScrollableView"
+	],
+	// Modules for the application.  They are basically used as the second
+	// array of mixins in a dojo.declare().  Modify the top level behavior
+	// of the application, how it processes the config or any other life cycle
+	// by creating and including one or more of these
+	"modules": [
+		"longListTestApp/longListTestApp"
+	],
+
+	"controllers": [
+		"dojox/app/controllers/History",
+		"dojox/app/controllers/Load",
+		"dojox/app/controllers/Transition",
+		"dojox/app/controllers/Layout"
+	],
+
+	//stores we are using
+	"stores": {
+		"longlistStore":{
+	       "type": "dojo/store/Memory",
+	       "observable": true,
+		   "params": {
+                "data": "modelApp.list"
+		   }
+		}	   
+	},
+	
+	"has" : {
+		"phone" : {
+			"defaultView": "Header1,LongList1",
+			"isTablet" : false
+		},
+		"tablet" : {
+			"template": "longListTestApp/templates/tablet/ViewScrollableLists.html",
+			"definition": "longListTestApp/views/tablet/ViewScrollableLists",
+			"defaultView": "Header1,LongList1",
+			"isTablet" : true
+		}
+	},	
+
+	// these are the possible transitions, 
+	// if a transition is set on a view or parent it will override the transition set on the transitionEvent or the defaultTransition in the config.
+	"transition": "slide",
+
+	//views are groups of views and models loaded at once
+	"views": {
+		"configuration": {
+			"defaultView": "ScrollableListSelection",
+			"transition": "slide",
+			"definition": "none",
+
+			"views": {
+				"ScrollableListSelection": {
+					"template": "longListTestApp/templates/configuration/ScrollableListSelection.html"
+				}
+			}
+		},
+		"Header1": {
+			"template": "longListTestApp/templates/Header1.html",
+			"views": {
+				"TestInfo": {
+					"transition": "none",
+					"template": "longListTestApp/templates/TestInfo.html",
+					"definition": "longListTestApp/views/TestInfo.js"
+				},
+				"LongList1": {
+					"template": "longListTestApp/templates/LongList1.html",
+					"definition": "longListTestApp/views/LongList1.js"
+				},
+				"LongList3": {
+					"template": "longListTestApp/templates/LongList3.html",
+					"definition": "longListTestApp/views/LongList3.js"
+				}
+			}
+		},
+		"LongList2": {
+			"template": "longListTestApp/templates/LongList2.html"
+		}
+	}
+}

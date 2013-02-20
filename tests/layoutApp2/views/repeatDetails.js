@@ -23,7 +23,7 @@ function(dom, connect, registry, at, getStateful, Output){
 	};
 
 	return {
-		// repeate view init
+		// repeatDetails view init
 		init: function(){
 			repeatmodel = this.loadedModels.repeatmodels;
 		},

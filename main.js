@@ -48,6 +48,7 @@ define(["require", "dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare",
 						try{
 							var storeCtor = require(type);
 						}catch(e){
+							console.error(type+" must be listed in the dependencies");
 							throw new Error(type+" must be listed in the dependencies");
 						}
 						if(config.data && lang.isString(config.data)){
@@ -57,7 +58,17 @@ define(["require", "dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare",
 							//and will cause infinitive loop when creating StatefulModel.
 							config.data = lang.getObject(config.data);
 						}
-						params.stores[item].store = new storeCtor(config);
+						if(params.stores[item].observable){
+							try{
+								var observableCtor = require("dojo/store/Observable");
+							}catch(e){
+								console.error("dojo/store/Observable must be listed in the dependencies");
+								throw new Error("dojo/store/Observable must be listed in the dependencies");
+							}
+							params.stores[item].store = observableCtor(new storeCtor(config));							
+						}else{
+							params.stores[item].store = new storeCtor(config);
+						}
 					}
 				}
 			}
@@ -342,6 +353,7 @@ define(["require", "dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare",
 
 	return function(config, node){
 		if(!config){
+			console.error("App Config Missing");
 			throw new Error("App Config Missing");
 		}
 
