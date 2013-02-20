@@ -65,7 +65,6 @@ function(dom, connect, registry, at, Repeat, getStateful, Output){
 			});
 			_connectResults.push(connectResult);
 		},
-		// repeate view destroy
 		destroy: function(){
 			var connectResult = _connectResults.pop();
 			while(connectResult){

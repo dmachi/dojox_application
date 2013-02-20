@@ -84,9 +84,6 @@ function(dom, domStyle, connect, registry, at, TransitionEvent, Repeat, getState
 		beforeActivate: function(){
 			// summary:
 			//		view life cycle beforeActivate()
-			// description:
-			//		beforeActivate will call refreshData to create the
-			//		model/controller and show the list.
 			if(dom.byId("back3r") && this.app.isTablet){ 
 				domStyle.set(dom.byId("back3r"), "visibility", "hidden"); // hide the back button in tablet mode
 			}

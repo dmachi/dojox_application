@@ -80,7 +80,6 @@ function(lang, dom, connect, registry, at, TransitionEvent, Repeat, getStateful,
 			});
 			_connectResults.push(connectResult);
 		},
-		// repeate view destroy
 		destroy: function(){
 			var connectResult = _connectResults.pop();
 			while(connectResult){

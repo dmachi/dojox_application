@@ -19,9 +19,6 @@ function(dom, domStyle, connect, lang, registry, at, TransitionEvent, Repeat, ge
 		beforeActivate: function(){
 			// summary:
 			//		view life cycle beforeActivate()
-			// description:
-			//		beforeActivate will call refreshData to create the
-			//		model/controller and show the list.
 			if(dom.byId(backId) && this.app.isTablet){ 
 				domStyle.set(dom.byId(backId), "visibility", "hidden"); // hide the back button in tablet mode
 			}
@@ -39,7 +36,6 @@ function(dom, domStyle, connect, lang, registry, at, TransitionEvent, Repeat, ge
 		},
 		
 		
-		// repeate view destroy
 		destroy: function(){
 			var connectResult = _connectResults.pop();
 			while(connectResult){

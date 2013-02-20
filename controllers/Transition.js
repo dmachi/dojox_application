@@ -276,7 +276,11 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 			}
 
 			if(removeView){
-				// if we remove a view with not replacement
+				if(next !== current){ // nothing to remove
+					this.app.log("> in Transition._doTransition called with removeView true, but that view is not available to remove");
+					return;  // trying to remove a view which is not showing
+				}	
+				// if next == current we will set next to null and remove the view with out a replacement
 				next = null;
 			}
 
@@ -322,9 +326,9 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 				}
 				
 				var result = true;
-				if(transit && (!has("ie") || has("ie") >= 10) && (!nested || current != null)){
-					// if we are on IE CSS3 transitions are not supported (yet). So just skip the transition itself.
-					// we also skip in we are transitioning to a nested view from a parent view and that nested view
+				if(transit && (!nested || current != null)){
+					// css3 transit has the check for IE so it will not try to do it on ie, so we do not need to check it here.
+					// We skip in we are transitioning to a nested view from a parent view and that nested view
 					// did not have any current
 					var mergedOpts = lang.mixin({}, opts); // handle reverse from mergedOpts or transitionDir
 					mergedOpts = lang.mixin({}, mergedOpts, {

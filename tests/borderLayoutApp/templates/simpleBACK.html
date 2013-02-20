@@ -1,7 +1,7 @@
 <div id="settings" class="view mblView" data-app-constraint="center">
 	<script type="dojo/require">at: "dojox/mvc/at"</script>
-	<h1 data-dojo-type="dojox.mobile.Heading" data-app-constraint="top">Data Binding Example</h1>
-	<div data-dojo-type="dojox.app.widgets.Container" data-app-constraint="center" data-dojo-props="scrollable:'true'">
+	<h1 data-dojo-type="dojox/mobile/Heading" data-app-constraint="top">Data Binding Example</h1>
+	<div data-dojo-type="dojox/app/widgets/Container" data-app-constraint="center" data-dojo-props="scrollable:'true'">
 		<form name="testForm" id="testForm">
 			<div class="field-title">
 				Ship to - Bill to Address
@@ -14,7 +14,7 @@
 								First
 							</td>
 							<td class="layout">
-								<input id="firstInput1" data-dojo-type="dojox.mobile.TextBox" data-dojo-props="value: at('rel:', 'First'), placeholder:'First'">
+								<input id="firstInput1" data-dojo-type="dojox/mobile/TextBox" data-dojo-props="value: at('rel:', 'First'), placeholder:'First'">
 							</td>
 						</tr>
 						<tr>
@@ -22,7 +22,7 @@
 								Last Name
 							</td>
 							<td class="layout">
-								<input id="lastInput1" data-dojo-type="dojox.mobile.TextBox" data-dojo-props="placeholder:'Last Name', value: at('rel:', 'Last')">
+								<input id="lastInput1" data-dojo-type="dojox/mobile/TextBox" data-dojo-props="placeholder:'Last Name', value: at('rel:', 'Last')">
 							</td>
 						</tr>
 						<tr>
@@ -30,16 +30,16 @@
 								Email
 							</td>
 							<td class="layout">
-								<input id="emailInput1" data-dojo-type="dojox.mobile.TextBox" data-dojo-props="value: at('rel:', 'Email'), placeholder:'Email'">
+								<input id="emailInput1" data-dojo-type="dojox/mobile/TextBox" data-dojo-props="value: at('rel:', 'Email'), placeholder:'Email'">
 							</td>
 						</tr>
 					</table>
 					<div class="spacer">
 					</div>
-					<button id="shipto" type="button" data-dojo-type="dojox.mobile.Button" class="mblBlueButton">
+					<button id="shipto" type="button" data-dojo-type="dojox/mobile/Button" class="mblBlueButton">
 						Ship To
 					</button>
-					<button id="billto" type="button" data-dojo-type="dojox.mobile.Button" class="mblBlueButton">
+					<button id="billto" type="button" data-dojo-type="dojox/mobile/Button" class="mblBlueButton">
 						Bill To
 					</button>
 					<br/>
@@ -50,7 +50,7 @@
 									Street
 								</td>
 								<td class="layout">
-									<input id="streetInput" data-dojo-type="dojox.mobile.TextBox" data-dojo-props="value: at('rel:', 'Street'), placeholder:'Street'">
+									<input id="streetInput" data-dojo-type="dojox/mobile/TextBox" data-dojo-props="value: at('rel:', 'Street'), placeholder:'Street'">
 								</td>
 							</tr>
 							<tr>
@@ -58,7 +58,7 @@
 									City
 								</td>
 								<td class="layout">
-									<input id="cityInput" data-dojo-type="dojox.mobile.TextBox" data-dojo-props="placeholder:'City', value: at('rel:', 'City')">
+									<input id="cityInput" data-dojo-type="dojox/mobile/TextBox" data-dojo-props="placeholder:'City', value: at('rel:', 'City')">
 								</td>
 							</tr>
 							<tr>
@@ -66,7 +66,7 @@
 									State
 								</td>
 								<td class="layout">
-									<input id="StateInput" data-dojo-type="dojox.mobile.TextBox" data-dojo-props="value: at('rel:', 'State'), placeholder:'State'">
+									<input id="StateInput" data-dojo-type="dojox/mobile/TextBox" data-dojo-props="value: at('rel:', 'State'), placeholder:'State'">
 								</td>
 							</tr>
 							<tr>
@@ -74,7 +74,7 @@
 									State
 								</td>
 								<td class="layout">
-									<input id="ZipInput" data-dojo-type="dojox.mobile.TextBox" data-dojo-props="value: at('rel:', 'Zip'), placeholder:'Zip Code'">
+									<input id="ZipInput" data-dojo-type="dojox/mobile/TextBox" data-dojo-props="value: at('rel:', 'Zip'), placeholder:'Zip Code'">
 								</td>
 							</tr>
 						</table>
@@ -83,7 +83,7 @@
 			</div>
 			<div class="spacer">
 			</div>
-			<button id="reset1" type="button" data-dojo-type="dojox.mobile.Button" class="mblBlueButton">
+			<button id="reset1" type="button" data-dojo-type="dojox/mobile/Button" class="mblBlueButton">
 				Reset
 			</button>
 		</form>
