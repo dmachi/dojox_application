@@ -2,16 +2,18 @@
 define([
 	"dojo/_base/declare",
 	"dojo/_base/lang",
+	"dojo/_base/array",
 	"dojo/dom-class",
 	"dojo/dom-construct",
 	"dojox/mobile/scrollable"],
-	function(declare, lang, domClass, domConstruct, Scrollable){
+	function(declare, lang, array, domClass, domConstruct, Scrollable){
 	// module:
 	//		dojox/mobile/_ScrollableMixin
 	// summary:
 	//		Mixin for widgets to have a touch scrolling capability.
 
-	var cls = declare("dojox.app.widgets._ScrollableMixin", null, {
+//	var cls = declare("dojox.app.widgets._ScrollableMixin", null, {
+	var cls = declare("dojox.app.widgets._ScrollableMixin", Scrollable, {
 		// summary:
 		//		Mixin for widgets to have a touch scrolling capability.
 		// description:
@@ -84,6 +86,6 @@ define([
 			});
 		}
 	});
-	lang.extend(cls, new Scrollable());
+	//lang.extend(cls, new Scrollable());
 	return cls;
 });

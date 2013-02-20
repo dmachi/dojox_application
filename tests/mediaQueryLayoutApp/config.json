@@ -1,0 +1,133 @@
+{
+	"id": "mediaQueryLayoutApp",
+	"name": "mediaQuery Layout App",
+	"description": "A mediaQuery Layout App",
+	"splash": "splash",
+
+	"loaderConfig": {
+		"paths": {
+			"mediaQueryLayoutApp": "../dojox/app/tests/mediaQueryLayoutApp"
+		}
+	},
+
+	"dependencies": [
+		"dojox/app/utils/mvcModel",
+		"dojox/mobile/_base",
+		"dojox/mobile/compat",
+		"dojox/mobile/TabBar",
+		"dojox/mobile/RoundRect",
+		"dojox/mobile/TabBarButton",
+		"dojox/mobile/Button",
+		"dojox/mobile/RoundRect",
+		"dojox/mobile/Heading",
+		"dojox/mobile/ScrollableView",
+		"dojo/store/Memory",
+		"dojox/mvc/EditStoreRefListController",
+		"dojox/mvc/Group",
+        "dojox/mvc/Repeat",
+        "dojox/mvc/Output",
+		"dojox/mobile/View",
+		"dojox/app/widgets/Container"
+	],
+
+	"modules": [],
+	
+	"controllers": [
+		"dojox/app/controllers/History",
+		"dojox/app/controllers/Load",
+		"dojox/app/controllers/Transition",
+		"dojox/app/tests/mediaQueryLayoutApp/controllers/CssLayout"
+	],
+
+	//stores we are using
+	"stores": {
+	   "namesStore":{
+	       "type": "dojo/store/Memory",
+		   "params": {
+		      "data": "modelApp.names"
+		   }
+	   },
+       "repeatStore":{
+           "type": "dojo/store/Memory",
+           "params": {
+                "data": "modelApp.repeatData"
+           }
+       }
+	},
+
+	//models and instantiation parameters for the models. Including 'type' as a property allows
+	//one to overide the class that will be used for the model.  By default it is dojox/mvc/model
+	"models": {
+	   "names": {
+			"modelLoader": "dojox/app/utils/mvcModel",
+			"type": "dojox/mvc/EditStoreRefListController",
+			"params":{
+				"store": {"$ref":"#stores.namesStore"}
+			}	       
+	   },
+		"repeatmodels": {
+			"modelLoader": "dojox/app/utils/mvcModel",
+			"type": "dojox/mvc/EditStoreRefListController",
+			"params":{
+				"store": {"$ref":"#stores.repeatStore"}
+			}           
+		}
+	}, 
+
+
+	//the name of the view to load when the app is initialized.
+	"defaultView": "header+navigation+TestInfo",
+
+	// these are the possilbe defaultTransitions
+	"defaultTransition": "slide",
+	//"defaultTransition": "none",
+	//"defaultTransition": "fade",
+	//"defaultTransition": "flip",     
+
+	"views": {
+		"navigation":{
+			"definition" : "none",
+			"constraint" : "left",
+			"template": "mediaQueryLayoutApp/templates/navigation.html"
+		},
+		"TestInfo": {
+			"definition" : "mediaQueryLayoutApp/views/TestInfo.js",
+			"constraint" : "center",
+			"template": "mediaQueryLayoutApp/templates/TestInfo.html"
+		},	
+		"centerNavigation":{
+			"definition" : "mediaQueryLayoutApp/views/centerNavigation.js",
+			"constraint" : "center",
+			"template": "mediaQueryLayoutApp/templates/centerNavigation.html"
+		},
+		"header":{
+			"definition" : "none",
+			"constraint" : "top",
+			"template": "mediaQueryLayoutApp/templates/header.html"
+		},
+		"simple":{
+			"definition" : "mediaQueryLayoutApp/views/simple.js",
+			"constraint" : "center",
+			"template": "mediaQueryLayoutApp/templates/simple.html",
+			"dependencies":["dojox/mobile/TextBox"]
+		},
+
+		"repeatList":{
+			"definition" : "mediaQueryLayoutApp/views/repeat.js",
+			"template": "mediaQueryLayoutApp/templates/repeat.html",
+			"dependencies":["dojox/mobile/TextBox"]
+		},
+		"repeatDetails":{
+			"definition" : "mediaQueryLayoutApp/views/repeatDetails.js",
+			"template": "mediaQueryLayoutApp/templates/repeatDetails.html",
+			"dependencies":["dojox/mobile/TextBox"]
+		},
+
+		"generate": {
+			"definition": "mediaQueryLayoutApp/views/generate",
+            "template": "mediaQueryLayoutApp/templates/generate.html",
+			"constraint" : "center",            
+            "dependencies":["dojox/mobile/TextBox", "dojox/mobile/TextArea", "dojox/mvc/Generate"]
+		}
+	}	
+}

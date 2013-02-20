@@ -1,12 +1,12 @@
 <div class="view mblView"  data-app-constraint="center">
 	<script type="dojo/require">at: "dojox/mvc/at"</script>
-    <h1 data-dojo-type="dojox.mobile.Heading" data-app-constraint="center">Repeat Data Binding Example</h1>
+    <h1 data-dojo-type="dojox/mobile/Heading" data-app-constraint="center">Repeat Data Binding Example</h1>
     <form name="repeatTestForm" id="repeatTestForm">    
     	<div class="field-title">Search Results</div>
         <div id="repeatWidget" class="fieldset" data-dojo-type="dojox/mvc/Repeat" 
         	data-dojo-props="exprchar: '#', children: this.loadedModels.repeatmodels.model" >
            <div class="row">            
-                    <input data-dojo-type="dojox.mobile.TextBox"
+                    <input data-dojo-type="dojox/mobile/TextBox"
                         id="nameInput#{this.index}" data-dojo-props="value: at('rel:#{this.index}','First')" placeHolder="First Name"></input>
                     <button type="button" id="detail#{this.index}" data-dojo-type="dojox/mobile/Button" class="mblBlueButton">
                         Details

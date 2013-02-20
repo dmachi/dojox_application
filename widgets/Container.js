@@ -77,6 +77,10 @@ function(declare, lang, registry, domAttr, domGeom, domStyle, WidgetBase, Contai
 
 			var node = this.domNode;
 
+			if(this.scrollable){
+				this.inherited(arguments);
+			}
+
 			// set margin box size, unless it wasn't specified, in which case use current size
 			if(changeSize){
 				domGeom.setMarginBox(node, changeSize);
