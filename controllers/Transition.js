@@ -316,7 +316,7 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 					this.app.log("> in Transition._doTransition calling next.beforeActivate next name=[",next.name,"], parent.name=[",next.parent.name,"], next!==current path");
 					next.beforeActivate(current, data);
 				}
-				this.app.log("> in Transition._doTransition calling app.triggger layoutView view next");
+				this.app.log("> in Transition._doTransition calling app.emit layoutView view next");
 				if(!removeView){
 					// if we are removing the view we must delay the layout to _after_ the animation
 					this.app.emit("layoutView", {"parent": parent, "view": next });
