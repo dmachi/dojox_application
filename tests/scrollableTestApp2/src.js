@@ -13,5 +13,4 @@ require(["dojox/app/main","dojox/app/utils/config",  "dojox/json/ref", "dojo/sni
 		var config = json.fromJson(configJson);
 		Application(config);
 	});
-
 });

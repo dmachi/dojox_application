@@ -1,6 +1,6 @@
 define(["dojo/_base/lang", "dojo/_base/declare", "dojo/sniff", "dojo/_base/window", "dojo/_base/config",
-		"dojo/dom-attr", "dojo/topic", "dojo/dom-style", "../utils/constraints", "../Controller"],
-function(lang, declare, has, win, config, domAttr, topic, domStyle, constraints, Controller){
+		"dojo/dom-attr", "dojo/topic", "dojo/dom-style", "dojo/_base/array", "dijit/registry", "../utils/constraints", "../Controller"],
+function(lang, declare, has, win, config, domAttr, topic, domStyle, array, registry, constraints, Controller){
 	// module:
 	//		dojox/app/controllers/LayoutBase
 	// summary:
@@ -38,8 +38,15 @@ function(lang, declare, has, win, config, domAttr, topic, domStyle, constraints,
 			for(var hash in this.app.selectedChildren){  // need this to handle all selectedChildren
 				if(this.app.selectedChildren[hash]) {
 					this._doResize(this.app.selectedChildren[hash]);
+					// Call resize on child widgets, needed to get the scrollableView to resize correctly initially	
+					array.forEach(this.app.selectedChildren[hash].domNode.children, function(child){
+						if(registry.byId(child.id) && registry.byId(child.id).resize){ 
+							registry.byId(child.id).resize(); 
+						}
+					});	
 				}
 			}
+
 			
 		},
 		
