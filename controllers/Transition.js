@@ -366,24 +366,24 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 					}
 				}));
 				return result; // dojo/promise/all
-			}else{
-				// next view == current view, refresh current view
-				// deactivate next view
-				this.app.log("< in Transition._doTransition calling next.beforeDeactivate refresh current view next name=[",next.name,"], parent.name=[",next.parent.name,"], next==current path");
-				next.beforeDeactivate(current, data);
-				this.app.log("  < in Transition._doTransition calling next.afterDeactivate refresh current view next name=[",next.name,"], parent.name=[",next.parent.name,"], next==current path");
-				next.afterDeactivate(current, data);
-				// activate next view
-				this.app.log("> in Transition._doTransition calling next.beforeActivate next name=[",next.name,"], parent.name=[",next.parent.name,"], next==current path");
-				next.beforeActivate(current, data);
-				this.app.log("  > in Transition._doTransition calling next.afterActivate next name=[",next.name,"], parent.name=[",next.parent.name,"], next==current path");
-				next.afterActivate(current, data);
-				// layout current view, or remove it
-				this.app.log("> in Transition._doTransition calling app.triggger layoutView view next name=[",next.name,"], removeView = [",removeView,"], parent.name=[",next.parent.name,"], next==current path");
-				this.app.emit("layoutView", {"parent":parent, "view": next, "removeView": removeView});
-				if(doResize){
-					this.app.emit("resize"); // after last layoutView call resize			
-				}
+			}
+
+			// next view == current view, refresh current view
+			// deactivate next view
+			this.app.log("< in Transition._doTransition calling next.beforeDeactivate refresh current view next name=[",next.name,"], parent.name=[",next.parent.name,"], next==current path");
+			next.beforeDeactivate(current, data);
+			this.app.log("  < in Transition._doTransition calling next.afterDeactivate refresh current view next name=[",next.name,"], parent.name=[",next.parent.name,"], next==current path");
+			next.afterDeactivate(current, data);
+			// activate next view
+			this.app.log("> in Transition._doTransition calling next.beforeActivate next name=[",next.name,"], parent.name=[",next.parent.name,"], next==current path");
+			next.beforeActivate(current, data);
+			this.app.log("  > in Transition._doTransition calling next.afterActivate next name=[",next.name,"], parent.name=[",next.parent.name,"], next==current path");
+			next.afterActivate(current, data);
+			// layout current view, or remove it
+			this.app.log("> in Transition._doTransition calling app.triggger layoutView view next name=[",next.name,"], removeView = [",removeView,"], parent.name=[",next.parent.name,"], next==current path");
+			this.app.emit("layoutView", {"parent":parent, "view": next, "removeView": removeView});
+			if(doResize){
+				this.app.emit("resize"); // after last layoutView call resize
 			}
 
 			// do sub transition like transition from "tabScene,tab1" to "tabScene,tab2"
