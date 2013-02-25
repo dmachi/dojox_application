@@ -1,4 +1,4 @@
-define(["dojo/sniff",], function(has){
+define(["dojo/sniff"], function(has){
 
 // module:
 //		dojox/app/utils/config
