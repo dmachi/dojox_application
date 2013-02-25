@@ -19,6 +19,23 @@ function(declare, lang, array, win, query, domGeom, domAttr, domStyle, registry,
 			//		{event : handler}
 		},
 
+		onResize: function(){
+			this._doResize(this.app);
+			// this is needed to resize the children on an orientation change or a resize of the browser.
+			// it was being done in _doResize, but was not needed for every call to _doResize.
+			for(var hash in this.app.selectedChildren){  // need this to handle all selectedChildren
+				if(this.app.selectedChildren[hash]) {
+					this._doResize(this.app.selectedChildren[hash]);
+					// Call resize on child widgets, needed to get the scrollableView to resize correctly initially	
+					array.forEach(this.app.selectedChildren[hash].domNode.children, function(child){
+						if(registry.byId(child.id) && registry.byId(child.id).resize){ 
+							registry.byId(child.id).resize(); 
+						}
+					});	
+				}
+			}
+		},
+
 		initLayout: function(event){
 			// summary:
 			//		Response to dojox/app "initLayout" event.
