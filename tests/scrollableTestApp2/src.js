@@ -1,5 +1,5 @@
-require(["dojox/app/main","dojox/app/utils/config",  "dojox/json/ref", "dojo/sniff"],
-	function(Application, configUtil, json, has){
+require(["dojox/app/main", "dojox/json/ref", "dojo/sniff"],
+	function(Application, json, has){
 	var isTablet = false;
 	var configurationFile = "./config.json";
 	if(window.innerWidth > 600){
