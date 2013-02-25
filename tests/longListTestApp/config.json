@@ -59,7 +59,7 @@
 		"tablet" : {
 			"template": "longListTestApp/templates/tablet/ViewScrollableLists.html",
 			"definition": "longListTestApp/views/tablet/ViewScrollableLists",
-			"defaultView": "Header1,LongList1",
+			"defaultView": "Footer1,Header1,LongList1",
 			"isTablet" : true
 		}
 	},	
@@ -81,26 +81,35 @@
 				}
 			}
 		},
-		"Header1": {
-			"template": "longListTestApp/templates/Header1.html",
+		"Footer1": {
+			"template": "longListTestApp/templates/Footer1.html",
 			"views": {
-				"TestInfo": {
-					"transition": "none",
-					"template": "longListTestApp/templates/TestInfo.html",
-					"definition": "longListTestApp/views/TestInfo.js"
-				},
-				"LongList1": {
-					"template": "longListTestApp/templates/LongList1.html",
-					"definition": "longListTestApp/views/LongList1.js"
-				},
-				"LongList3": {
-					"template": "longListTestApp/templates/LongList3.html",
-					"definition": "longListTestApp/views/LongList3.js"
+				"Header1": {
+					"template": "longListTestApp/templates/Header1.html",
+					"definition": "longListTestApp/views/Header1.js",
+					"views": {
+						"TestInfo": {
+							"transition": "none",
+							"template": "longListTestApp/templates/TestInfo.html",
+							"definition": "longListTestApp/views/TestInfo.js"
+						},
+						"LongList1": {
+							"template": "longListTestApp/templates/LongList1.html",
+							"definition": "longListTestApp/views/LongList1.js"
+						},
+						"LongList3": {
+							"template": "longListTestApp/templates/LongList3.html",
+							"definition": "longListTestApp/views/LongList3.js"
+						}
+					}
 				}
 			}
 		},
 		"LongList2": {
 			"template": "longListTestApp/templates/LongList2.html"
+		},
+		"LongList4": {
+			"template": "longListTestApp/templates/LongList4.html"
 		}
 	}
 }
