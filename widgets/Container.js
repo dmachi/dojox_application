@@ -3,6 +3,8 @@ define(["dojo/_base/declare", "dojo/_base/lang", "dijit/registry", "dojo/dom-att
 function(declare, lang, registry, domAttr, domGeom, domStyle, WidgetBase, Container, Contained, array, query, layoutUtils, ScrollableMixin){
 	return declare("dojox.app.widgets.Container", [WidgetBase, Container, Contained, ScrollableMixin], {
 		scrollable: false,
+		fixedFooter:"",
+		fixedeader:"",
 
 		buildRendering: function(){
 			//set default _constraint="center"
@@ -78,6 +80,7 @@ function(declare, lang, registry, domAttr, domGeom, domStyle, WidgetBase, Contai
 			var node = this.domNode;
 
 			if(this.scrollable){
+				//win.longListTestApp
 				this.inherited(arguments);
 			}
 
