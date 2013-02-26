@@ -110,13 +110,13 @@
 	//views are groups of views and models loaded at once
 	"views": {
 		"navigation": {
-			"template": "scrollableTestApp/templates/tablet/ViewScrollableLists.html",
+			"template": "scrollableTestApp/views/tablet/ViewScrollableLists.html",
 			"definition" : "scrollableTestApp/views/tablet/ViewScrollableLists.js",
 			"transition": "slide",
 			"constraint" : "left"
 		},
 		"configuration": {
-				"template": "scrollableTestApp/templates/configuration/ScrollableListSelection.html",
+				"template": "scrollableTestApp/views/configuration/ScrollableListSelection.html",
 				"definition": "scrollableTestApp/views/configuration/ScrollableListSelection.js",
 				"has" : {
 					"phone" : {
@@ -130,46 +130,46 @@
 		
 		"TestInfo": {
 			"transition": "none",
-			"template": "scrollableTestApp/templates/TestInfo.html"
+			"template": "scrollableTestApp/views/TestInfo.html"
 		},
 		"Scrollable1": {
 			"transition": "slide",
-			"template": "scrollableTestApp/templates/Scrollable1.html"
+			"template": "scrollableTestApp/views/Scrollable1.html"
 		},
 		"Scrollable1P": {
-			"template": "scrollableTestApp/templates/Scrollable1P.html",
+			"template": "scrollableTestApp/views/Scrollable1P.html",
 			"transition": "flip",
 			"constraint" : "center"
 		},
 		"Scrollable2": {
-			"template": "scrollableTestApp/templates/Scrollable2.html",
+			"template": "scrollableTestApp/views/Scrollable2.html",
 			"transition": "fade",
 			"constraint" : "center"
 		},
 		"Scrollable3": {
-			"template": "scrollableTestApp/templates/Scrollable3.html",
+			"template": "scrollableTestApp/views/Scrollable3.html",
 			"constraint" : "center"
 		},
 		"Scrollable4": {
-			"template": "scrollableTestApp/templates/Scrollable4.html",
+			"template": "scrollableTestApp/views/Scrollable4.html",
 			"constraint" : "center"
 		},
 		"Scrollable5": {
-			"template": "scrollableTestApp/templates/Scrollable5.html"
+			"template": "scrollableTestApp/views/Scrollable5.html"
 		},
 		"ListItemDomButtons": {
 			"definition": "scrollableTestApp/views/ListItem-domButtons",
-			"template": "scrollableTestApp/templates/ListItem-domButtons.html",
+			"template": "scrollableTestApp/views/ListItem-domButtons.html",
 			"constraint" : "center"
 		},
 		"ListItemDomButtons2": {
 			"definition": "scrollableTestApp/views/ListItem-domButtons2",
-			"template": "scrollableTestApp/templates/ListItem-domButtons2.html",
+			"template": "scrollableTestApp/views/ListItem-domButtons2.html",
 			"constraint" : "center"
 		},
 		
 		"repeatDetails": {
-			"template": "scrollableTestApp/templates/repeatDetails.html",
+			"template": "scrollableTestApp/views/repeatDetails.html",
 			"transition": "slide",
 			"constraint" : "center"
 		}

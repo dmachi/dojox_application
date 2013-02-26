@@ -57,7 +57,7 @@
 			"isTablet" : false
 		},
 		"tablet" : {
-			"template": "longListTestApp/templates/tablet/ViewScrollableLists.html",
+			"template": "longListTestApp/views/tablet/ViewScrollableLists.html",
 			"definition": "longListTestApp/views/tablet/ViewScrollableLists",
 			"defaultView": "Footer1,Header1,LongList1",
 			"isTablet" : true
@@ -77,28 +77,28 @@
 
 			"views": {
 				"ScrollableListSelection": {
-					"template": "longListTestApp/templates/configuration/ScrollableListSelection.html"
+					"template": "longListTestApp/views/configuration/ScrollableListSelection.html"
 				}
 			}
 		},
 		"Footer1": {
-			"template": "longListTestApp/templates/Footer1.html",
+			"template": "longListTestApp/views/Footer1.html",
 			"views": {
 				"Header1": {
-					"template": "longListTestApp/templates/Header1.html",
+					"template": "longListTestApp/views/Header1.html",
 					"definition": "longListTestApp/views/Header1.js",
 					"views": {
 						"TestInfo": {
 							"transition": "none",
-							"template": "longListTestApp/templates/TestInfo.html",
+							"template": "longListTestApp/views/TestInfo.html",
 							"definition": "longListTestApp/views/TestInfo.js"
 						},
 						"LongList1": {
-							"template": "longListTestApp/templates/LongList1.html",
+							"template": "longListTestApp/views/LongList1.html",
 							"definition": "longListTestApp/views/LongList1.js"
 						},
 						"LongList3": {
-							"template": "longListTestApp/templates/LongList3.html",
+							"template": "longListTestApp/views/LongList3.html",
 							"definition": "longListTestApp/views/LongList3.js"
 						}
 					}
@@ -106,10 +106,10 @@
 			}
 		},
 		"LongList2": {
-			"template": "longListTestApp/templates/LongList2.html"
+			"template": "longListTestApp/views/LongList2.html"
 		},
 		"LongList4": {
-			"template": "longListTestApp/templates/LongList4.html"
+			"template": "longListTestApp/views/LongList4.html"
 		}
 	}
 }

@@ -1,6 +1,6 @@
 define(["dojo/dom", "dojo/dom-style", "dojo/_base/connect", "dojo/_base/lang", "dojo/_base/declare", "dijit/registry", "dojox/mvc/at", 
 "dojox/mobile/TransitionEvent", "dojox/mvc/Repeat", "dojox/mvc/getStateful", "dojox/mvc/Output", 
-"dojox/mobile/RoundRectList", "dojox/mvc/WidgetList", "dojox/mvc/Templated", "dojox/mobile/ListItem", "dojo/text!../templates/RoundRectWidListTemplate.html"],
+"dojox/mobile/RoundRectList", "dojox/mvc/WidgetList", "dojox/mvc/Templated", "dojox/mobile/ListItem", "dojo/text!../views/RoundRectWidListTemplate.html"],
 function(dom, domStyle, connect, lang, declare, registry, at, TransitionEvent, Repeat, getStateful, Output, RoundRectList, WidgetList, Templated, 
 	ListItem, RoundRectWidListTemplate){
 	var _connectResults = []; // events connect result

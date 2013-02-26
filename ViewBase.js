@@ -140,6 +140,10 @@ define(["require", "dojo/when", "dojo/on", "dojo/dom-attr", "dojo/_base/declare"
 				return definitionDef;
 			}else if(this.definition){
 				path = this.definition.replace(/(\.js)$/, "");
+			}else if(this.template){
+				path = this.template.replace(/(\.html)$/, "");
+				// TODO: remove this, temp code to avoid braking all default definitions before the conversion over to the new file structure
+				path = path.replace("templates", "views");
 			}else{
 				path = this.id.split("_");
 				path.shift();
