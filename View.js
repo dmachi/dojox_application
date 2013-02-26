@@ -37,6 +37,7 @@ define(["require", "dojo/when", "dojo/on", "dojo/_base/declare", "dojo/_base/lan
 			//		|		name: this.name,
 			//		|		parent: this,
 			//		|		templateString: this.templateString,
+			//		|		template: this.template, 
 			//		|		definition: this.definition
 			//		|	});
 			//		|	viewObj.start(); // start view

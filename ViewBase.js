@@ -14,6 +14,7 @@ define(["require", "dojo/when", "dojo/on", "dojo/dom-attr", "dojo/_base/declare"
 			//		- id: view id
 			//		- name: view name
 			//		- parent: parent view
+			//		- template: view template path 
 			//		- definition: view definition module identifier
 			//		- children: children views
 			this.id = "";
