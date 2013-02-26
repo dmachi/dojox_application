@@ -4,7 +4,7 @@ function(declare, lang, registry, domAttr, domGeom, domStyle, WidgetBase, Contai
 	return declare("dojox.app.widgets.Container", [WidgetBase, Container, Contained, ScrollableMixin], {
 		scrollable: false,
 		fixedFooter:"",
-		fixedeader:"",
+		fixedHeader:"",
 
 		buildRendering: function(){
 			//set default _constraint="center"
@@ -80,8 +80,9 @@ function(declare, lang, registry, domAttr, domGeom, domStyle, WidgetBase, Contai
 			var node = this.domNode;
 
 			if(this.scrollable){
-				//win.longListTestApp
 				this.inherited(arguments);
+				this.layout();
+				return;
 			}
 
 			// set margin box size, unless it wasn't specified, in which case use current size

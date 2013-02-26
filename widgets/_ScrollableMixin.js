@@ -29,7 +29,7 @@ define([
 
 		// appBars: Boolean
 		//		Enables the search for application-specific bars (header or footer).
-		appBars: true, 
+		appBars: false, 
 
 		// allowNestedScrolls: Boolean
 		//		e.g. Allow ScrollableView in a SwapView.
@@ -136,14 +136,15 @@ define([
 			if(node.nodeType === 1){
 				var fixed = node.getAttribute("data-app-constraint")
 					|| (registry.byNode(node) && registry.byNode(node)["data-app-constraint"]);
-				if(fixed === "top"){
+			/*	if(fixed === "top"){
 					domClass.add(node, "mblFixedHeaderBar");
 					if(local){
 						node.style.top = "0px";
 						this.fixedHeader = node;
 					}
 					return fixed;
-				}else 
+				}else
+			*/	 
 				if(fixed === "bottom"){
 					domClass.add(node, "mblFixedBottomBar");
 					if(local){

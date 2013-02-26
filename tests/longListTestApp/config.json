@@ -20,6 +20,8 @@
 		"dojox/mobile/RoundRectCategory",
 		"dojox/mobile/EdgeToEdgeStoreList",
 		"dojox/mobile/LongListMixin",
+		"dojox/mobile/TabBar",
+		"dojox/mobile/TabBarButton",
 		"dojox/app/widgets/Container",
 		"dojo/store/Memory",
 		"dojo/store/Observable",
