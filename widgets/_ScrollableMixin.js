@@ -29,7 +29,7 @@ define([
 
 		// appBars: Boolean
 		//		Enables the search for application-specific bars (header or footer).
-		appBars: false, 
+		appBars: true, 
 
 		// allowNestedScrolls: Boolean
 		//		e.g. Allow ScrollableView in a SwapView.

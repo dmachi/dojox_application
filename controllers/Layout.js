@@ -30,13 +30,11 @@ function(declare, lang, array, win, query, domGeom, domAttr, domStyle, registry,
 		resizeSelectedChildren: function(w){
 			for(var hash in w.selectedChildren){  // need this to handle all selectedChildren
 				if(w.selectedChildren[hash]) {
-					var app = this.app
-					app.log("in Layout resizeSelectedChildren calling resizeSelectedChildren calling _doResize for w.selectedChildren[hash].id="+w.selectedChildren[hash].id);
+					this.app.log("in Layout resizeSelectedChildren calling resizeSelectedChildren calling _doResize for w.selectedChildren[hash].id="+w.selectedChildren[hash].id);
 					this._doResize(w.selectedChildren[hash]);
 					// Call resize on child widgets, needed to get the scrollableView to resize correctly initially	
 					array.forEach(w.selectedChildren[hash].domNode.children, function(child){
 						if(registry.byId(child.id) && registry.byId(child.id).resize){ 
-							app.log("in Layout resizeSelectedChildren doing children of selectedChildren calling resize for child.id="+child.id);
 							registry.byId(child.id).resize(); 
 						}
 					});	
@@ -77,7 +75,6 @@ function(declare, lang, array, win, query, domGeom, domAttr, domStyle, registry,
 				this.app.log("Warning - View has not been loaded, in Layout _doResize view.domNode is not set for view.id="+view.id+" view=",view);
 				return;
 			}
-			this.app.log("in Layout _doResize for view.id="+view.id+" view=",view);
 
 			// If either height or width wasn't specified by the user, then query node for it.
 			// But note that setting the margin box and then immediately querying dimensions may return
