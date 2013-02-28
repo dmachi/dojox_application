@@ -20,6 +20,8 @@
 		"dojox/mobile/RoundRectCategory",
 		"dojox/mobile/EdgeToEdgeStoreList",
 		"dojox/mobile/LongListMixin",
+		"dojox/mobile/TabBar",
+		"dojox/mobile/TabBarButton",
 		"dojox/app/widgets/Container",
 		"dojo/store/Memory",
 		"dojo/store/Observable",
@@ -53,7 +55,7 @@
 	
 	"has" : {
 		"phone" : {
-			"defaultView": "Header1,LongList1",
+			"defaultView": "Footer1,Header1,LongList1",
 			"isTablet" : false
 		},
 		"tablet" : {
