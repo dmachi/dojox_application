@@ -86,7 +86,7 @@ function(dom, domStyle, connect, lang, registry, at, TransitionEvent, Repeat, ge
 				app.showProgressIndicator(true);
 				setTimeout(lang.hitch(this,function(){
 					maxentries = repeatmodel.model.length+10;
-					for(i = repeatmodel.model.length; i < maxentries; i++){
+					for(var i = repeatmodel.model.length; i < maxentries; i++){
 						var data = {id:Math.random(), "First": "First"+repeatmodel.model.length, "Last": "Last"+repeatmodel.model.length, "Location": "CA", "Office": "", "Email": "", "Tel": "", "Fax": ""};
 						repeatmodel.model.splice(repeatmodel.model.length, 0, new getStateful(data));					
 					}
@@ -101,7 +101,7 @@ function(dom, domStyle, connect, lang, registry, at, TransitionEvent, Repeat, ge
 				app.showProgressIndicator(true);
 				setTimeout(lang.hitch(this,function(){				
 					maxentries = repeatmodel.model.length-10;
-					for(i = repeatmodel.model.length; i > maxentries; i--){
+					for(var i = repeatmodel.model.length; i > maxentries; i--){
 						repeatmodel.model.splice(i, 1);
 					}
 					repeatmodel.set("cursorIndex", 0);		
@@ -141,5 +141,5 @@ function(dom, domStyle, connect, lang, registry, at, TransitionEvent, Repeat, ge
 				connectResult = _connectResults.pop();
 			}
 		}
-	}
+	};
 });

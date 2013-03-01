@@ -12,7 +12,7 @@ require(["dojox/app/main", "dojox/json/ref", "dojo/sniff"],
 	require(["dojo/text!"+configurationFile], function(configJson){
 		var config = json.fromJson(configJson);
 		has.add("phone", !isTablet);
-		has.add("ie9orLess", has("ie") && !has("ie") >= 10);
+		has.add("ie9orLess", has("ie") && (has("ie") <= 9));
 		Application(config);
 	});
 });
