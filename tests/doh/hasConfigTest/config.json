@@ -35,14 +35,14 @@
 		"phone,ios,andriod" : {
 			"configTestPhoneIosOrAndroid": "Yes"
 		},
-		"ios,andriod,tablet" : {
+		"ios,andriod,!phone" : {
 			"configTestTabletIosOrAndroid": "Yes"
 		},
 		"phone" : {
 			"configTestPhone": "Yes",
 			"isTablet" : false
 		},
-		"tablet" : {
+		"!phone" : {
 			"configTestTablet": "Yes",
 			"isTablet" : true
 		},
@@ -51,7 +51,7 @@
 				"dojox/app/controllers/HistoryHash"
 			]
 		},
-		"notIE" : {
+		"!ie" : {
 			"controllers": [
 				"dojox/app/controllers/History"
 			]
