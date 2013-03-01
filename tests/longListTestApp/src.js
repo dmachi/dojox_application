@@ -9,16 +9,15 @@ require(["dojo/_base/window","dojox/app/main", "dojox/json/ref", "dojo/sniff"],
 	var isTablet = false;
 
 	var configurationFile = "./config.json";
-	if(window.innerWidth > 600){
+	var width = window.innerWidth || document.documentElement.clientWidth;
+	if(width > 600){
 		isTablet = true;
 	}
 
 	require(["dojo/text!"+configurationFile], function(configJson){
 		var config = json.fromJson(configJson);
-		has.add("tablet", isTablet);
 		has.add("phone", !isTablet);
-		has.add("ie9orLess", has("ie") && !has("ie") >= 10);
-		has.add("notie9orLess", !has("ie") || has("ie") >= 10);
+		has.add("ie9orLess", has("ie") && (has("ie") <= 9));
 		Application(config);
 	});
 });
