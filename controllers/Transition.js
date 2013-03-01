@@ -322,7 +322,7 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 					this.app.emit("app-layoutView", {"parent": parent, "view": next });
 				}
 				if(doResize){  
-					this.app.emit("app-resize"); // after last layoutView call resize			
+					this.app.emit("app-resize"); // after last layoutView fire app-resize			
 				}
 				
 				var result = true;
@@ -383,7 +383,7 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 			this.app.log("> in Transition._doTransition calling app.triggger layoutView view next name=[",next.name,"], removeView = [",removeView,"], parent.name=[",next.parent.name,"], next==current path");
 			this.app.emit("app-layoutView", {"parent":parent, "view": next, "removeView": removeView});
 			if(doResize){
-				this.app.emit("app-resize"); // after last layoutView call resize
+				this.app.emit("app-resize"); // after last layoutView fire app-resize
 			}
 
 			// do sub transition like transition from "tabScene,tab1" to "tabScene,tab2"
