@@ -27,7 +27,7 @@ function(lang, declare, has, win, config, domAttr, topic, domStyle, constraints,
 				topic.subscribe("/dojox/mobile/afterResizeAll", lang.hitch(this, this.onResize));
 			}else{
 				// bind to browsers orientationchange event for ios otherwise bind to browsers resize
-				this.bind(win.global, has("ios") ? "orientationchange" : "app-resize", lang.hitch(this, this.onResize));
+				this.bind(win.global, has("ios") ? "orientationchange" : "resize", lang.hitch(this, this.onResize));
 			}
 		},
 
