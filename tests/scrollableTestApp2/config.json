@@ -76,18 +76,18 @@
 			"defaultView": "configuration",
 			"isTablet" : false
 		},
-		"tablet" : {
+		"!phone" : {
 			"defaultView": "configuration+TestInfo",
 			"isTablet" : true
 		},
 		"ie9orLess" : {
 			"controllers": [
-				"dojox/app/controllers/HistoryHash",
+				"dojox/app/controllers/HistoryHash"
 			]
 		},
-		"notie9orLess" : {
+		"!ie9orLess" : {
 			"controllers": [
-				"dojox/app/controllers/History",
+				"dojox/app/controllers/History"
 			]
 		}
 	},	
@@ -120,12 +120,12 @@
 				"definition": "scrollableTestApp/views/configuration/ScrollableListSelection.js",
 				"has" : {
 					"phone" : {
-						"constraint" : "center",
+						"constraint" : "center"
 					},
-					"tablet" : { 
-						"constraint" : "left",
-					},	
-				},
+					"!phone" : { 
+						"constraint" : "left"
+					}	
+				}
 		},
 		
 		"TestInfo": {

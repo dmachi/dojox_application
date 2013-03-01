@@ -27,33 +27,33 @@
 	// These configTest... lines are only used for the doh test, this is not typical for a config
 	"has" : {
 		"testTrue" : {
-			"configTestSetTrueInHas": "SetInHasOk",
+			"configTestSetTrueInHas": "SetInHasOk"
 		},
 		"testFalse" : {
-			"configTestNotSetInHas": "FAILED",
+			"configTestNotSetInHas": "FAILED"
 		},
 		"phone,ios,andriod" : {
-			"configTestPhoneIosOrAndroid": "Yes",
+			"configTestPhoneIosOrAndroid": "Yes"
 		},
-		"ios,andriod,tablet" : {
-			"configTestTabletIosOrAndroid": "Yes",
+		"ios,andriod,!phone" : {
+			"configTestTabletIosOrAndroid": "Yes"
 		},
 		"phone" : {
 			"configTestPhone": "Yes",
 			"isTablet" : false
 		},
-		"tablet" : {
+		"!phone" : {
 			"configTestTablet": "Yes",
 			"isTablet" : true
 		},
 		"ie" : {
 			"controllers": [
-				"dojox/app/controllers/HistoryHash",
+				"dojox/app/controllers/HistoryHash"
 			]
 		},
-		"notIE" : {
+		"!ie" : {
 			"controllers": [
-				"dojox/app/controllers/History",
+				"dojox/app/controllers/History"
 			]
 		}
 	},	

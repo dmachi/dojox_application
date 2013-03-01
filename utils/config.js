@@ -30,7 +30,8 @@ var config = {
 						if(parts.length > 0){
 							while(parts.length > 0){ 	
 								var haspart = parts.shift();
-								if(has(haspart)) { // if true this one should be merged
+								// check for has(haspart) or if haspart starts with ! check for !(has(haspart))
+								if((has(haspart)) || (haspart.charAt(0) == '!' && !(has(haspart.substring(1))))) { // if true this one should be merged
 									var hasval = sval[hasname];
 									this.configMerge(source, hasval); // merge this has section into the source config
 									break;  // found a match for this multiple has test, so go to the next one

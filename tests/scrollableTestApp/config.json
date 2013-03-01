@@ -78,7 +78,7 @@
 			"defaultView": "configuration,ScrollableListSelection",
 			"isTablet" : false
 		},
-		"tablet" : {
+		"!phone" : {
 			"template": "scrollableTestApp/templates/tablet/ViewScrollableLists.html",
 			"definition": "scrollableTestApp/views/tablet/ViewScrollableLists",
 			"defaultView": "TestInfo",
@@ -86,12 +86,12 @@
 		},
 		"ie9orLess" : {
 			"controllers": [
-				"dojox/app/controllers/HistoryHash",
+				"dojox/app/controllers/HistoryHash"
 			]
 		},
-		"notie9orLess" : {
+		"!ie9orLess" : {
 			"controllers": [
-				"dojox/app/controllers/History",
+				"dojox/app/controllers/History"
 			]
 		}
 	},	

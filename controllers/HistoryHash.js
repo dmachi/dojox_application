@@ -3,7 +3,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/topic", "dojo/on", "../Co
 	// module:
 	//		dojox/app/controllers/HistoryHash
 	// summary:
-	//		Bind "domNode" event on dojox/app application instance,
+	//		Bind "app-domNode" event on dojox/app application instance,
 	//		Bind "startTransition" event on dojox/app application domNode,
 	//		Bind "/dojo/hashchange" event on window object.
 	//		Maintain history by history hash.
@@ -12,14 +12,14 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/topic", "dojo/on", "../Co
 
 		constructor: function(app){
 			// summary:
-			//		Bind "domNode" event on dojox/app application instance,
+			//		Bind "app-domNode" event on dojox/app application instance,
 			//		Bind "startTransition" event on dojox/app application domNode,
 			//		subscribe "/dojo/hashchange" event.
 			//
 			// app:
 			//		dojox/app application instance.
 			this.events = {
-				"domNode": this.onDomNodeChange
+				"app-domNode": this.onDomNodeChange
 			};
 			if(this.app.domNode){
 				this.onDomNodeChange({oldNode: null, newNode: this.app.domNode});
@@ -176,7 +176,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/topic", "dojo/on", "../Co
 				this._addHistory(currentHash);
 				if (!this._startTransitionEvent) {
 					// transition to the target view
-					this.app.emit("transition", {
+					this.app.emit("app-transition", {
 						viewId: hash.getTarget(currentHash),
 						opts: { params: hash.getParams(currentHash) || {} }
 					});
@@ -236,7 +236,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/topic", "dojo/on", "../Co
 			topic.publish("/app/history/back", {"viewId": target, "detail": detail});
 
 			// transition to the target view
-			this.app.emit("transition", {
+			this.app.emit("app-transition", {
 				viewId: target,
  				opts: lang.mixin({reverse: true}, detail, {"params": hash.getParams(currentHash)})
 			});
@@ -259,7 +259,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/topic", "dojo/on", "../Co
 			topic.publish("/app/history/forward", {"viewId": target, "detail": detail});
 
 			// transition to the target view
-			this.app.emit("transition", {
+			this.app.emit("app-transition", {
 				viewId: target,
  				opts: lang.mixin({reverse: false}, detail, {"params": hash.getParams(currentHash)})
 			});
@@ -281,7 +281,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/topic", "dojo/on", "../Co
 			topic.publish("/app/history/go", {"viewId": target, "step": step, "detail": this._historyStack[index]["detail"]});
 
 			// transition to the target view
-			this.app.emit("transition", {
+			this.app.emit("app-transition", {
 				viewId: target,
 				opts: lang.mixin({reverse: (step <= 0)}, this._historyStack[index]["detail"], {"params": hash.getParams(this._current)})
 			});

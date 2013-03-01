@@ -6,9 +6,10 @@ define([
 	"dojo/_base/window",
 	"dojo/dom-class",
 	"dijit/registry",
+	"dojo/dom",
 	"dojo/dom-construct",
 	"dojox/mobile/scrollable"],
-	function(declare, lang, array, win, domClass, registry, domConstruct, Scrollable){
+	function(declare, lang, array, win, domClass, registry, dom, domConstruct, Scrollable){
 	// module:
 	//		dojox/mobile/_ScrollableMixin
 	// summary:
@@ -45,8 +46,24 @@ define([
 
 		startup: function(){
 			if(this._started){ return; }
-			this.findAppBars();			
-			var params = this.scrollableParams;
+			this.findAppBars();
+			var node, params = this.scrollableParams;
+			if(this.fixedHeader){
+				node = dom.byId(this.fixedHeader);
+				if(node.parentNode == this.domNode){ // local footer
+					this.isLocalHeader = true;
+				}
+				params.fixedHeaderHeight = node.offsetHeight;
+			}
+			if(this.fixedFooter){
+				node = dom.byId(this.fixedFooter);
+				if(node.parentNode == this.domNode){ // local footer
+					this.isLocalFooter = true;
+					node.style.bottom = "0px";
+				}
+				params.fixedFooterHeight = node.offsetHeight;
+			}
+			
 			this.init(params);
 			this.inherited(arguments);
 			this.reparent();
@@ -119,14 +136,15 @@ define([
 			if(node.nodeType === 1){
 				var fixed = node.getAttribute("data-app-constraint")
 					|| (registry.byNode(node) && registry.byNode(node)["data-app-constraint"]);
-				if(fixed === "top"){
+			/*	if(fixed === "top"){
 					domClass.add(node, "mblFixedHeaderBar");
 					if(local){
 						node.style.top = "0px";
 						this.fixedHeader = node;
 					}
 					return fixed;
-				}else 
+				}else
+			*/	 
 				if(fixed === "bottom"){
 					domClass.add(node, "mblFixedBottomBar");
 					if(local){

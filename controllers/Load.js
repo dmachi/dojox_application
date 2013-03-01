@@ -3,27 +3,27 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/Def
 	// module:
 	//		dojox/app/controllers/Load
 	// summary:
-	//		Bind "load" event on dojox/app application instance.
+	//		Bind "app-load" event on dojox/app application instance.
 	//		Load child view and sub children at one time.
 
 	return declare("dojox.app.controllers.Load", Controller, {
 
 		constructor: function(app, events){
 			// summary:
-			//		bind "load" event on application instance.
+			//		bind "app-load" event on application instance.
 			//
 			// app:
 			//		dojox/app application instance.
 			// events:
 			//		{event : handler}
 			this.events = {
-				"init": this.init,
-				"load": this.load
+				"app-init": this.init,
+				"app-load": this.load
 			};
 		},
 
 		init: function(event){
-			// when the load controller received "init", before the lifecycle really starts we create the root view
+			// when the load controller received "app-init", before the lifecycle really starts we create the root view
 			// if any. This used to be done in main.js but must be done in Load to be able to create custom
 			// views from the Load controller.
 			//create and start child. return Deferred
@@ -42,7 +42,7 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/Def
 			//
 			// example:
 			//		Use trigger() to trigger "loadArray" event, and this function will response the event. For example:
-			//		|	this.trigger("load", {"parent":parent, "viewId":viewId, "viewArray":viewArray, "callback":function(){...}});
+			//		|	this.trigger("app-load", {"parent":parent, "viewId":viewId, "viewArray":viewArray, "callback":function(){...}});
 			//
 			// event: Object
 			//		LoadArray event parameter. It should be like this: {"parent":parent, "viewId":viewId, "viewArray":viewArray, "callback":function(){...}}
@@ -85,11 +85,11 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/Def
 
 		loadView: function(event){
 			// summary:
-			//		Response to dojox/app "load" event.
+			//		Response to dojox/app "app-load" event.
 			//
 			// example:
-			//		Use trigger() to trigger "load" event, and this function will response the event. For example:
-			//		|	this.trigger("load", {"parent":parent, "viewId":viewId, "callback":function(){...}});
+			//		Use trigger() to trigger "app-load" event, and this function will response the event. For example:
+			//		|	this.trigger("app-load", {"parent":parent, "viewId":viewId, "callback":function(){...}});
 			//
 			// event: Object
 			//		Load event parameter. It should be like this: {"parent":parent, "viewId":viewId, "callback":function(){...}}

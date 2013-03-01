@@ -3,6 +3,8 @@ define(["dojo/_base/declare", "dojo/_base/lang", "dijit/registry", "dojo/dom-att
 function(declare, lang, registry, domAttr, domGeom, domStyle, WidgetBase, Container, Contained, array, query, layoutUtils, ScrollableMixin){
 	return declare("dojox.app.widgets.Container", [WidgetBase, Container, Contained, ScrollableMixin], {
 		scrollable: false,
+		fixedFooter:"",
+		fixedHeader:"",
 
 		buildRendering: function(){
 			//set default _constraint="center"
@@ -79,6 +81,8 @@ function(declare, lang, registry, domAttr, domGeom, domStyle, WidgetBase, Contai
 
 			if(this.scrollable){
 				this.inherited(arguments);
+				this.layout();
+				return;
 			}
 
 			// set margin box size, unless it wasn't specified, in which case use current size

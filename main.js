@@ -48,7 +48,6 @@ define(["require", "dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare",
 						try{
 							var storeCtor = require(type);
 						}catch(e){
-							console.error(type+" must be listed in the dependencies");
 							throw new Error(type+" must be listed in the dependencies");
 						}
 						if(config.data && lang.isString(config.data)){
@@ -62,7 +61,6 @@ define(["require", "dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare",
 							try{
 								var observableCtor = require("dojo/store/Observable");
 							}catch(e){
-								console.error("dojo/store/Observable must be listed in the dependencies");
 								throw new Error("dojo/store/Observable must be listed in the dependencies");
 							}
 							params.stores[item].store = observableCtor(new storeCtor(config));							
@@ -170,7 +168,7 @@ define(["require", "dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare",
 		setDomNode: function(domNode){
 			var oldNode = this.domNode;
 			this.domNode = domNode;
-			this.emit("domNode", {
+			this.emit("app-domNode", {
 				oldNode: oldNode,
 				newNode: domNode
 			});
@@ -196,8 +194,8 @@ define(["require", "dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare",
 				this.constraint = "center";
 			}
 			var emitLoad = function(){
-				// emit "load" event and let controller to load view.
-				this.emit("load", {
+				// emit "app-load" event and let controller to load view.
+				this.emit("app-load", {
 					viewId: this.defaultView,
 					params: this._startParams,
 					callback: lang.hitch(this, function (){
@@ -225,7 +223,7 @@ define(["require", "dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare",
 							constraints.setSelectedChild(this, constraint, this.children[this.id + '_' + selectId]);
 						}
 						// transition to startView. If startView==defaultView, that means initial the default view.
-						this.emit("transition", {
+						this.emit("app-transition", {
 							viewId: this._startView,
 							opts: { params: this._startParams }
 						});
@@ -235,8 +233,8 @@ define(["require", "dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare",
 			};
 			when(controllers, lang.hitch(this, function(result){
 				if(this.template){
-					// emit "init" event so that the Load controller can initialize root view
-					this.emit("init", {
+					// emit "app-init" event so that the Load controller can initialize root view
+					this.emit("app-init", {
 						app: this,  // pass the app into the View so it can have easy access to app
 						name: this.name,
 						type: this.type,
@@ -354,7 +352,6 @@ define(["require", "dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare",
 
 	return function(config, node){
 		if(!config){
-			console.error("App Config Missing");
 			throw new Error("App Config Missing");
 		}
 
