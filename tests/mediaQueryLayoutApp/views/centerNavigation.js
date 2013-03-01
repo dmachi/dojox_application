@@ -1,6 +1,6 @@
-define(["dojo/dom", "dojo/dom-style", "dojo/_base/connect", "dijit/registry", "dojox/mvc/at", "dojox/mobile/TransitionEvent", 
+define(["dojo/dom", "dojo/dom-class", "dojo/_base/connect", "dijit/registry", "dojox/mvc/at", "dojox/mobile/TransitionEvent", 
 	"dojo/Stateful", "dojox/mvc/parserExtension", "dojox/mvc/sync"],
-function(dom, domStyle, connect, registry, at, TransitionEvent, Stateful, parserExtension, sync){
+function(dom, domClass, connect, registry, at, TransitionEvent, Stateful, parserExtension, sync){
 	var _connectResults = []; // events connect result
 	var previousView = null;
 
@@ -34,7 +34,8 @@ function(dom, domStyle, connect, registry, at, TransitionEvent, Stateful, parser
 			//
 			this.previousView = view;
 			var backButtomDom = dom.byId('headerBackButton');
-			domStyle.set(backButtomDom, "display", "none");
+			domClass.remove(backButtomDom, "hideOnTablet");
+			domClass.add(backButtomDom, "hide");
 			
 			// setup code to watch for the navigation pane being visible
 			
@@ -45,7 +46,8 @@ function(dom, domStyle, connect, registry, at, TransitionEvent, Stateful, parser
 			//		view life cycle beforeActivate()
 			//
 			var backButtomDom = dom.byId('headerBackButton');
-			domStyle.set(backButtomDom, "display", "block");
+			domClass.remove(backButtomDom, "hide");
+			domClass.add(backButtomDom, "hideOnTablet");
 		},
 		
 		// repeat view destroy
