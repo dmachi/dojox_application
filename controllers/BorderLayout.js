@@ -12,12 +12,12 @@ function(declare, domAttr, domStyle, LayoutBase, BorderContainer, StackContainer
 
 		initLayout: function(event){
 			// summary:
-			//		Response to dojox/app "initLayout" event which is setup in LayoutBase.
+			//		Response to dojox/app "app-initLayout" event which is setup in LayoutBase.
 			//		The initLayout event is called once when the View is being created the first time.
 			//
 			// example:
-			//		Use emit to trigger "initLayout" event, and this function will respond to the event. For example:
-			//		|	this.app.emit("initLayout", view);
+			//		Use emit to trigger "app-initLayout" event, and this function will respond to the event. For example:
+			//		|	this.app.emit("app-initLayout", view);
 			//
 			// event: Object
 			// |		{"view": view, "callback": function(){}};
