@@ -6,7 +6,7 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 
 	// module:
 	//		dojox/app/controllers/transition
-	//		Bind "transition" event on dojox/app application instance.
+	//		Bind "app-transition" event on dojox/app application instance.
 	//		Do transition from one view to another view.
 	return declare("dojox.app.controllers.Transition", Controller, {
 
@@ -16,15 +16,15 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 
 		constructor: function(app, events){
 			// summary:
-			//		bind "transition" event on application instance.
+			//		bind "app-transition" event on application instance.
 			//
 			// app:
 			//		dojox/app application instance.
 			// events:
 			//		{event : handler}
 			this.events = {
-				"transition": this.transition,
-				"domNode": this.onDomNodeChange
+				"app-transition": this.transition,
+				"app-domNode": this.onDomNodeChange
 			};
 			require([this.app.transit || "dojox/css3/transit"], function(t){
 				transit = t;
@@ -36,14 +36,14 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 
 		transition: function(event){
 			// summary:
-			//		Response to dojox/app "transition" event.
+			//		Response to dojox/app "app-transition" event.
 			//
 			// example:
-			//		Use emit to trigger "transition" event, and this function will response to the event. For example:
-			//		|	this.app.emit("transition", {"viewId": viewId, "opts": opts});
+			//		Use emit to trigger "app-transition" event, and this function will response to the event. For example:
+			//		|	this.app.emit("app-transition", {"viewId": viewId, "opts": opts});
 			//
 			// event: Object
-			//		"transition" event parameter. It should be like this: {"viewId": viewId, "opts": opts}
+			//		"app-transition" event parameter. It should be like this: {"viewId": viewId, "opts": opts}
 			
 			this.proceeding = (event.opts && event.opts.params && event.opts.params.waitToProceed); // waitToProceed passed when visible is true to delay processing.
 
@@ -132,7 +132,7 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 			//		If transition is in proceeding, add the next transition to waiting queue.
 			//
 			// transitionEvt: Object
-			//		"transition" event parameter. It should be like this: {"viewId":viewId, "opts":opts}
+			//		"app-transition" event parameter. It should be like this: {"viewId":viewId, "opts":opts}
 
 			if(this.proceeding){
 				this.app.log("in app/controllers/Transition proceedTransition push event", transitionEvt);
@@ -155,7 +155,7 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 				transitionEvt.opts = {};
 			}
 			var params = transitionEvt.params;
-			this.app.emit("load", {
+			this.app.emit("app-load", {
 				"viewId": transitionEvt.viewId,
 				"params": params,
 				"callback": lang.hitch(this, function(){
@@ -319,10 +319,10 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 				this.app.log("> in Transition._doTransition calling app.emit layoutView view next");
 				if(!removeView){
 					// if we are removing the view we must delay the layout to _after_ the animation
-					this.app.emit("layoutView", {"parent": parent, "view": next });
+					this.app.emit("app-layoutView", {"parent": parent, "view": next });
 				}
 				if(doResize){  
-					this.app.emit("resize"); // after last layoutView call resize			
+					this.app.emit("app-resize"); // after last layoutView call resize			
 				}
 				
 				var result = true;
@@ -340,7 +340,7 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 				}
 				when(result, lang.hitch(this, function(){
 					if(removeView){
-						this.app.emit("layoutView", {"parent": parent, "view": current, "removeView": true});
+						this.app.emit("app-layoutView", {"parent": parent, "view": current, "removeView": true});
 					}
 
 					// deactivate sub child of current view, then deactivate current view
@@ -381,9 +381,9 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 			next.afterActivate(current, data);
 			// layout current view, or remove it
 			this.app.log("> in Transition._doTransition calling app.triggger layoutView view next name=[",next.name,"], removeView = [",removeView,"], parent.name=[",next.parent.name,"], next==current path");
-			this.app.emit("layoutView", {"parent":parent, "view": next, "removeView": removeView});
+			this.app.emit("app-layoutView", {"parent":parent, "view": next, "removeView": removeView});
 			if(doResize){
-				this.app.emit("resize"); // after last layoutView call resize
+				this.app.emit("app-resize"); // after last layoutView call resize
 			}
 
 			// do sub transition like transition from "tabScene,tab1" to "tabScene,tab2"

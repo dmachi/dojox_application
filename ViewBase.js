@@ -108,7 +108,7 @@ define(["require", "dojo/when", "dojo/on", "dojo/dom-attr", "dojo/_base/declare"
 			constraints.register(this.constraint);
 
 
-			this.app.emit("initLayout", {
+			this.app.emit("app-initLayout", {
 				"view": this, 
 				"callback": lang.hitch(this, function(){
 						//start widget

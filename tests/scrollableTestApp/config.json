@@ -86,12 +86,12 @@
 		},
 		"ie9orLess" : {
 			"controllers": [
-				"dojox/app/controllers/HistoryHash",
+				"dojox/app/controllers/HistoryHash"
 			]
 		},
 		"notie9orLess" : {
 			"controllers": [
-				"dojox/app/controllers/History",
+				"dojox/app/controllers/History"
 			]
 		}
 	},	
