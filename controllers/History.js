@@ -3,7 +3,7 @@ function(lang, declare, on, Controller, hash){
 	// module:
 	//		dojox/app/controllers/History
 	// summary:
-	//		Bind "domNode" event on dojox/app application instance,
+	//		Bind "app-domNode" event on dojox/app application instance,
 	//		Bind "startTransition" event on dojox/app application domNode,
 	//		Bind "popstate" event on window object.
 	//		Maintain history by HTML5 "pushState" method and "popstate" event.
@@ -11,7 +11,7 @@ function(lang, declare, on, Controller, hash){
 	return declare("dojox.app.controllers.History", Controller, {
 		constructor: function(app){
 			// summary:
-			//		Bind "domNode" event on dojox/app application instance,
+			//		Bind "app-domNode" event on dojox/app application instance,
 			//		Bind "startTransition" event on dojox/app application domNode,
 			//		Bind "popstate" event on window object.
 			//
@@ -19,7 +19,7 @@ function(lang, declare, on, Controller, hash){
 			//		dojox/app application instance.
 
 			this.events = {
-				"domNode": this.onDomNodeChange
+				"app-domNode": this.onDomNodeChange
 			};
 			if(this.app.domNode){
 				this.onDomNodeChange({oldNode: null, newNode: this.app.domNode});
@@ -103,7 +103,7 @@ function(lang, declare, on, Controller, hash){
 			}
 
 			// transition to the target view
-			this.app.emit("transition", {
+			this.app.emit("app-transition", {
 				viewId: state.target,
 				opts: lang.mixin({reverse: true}, evt.detail, {"params": state.params})
 			});

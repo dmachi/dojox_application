@@ -5,13 +5,13 @@ function(declare, lang, array, win, query, domGeom, domAttr, domStyle, registry,
 	// module:
 	//		dojox/app/controllers/Layout
 	// summary:
-	//		Bind "initLayout" and "layoutView" events on dojox/app application instance.
+	//		Extends LayoutBase which binds "app-initLayout", "app-layoutView" and "app-resize" events on application instance.
 
 	return declare("dojox.app.controllers.Layout", LayoutBase, {
 
 		constructor: function(app, events){
 			// summary:
-			//		bind "initLayout" and "layoutView" events on application instance.
+			//		bind "app-initLayout" and "app-layoutView" events on application instance.
 			//
 			// app:
 			//		dojox/app application instance.
@@ -46,11 +46,11 @@ function(declare, lang, array, win, query, domGeom, domAttr, domStyle, registry,
 
 		initLayout: function(event){
 			// summary:
-			//		Response to dojox/app "initLayout" event.
+			//		Response to dojox/app "app-initLayout" event.
 			//
 			// example:
-			//		Use emit to trigger "initLayout" event, and this function will respond to the event. For example:
-			//		|	this.app.emit("initLayout", view);
+			//		Use emit to trigger "app-initLayout" event, and this function will respond to the event. For example:
+			//		|	this.app.emit("app-initLayout", view);
 			//
 			// event: Object
 			// |		{"view": view, "callback": function(){}};
@@ -117,11 +117,11 @@ function(declare, lang, array, win, query, domGeom, domAttr, domStyle, registry,
 
 		layoutView: function(event){
 			// summary:
-			//		Response to dojox/app "layoutView" event.
+			//		Response to dojox/app "app-layoutView" event.
 			//
 			// example:
-			//		Use emit to trigger "layoutView" event, and this function will response the event. For example:
-			//		|	this.app.emit("layoutView", view);
+			//		Use emit to trigger "app-layoutView" event, and this function will response the event. For example:
+			//		|	this.app.emit("app-layoutView", view);
 			//
 			// event: Object
 			// |		{"parent":parent, "view":view, "removeView": boolean}

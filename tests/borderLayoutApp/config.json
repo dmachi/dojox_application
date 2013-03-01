@@ -4,7 +4,7 @@
 	"description": "A border layout App",
 	"splash": "splash",
 
-	loaderConfig: {
+	"loaderConfig": {
 		"paths": {
 			"layoutApp": "../dojox/app/tests/borderLayoutApp"
 		}
@@ -102,7 +102,6 @@
 		
 	"views": {
 		"view1":{
-			"definition" : "none",
 			"constraint" : "top",
 			"definition" : "layoutApp/views/view1.js",			
 			"template": "layoutApp/templates/view1.html"
@@ -123,7 +122,6 @@
 			"template": "layoutApp/templates/view4.html"
 		},
 		"view5":{
-			"definition" : "none",
 			"constraint" : "center",
 			"definition" : "layoutApp/views/view5.js",
 			"template": "layoutApp/templates/view5.html"

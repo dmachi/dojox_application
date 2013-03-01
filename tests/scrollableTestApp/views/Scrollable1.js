@@ -27,7 +27,7 @@ function(dom, domStyle, connect, lang, registry, at, TransitionEvent, Repeat, ge
 	};
 	// show an item detail
 	setDetailsContext = function(index){
-		repeatmodel.set("cursorId", index);
+		repeatmodel.set("cursorIndex", index);		
 	};
 	
 	removeScrollableItem = function(index){

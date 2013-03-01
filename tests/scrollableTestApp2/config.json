@@ -82,12 +82,12 @@
 		},
 		"ie9orLess" : {
 			"controllers": [
-				"dojox/app/controllers/HistoryHash",
+				"dojox/app/controllers/HistoryHash"
 			]
 		},
 		"notie9orLess" : {
 			"controllers": [
-				"dojox/app/controllers/History",
+				"dojox/app/controllers/History"
 			]
 		}
 	},	
@@ -120,12 +120,12 @@
 				"definition": "scrollableTestApp/views/configuration/ScrollableListSelection.js",
 				"has" : {
 					"phone" : {
-						"constraint" : "center",
+						"constraint" : "center"
 					},
 					"tablet" : { 
-						"constraint" : "left",
-					},	
-				},
+						"constraint" : "left"
+					}	
+				}
 		},
 		
 		"TestInfo": {
