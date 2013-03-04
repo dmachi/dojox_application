@@ -66,7 +66,7 @@
 	   }
 	}, 
 
-	"template": "layoutApp/templates/navigation.html",
+	"template": "layoutApp/views/navigation.html",
 	"definition" : "none",
 
 	//the name of the view to load when the app is initialized.
@@ -89,7 +89,7 @@
 	"views": {
 		"simple":{
 			"definition" : "layoutApp/views/simple.js",
-			"template": "layoutApp/templates/simple.html",
+			"template": "layoutApp/views/simple.html",
 			"dependencies":["dojox/mobile/TextBox"]
 		},
 
@@ -111,13 +111,13 @@
 				"repeatList":{
 					"transition": "slide",
 					"definition" : "layoutApp/views/repeat.js",
-					"template": "layoutApp/templates/repeat.html",
+					"template": "layoutApp/views/repeat.html",
 					"dependencies":["dojox/mobile/TextBox"]
 				},
 				"repeatDetails":{
 					"transition": "flip",
 					"definition" : "layoutApp/views/repeatDetails.js",
-					"template": "layoutApp/templates/repeatDetails.html",
+					"template": "layoutApp/views/repeatDetails.html",
 					"dependencies":["dojox/mobile/TextBox"]
 				}
 			}
@@ -125,7 +125,7 @@
 
 		"generate": {
 			"definition": "layoutApp/views/generate",
-            "template": "layoutApp/templates/generate.html",
+            "template": "layoutApp/views/generate.html",
             "dependencies":["dojox/mobile/TextBox", "dojox/mobile/TextArea", "dojox/mvc/Generate"]
 		}
 	}	

@@ -88,44 +88,44 @@
 		"navigation":{
 			"definition" : "none",
 			"constraint" : "left",
-			"template": "mediaQueryLayoutApp/templates/navigation.html"
+			"template": "mediaQueryLayoutApp/views/navigation.html"
 		},
 		"TestInfo": {
 			"definition" : "mediaQueryLayoutApp/views/TestInfo.js",
 			"constraint" : "center",
-			"template": "mediaQueryLayoutApp/templates/TestInfo.html"
+			"template": "mediaQueryLayoutApp/views/TestInfo.html"
 		},	
 		"centerNavigation":{
 			"definition" : "mediaQueryLayoutApp/views/centerNavigation.js",
 			"constraint" : "center",
-			"template": "mediaQueryLayoutApp/templates/centerNavigation.html"
+			"template": "mediaQueryLayoutApp/views/centerNavigation.html"
 		},
 		"header":{
 			"definition" : "none",
 			"constraint" : "top",
-			"template": "mediaQueryLayoutApp/templates/header.html"
+			"template": "mediaQueryLayoutApp/views/header.html"
 		},
 		"simple":{
 			"definition" : "mediaQueryLayoutApp/views/simple.js",
 			"constraint" : "center",
-			"template": "mediaQueryLayoutApp/templates/simple.html",
+			"template": "mediaQueryLayoutApp/views/simple.html",
 			"dependencies":["dojox/mobile/TextBox"]
 		},
 
 		"repeatList":{
 			"definition" : "mediaQueryLayoutApp/views/repeat.js",
-			"template": "mediaQueryLayoutApp/templates/repeat.html",
+			"template": "mediaQueryLayoutApp/views/repeat.html",
 			"dependencies":["dojox/mobile/TextBox"]
 		},
 		"repeatDetails":{
 			"definition" : "mediaQueryLayoutApp/views/repeatDetails.js",
-			"template": "mediaQueryLayoutApp/templates/repeatDetails.html",
+			"template": "mediaQueryLayoutApp/views/repeatDetails.html",
 			"dependencies":["dojox/mobile/TextBox"]
 		},
 
 		"generate": {
 			"definition": "mediaQueryLayoutApp/views/generate",
-            "template": "mediaQueryLayoutApp/templates/generate.html",
+            "template": "mediaQueryLayoutApp/views/generate.html",
 			"constraint" : "center",            
             "dependencies":["dojox/mobile/TextBox", "dojox/mobile/TextArea", "dojox/mvc/Generate"]
 		}

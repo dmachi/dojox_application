@@ -19,8 +19,10 @@
 		"dojo/store/Memory",
 		"dojo/data/ItemFileWriteStore",
 		"dojo/store/DataStore",
+		"dojox/app/utils/simpleModel",
 		"dojox/app/utils/mvcModel",
 		"dojox/mvc/EditStoreRefListController",
+		"dojox/mvc/EditModelRefController",
 		"dojox/mobile/deviceTheme"
 	],
 	// Modules for the application.  The are basically used as the second
@@ -103,7 +105,7 @@
 		"home": {
 			"definition" : "none",
 			"dependencies":["dojox/mobile/ListItem","dojox/mobile/RoundRectList","dojox/mobile/RoundRectCategory","dojox/mobile/Heading"],
-			"template": "../app/tests/simpleModelApp/templates/main.html"
+			"template": "../app/tests/simpleModelApp/main/main.html"
 		},
 
 		"simple":{
@@ -116,8 +118,8 @@
 					}
 				}
 			},
-			"definition" : "../app/tests/simpleModelApp/views/simple.js",
-			"template": "../app/tests/simpleModelApp/templates/simple.html",
+			"definition" : "../app/tests/simpleModelApp/simple/simple.js",
+			"template": "../app/tests/simpleModelApp/simple/simple.html",
 			"dependencies":["dojox/mobile/TextBox","dojox/mvc/Group","dojox/mvc/Repeat","dojox/mvc/Output"]
 		},
 
@@ -138,8 +140,8 @@
 					}
 				}
 			},
-			"definition" : "../app/tests/simpleModelApp/views/simple2.js",
-			"template": "../app/tests/simpleModelApp/templates/simple2.html",
+			"definition" : "../app/tests/simpleModelApp/simple/simple2.js",
+			"template": "../app/tests/simpleModelApp/simple/simple2.html",
 			"dependencies":["dojox/mobile/TextBox","dojox/mvc/Group","dojox/mvc/Repeat","dojox/mvc/Output"]
 		},
 
@@ -158,8 +160,8 @@
 					}
 				}
 			},
-			"definition" : "../app/tests/simpleModelApp/views/simple3.js",
-			"template": "../app/tests/simpleModelApp/templates/simple3.html",
+			"definition" : "../app/tests/simpleModelApp/simple/simple3.js",
+			"template": "../app/tests/simpleModelApp/simple/simple3.html",
 			"dependencies":["dojox/mobile/TextBox"]
 		},
 
@@ -180,8 +182,8 @@
 					}
 				}
 			},
-			"template": "../app/tests/simpleModelApp/templates/repeat.html",
-			"definition" : "../app/tests/simpleModelApp/views/repeat.js",
+			"template": "../app/tests/simpleModelApp/repeat/repeat.html",
+			"definition" : "../app/tests/simpleModelApp/repeat/repeat.js",
 			"dependencies":["dojox/mobile/TextBox","dojox/mvc/Group","dojox/mvc/Repeat","dojox/mvc/Output"]
 		},
 
@@ -196,20 +198,20 @@
 					}
 				}
 			},
-			"template": "../app/tests/simpleModelApp/templates/repeat2.html",
-			"definition" : "../app/tests/simpleModelApp/views/repeat2.js",
+			"template": "../app/tests/simpleModelApp/repeat/repeat2.html",
+			"definition" : "../app/tests/simpleModelApp/repeat/repeat2.js",
 			"dependencies":["dojox/mobile/TextBox","dojox/mvc/Group","dojox/mvc/Repeat","dojox/mvc/Output"]
 		},
 
 		"repeat3": {
-			"template": "../app/tests/simpleModelApp/templates/repeat3.html",
-			"definition" : "../app/tests/simpleModelApp/views/repeat3.js",
+			"template": "../app/tests/simpleModelApp/repeat/repeat3.html",
+			"definition" : "../app/tests/simpleModelApp/repeat/repeat3.js",
 			"dependencies":["dojox/mobile/TextBox","dojox/mvc/Group","dojox/mvc/Repeat","dojox/mvc/Output"]
 		},
 
 		"generate": {
-			"template": "../app/tests/simpleModelApp/templates/generate.html",
-			"definition" : "../app/tests/simpleModelApp/views/generate.js",
+			"template": "../app/tests/simpleModelApp/generate/generate.html",
+			"definition" : "../app/tests/simpleModelApp/generate/generate.js",
 			"dependencies":["dojox/mobile/TextBox", "dojox/mobile/TextArea", "dojox/mvc/Generate"]
 		}
 	}
