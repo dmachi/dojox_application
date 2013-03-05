@@ -103,77 +103,77 @@
 	"views": {
 		"view1":{
 			"constraint" : "top",
-			"definition" : "layoutApp/views/view1.js",			
+			"controller" : "layoutApp/views/view1.js",			
 			"template": "layoutApp/templates/view1.html"
 		},
 		"view2":{
-			"definition" : "none",
+			"controller" : "none",
 			"constraint" : "top",
 			"template": "layoutApp/templates/view2.html"
 		},
 		"view3":{
-			"definition" : "none",
+			"controller" : "none",
 			"constraint" : "left",
 			"template": "layoutApp/templates/view3.html"
 		},
 		"view4":{
-			"definition" : "none",
+			"controller" : "none",
 			"constraint" : "left",
 			"template": "layoutApp/templates/view4.html"
 		},
 		"view5":{
 			"constraint" : "center",
-			"definition" : "layoutApp/views/view5.js",
+			"controller" : "layoutApp/views/view5.js",
 			"template": "layoutApp/templates/view5.html"
 		},
 		"view6":{
-			"definition" : "none",
+			"controller" : "none",
 			"constraint" : "center",
 			"template": "layoutApp/templates/view6.html"
 		},
 		"view7":{
-			"definition" : "none",
+			"controller" : "none",
 			"constraint" : "right",
 			"template": "layoutApp/templates/view7.html"
 		},
 		"view8":{
-			"definition" : "none",
+			"controller" : "none",
 			"constraint" : "right",
 			"template": "layoutApp/templates/view8.html"
 		},
 		"view9":{
-			"definition" : "none",
+			"controller" : "none",
 			"constraint" : "bottom",
 			"template": "layoutApp/templates/view9.html"
 		},
 		"view10":{
-			"definition" : "none",
+			"controller" : "none",
 			"constraint" : "bottom",
 			"template": "layoutApp/templates/view10.html"
 		},
 		"simple":{
-			"definition" : "layoutApp/views/simple.js",
+			"controller" : "layoutApp/views/simple.js",
 			"template": "layoutApp/templates/simple.html",
 			"constraint" : "center",
 			"dependencies":["dojox/mobile/TextBox"]
 		},
 
 		"repeat": {
-			"definition" : "layoutApp/views/repeat.js",
+			"controller" : "layoutApp/views/repeat.js",
 			"template": "layoutApp/templates/repeat.html",
 			"constraint" : "center",			
 			"dependencies":["dojox/mobile/TextBox"]
 		},
 		
 		"repeatDetails":{
-					"definition" : "layoutApp/views/repeatDetails.js",
+					"controller" : "layoutApp/views/repeatDetails.js",
 					"template": "layoutApp/templates/repeatDetails.html",
 					"constraint" : "center",
 					"dependencies":["dojox/mobile/TextBox"]
 		},
 
 		"generate": {
-			"definition": "layoutApp/views/generate",
+			"controller": "layoutApp/views/generate",
 			"template": "layoutApp/templates/generate.html",
 			"constraint" : "center",
 			"dependencies":["dojox/mobile/TextBox", "dojox/mobile/TextArea", "dojox/mvc/Generate"]

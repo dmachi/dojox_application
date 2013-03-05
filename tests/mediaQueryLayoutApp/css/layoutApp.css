@@ -1,117 +1,98 @@
 .center {
 	float: left;
-	width: 900px;
-	height: 100% 
+	height: 100%; 
+	width:69.8%;
 }
 
 .top {
 	float: top;
 }
 
+.hideOnPhone {
+	display: block !important;
+}
+
+.hide {
+	display: none !important;
+}
+
+.hideOnTablet {
+	display: none !important;
+}
+
 .left {
 	float: left; 
-	width:250px;
+	width:30%;
 	border-right:1px solid black;
 	background-color: #C5CCD3;
 	z-index:100;	
-	height: 100% 
-}
-
-#headerBackButton {
-	display: none;
-}
-
-@media screen and (max-width: 1154px) {
-	.center {
-		float: left;
-		width: 600px 
-	}
-
-	.left {
-		float: left; 
-		width:250px;
-		border-right:1px solid black;
-		background-color: #C5CCD3;
-		z-index:100;	
-		height: 100% 
-	}
-
-}
-
-@media screen and (max-width: 854px) {
-	.center {
-		float: left;
-		width: 520px;
-		height: 100%;
-		
-	}
-
-	.left {
-		float: left; 
-		width:250px;
-		border-right:1px solid black;
-		background-color: #C5CCD3;
-		z-index:100;	
-		height: 100% 
-	}
-
+	height: 100%; 
 }
 
 @media screen and (max-width: 560px) {
-	.center {
-		float: left;
-		width: 100%; 
-	}
 
 	.left {
-		display: none;
 		float: left; 
 		width:0px;
 	}
 
-	#headerBackButton {
-		display: block;
+	.center {
+		float: left;
+		width: 99.6%; 
+	}
+
+	.hideOnPhone {
+		display: none !important;
+	}
+
+	.hideOnTablet {
+		display: block !important;
 	}
 
 }
 
 
 @media only screen and (orientation: portrait) {
-	.center {
-		float: left;
-		width: 100%; 
-	}
 
 	.left {
-		display: none;
 		float: left; 
 		width:0px;
 	}
 
-	#headerBackButton {
-		display: block;
+	.center {
+		float: left;
+		width: 99.6%; 
 	}
-}
 
+	.hideOnPhone {
+		display: none !important;
+	}
+
+	.hideOnTablet {
+		display: block !important;
+	}
+
+}
+/*
 @media only screen and (orientation: landscape) and (max-width: 568px) {
 	.center {
 		float: left;
-		width: 360px;
+		width: 80%;
 		height: 100%;
 		
 	}
 
 	.left {
 		float: left; 
-		width:150px;
+		width:20%;
 		border-right:1px solid black;
 		background-color: #C5CCD3;
 		z-index:100;	
-		height: 100% 
+		height: 100%; 
 	}
 
 }
-
+*/
 /*@media only screen and (device-width: 480px) and (orientation: landscape) and (resolution: 163dpi) { */
 	/* CSS3 Rules for XX iPhone in Portrait Orientation */
 /*@media only screen and (device-width: 568px) and (orientation: landscape) {

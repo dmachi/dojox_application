@@ -73,26 +73,26 @@
 	"views": {
 
 		"home": { 
-			"definition" : "none",
+			"controller" : "none",
 			"dependencies":["dojox/mobile/ListItem","dojox/mobile/RoundRectList","dojox/mobile/RoundRectCategory","dojox/mobile/Heading"],
-			"template": "./templates/main.html"
+			"template": "./main/main.html"
 		},
 
 		//repeat scene, include list view and date view
 		"repeat": {
 			"defaultView": "repeatList",
 			"defaultTransition": "slide",
-			"definition": "none",
+			"controller": "none",
 
 			"views": {
 				"repeatList":{
-					"definition" : "./views/repeat.js",
-					"template": "./templates/repeat.html",
+					"controller" : "./repeat/repeat.js",
+					"template": "./repeat/repeat.html",
 					"dependencies":["dojox/mobile/TextBox"]
 				},
 				"repeatDetails":{
-					"definition" : "./views/repeatDetails.js",
-					"template": "./templates/repeatDetails.html",
+					"controller" : "./repeat/repeatDetails.js",
+					"template": "./repeat/repeatDetails.html",
 					"dependencies":["dojox/mobile/TextBox"],
 					"defaultParams": {"cursor":"2"}
 				}
@@ -109,13 +109,13 @@
 					}	       
 				}
 			},
-			"definition" : "./views/simple.js",
-			"template": "./templates/simple.html",
+			"controller" : "./simple/simple.js",
+			"template": "./simple/simple.html",
 			"dependencies":["dojox/mobile/TextBox"]
 		},
 
 		"generate": {
-            "template": "./templates/generate.html",
+            "template": "./generate/generate.html",
             "dependencies":["dojox/mobile/TextBox", "dojox/mobile/TextArea", "dojox/mvc/Generate"]
 		}
 	}	

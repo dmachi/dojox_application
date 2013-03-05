@@ -1,5 +1,5 @@
-define(["dojo/dom", "dojo/dom-style", "dojo/_base/connect", "dojo/store/Memory", "dojo/store/Observable"],
-function(dom, domStyle, connect, Memory, Observable){
+define(["dojo/dom", "dojo/dom-style", "dojo/_base/connect", "dojo/store/Memory", "dojo/store/Observable", "dojo/sniff"],
+function(dom, domStyle, connect, Memory, Observable, has){
 
 		var _connectResults = []; // events connect result
 		var backId = 'sc1back1';
@@ -43,7 +43,7 @@ function(dom, domStyle, connect, Memory, Observable){
 		beforeActivate: function(){
 			// summary:
 			//		view life cycle beforeActivate()
-			if(dom.byId(backId) && this.app.isTablet){ 
+			if(dom.byId(backId) && !has("phone")){ 
 				domStyle.set(dom.byId(backId), "visibility", "hidden"); // hide the back button in tablet mode
 			}
 			if(dom.byId("tab1WrapperA")){ 

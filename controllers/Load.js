@@ -29,7 +29,8 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/Def
 			//create and start child. return Deferred
 			when(this.createView(event.parent, null, null, {
 					templateString: event.templateString,
-					definition: event.definition
+					template: event.template,
+					controller: event.controller
 			}, null, event.type), function(newView){
 				when(newView.start(), event.callback);
 			});
@@ -162,7 +163,7 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/Def
 			// name: String
 			//		view name.
 			// mixin: String
-			//		additional property to be mixed into the view (templateString, definition...)
+			//		additional property to be mixed into the view (templateString, template, controller...)
 			// params: Object
 			//		params of this view.
 			// type: String

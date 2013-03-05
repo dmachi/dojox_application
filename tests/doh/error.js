@@ -1,6 +1,6 @@
 define(["doh", "dojox/app/main", "dojox/json/ref", "dojo/text!./error1.json", "dojo/text!./error2.json",
-	"dojo/text!./error3.json", "dojo/text!./error4.json", "dojo/text!./error5.json", "dojo/text!./error6.json", "dojo/topic"],
-	function(doh, Application, json, config1, config2, config3, config4, config5, config6, topic){
+	"dojo/text!./error3.json", "dojo/text!./error4.json", "dojo/text!./error5.json", "dojo/text!./errorLast.json", "dojo/topic"],
+	function(doh, Application, json, config1, config2, config3, config4, config5, configLast, topic){
 	doh.register("dojox.app.tests.doh.error", [
 		{
 			timeout: 4000,
@@ -96,7 +96,7 @@ define(["doh", "dojox/app/main", "dojox/json/ref", "dojo/text!./error1.json", "d
 		},
 		{
 			timeout: 4000,
-			name: "error6",
+			name: "error5",
 			runTest: function(t){
 				var dohDeferred = new doh.Deferred();
 				// stack events that are pushed
@@ -109,7 +109,7 @@ define(["doh", "dojox/app/main", "dojox/json/ref", "dojo/text!./error1.json", "d
 					require.on("error", function(){
 						goterror = true;
 					})
-					Application(json.fromJson(config6));
+					Application(json.fromJson(config5));
 					// we need to check that before timeout we _never_ entered the START (2) state
 					// and we must check error has been thrown
 					setTimeout(dohDeferred.getTestCallback(function(){
@@ -127,7 +127,7 @@ define(["doh", "dojox/app/main", "dojox/json/ref", "dojo/text!./error1.json", "d
 		},
 		{
 			timeout: 4000,
-			name: "error5",
+			name: "errorLast",
 			runTest: function(t){
 				var dohDeferred = new doh.Deferred();
 				// stack events that are pushed
@@ -141,7 +141,7 @@ define(["doh", "dojox/app/main", "dojox/json/ref", "dojo/text!./error1.json", "d
 				}
 				require.execQ.length = 0;
 				require(["dojox/app/main"], function(Application){
-					Application(json.fromJson(config5));
+					Application(json.fromJson(configLast));
 					// we need to check that before timeout we _never_ entered the START (2) state
 					setTimeout(dohDeferred.getTestCallback(function(){
 						t.assertEqual([1], events);

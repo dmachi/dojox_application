@@ -23,7 +23,7 @@
 
 	"views": {
 		"home": {
-			"definition" : "none",
+			"controller" : "none",
 			"template": "customApp/home.html",
 			"dependencies":	[
 				"dojox/mobile/RoundRectList",
@@ -32,12 +32,12 @@
 		},
 		"dtl": {
 			"type": "customApp/DtlView",
-			"definition" : "customApp/dtl",
+			"controller" : "customApp/dtl",
 			"template": "customApp/dtl.html"
 		},
 		"widget": {
 			"type": "customApp/WidgetView",
-			"definition": "customApp/widget"
+			"controller": "customApp/widget"
 		}
 	}
 }

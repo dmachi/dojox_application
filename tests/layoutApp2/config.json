@@ -67,8 +67,8 @@
 	}, 
 
 // this app uses constraints and multiple files in defaultView instead of an outer template for a table layout
-//	"template": "layoutApp2/templates/navigation.html",
-//	"definition" : "none",
+//	"template": "layoutApp2/views/navigation.html",
+//	"controller" : "none",
 
 	//the name of the view to load when the app is initialized.
 	"defaultView": "navigation+simple",
@@ -81,14 +81,14 @@
 
 	"views": {
 		"navigation":{
-			"definition" : "none",
+			"controller" : "none",
 			"constraint" : "left",
-			"template": "layoutApp2/templates/navigation.html"
+			"template": "layoutApp2/views/navigation.html"
 		},
 		"simple":{
-			"definition" : "layoutApp2/views/simple.js",
+			"controller" : "layoutApp2/views/simple.js",
 			"constraint" : "center",
-			"template": "layoutApp2/templates/simple.html",
+			"template": "layoutApp2/views/simple.html",
 			"dependencies":["dojox/mobile/TextBox"]
 		},
 
@@ -104,26 +104,26 @@
             },
 			"defaultView": "repeatList",
 			"defaultTransition": "slide",
-			"definition": "none",
+			"controller": "none",
 			"constraint" : "center",
 
 			"views": {
 				"repeatList":{
-					"definition" : "layoutApp2/views/repeat.js",
-					"template": "layoutApp2/templates/repeat.html",
+					"controller" : "layoutApp2/views/repeat.js",
+					"template": "layoutApp2/views/repeat.html",
 					"dependencies":["dojox/mobile/TextBox"]
 				},
 				"repeatDetails":{
-					"definition" : "layoutApp2/views/repeatDetails.js",
-					"template": "layoutApp2/templates/repeatDetails.html",
+					"controller" : "layoutApp2/views/repeatDetails.js",
+					"template": "layoutApp2/views/repeatDetails.html",
 					"dependencies":["dojox/mobile/TextBox"]
 				}
 			}
 		},
 
 		"generate": {
-			"definition": "layoutApp2/views/generate",
-            "template": "layoutApp2/templates/generate.html",
+			"controller": "layoutApp2/views/generate",
+            "template": "layoutApp2/views/generate.html",
 			"constraint" : "center",            
             "dependencies":["dojox/mobile/TextBox", "dojox/mobile/TextArea", "dojox/mvc/Generate"]
 		}

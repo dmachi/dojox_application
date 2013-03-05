@@ -1,5 +1,6 @@
-define(["dojo/dom", "dojo/dom-style", "dojo/_base/connect", "dojo/_base/lang","dijit/registry", "dojox/mvc/at", "dojox/mobile/TransitionEvent", "dojox/mvc/Repeat", "dojox/mvc/getStateful", "dojox/mvc/Output"],
-function(dom, domStyle, connect, lang, registry, at, TransitionEvent, Repeat, getStateful, Output){
+define(["dojo/dom", "dojo/dom-style", "dojo/_base/connect", "dojo/_base/lang","dijit/registry", "dojox/mvc/at", "dojox/mobile/TransitionEvent", 
+		"dojox/mvc/Repeat", "dojox/mvc/getStateful", "dojox/mvc/Output", "dojo/sniff"],
+function(dom, domStyle, connect, lang, registry, at, TransitionEvent, Repeat, getStateful, Output, has){
 	var _connectResults = []; // events connect result
 
 	var repeatmodel = null;	//repeat view data model
@@ -19,10 +20,10 @@ function(dom, domStyle, connect, lang, registry, at, TransitionEvent, Repeat, ge
 		beforeActivate: function(){
 			// summary:
 			//		view life cycle beforeActivate()
-			if(dom.byId(backId) && this.app.isTablet){ 
+			if(dom.byId(backId) && !has("phone")){ 
 				domStyle.set(dom.byId(backId), "visibility", "hidden"); // hide the back button in tablet mode
 			}
-			if(dom.byId("tab1WrapperA") && this.app.isTablet){ 
+			if(dom.byId("tab1WrapperA") && !has("phone")){ 
 				domStyle.set(dom.byId("tab1WrapperA"), "visibility", "visible");  // show the nav view if it being used
 				domStyle.set(dom.byId("tab1WrapperB"), "visibility", "visible");  // show the nav view if it being used
 			}

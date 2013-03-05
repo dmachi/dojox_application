@@ -66,8 +66,8 @@
 	   }
 	}, 
 
-	"template": "layoutApp/templates/navigation.html",
-	"definition" : "none",
+	"template": "layoutApp/views/navigation.html",
+	"controller" : "none",
 
 	//the name of the view to load when the app is initialized.
 	"defaultView": "simple",
@@ -88,8 +88,8 @@
 
 	"views": {
 		"simple":{
-			"definition" : "layoutApp/views/simple.js",
-			"template": "layoutApp/templates/simple.html",
+			"controller" : "layoutApp/views/simple.js",
+			"template": "layoutApp/views/simple.html",
 			"dependencies":["dojox/mobile/TextBox"]
 		},
 
@@ -105,27 +105,27 @@
             },
 			"transition": "fade",
 			"defaultView": "repeatList",
-			"definition": "none",
+			"controller": "none",
 
 			"views": {
 				"repeatList":{
 					"transition": "slide",
-					"definition" : "layoutApp/views/repeat.js",
-					"template": "layoutApp/templates/repeat.html",
+					"controller" : "layoutApp/views/repeat.js",
+					"template": "layoutApp/views/repeat.html",
 					"dependencies":["dojox/mobile/TextBox"]
 				},
 				"repeatDetails":{
 					"transition": "flip",
-					"definition" : "layoutApp/views/repeatDetails.js",
-					"template": "layoutApp/templates/repeatDetails.html",
+					"controller" : "layoutApp/views/repeatDetails.js",
+					"template": "layoutApp/views/repeatDetails.html",
 					"dependencies":["dojox/mobile/TextBox"]
 				}
 			}
 		},
 
 		"generate": {
-			"definition": "layoutApp/views/generate",
-            "template": "layoutApp/templates/generate.html",
+			"controller": "layoutApp/views/generate",
+            "template": "layoutApp/views/generate.html",
             "dependencies":["dojox/mobile/TextBox", "dojox/mobile/TextArea", "dojox/mvc/Generate"]
 		}
 	}	
