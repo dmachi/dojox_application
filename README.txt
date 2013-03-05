@@ -65,14 +65,14 @@ Example Config:
 		"my/custom/appController"
 	],
 
-	/* The Application level HTML template. template files store in application's templates folder by default */
-	template: "./templates/example.html",
+	/* The Application level HTML template. */
+	template: "./views/example.html",
 	
-	/* Application level view definition. Application will have a root view even if it has no template.
-	  "none" -- no definition for this view,
-	  "./views/myView.js" -- load definition from "./views/myView.js",
-	  no definition (by default) -- load definition from "./views/example.js" */
-	"definition": "none",
+	/* Application level view controller. Application will have a root view even if it has no template.
+	  "none" -- no controller for this view,
+	  "./views/myView.js" -- load controller from "./views/myView.js",
+	  no controller (by default) -- load controller from the same location as the template */
+	"controller": "none",
 
 	/* the view to start on by default */
 	"defaultView": "home",
@@ -93,20 +93,20 @@ Example Config:
 			],
 
 			/* template to use for this view */
-			template: "./templates/home.html",
+			template: "./views/home.html",
 
-			/* view definition. "none" -- no definition for this view,
-			  "./views/myHome.js" -- load definition from "./views/myHome.js",
-			  no definition (by default) -- load definition from "./views/home.js" */
-			"definition": "none"
+			/* view controller. "none" -- no controller for this view,
+			  "./views/myHome.js" -- load controller from "./views/myHome.js",
+			  no controller (by default) -- load controller from the same location as the template */
+			"controller": "none"
 		},
 	
 		/* tabs view contains three child views */
 		"tabs": { 
 			/* the tabs view template */
-			"template": "./templates/tabScene.html",
+			"template": "./views/tabScene.html",
 
-			"definition": "none",
+			"controller": "none",
 
 			/* the default view within tabs view */	
 			"defaultView": "tab1",
@@ -117,14 +117,14 @@ Example Config:
 			//the views available to tabs view
 			"views": { 
 				"tab1":{
-					"template": "./templates/tabs/tab1.html"
-					/* no definition define for tab1 view, load tab1 view definition from "views/tabs/tab1.js" */
+					"template": "./views/tabs/tab1.html"
+					/* no controller define for tab1 view, load tab1 view controller from the same location as the template. */
 				},
 				"tab2":{
-					"template": "./templates/tabs/tab2.html" 
+					"template": "./views/tabs/tab2.html" 
 				},
 				"tab3":{
-					"template": "./templates/tabs/tab3.html" 
+					"template": "./views/tabs/tab3.html" 
 				}
 			},
 

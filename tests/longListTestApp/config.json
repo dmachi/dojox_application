@@ -54,14 +54,12 @@
 	
 	"has" : {
 		"phone" : {
-			"defaultView": "Footer1,Header1,LongList1",
-			"isTablet" : false
+			"defaultView": "Footer1,Header1,LongList1"
 		},
 		"!phone" : {
 			"template": "longListTestApp/views/tablet/ViewScrollableLists.html",
-			"definition": "longListTestApp/views/tablet/ViewScrollableLists",
-			"defaultView": "Footer1,Header1,LongList1",
-			"isTablet" : true
+			"controller": "longListTestApp/views/tablet/ViewScrollableLists",
+			"defaultView": "Footer1,Header1,LongList1"
 		},
 		"ie9orLess" : {
 			"controllers": [
@@ -84,7 +82,7 @@
 		"configuration": {
 			"defaultView": "ScrollableListSelection",
 			"transition": "slide",
-			"definition": "none",
+			"controller": "none",
 
 			"views": {
 				"ScrollableListSelection": {
@@ -97,20 +95,20 @@
 			"views": {
 				"Header1": {
 					"template": "longListTestApp/views/Header1.html",
-					"definition": "longListTestApp/views/Header1.js",
+					"controller": "longListTestApp/views/Header1.js",
 					"views": {
 						"TestInfo": {
 							"transition": "none",
 							"template": "longListTestApp/views/TestInfo.html",
-							"definition": "longListTestApp/views/TestInfo.js"
+							"controller": "longListTestApp/views/TestInfo.js"
 						},
 						"LongList1": {
 							"template": "longListTestApp/views/LongList1.html",
-							"definition": "longListTestApp/views/LongList1.js"
+							"controller": "longListTestApp/views/LongList1.js"
 						},
 						"LongList3": {
 							"template": "longListTestApp/views/LongList3.html",
-							"definition": "longListTestApp/views/LongList3.js"
+							"controller": "longListTestApp/views/LongList3.js"
 						}
 					}
 				}

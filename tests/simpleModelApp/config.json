@@ -102,7 +102,7 @@
 	"views": {
 
 		"home": {
-			"definition" : "none",
+			"controller" : "none",
 			"dependencies":["dojox/mobile/ListItem","dojox/mobile/RoundRectList","dojox/mobile/RoundRectCategory","dojox/mobile/Heading"],
 			"template": "./main/main.html"
 		},
@@ -117,7 +117,7 @@
 					}
 				}
 			},
-			"definition" : "./simple/simple.js",
+			"controller" : "./simple/simple.js",
 			"template": "./simple/simple.html",
 			"dependencies":["dojox/mobile/TextBox","dojox/mvc/Group","dojox/mvc/Repeat","dojox/mvc/Output"]
 		},
@@ -139,7 +139,7 @@
 					}
 				}
 			},
-			"definition" : "./simple/simple2.js",
+			"controller" : "./simple/simple2.js",
 			"template": "./simple/simple2.html",
 			"dependencies":["dojox/mobile/TextBox","dojox/mvc/Group","dojox/mvc/Repeat","dojox/mvc/Output"]
 		},
@@ -159,7 +159,7 @@
 					}
 				}
 			},
-			"definition" : "./simple/simple3.js",
+			"controller" : "./simple/simple3.js",
 			"template": "./simple/simple3.html",
 			"dependencies":["dojox/mobile/TextBox"]
 		},

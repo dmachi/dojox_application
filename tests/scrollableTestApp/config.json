@@ -89,15 +89,13 @@
 	"has" : {
 		"phone" : {
 			//The name(s) of the view(s) to load when the application is initialized.
-			"defaultView": "configuration,ScrollableListSelection",
-			"isTablet" : false
+			"defaultView": "configuration,ScrollableListSelection"
 		},
 		"!phone" : {
 			//The name(s) of the view(s) to load when the application is initialized.
 			"defaultView": "TestInfo",
 			"template": "scrollableTestApp/views/tablet/ViewScrollableLists.html",
-			"definition": "scrollableTestApp/views/tablet/ViewScrollableLists",
-			"isTablet" : true
+			"controller": "scrollableTestApp/views/tablet/ViewScrollableLists"
 		},
 		"ie9orLess" : {
 			"controllers": [
@@ -127,17 +125,17 @@
 	//views: The children views of an application or of a view. Dependencies may be defined on views for
 	//optimization and organization purposes. Models might also be defined on views if they are view-specific
 	//Finally a view item as three additional properties: transition for specific view transitions, template for
-	//defining the view rendering and finally definition to provide an AMD module to be mixed into the view to 
+	//defining the view rendering and finally controller to provide an AMD module to be mixed into the view to 
 	//control it. AMD modules identifiers starting with “.” will be resolved relative to the application root. All other
 	//modules identifiers will be resolved according to the Dojo AMD loader rules and in particular with respect
-	//to its configuration provided as part of the loaderConfig attribute. By default if no definition module is
-	//specified for a view it is looked up automatically in ”./views/<viewId>.js”. If you don’t want a definition
+	//to its configuration provided as part of the loaderConfig attribute. By default if no controller module is
+	//specified for a view it is looked up automatically in ”./views/<viewId>.js”. If you don’t want a controller
 	//module at all you should specify the “none” value.
 	"views": {
 		"configuration": {
 			"defaultView": "ScrollableListSelection",
 			"transition": "slide",
-			"definition": "none",
+			"controller": "none",
 
 			"views": {
 				"ScrollableListSelection": {
@@ -173,11 +171,11 @@
 			"template": "scrollableTestApp/views/Scrollable5.html"
 		},
 		"ListItemDomButtons": {
-			"definition": "scrollableTestApp/views/ListItem-domButtons",
+			"controller": "scrollableTestApp/views/ListItem-domButtons",
 			"template": "scrollableTestApp/views/ListItem-domButtons.html"
 		},
 		"ListItemDomButtons2": {
-			"definition": "scrollableTestApp/views/ListItem-domButtons2",
+			"controller": "scrollableTestApp/views/ListItem-domButtons2",
 			"template": "scrollableTestApp/views/ListItem-domButtons2.html"
 		},
 		

@@ -1,7 +1,7 @@
 define(["dojo/dom", "dojo/dom-style", "dojo/_base/connect", "dojo/_base/lang", "dojo/_base/declare", "dijit/registry", "dojox/mvc/at", 
-"dojox/mobile/TransitionEvent", "dojox/mvc/Repeat", "dojox/mvc/getStateful", "dojox/mvc/Output", 
+"dojox/mobile/TransitionEvent", "dojox/mvc/Repeat", "dojox/mvc/getStateful", "dojox/mvc/Output", "dojo/sniff", 
 "dojox/mobile/RoundRectList", "dojox/mvc/WidgetList", "dojox/mvc/Templated", "dojox/mobile/ListItem", "dojo/text!../views/RoundRectWidListTemplate.html"],
-function(dom, domStyle, connect, lang, declare, registry, at, TransitionEvent, Repeat, getStateful, Output, RoundRectList, WidgetList, Templated, 
+function(dom, domStyle, connect, lang, declare, registry, at, TransitionEvent, Repeat, getStateful, Output, has, RoundRectList, WidgetList, Templated, 
 	ListItem, RoundRectWidListTemplate){
 	var _connectResults = []; // events connect result
 
@@ -154,7 +154,7 @@ function(dom, domStyle, connect, lang, declare, registry, at, TransitionEvent, R
 		beforeActivate: function(){
 			// summary:
 			//		view life cycle beforeActivate()
-			if(dom.byId(backId) && this.app.isTablet){ 
+			if(dom.byId(backId) && !has("phone")){ 
 				domStyle.set(dom.byId(backId), "visibility", "hidden"); // hide the back button in tablet mode
 			}
 			if(dom.byId("tab1WrapperA")){ 

@@ -73,7 +73,7 @@
 	"views": {
 
 		"home": { 
-			"definition" : "none",
+			"controller" : "none",
 			"dependencies":["dojox/mobile/ListItem","dojox/mobile/RoundRectList","dojox/mobile/RoundRectCategory","dojox/mobile/Heading"],
 			"template": "./main/main.html"
 		},
@@ -82,16 +82,16 @@
 		"repeat": {
 			"defaultView": "repeatList",
 			"defaultTransition": "slide",
-			"definition": "none",
+			"controller": "none",
 
 			"views": {
 				"repeatList":{
-					"definition" : "./repeat/repeat.js",
+					"controller" : "./repeat/repeat.js",
 					"template": "./repeat/repeat.html",
 					"dependencies":["dojox/mobile/TextBox"]
 				},
 				"repeatDetails":{
-					"definition" : "./repeat/repeatDetails.js",
+					"controller" : "./repeat/repeatDetails.js",
 					"template": "./repeat/repeatDetails.html",
 					"dependencies":["dojox/mobile/TextBox"],
 					"defaultParams": {"cursor":"2"}
@@ -109,7 +109,7 @@
 					}	       
 				}
 			},
-			"definition" : "./simple/simple.js",
+			"controller" : "./simple/simple.js",
 			"template": "./simple/simple.html",
 			"dependencies":["dojox/mobile/TextBox"]
 		},

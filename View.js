@@ -12,21 +12,21 @@ define(["require", "dojo/when", "dojo/on", "dojo/_base/declare", "dojo/_base/lan
 			// example:
 			//		|	use configuration file
 			//		|
-			// 		|	// load view definition from views/simple.js by default
+			// 		|	// load view controller from views/simple.js by default
 			//		|	"simple":{
-			//		|		"template": "myapp/templates/simple.html",
+			//		|		"template": "myapp/views/simple.html",
 			//		|		"nls": "myapp/nls/simple"
 			//		|		"dependencies":["dojox/mobile/TextBox"]
 			//		|	}
 			//		|
 			//		|	"home":{
-			//		|		"template": "myapp/templates/home.html",
-			//		|		"definition": "none",	// identify no view definition
+			//		|		"template": "myapp/views/home.html",
+			//		|		"controller": "none",	// identify no view controller
 			//		|		"dependencies":["dojox/mobile/TextBox"]
 			//		|	}
 			//		|	"main":{
-			//		|		"template": "myapp/templates/main.html",
-			//		|		"definition": "myapp/views/main.js", // identify load view definition from views/main.js
+			//		|		"template": "myapp/views/main.html",
+			//		|		"controller": "myapp/views/main.js", // identify load view controller from views/main.js
 			//		|		"dependencies":["dojox/mobile/TextBox"]
 			//		|	}
 			//
@@ -38,7 +38,7 @@ define(["require", "dojo/when", "dojo/on", "dojo/_base/declare", "dojo/_base/lan
 			//		|		parent: this,
 			//		|		templateString: this.templateString,
 			//		|		template: this.template, 
-			//		|		definition: this.definition
+			//		|		controller: this.controller
 			//		|	});
 			//		|	viewObj.start(); // start view
 			//
@@ -50,7 +50,7 @@ define(["require", "dojo/when", "dojo/on", "dojo/_base/declare", "dojo/_base/lan
 			//		- name: view name
 			//		- template: view template identifier. If templateString is not empty, this parameter is ignored.
 			//		- templateString: view template string
-			//		- definition: view definition module identifier
+			//		- controller: view controller module identifier
 			//		- parent: parent view
 			//		- children: children views
 			//		- nls: nls definition module identifier
@@ -117,9 +117,9 @@ define(["require", "dojo/when", "dojo/on", "dojo/_base/declare", "dojo/_base/lan
 			var tplDef = new Deferred();
 			var defDef = this.inherited(arguments);
 			var nlsDef = nls(this);
-			// when parent loading is done (definition), proceed with template
-			// (for data-dojo-* to work we need to wait for definition to be here, this is also
-			// useful when the definition is used as a layer for the view)
+			// when parent loading is done (controller), proceed with template
+			// (for data-dojo-* to work we need to wait for controller to be here, this is also
+			// useful when the controller is used as a layer for the view)
 			when(defDef, lang.hitch(this, function(){
 				when(nlsDef, lang.hitch(this, function(nls){
 					// we inherit from the parent NLS

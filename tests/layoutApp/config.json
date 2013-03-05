@@ -67,7 +67,7 @@
 	}, 
 
 	"template": "layoutApp/views/navigation.html",
-	"definition" : "none",
+	"controller" : "none",
 
 	//the name of the view to load when the app is initialized.
 	"defaultView": "simple",
@@ -88,7 +88,7 @@
 
 	"views": {
 		"simple":{
-			"definition" : "layoutApp/views/simple.js",
+			"controller" : "layoutApp/views/simple.js",
 			"template": "layoutApp/views/simple.html",
 			"dependencies":["dojox/mobile/TextBox"]
 		},
@@ -105,18 +105,18 @@
             },
 			"transition": "fade",
 			"defaultView": "repeatList",
-			"definition": "none",
+			"controller": "none",
 
 			"views": {
 				"repeatList":{
 					"transition": "slide",
-					"definition" : "layoutApp/views/repeat.js",
+					"controller" : "layoutApp/views/repeat.js",
 					"template": "layoutApp/views/repeat.html",
 					"dependencies":["dojox/mobile/TextBox"]
 				},
 				"repeatDetails":{
 					"transition": "flip",
-					"definition" : "layoutApp/views/repeatDetails.js",
+					"controller" : "layoutApp/views/repeatDetails.js",
 					"template": "layoutApp/views/repeatDetails.html",
 					"dependencies":["dojox/mobile/TextBox"]
 				}
@@ -124,7 +124,7 @@
 		},
 
 		"generate": {
-			"definition": "layoutApp/views/generate",
+			"controller": "layoutApp/views/generate",
             "template": "layoutApp/views/generate.html",
             "dependencies":["dojox/mobile/TextBox", "dojox/mobile/TextArea", "dojox/mvc/Generate"]
 		}

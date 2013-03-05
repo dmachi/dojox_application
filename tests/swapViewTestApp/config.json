@@ -95,40 +95,40 @@
 
 	"views": {
 		"main": {
-			"definition" : "swapViewTestApp/views/main.js",
+			"controller" : "swapViewTestApp/views/main.js",
 			"constraint" : "center",
 			"template": "swapViewTestApp/views/main.html"
 		},	
 		"navigation":{
-			"definition" : "swapViewTestApp/views/navigation.js",
+			"controller" : "swapViewTestApp/views/navigation.js",
 			"constraint" : "nav1Id",
 			"template": "swapViewTestApp/views/navigation.html"
 		},
 		"TestInfo": {
-			"definition" : "swapViewTestApp/views/TestInfo.js",
+			"controller" : "swapViewTestApp/views/TestInfo.js",
 			"constraint" : "swapView1Id",
 			"template": "swapViewTestApp/views/TestInfo.html"
 		},	
 		"header":{
-			"definition" : "none",
+			"controller" : "none",
 			"constraint" : "heading1Id",
 			"template": "swapViewTestApp/views/header.html"
 		},
 		"simple":{
-			"definition" : "swapViewTestApp/views/simple.js",
+			"controller" : "swapViewTestApp/views/simple.js",
 			"constraint" : "swapView2Id",
 			"template": "swapViewTestApp/views/simple.html",
 			"dependencies":["dojox/mobile/TextBox"]
 		},
 
 		"repeatList":{
-			"definition" : "swapViewTestApp/views/repeat.js",
+			"controller" : "swapViewTestApp/views/repeat.js",
 			"constraint" : "swapView3Id",
 			"template": "swapViewTestApp/views/repeat.html",
 			"dependencies":["dojox/mobile/TextBox"]
 		},
 		"repeatDetails":{
-			"definition" : "swapViewTestApp/views/repeatDetails.js",
+			"controller" : "swapViewTestApp/views/repeatDetails.js",
 			"constraint" : "swapView3Id",
 			"template": "swapViewTestApp/views/repeatDetails.html",
 			"dependencies":["dojox/mobile/TextBox"]

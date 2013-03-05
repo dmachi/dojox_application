@@ -103,7 +103,7 @@
 	"views": {
 
 		"home": {
-			"definition" : "none",
+			"controller" : "none",
 			"dependencies":["dojox/mobile/ListItem","dojox/mobile/RoundRectList","dojox/mobile/RoundRectCategory","dojox/mobile/Heading"],
 			"template": "../app/tests/simpleModelApp/main/main.html"
 		},
@@ -118,7 +118,7 @@
 					}
 				}
 			},
-			"definition" : "../app/tests/simpleModelApp/simple/simple.js",
+			"controller" : "../app/tests/simpleModelApp/simple/simple.js",
 			"template": "../app/tests/simpleModelApp/simple/simple.html",
 			"dependencies":["dojox/mobile/TextBox","dojox/mvc/Group","dojox/mvc/Repeat","dojox/mvc/Output"]
 		},
@@ -140,7 +140,7 @@
 					}
 				}
 			},
-			"definition" : "../app/tests/simpleModelApp/simple/simple2.js",
+			"controller" : "../app/tests/simpleModelApp/simple/simple2.js",
 			"template": "../app/tests/simpleModelApp/simple/simple2.html",
 			"dependencies":["dojox/mobile/TextBox","dojox/mvc/Group","dojox/mvc/Repeat","dojox/mvc/Output"]
 		},
@@ -160,7 +160,7 @@
 					}
 				}
 			},
-			"definition" : "../app/tests/simpleModelApp/simple/simple3.js",
+			"controller" : "../app/tests/simpleModelApp/simple/simple3.js",
 			"template": "../app/tests/simpleModelApp/simple/simple3.html",
 			"dependencies":["dojox/mobile/TextBox"]
 		},
@@ -183,7 +183,7 @@
 				}
 			},
 			"template": "../app/tests/simpleModelApp/repeat/repeat.html",
-			"definition" : "../app/tests/simpleModelApp/repeat/repeat.js",
+			"controller" : "../app/tests/simpleModelApp/repeat/repeat.js",
 			"dependencies":["dojox/mobile/TextBox","dojox/mvc/Group","dojox/mvc/Repeat","dojox/mvc/Output"]
 		},
 
@@ -199,19 +199,19 @@
 				}
 			},
 			"template": "../app/tests/simpleModelApp/repeat/repeat2.html",
-			"definition" : "../app/tests/simpleModelApp/repeat/repeat2.js",
+			"controller" : "../app/tests/simpleModelApp/repeat/repeat2.js",
 			"dependencies":["dojox/mobile/TextBox","dojox/mvc/Group","dojox/mvc/Repeat","dojox/mvc/Output"]
 		},
 
 		"repeat3": {
 			"template": "../app/tests/simpleModelApp/repeat/repeat3.html",
-			"definition" : "../app/tests/simpleModelApp/repeat/repeat3.js",
+			"controller" : "../app/tests/simpleModelApp/repeat/repeat3.js",
 			"dependencies":["dojox/mobile/TextBox","dojox/mvc/Group","dojox/mvc/Repeat","dojox/mvc/Output"]
 		},
 
 		"generate": {
 			"template": "../app/tests/simpleModelApp/generate/generate.html",
-			"definition" : "../app/tests/simpleModelApp/generate/generate.js",
+			"controller" : "../app/tests/simpleModelApp/generate/generate.js",
 			"dependencies":["dojox/mobile/TextBox", "dojox/mobile/TextArea", "dojox/mvc/Generate"]
 		}
 	}

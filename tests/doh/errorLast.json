@@ -21,7 +21,7 @@
 	"views": {
 
 		"home": { 
-			"definition" : "doesnotexist",
+			"controller" : "doesnotexist",
 			"template": "dojox/app/tests/doh/config.html"
 		}
 

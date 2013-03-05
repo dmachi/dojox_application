@@ -73,12 +73,10 @@
 	
 	"has" : {
 		"phone" : {
-			"defaultView": "configuration",
-			"isTablet" : false
+			"defaultView": "configuration"
 		},
 		"!phone" : {
-			"defaultView": "configuration+TestInfo",
-			"isTablet" : true
+			"defaultView": "configuration+TestInfo"
 		},
 		"ie9orLess" : {
 			"controllers": [
@@ -111,13 +109,13 @@
 	"views": {
 		"navigation": {
 			"template": "scrollableTestApp/views/tablet/ViewScrollableLists.html",
-			"definition" : "scrollableTestApp/views/tablet/ViewScrollableLists.js",
+			"controller" : "scrollableTestApp/views/tablet/ViewScrollableLists.js",
 			"transition": "slide",
 			"constraint" : "left"
 		},
 		"configuration": {
 				"template": "scrollableTestApp/views/configuration/ScrollableListSelection.html",
-				"definition": "scrollableTestApp/views/configuration/ScrollableListSelection.js",
+				"controller": "scrollableTestApp/views/configuration/ScrollableListSelection.js",
 				"has" : {
 					"phone" : {
 						"constraint" : "center"
@@ -158,12 +156,12 @@
 			"template": "scrollableTestApp/views/Scrollable5.html"
 		},
 		"ListItemDomButtons": {
-			"definition": "scrollableTestApp/views/ListItem-domButtons",
+			"controller": "scrollableTestApp/views/ListItem-domButtons",
 			"template": "scrollableTestApp/views/ListItem-domButtons.html",
 			"constraint" : "center"
 		},
 		"ListItemDomButtons2": {
-			"definition": "scrollableTestApp/views/ListItem-domButtons2",
+			"controller": "scrollableTestApp/views/ListItem-domButtons2",
 			"template": "scrollableTestApp/views/ListItem-domButtons2.html",
 			"constraint" : "center"
 		},

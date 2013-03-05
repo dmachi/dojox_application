@@ -86,45 +86,45 @@
 
 	"views": {
 		"navigation":{
-			"definition" : "none",
+			"controller" : "none",
 			"constraint" : "left",
 			"template": "mediaQueryLayoutApp/views/navigation.html"
 		},
 		"TestInfo": {
-			"definition" : "mediaQueryLayoutApp/views/TestInfo.js",
+			"controller" : "mediaQueryLayoutApp/views/TestInfo.js",
 			"constraint" : "center",
 			"template": "mediaQueryLayoutApp/views/TestInfo.html"
 		},	
 		"centerNavigation":{
-			"definition" : "mediaQueryLayoutApp/views/centerNavigation.js",
+			"controller" : "mediaQueryLayoutApp/views/centerNavigation.js",
 			"constraint" : "center",
 			"template": "mediaQueryLayoutApp/views/centerNavigation.html"
 		},
 		"header":{
-			"definition" : "none",
+			"controller" : "none",
 			"constraint" : "top",
 			"template": "mediaQueryLayoutApp/views/header.html"
 		},
 		"simple":{
-			"definition" : "mediaQueryLayoutApp/views/simple.js",
+			"controller" : "mediaQueryLayoutApp/views/simple.js",
 			"constraint" : "center",
 			"template": "mediaQueryLayoutApp/views/simple.html",
 			"dependencies":["dojox/mobile/TextBox"]
 		},
 
 		"repeatList":{
-			"definition" : "mediaQueryLayoutApp/views/repeat.js",
+			"controller" : "mediaQueryLayoutApp/views/repeat.js",
 			"template": "mediaQueryLayoutApp/views/repeat.html",
 			"dependencies":["dojox/mobile/TextBox"]
 		},
 		"repeatDetails":{
-			"definition" : "mediaQueryLayoutApp/views/repeatDetails.js",
+			"controller" : "mediaQueryLayoutApp/views/repeatDetails.js",
 			"template": "mediaQueryLayoutApp/views/repeatDetails.html",
 			"dependencies":["dojox/mobile/TextBox"]
 		},
 
 		"generate": {
-			"definition": "mediaQueryLayoutApp/views/generate",
+			"controller": "mediaQueryLayoutApp/views/generate",
             "template": "mediaQueryLayoutApp/views/generate.html",
 			"constraint" : "center",            
             "dependencies":["dojox/mobile/TextBox", "dojox/mobile/TextArea", "dojox/mvc/Generate"]
