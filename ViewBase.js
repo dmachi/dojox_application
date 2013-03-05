@@ -3,7 +3,7 @@ define(["require", "dojo/when", "dojo/on", "dojo/dom-attr", "dojo/_base/declare"
 	function(require, when, on, domAttr, declare, lang, Deferred, model, constraints){
 	return declare("dojox.app.ViewBase", null, {
 		// summary:
-		//		View base class with model & definition capabilities. Subclass must implement rendering capabilities.
+		//		View base class with model & controller capabilities. Subclass must implement rendering capabilities.
 		constructor: function(params){
 			// summary:
 			//		Constructs a ViewBase instance.
@@ -14,7 +14,8 @@ define(["require", "dojo/when", "dojo/on", "dojo/dom-attr", "dojo/_base/declare"
 			//		- id: view id
 			//		- name: view name
 			//		- parent: parent view
-			//		- definition: view definition module identifier
+			//		- template: view template path 
+			//		- controller: view controller module identifier
 			//		- children: children views
 			this.id = "";
 			this.name = "";
@@ -33,7 +34,7 @@ define(["require", "dojo/when", "dojo/on", "dojo/dom-attr", "dojo/_base/declare"
 		start: function(){
 			// summary:
 			//		start view object.
-			//		load view template, view definition implement and startup all widgets in view template.
+			//		load view template, view controller implement and startup all widgets in view template.
 			if(this._started){
 				return this;
 			}
@@ -46,13 +47,13 @@ define(["require", "dojo/when", "dojo/on", "dojo/dom-attr", "dojo/_base/declare"
 		},
 
 		load: function(){
-			var defDef = this._loadDefinition();
-			when(defDef, lang.hitch(this, function(definition){
-				if(definition){
-					lang.mixin(this, definition);
+			var vcDef = this._loadViewController();
+			when(vcDef, lang.hitch(this, function(controller){
+				if(controller){
+					lang.mixin(this, controller);
 				}
 			}));
-			return defDef;
+			return vcDef;
 		},
 
 		_setupModel: function(){
@@ -126,20 +127,22 @@ define(["require", "dojo/when", "dojo/on", "dojo/dom-attr", "dojo/_base/declare"
 		},
 
 
-		_loadDefinition: function(){
+		_loadViewController: function(){
 			// summary:
-			//		Load view definition by configuration or by default.
+			//		Load view controller by configuration or by default.
 			// tags:
 			//		private
 			//
-			var definitionDef = new Deferred();
+			var viewControllerDef = new Deferred();
 			var path;
 
-			if(this.definition && (this.definition === "none")){
-				definitionDef.resolve(true);
-				return definitionDef;
-			}else if(this.definition){
-				path = this.definition.replace(/(\.js)$/, "");
+			if(this.controller && (this.controller === "none")){
+				viewControllerDef.resolve(true);
+				return viewControllerDef;
+			}else if(this.controller){
+				path = this.controller.replace(/(\.js)$/, "");
+			}else if(this.template){
+				path = this.template.replace(/(\.html)$/, "");
 			}else{
 				path = this.id.split("_");
 				path.shift();
@@ -155,11 +158,11 @@ define(["require", "dojo/when", "dojo/on", "dojo/dom-attr", "dojo/_base/declare"
 					loadFile = path.substring(index+2);
 				}
 				requireSignal = require.on("error", function(error){
-					if (definitionDef.isResolved() || definitionDef.isRejected()) {
+					if (viewControllerDef.isResolved() || viewControllerDef.isRejected()) {
 						return;
 					}
 					if(error.info[0] && (error.info[0].indexOf(loadFile)>= 0)){
-						definitionDef.resolve(false);
+						viewControllerDef.resolve(false);
 						requireSignal.remove();
 					}
 				});
@@ -168,15 +171,15 @@ define(["require", "dojo/when", "dojo/on", "dojo/dom-attr", "dojo/_base/declare"
 					path = "app/"+path;
 				}
 
-				require([path], function(definition){
-					definitionDef.resolve(definition);
+				require([path], function(controller){
+					viewControllerDef.resolve(controller);
 					requireSignal.remove();
 				});
 			}catch(e){
-				definitionDef.reject(e);
+				viewControllerDef.reject(e);
 				requireSignal.remove();
 			}
-			return definitionDef;
+			return viewControllerDef;
 		},
 
 		init: function(){

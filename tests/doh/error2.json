@@ -21,7 +21,7 @@
 	"views": {
 
 		"home": { 
-			"definition" : "dojox/app/tests/doh/errorDef2",
+			"controller" : "dojox/app/tests/doh/errorDef2",
 			"template": "dojox/app/tests/doh/config.html"
 		}
 

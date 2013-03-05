@@ -1,8 +1,5 @@
 {
 	"id": "testApp",
-	"name": "Test App",
-	"description": "A testApp",
-	"splash": "splash",
 
 	"dependencies": [
 	],
@@ -18,12 +15,15 @@
 
 	"defaultTransition": "slide",
 
-	"views": {
+	"stores": {
+		"namesStore":{
+			"type": "dojo/store/Memory"
+		}
+	},
 
-		"home": { 
-			"definition" : "doesnotexist",
+	"views": {
+		"home": {
 			"template": "dojox/app/tests/doh/config.html"
 		}
-
 	}
 }

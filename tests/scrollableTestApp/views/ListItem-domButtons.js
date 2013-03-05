@@ -1,5 +1,6 @@
-define(["dojo/dom", "dojo/dom-style", "dojo/_base/connect", "dijit/registry", "dojox/mvc/at", "dojox/mobile/TransitionEvent", "dojox/mvc/Repeat", "dojox/mvc/getStateful", "dojox/mvc/Output"],
-function(dom, domStyle, connect, registry, at, TransitionEvent, Repeat, getStateful, Output){
+define(["dojo/dom", "dojo/dom-style", "dojo/_base/connect", "dijit/registry", "dojox/mvc/at", "dojox/mobile/TransitionEvent", "dojox/mvc/Repeat", 
+		"dojox/mvc/getStateful", "dojox/mvc/Output", "dojo/sniff"],
+function(dom, domStyle, connect, registry, at, TransitionEvent, Repeat, getStateful, Output, has){
 	var _connectResults = []; // events connect result
 
 
@@ -12,7 +13,7 @@ function(dom, domStyle, connect, registry, at, TransitionEvent, Repeat, getState
 		beforeActivate: function(){
 			// summary:
 			//		view life cycle beforeActivate()
-			if(dom.byId("mli1back") && this.app.isTablet){ 
+			if(dom.byId("mli1back") && !has("phone")){ 
 				domStyle.set(dom.byId("mli1back"), "visibility", "hidden"); // hide the back button in tablet mode
 			}
 			if(dom.byId("tab1WrapperA")){ 

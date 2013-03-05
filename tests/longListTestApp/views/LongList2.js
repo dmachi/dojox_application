@@ -1,5 +1,5 @@
-define(["dojo/dom", "dojo/dom-style", "dojo/_base/connect","dijit/registry"],
-function(dom, domStyle, connect, registry){
+define(["dojo/dom", "dojo/dom-style", "dojo/_base/connect","dijit/registry", "dojo/sniff"],
+function(dom, domStyle, connect, registry, has){
 		var _connectResults = []; // events connect result
 		var	list = null;
 		var listId = 'list2';
@@ -21,7 +21,7 @@ function(dom, domStyle, connect, registry){
 		beforeActivate: function(){
 			// summary:
 			//		view life cycle beforeActivate()
-			if(dom.byId(backId) && this.app.isTablet){ 
+			if(dom.byId(backId) && !has("phone")){ 
 				domStyle.set(dom.byId(backId), "visibility", "hidden"); // hide the back button in tablet mode
 			}
 			

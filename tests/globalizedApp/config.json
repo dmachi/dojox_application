@@ -25,7 +25,7 @@
 
 	"views": {
 		"home": {
-			"definition" : "none",
+			"controller" : "none",
 			"template": "globalizedApp/home.html",
 			"nls": "globalizedApp/nls/home",
 			"dependencies":	[
@@ -34,7 +34,7 @@
 			]
 		},
 		"detail": {
-			"definition" : "globalizedApp/detail",
+			"controller" : "globalizedApp/detail",
 			"template": "globalizedApp/detail.html"
 		}
 	}
