@@ -151,7 +151,7 @@ Property descriptions
 	- template -  This is the template/HTML that is used for the application when defined at the root of the configuration.
 	 Within the context of a view, it is the template/HTML for defining the view.
 
-	- definition -  This is the view definition that is used for the application template view when defined at the root of the configuration. It implements the view's life cycle interface like init(), beforeActivate(), destroy(), etc. and allows one to control the view.
+	- controller -  This is the view controller that is used for the application template view when defined at the root of the configuration. It implements the view's life cycle interface like init(), beforeActivate(), destroy(), etc. and allows one to control the view.
 
 	- defaultView -  The defaultView defines the startup view for the application.
 
@@ -203,13 +203,13 @@ This template for the tabs view defines two areas with region top, a header and 
 
 Normally, when using a BorderContainer, one would also have a data-app-constraint="center" section. In the case of a View however, the "center" region will be applied to the currently active view (the current tab for example).
 
-The application can also provide view definition modules to implement the View lifecyle APIs (like init(), destory(),...) for each view. The Transition controller controls the transition from one child view to another. This includes propagating transition events on to children if the active child is itself another view.
+The application can also provide view controller modules to implement the View lifecyle APIs (like init(), destory(),...) for each view. The Transition controller controls the transition from one child view to another. This includes propagating transition events on to children if the active child is itself another view.
 
 The Controller module:
 
 The Controller module provides a base Class to control the application by binding events on application's root domNode. Several controllers required by the framework are implemented in dojox/app/controllers package:
 	
-   * Load controller: load view templates and view definitions
+   * Load controller: load view templates and view controllers
    * Transition controller: respond to "startTransition" event and do transition between views
    * Layout controller: perform views layout
    * History controller: maintain application's history. This is based on HTML5 history APIs and will not work on platforms that do not support it like IE, Android 3 & 4, iOS4, etc.
