@@ -102,7 +102,6 @@
 	"views": {
 
 		"home": {
-			"controller" : "none",
 			"dependencies":["dojox/mobile/ListItem","dojox/mobile/RoundRectList","dojox/mobile/RoundRectCategory","dojox/mobile/Heading"],
 			"template": "./main/main.html"
 		},
@@ -181,6 +180,7 @@
 					}
 				}
 			},
+			"controller": "./repeat/repeat.js",
 			"template": "./repeat/repeat.html",
 			"dependencies":["dojox/mobile/TextBox","dojox/mvc/Group","dojox/mvc/Repeat","dojox/mvc/Output"]
 		},
@@ -196,16 +196,19 @@
 					}
 				}
 			},
+			"controller": "./repeat/repeat2.js",
 			"template": "./repeat/repeat2.html",
 			"dependencies":["dojox/mobile/TextBox","dojox/mvc/Group","dojox/mvc/Repeat","dojox/mvc/Output"]
 		},
 
 		"repeat3": {
+			"controller": "./repeat/repeat3.js",
 			"template": "./repeat/repeat3.html",
 			"dependencies":["dojox/mobile/TextBox","dojox/mvc/Group","dojox/mvc/Repeat","dojox/mvc/Output"]
 		},
 
 		"generate": {
+			"controller": "./generate/generate.js",
 			"template": "./generate/generate.html",
 			"dependencies":["dojox/mobile/TextBox", "dojox/mobile/TextArea", "dojox/mvc/Generate"]
 		}

@@ -14,7 +14,6 @@ define(["require", "dojo/when", "dojo/on", "dojo/dom-attr", "dojo/_base/declare"
 			//		- id: view id
 			//		- name: view name
 			//		- parent: parent view
-			//		- template: view template path 
 			//		- controller: view controller module identifier
 			//		- children: children views
 			this.id = "";
@@ -136,18 +135,12 @@ define(["require", "dojo/when", "dojo/on", "dojo/dom-attr", "dojo/_base/declare"
 			var viewControllerDef = new Deferred();
 			var path;
 
-			if(this.controller && (this.controller === "none")){
+			if(!this.controller){  // no longer using this.controller === "none", if we dont have one it means none.
+				this.app.log("  > in app/ViewBase _loadViewController no controller set for view name=[",this.name,"], parent.name=[",this.parent.name,"]");
 				viewControllerDef.resolve(true);
 				return viewControllerDef;
-			}else if(this.controller){
-				path = this.controller.replace(/(\.js)$/, "");
-			}else if(this.template){
-				path = this.template.replace(/(\.html)$/, "");
 			}else{
-				path = this.id.split("_");
-				path.shift();
-				path = path.join("/");
-				path = "./views/" + path;
+				path = this.controller.replace(/(\.js)$/, "");
 			}
 
 			var requireSignal;
