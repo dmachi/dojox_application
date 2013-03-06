@@ -300,13 +300,14 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 				//activate or deactivate views and refresh layout.
 
 				// deactivate sub child of current view, then deactivate current view
-				// TODO: why is "center" hard coded here?
-				var subChild = constraints.getSelectedChild(current, "center");
-				while(subChild){
-					this.app.log("< in Transition._doTransition calling subChild.beforeDeactivate subChild name=[",subChild.name,"], parent.name=[",subChild.parent.name,"], next!==current path");
-					// TODO what to pass to beforeDeactivate here?
-					subChild.beforeDeactivate();
-					subChild = constraints.getSelectedChild(subChild, "center");
+				var selChildren = constraints.getAllSelectedChildren(current);
+				for(var i = 0; i < selChildren.length; i++){					
+					var subChild = selChildren[i];
+					if(subChild && subChild.beforeDeactivate){ 
+						this.app.log("< in Transition._doTransition calling subChild.beforeDeactivate subChild name=[",subChild.name,"], parent.name=[",subChild.parent.name,"], next!==current path");
+						// TODO what to pass to beforeDeactivate here?
+						subChild.beforeDeactivate();
+					}
 				}
 				if(current){
 					this.app.log("< in Transition._doTransition calling current.beforeDeactivate current name=[",current.name,"], parent.name=[",current.parent.name,"], next!==current path");
@@ -344,13 +345,14 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 					}
 
 					// deactivate sub child of current view, then deactivate current view
-					subChild = constraints.getSelectedChild(current, "center");
-					
-					while(subChild){
-						this.app.log("  < in Transition._doTransition calling subChild.afterDeactivate subChild name=[",subChild.name,"], parent.name=[",subChild.parent.name,"], next!==current path");
-						// TODO what  to pass to beforeDeactivate here?
-						subChild.afterDeactivate();
-						subChild = constraints.getSelectedChild(subChild, "center");
+					var selChildren = constraints.getAllSelectedChildren(current);
+					for(var i = 0; i < selChildren.length; i++){					
+						var subChild = selChildren[i];
+						if(subChild && subChild.beforeDeactivate){ 
+							this.app.log("  < in Transition._doTransition calling subChild.afterDeactivate subChild name=[",subChild.name,"], parent.name=[",subChild.parent.name,"], next!==current path");
+							// TODO what  to pass to beforeDeactivate here?
+							subChild.afterDeactivate();
+						}
 					}
 					if(current){
 						this.app.log("  < in Transition._doTransition calling current.afterDeactivate current name=[",current.name,"], parent.name=[",current.parent.name,"], next!==current path");

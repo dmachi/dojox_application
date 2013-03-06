@@ -33,6 +33,33 @@ define(["dojo/_base/array"], function(arr){
 			view.selectedChildren[hash] = child;
 		},
 
+
+		getAllSelectedChildren: function(view, selChildren){
+			// summary:
+			//		get current all selected children for this view and it's selected subviews
+			//
+			// view: View
+			//		the View to get the child from
+			//
+			// selChildren: Array
+			//		the Array of the subChildren found
+			//
+			// returns:
+			//		selChildren array of all of the selected child views
+			//
+			selChildren = selChildren || [];
+			if(view && view.selectedChildren){
+				for(var hash in view.selectedChildren){  
+					if(view.selectedChildren[hash]) {
+						var subChild = view.selectedChildren[hash];
+						selChildren.push(subChild);
+						this.getAllSelectedChildren(subChild, selChildren);
+					}
+				}
+			}
+			return selChildren;
+		},
+
 		register: function(constraint){
 			// if the constraint has already been registered we don't care about it...
 			var type = typeof(constraint);
