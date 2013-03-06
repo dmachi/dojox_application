@@ -110,7 +110,6 @@
 			"template": "swapViewTestApp/views/TestInfo.html"
 		},	
 		"header":{
-			"controller" : "none",
 			"constraint" : "heading1Id",
 			"template": "swapViewTestApp/views/header.html"
 		},

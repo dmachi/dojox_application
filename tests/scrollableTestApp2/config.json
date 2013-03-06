@@ -10,6 +10,8 @@
 		}
 	},
 
+	// Array of AMD modules identifiers. When defined at the top level dependencies of the dojox/app application. 
+	// When defined at view level, dependencies for the view.
 	"dependencies": [
 		"dojox/mobile/_base",
 		"dojox/mobile/_compat",
@@ -43,13 +45,18 @@
 		"scrollableTestApp/scrollableTestApp"
 	],
 
+	// Array of AMD modules identifiers. Controllers for the application. All the controllers defined here will be 
+	// loaded during application startup to respond to application events and controller the application logic. 
 	"controllers": [
 		"dojox/app/controllers/Load",
 		"dojox/app/controllers/Transition",
 		"dojox/app/controllers/Layout"
 	],	
 
-	//stores we are using
+	// Dojo stores which are used by dojox/app to setup data models. A store item is an object with a
+	// a type and a params property. The type property is the AMD module identifier for the store class to be
+	// instantiated. The content of the params property is passed to the store class constructor to build an 
+	// instance. 
 	"stores": {
 		"repeatStore":{
 			"type": "dojo/data/ItemFileWriteStore",
@@ -59,20 +66,26 @@
 	   }
 	},
 
-	//models and instantiation parameters for the models. Including 'type' as a property allows
-	//one to overide the class that will be used for the model.  By default it is dojox/mvc/model
+	// Models and their instantiation parameters. A model item is an object with three properties: the 
+	// model type, the modelLoader and the params. The modelLoader property defines whether an MVC or a
+	// simple model must be loaded. The type property defines which class must be used for that model using
+	// an AMD module identifier and finally the params property content is passed to the model class 
+	// constructor to build an instance.
 	"models": {
-       "repeatmodels": {
+		"repeatmodels": {
        					"modelLoader": "dojox/app/utils/mvcModel",
-					"type": "dojox/mvc/EditStoreRefListController",
-					"params":{
-						"datastore": {"$ref":"#stores.repeatStore"}
-					}
-        }
+						"type": "dojox/mvc/EditStoreRefListController",
+						"params":{
+							"datastore": {"$ref":"#stores.repeatStore"}
+						}
+		}
 	},
 	
+	// The has section will include the sections for which the has checks are true.  
+	// For the sections with ! it will include the section if the has check is not true.
 	"has" : {
 		"phone" : {
+			//The name(s) of the view(s) to load when the application is initialized.
 			"defaultView": "configuration"
 		},
 		"!phone" : {
@@ -90,22 +103,27 @@
 		}
 	},	
 
-
-	// these are the possible defaultTransitions, 
-	// the defaultTransition is only used if transition is not set in the config and it is not set or defaulted on the transitionEvent
+	// defaultTransition: The default animation type for the view transition.
+	// the defaultTransition is only used if transition is not set in the config and the transition is not set or 
+	// defaulted on the transitionEvent
+	// These are the possible defaultTransitions, 
 	//"defaultTransition": "slide",
 	//"defaultTransition": "none",
 	//"defaultTransition": "fade",
 	"defaultTransition": "flip",     // Note: flip does not work with a BorderLayout Controller
 
-	// these are the possible transitions, 
+	// transition: The animation type to use for all view transitions.
 	// if a transition is set on a view or parent it will override the transition set on the transitionEvent or the defaultTransition in the config.
 	//"transition": "slide",
-	//"transition": "none",
-	//"transition": "fade",
-	//"transition": "flip",
 
-	//views are groups of views and models loaded at once
+	// views: The children views of an application or of a view. Dependencies may be defined on views for
+	// optimization and organization purposes. Models might also be defined on views if they are view-specific
+	// Finally a view item as three additional properties: transition for specific view transitions, template for
+	// defining the view rendering and finally controller to provide an AMD module to be mixed into the view to 
+	// control it. AMD modules identifiers starting with “.” will be resolved relative to the application root. All other
+	// modules identifiers will be resolved according to the Dojo AMD loader rules and in particular with respect
+	// to its configuration provided as part of the loaderConfig attribute. If you do not want a controller
+	// module at all you should not specify one, setting it to none will no longer work.
 	"views": {
 		"navigation": {
 			"template": "scrollableTestApp/views/tablet/ViewScrollableLists.html",
@@ -128,31 +146,38 @@
 		
 		"TestInfo": {
 			"transition": "none",
+			"controller": "scrollableTestApp/views/TestInfo.js",
 			"template": "scrollableTestApp/views/TestInfo.html"
 		},
 		"Scrollable1": {
 			"transition": "slide",
+			"controller": "scrollableTestApp/views/Scrollable1.js",
 			"template": "scrollableTestApp/views/Scrollable1.html"
 		},
 		"Scrollable1P": {
+			"controller": "scrollableTestApp/views/Scrollable1P.js",
 			"template": "scrollableTestApp/views/Scrollable1P.html",
 			"transition": "flip",
 			"constraint" : "center"
 		},
 		"Scrollable2": {
+			"controller": "scrollableTestApp/views/Scrollable2.js",
 			"template": "scrollableTestApp/views/Scrollable2.html",
 			"transition": "fade",
 			"constraint" : "center"
 		},
 		"Scrollable3": {
+			"controller": "scrollableTestApp/views/Scrollable3.js",
 			"template": "scrollableTestApp/views/Scrollable3.html",
 			"constraint" : "center"
 		},
 		"Scrollable4": {
+			"controller": "scrollableTestApp/views/Scrollable4.js",
 			"template": "scrollableTestApp/views/Scrollable4.html",
 			"constraint" : "center"
 		},
 		"Scrollable5": {
+			"controller": "scrollableTestApp/views/Scrollable5.js",
 			"template": "scrollableTestApp/views/Scrollable5.html"
 		},
 		"ListItemDomButtons": {
@@ -167,6 +192,7 @@
 		},
 		
 		"repeatDetails": {
+			"controller": "scrollableTestApp/views/repeatDetails.js",
 			"template": "scrollableTestApp/views/repeatDetails.html",
 			"transition": "slide",
 			"constraint" : "center"

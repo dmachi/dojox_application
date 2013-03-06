@@ -73,7 +73,6 @@
 	"views": {
 
 		"home": { 
-			"controller" : "none",
 			"dependencies":["dojox/mobile/ListItem","dojox/mobile/RoundRectList","dojox/mobile/RoundRectCategory","dojox/mobile/Heading"],
 			"template": "./main/main.html"
 		},
@@ -115,6 +114,7 @@
 		},
 
 		"generate": {
+            "controller": "./generate/generate.js",
             "template": "./generate/generate.html",
             "dependencies":["dojox/mobile/TextBox", "dojox/mobile/TextArea", "dojox/mvc/Generate"]
 		}

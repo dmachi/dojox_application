@@ -86,11 +86,13 @@
 
 			"views": {
 				"ScrollableListSelection": {
+					"controller": "longListTestApp/views/configuration/ScrollableListSelection.js",
 					"template": "longListTestApp/views/configuration/ScrollableListSelection.html"
 				}
 			}
 		},
 		"Footer1": {
+			"controller": "longListTestApp/views/Footer1.js",
 			"template": "longListTestApp/views/Footer1.html",
 			"views": {
 				"Header1": {
@@ -115,9 +117,11 @@
 			}
 		},
 		"LongList2": {
+			"controller": "longListTestApp/views/LongList2.js",
 			"template": "longListTestApp/views/LongList2.html"
 		},
 		"LongList4": {
+			"controller": "longListTestApp/views/LongList4.js",
 			"template": "longListTestApp/views/LongList4.html"
 		}
 	}

@@ -24,7 +24,6 @@
 	"views": {
 
 		"home": { 
-			"controller" : "none",
 			"template": "dojox/app/tests/doh/config.html"
 		}
 

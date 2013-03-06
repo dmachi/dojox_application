@@ -241,7 +241,6 @@ define(["require", "dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare",
 						parent: this,
 						templateString: this.templateString,
 						controller: this.controller,
-						template: this.template,
 						callback: lang.hitch(this, function(view){
 							this.setDomNode(view.domNode);
 							emitLoad.call(this);

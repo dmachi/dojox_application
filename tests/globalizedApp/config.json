@@ -25,7 +25,6 @@
 
 	"views": {
 		"home": {
-			"controller" : "none",
 			"template": "globalizedApp/home.html",
 			"nls": "globalizedApp/nls/home",
 			"dependencies":	[
