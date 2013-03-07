@@ -23,7 +23,6 @@
 
 	"views": {
 		"home": {
-			"controller" : "none",
 			"template": "customApp/home.html",
 			"dependencies":	[
 				"dojox/mobile/RoundRectList",

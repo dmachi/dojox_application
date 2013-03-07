@@ -35,7 +35,6 @@
 	"stores": {},
 
 	"template": "./application.html",
-	"controller" : "none",
 
 	//models and instantiation parameters for the models. Including 'type' as a property allows
 	//one to overide the class that will be used for the model.  By default it is dojox/mvc/model
@@ -50,7 +49,6 @@
 
 		//simple scene which loads all views and shows the default first
 		"home": { 
-			"controller" : "none",
 			"dependencies":["dojox/mobile/RoundRectList","dojox/mobile/ListItem", "dojox/mobile/EdgeToEdgeCategory"],
 			"template": "./templates/simple/home.html"
 		},
@@ -58,22 +56,18 @@
 		"main":{
 			//all views in the main scene will be bound to the user model
 			"models": [],
-			"controller" : "none",
 			"template": "./simple.html",
 			"defaultView": "main",
 			"defaultTransition": "slide",
 			//the views available to this scene
 			"views": { 
 				"main":{
-					"controller" : "none",
 					"template": "./templates/simple/main.html"
 				},
 				"second":{
-					"controller" : "none",
 					"template": "./templates/simple/second.html"
 				},
 				"third":{
-					"controller" : "none",
 					"template": "./templates/simple/third.html"
 				}
 			},
@@ -83,22 +77,18 @@
 		"tabscene": { 
 			//all views in the second scene will be bound to the user model
 			"models": [],
-			"controller" : "none",
 			"template": "./tabScene.html",
 			"defaultView": "tab1",
 			"defaultTransition": "flip",
 			//the views available to this scene
 			"views": { 
 				"tab1":{
-					"controller" : "none",
 					"template": "./templates/tabs/tab1.html"
 				},
 				"tab2":{
-					"controller" : "none",
 					"template": "./templates/tabs/tab2.html"
 				},
 				"tab3":{
-					"controller" : "none",
 					"template": "./templates/tabs/tab3.html"
 				}
 			},

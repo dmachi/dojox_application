@@ -84,9 +84,10 @@
 	//"defaultTransition": "fade",
 	//"defaultTransition": "flip",     
 
+	"transition": "flip",     
+
 	"views": {
 		"navigation":{
-			"controller" : "none",
 			"constraint" : "left",
 			"template": "mediaQueryLayoutApp/views/navigation.html"
 		},
@@ -101,7 +102,6 @@
 			"template": "mediaQueryLayoutApp/views/centerNavigation.html"
 		},
 		"header":{
-			"controller" : "none",
 			"constraint" : "top",
 			"template": "mediaQueryLayoutApp/views/header.html"
 		},

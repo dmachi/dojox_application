@@ -103,7 +103,6 @@
 	"views": {
 
 		"home": {
-			"controller" : "none",
 			"dependencies":["dojox/mobile/ListItem","dojox/mobile/RoundRectList","dojox/mobile/RoundRectCategory","dojox/mobile/Heading"],
 			"template": "../app/tests/simpleModelApp/main/main.html"
 		},

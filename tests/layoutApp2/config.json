@@ -68,7 +68,6 @@
 
 // this app uses constraints and multiple files in defaultView instead of an outer template for a table layout
 //	"template": "layoutApp2/views/navigation.html",
-//	"controller" : "none",
 
 	//the name of the view to load when the app is initialized.
 	"defaultView": "navigation+simple",
@@ -81,7 +80,6 @@
 
 	"views": {
 		"navigation":{
-			"controller" : "none",
 			"constraint" : "left",
 			"template": "layoutApp2/views/navigation.html"
 		},

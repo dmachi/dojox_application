@@ -109,36 +109,37 @@
 		}
 	},	
 
-	//defaultTransition: The default animation type for the view transition.
-	//the defaultTransition is only used if transition is not set in the config and the transition is not set or 
-	//defaulted on the transitionEvent
+	// defaultTransition: The default animation type for the view transition.
+	// the defaultTransition is only used if transition is not set in the config and the transition is not set or 
+	// defaulted on the transitionEvent
 	// These are the possible defaultTransitions, 
 	//"defaultTransition": "slide",
 	//"defaultTransition": "none",
 	//"defaultTransition": "fade",
 	"defaultTransition": "flip",     // Note: flip does not work with a BorderLayout Controller
 
-	//transition: The animation type to use for all view transitions.
+	// transition: The animation type to use for all view transitions.
 	// if a transition is set on a view or parent it will override the transition set on the transitionEvent or the defaultTransition in the config.
 	//"transition": "slide",
 
-	//views: The children views of an application or of a view. Dependencies may be defined on views for
-	//optimization and organization purposes. Models might also be defined on views if they are view-specific
-	//Finally a view item as three additional properties: transition for specific view transitions, template for
-	//defining the view rendering and finally controller to provide an AMD module to be mixed into the view to 
-	//control it. AMD modules identifiers starting with “.” will be resolved relative to the application root. All other
-	//modules identifiers will be resolved according to the Dojo AMD loader rules and in particular with respect
-	//to its configuration provided as part of the loaderConfig attribute. By default if no controller module is
-	//specified for a view it is looked up automatically in ”./views/<viewId>.js”. If you don’t want a controller
-	//module at all you should specify the “none” value.
+	// views: The children views of an application or of a view. Dependencies may be defined on views for
+	// optimization and organization purposes. Models might also be defined on views if they are view-specific
+	// Finally a view item as three additional properties: transition for specific view transitions, template for
+	// defining the view rendering and finally controller to provide an AMD module to be mixed into the view to 
+	// control it. AMD modules identifiers starting with “.” will be resolved relative to the application root. All other
+	// modules identifiers will be resolved according to the Dojo AMD loader rules and in particular with respect
+	// to its configuration provided as part of the loaderConfig attribute. If you do not want a controller
+	// module at all you should not specify one, setting it to none will no longer work.
+
 	"views": {
 		"configuration": {
 			"defaultView": "ScrollableListSelection",
 			"transition": "slide",
-			"controller": "none",
+			//"controller": "none",
 
 			"views": {
 				"ScrollableListSelection": {
+					"controller": "scrollableTestApp/views/configuration/ScrollableListSelection.js",
 					"template": "scrollableTestApp/views/configuration/ScrollableListSelection.html"
 				}
 			}
@@ -147,27 +148,34 @@
 		
 		"TestInfo": {
 			"transition": "none",
+			"controller": "scrollableTestApp/views/TestInfo.js",
 			"template": "scrollableTestApp/views/TestInfo.html"
 		},
 		"Scrollable1": {
 			"transition": "slide",
+			"controller": "scrollableTestApp/views/Scrollable1.js",
 			"template": "scrollableTestApp/views/Scrollable1.html"
 		},
 		"Scrollable1P": {
 			"transition": "flip",
+			"controller": "scrollableTestApp/views/Scrollable1P.js",
 			"template": "scrollableTestApp/views/Scrollable1P.html"
 		},
 		"Scrollable2": {
 			"transition": "fade",
+			"controller": "scrollableTestApp/views/Scrollable2.js",
 			"template": "scrollableTestApp/views/Scrollable2.html"
 		},
 		"Scrollable3": {
+			"controller": "scrollableTestApp/views/Scrollable3.js",
 			"template": "scrollableTestApp/views/Scrollable3.html"
 		},
 		"Scrollable4": {
+			"controller": "scrollableTestApp/views/Scrollable4.js",
 			"template": "scrollableTestApp/views/Scrollable4.html"
 		},
 		"Scrollable5": {
+			"controller": "scrollableTestApp/views/Scrollable5.js",
 			"template": "scrollableTestApp/views/Scrollable5.html"
 		},
 		"ListItemDomButtons": {
@@ -180,6 +188,7 @@
 		},
 		
 		"repeatDetails": {
+			"controller": "scrollableTestApp/views/repeatDetails.js",
 			"template": "scrollableTestApp/views/repeatDetails.html",
 			"transition": "slide"
 		}

@@ -107,17 +107,14 @@
 			"template": "layoutApp/templates/view1.html"
 		},
 		"view2":{
-			"controller" : "none",
 			"constraint" : "top",
 			"template": "layoutApp/templates/view2.html"
 		},
 		"view3":{
-			"controller" : "none",
 			"constraint" : "left",
 			"template": "layoutApp/templates/view3.html"
 		},
 		"view4":{
-			"controller" : "none",
 			"constraint" : "left",
 			"template": "layoutApp/templates/view4.html"
 		},
@@ -127,27 +124,22 @@
 			"template": "layoutApp/templates/view5.html"
 		},
 		"view6":{
-			"controller" : "none",
 			"constraint" : "center",
 			"template": "layoutApp/templates/view6.html"
 		},
 		"view7":{
-			"controller" : "none",
 			"constraint" : "right",
 			"template": "layoutApp/templates/view7.html"
 		},
 		"view8":{
-			"controller" : "none",
 			"constraint" : "right",
 			"template": "layoutApp/templates/view8.html"
 		},
 		"view9":{
-			"controller" : "none",
 			"constraint" : "bottom",
 			"template": "layoutApp/templates/view9.html"
 		},
 		"view10":{
-			"controller" : "none",
 			"constraint" : "bottom",
 			"template": "layoutApp/templates/view10.html"
 		},

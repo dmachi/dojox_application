@@ -67,7 +67,6 @@
 	}, 
 
 	"template": "layoutApp/views/navigation.html",
-	"controller" : "none",
 
 	//the name of the view to load when the app is initialized.
 	"defaultView": "simple",
