@@ -135,7 +135,6 @@
 		"configuration": {
 			"defaultView": "ScrollableListSelection",
 			"transition": "slide",
-			//"controller": "none",
 
 			"views": {
 				"ScrollableListSelection": {

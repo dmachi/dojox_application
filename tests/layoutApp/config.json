@@ -104,7 +104,6 @@
             },
 			"transition": "fade",
 			"defaultView": "repeatList",
-			"controller": "none",
 
 			"views": {
 				"repeatList":{

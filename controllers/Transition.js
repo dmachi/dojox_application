@@ -45,8 +45,6 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 			// event: Object
 			//		"app-transition" event parameter. It should be like this: {"viewId": viewId, "opts": opts}
 			
-			this.proceeding = (event.opts && event.opts.params && event.opts.params.waitToProceed); // waitToProceed passed when visible is true to delay processing.
-
 			var viewsId = event.viewId || "";
 			this.proceedingSaved = this.proceeding;	
 			var parts = viewsId.split('+');
@@ -237,12 +235,12 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 			// returns:
 			//		transit dojo/promise/all object.
 
-			//TODO: Can this be called with a viewId which includes multiple views with a "+"?  Need to handle that!
-			this.app.log("in app/controllers/Transition._doTransition transitionTo=[",transitionTo,"], removeView = [",removeView,"] parent.name=[",parent.name,"], opts=",opts);
-
 			if(!parent){
 				throw Error("view parent not found in transition.");
 			}
+
+			this.app.log("in app/controllers/Transition._doTransition transitionTo=[",transitionTo,"], removeView = [",removeView,"] parent.name=[",parent.name,"], opts=",opts);
+
 			var parts, toId, subIds, next;
 			if(transitionTo){
 				parts = transitionTo.split(",");
@@ -364,7 +362,7 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 					}
 
 					if(subIds){
-						this._doTransition(subIds, opts, params, data, next, removeView, doResize, true);
+						this._doTransition(subIds, opts, params, data, next || parent, removeView, doResize, true);
 					}
 				}));
 				return result; // dojo/promise/all
