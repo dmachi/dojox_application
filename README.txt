@@ -69,10 +69,9 @@ Example Config:
 	template: "./views/example.html",
 	
 	/* Application level view controller. Application will have a root view even if it has no template.
-	  "none" -- no controller for this view,
 	  "./views/myView.js" -- load controller from "./views/myView.js",
-	  no controller (by default) -- load controller from the same location as the template */
-	"controller": "none",
+	  no controller -- no controller for this view */
+	"controller": "./views/myView.js",
 
 	/* the view to start on by default */
 	"defaultView": "home",
@@ -93,20 +92,17 @@ Example Config:
 			],
 
 			/* template to use for this view */
-			template: "./views/home.html",
+			template: "./views/home.html"
 
-			/* view controller. "none" -- no controller for this view,
+			/* view controller. "none" -- ,
 			  "./views/myHome.js" -- load controller from "./views/myHome.js",
-			  no controller (by default) -- load controller from the same location as the template */
-			"controller": "none"
+			  no controller -- no controller for this view */
 		},
 	
 		/* tabs view contains three child views */
 		"tabs": { 
 			/* the tabs view template */
 			"template": "./views/tabScene.html",
-
-			"controller": "none",
 
 			/* the default view within tabs view */	
 			"defaultView": "tab1",

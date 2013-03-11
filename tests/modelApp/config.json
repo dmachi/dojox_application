@@ -81,7 +81,6 @@
 		"repeat": {
 			"defaultView": "repeatList",
 			"defaultTransition": "slide",
-			"controller": "none",
 
 			"views": {
 				"repeatList":{

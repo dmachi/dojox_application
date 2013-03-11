@@ -20,8 +20,7 @@ define(["require", "dojo/when", "dojo/on", "dojo/_base/declare", "dojo/_base/lan
 			//		|	}
 			//		|
 			//		|	"home":{
-			//		|		"template": "myapp/views/home.html",
-			//		|		"controller": "none",	// identify no view controller
+			//		|		"template": "myapp/views/home.html", // no controller set to not use a view controller
 			//		|		"dependencies":["dojox/mobile/TextBox"]
 			//		|	}
 			//		|	"main":{
