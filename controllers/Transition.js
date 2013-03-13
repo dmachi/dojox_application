@@ -152,7 +152,7 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 			if(!transitionEvt.opts){
 				transitionEvt.opts = {};
 			}
-			var params = transitionEvt.params;
+			var params = transitionEvt.params || transitionEvt.opts.params;
 			this.app.emit("app-load", {
 				"viewId": transitionEvt.viewId,
 				"params": params,
@@ -335,9 +335,11 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 						// if transition is set for the view (or parent) in the config use it, otherwise use it from the event or defaultTransition from the config
 						transition: this._getTransition(parent, transitionTo, mergedOpts)
 					}); 
+					this.app.log("    > in Transition._doTransition calling transit for next ="+next.name);
 					result = transit(current && current.domNode, next && next.domNode, mergedOpts);
 				}
 				when(result, lang.hitch(this, function(){
+					this.app.log("    < in Transition._doTransition back from transit for next ="+next.name);
 					if(removeView){
 						this.app.emit("app-layoutView", {"parent": parent, "view": current, "removeView": true});
 					}
