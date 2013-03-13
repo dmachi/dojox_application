@@ -1,0 +1,32 @@
+<div data-dojo-attach-point="lastOuterDiv">
+	<div data-dojo-type="dojox/app/widgets/Container" data-dojo-attach-point="lastOuterContainer" data-app-constraint="right">
+
+	<!-- <div data-dojo-type="dojox/app/widgets/Container" data-app-constraint="center" data-dojo-props="scrollable:true">  -->
+		<div>
+	<h1 data-dojo-type="dojox/mobile/Heading" data-dojo-props='label:"Last", fixed:"top"'>
+		<span class="mblToolBarButton mblToolBarButtonHasLeftArrow" tabindex="0" data-dojo-attach-point="lastheaderBackButton"
+			widgetid="headerBackButton">
+			<span class="mblToolBarButtonArrow mblToolBarButtonLeftArrow mblColorDefault mblColorDefault45"></span>
+			<span class="mblToolBarButtonBody mblColorDefault"><table cellpadding="0" cellspacing="0" border="0" class="mblToolBarButtonText">
+				<tbody><tr>
+					<td class="mblToolBarButtonIcon"></td>
+					<td class="mblToolBarButtonLabel">Main</td>
+				</tr></tbody></table>
+			</span>
+		</span>
+	</h1>
+	<h2 data-dojo-attach-point="lastH2" data-dojo-type="dojox/mobile/EdgeToEdgeCategory" data-dojo-props='label:"None selected", fixed:"top"'></h2>		
+			<ul data-dojo-attach-point="lastList" data-dojo-type="dojox/mobile/RoundRectList" data-app-constraint="center">
+				<li data-dojo-type="dojox/mobile/ListItem" data-dojo-attach-event="onClick:lastOption1Clicked" data-dojo-props='clickable:true,noArrow:true'>
+					Option 1
+				</li>
+				<li data-dojo-type="dojox/mobile/ListItem" data-dojo-attach-event="onClick:lastOption2Clicked" data-dojo-props='clickable:true,noArrow:true'>
+					Option 2
+				</li>
+				<li data-dojo-type="dojox/mobile/ListItem" data-dojo-attach-event="onClick:lastOption3Clicked" data-dojo-props='clickable:true,noArrow:true'>
+					Option 3
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
