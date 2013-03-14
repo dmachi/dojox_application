@@ -60,45 +60,43 @@ function(lang, declare, dom, domStyle, has, win, config, domClass, domAttr, domC
 		},
 		LastOption1: function(e){	
 			var params = lang.mixin(this.lastParams,{'lastSel':"LastOption1"});
-			if(this.isMedium()){
-				console.log("in NavigationController LastOption1 called with isMedium.");			
-				this.doTransition(e, "mainLeft","lastCenter","lastRight", params, false);
-			}else if(this.isSmall()){
-				console.log("in NavigationController LastOption1 called with isSmall.");			
+			if(!this.isLarge()){
+				console.log("in NavigationController LastOption1 called with isMedium or isSmall.");			
 				this.doTransition(e, "navLeft","lastCenter","lastRight", params, false);
-			}else{
-				console.log("in NavigationController LastOption1 called with isLarge.");			
-				this.doTransition(e, "navLeft","mainCenter","lastRight", params, false);
-			}		
+			}else{	
+				console.log("in NavigationController LastOption1 called with isLarge.");
+				this.doTransition(e, "navLeft", this._getMainCenter(),"lastRight", params, false);
+			}
 		},
 		LastOption2: function(e){
 			var params = lang.mixin(this.lastParams,{'lastSel':"LastOption2"});
-			if(this.isMedium()){
-				console.log("in NavigationController LastOption2 called with isMedium.");			
-				this.doTransition(e, "mainLeft","lastCenter","lastRight", params, false);
-			}else if(this.isSmall()){
-				console.log("in NavigationController LastOption2 called with isSmall.");			
+			if(!this.isLarge()){
+				console.log("in NavigationController LastOption2 called with isMedium or isSmall.");			
 				this.doTransition(e, "navLeft","lastCenter","lastRight", params, false);
-			}else{
+			}else{	
 				console.log("in NavigationController LastOption2 called with isLarge.");			
-				this.doTransition(e, "navLeft","mainCenter","lastRight", params, false);
-			}		
+				this.doTransition(e, "navLeft", this._getMainCenter(),"lastRight", params, false);
+			}
 		},
 		LastOption3: function(e){			
 			var params = lang.mixin(this.lastParams,{'lastSel':"LastOption3"});
-			if(this.isMedium()){
-				console.log("in NavigationController LastOption3 called with isMedium.");			
-				this.doTransition(e, "mainLeft","lastCenter","lastRight", params, false);
-			}else if(this.isSmall()){
-				console.log("in NavigationController LastOption3 called with isSmall.");			
+			if(!this.isLarge()){
+				console.log("in NavigationController LastOption3 called with isMedium or isSmall.");			
 				this.doTransition(e, "navLeft","lastCenter","lastRight", params, false);
-			}else{
+			}else{	
 				console.log("in NavigationController LastOption2 called with isLarge.");			
-				this.doTransition(e, "navLeft","mainCenter","lastRight", params, false);
-			}		
-					
+				this.doTransition(e, "navLeft", this._getMainCenter(),"lastRight", params, false);
+			}
 		},
-		
+
+		// Called to get the correct mainCenter
+		_getMainCenter: function(){
+			if(this.lastCenter == "mainCenter" || this.lastCenter == "mainCenter2" || this.lastCenter == "mainCenter3"){
+				return this.lastCenter;
+			}
+			return "mainCenter";
+			
+		},		
 		// These BackFrom ones need work to really go back in the history.
 		BackFromMain: function(e){
 			if(this.isSmall()){
@@ -144,6 +142,7 @@ function(lang, declare, dom, domStyle, has, win, config, domClass, domAttr, domC
 				target: views,
 				url: "#"+views,
 				reverse: back,
+			//	"transition": "none",
 				params:params
 			};
 			new TransitionEvent(e.target,transOpts,e).dispatch();
@@ -171,8 +170,8 @@ function(lang, declare, dom, domStyle, has, win, config, domClass, domAttr, domC
 					console.log("in NavigationController onResize isMedium and navCenter calling transition with navLeft+mainCenter+lastRight");
 					this.doTransition(this.lastEvent, "navLeft","mainCenter","lastRight", this.lastParams);
 				}else if(this.lastTransition == "navLeft+lastCenter+lastRight"){
-					console.log("in NavigationController onResize isMedium and lastCenter calling transition with mainLeft+LastCenter+lastRight");
-					this.doTransition(this.lastEvent, "mainLeft","lastCenter","lastRight", this.lastParams);
+					console.log("in NavigationController onResize isMedium and lastCenter calling transition with navLeft+LastCenter+lastRight");
+					this.doTransition(this.lastEvent, "navLeft","lastCenter","lastRight", this.lastParams);
 				}	
 			}
 					

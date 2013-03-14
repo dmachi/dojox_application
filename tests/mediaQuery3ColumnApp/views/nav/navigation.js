@@ -1,6 +1,5 @@
-define(["dojo/dom-class", "dojo/_base/connect"],
-function(domClass, connect){
-	var _connectResults = []; // events connect result
+define(["dojo/dom-class"],
+function(domClass){
 	var previousView = null;
 
 	return {
@@ -9,7 +8,7 @@ function(domClass, connect){
 			console.log("in init for view with this.name = "+this.name);
 
 			// the back button is never shown for Nav
-			domClass.add(this.navheaderBackButton, "hide");
+			domClass.add(this.navheaderBackButton.domNode, "hide");
 
 			// This code will setup the view to work in the left or center depending upon the view name
 			if(this.name == "navLeft"){
@@ -51,15 +50,7 @@ function(domClass, connect){
 
 		mainOption3Clicked: function(/*Event*/ e){
 			this.app.emit("MQ3ColApp/MainOption3", e);
-		},
-
-		// view destroy
-		destroy: function(){
-			var connectResult = _connectResults.pop();
-			while(connectResult){
-				connect.disconnect(connectResult);
-				connectResult = _connectResults.pop();
-			}
 		}
+
 	}
 });
