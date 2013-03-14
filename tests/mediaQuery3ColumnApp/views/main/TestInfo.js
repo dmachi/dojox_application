@@ -1,6 +1,6 @@
-define(["dojo/_base/lang", "dojo/dom-class", "dojo/_base/connect"],
-function(lang, domClass, connect){
-	var _connectResults = []; // events connect result
+define(["dojo/_base/lang", "dojo/dom-class"],
+function(lang, domClass){
+	var _onResults = []; // events on array
 	var previousView = null;
 
 	return {
@@ -8,14 +8,14 @@ function(lang, domClass, connect){
 		init: function(){
 			console.log("in init for view with this.name = "+this.name);
 
-			// handle the backButton onclick
-			connectResult = connect.connect(this.testheaderBackButton, "onclick", lang.hitch(this, function(e){
+			// handle the backButton click
+			onResult = this.testheaderBackButton.on("click", lang.hitch(this, function(e){
 				this.app.emit("MQ3ColApp/BackFromTest", e);
-			}));
-			_connectResults.push(connectResult);
+			})); 
+			_onResults.push(onResult);
 			 
 			// This code will setup the classes for the backButton
-			domClass.add(this.testheaderBackButton, "showOnSmall hideOnMedium hideOnLarge");
+			domClass.add(this.testheaderBackButton.domNode, "showOnSmall hideOnMedium hideOnLarge");
 		},
 
 
@@ -27,10 +27,10 @@ function(lang, domClass, connect){
 
 		// view destroy
 		destroy: function(){
-			var connectResult = _connectResults.pop();
-			while(connectResult){
-				connect.disconnect(connectResult);
-				connectResult = _connectResults.pop();
+			var onResult = _onResults.pop();
+			while(onResult){
+				onResult.remove();
+				onResult = _onResults.pop();
 			}
 		}
 	}

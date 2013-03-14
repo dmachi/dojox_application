@@ -5,17 +5,11 @@
 	<!-- <div data-dojo-type="dojox/app/widgets/Container" data-app-constraint="center" data-dojo-props="scrollable:true">  -->
 		<div>
 			<h1 data-dojo-type="dojox/mobile/Heading" data-dojo-props='label:"Nav", fixed:"top"'>
-				<span class="mblToolBarButton mblToolBarButtonHasLeftArrow" tabindex="0" data-dojo-attach-point="navheaderBackButton" 
-					widgetid="headerBackButton">
-					<span class="mblToolBarButtonArrow mblToolBarButtonLeftArrow mblColorDefault mblColorDefault45"></span>
-					<span class="mblToolBarButtonBody mblColorDefault"><table cellpadding="0" cellspacing="0" border="0" class="mblToolBarButtonText">
-						<tbody><tr>
-							<td class="mblToolBarButtonIcon"></td>
-							<td class="mblToolBarButtonLabel">Back</td>
-						</tr></tbody></table>
-					</span>
+				<span data-dojo-type="dojox/mobile/ToolBarButton" tabindex="0" data-dojo-attach-point="navheaderBackButton" 
+					data-dojo-props='label:"Back", fixed:"top", arrow:"left"'>
 				</span>
 			</h1>
+			
 			<ul data-dojo-attach-point="navList" data-dojo-type="dojox/mobile/RoundRectList" data-app-constraint="center">
 				<li data-dojo-type="dojox/mobile/ListItem" clickable="true" data-dojo-attach-event="onClick:mainOption1Clicked">
 					Main Option 1
