@@ -1,6 +1,6 @@
-define(["dojo/_base/lang", "dojo/dom-class", "dojo/_base/connect"],
-function(lang, domClass, connect){
-	var _connectResults = []; // events connect result
+define(["dojo/_base/lang", "dojo/dom-class"],
+function(lang, domClass){
+	var _onResults = []; // events on array
 	var previousView = null;
 
 	return {
@@ -8,21 +8,21 @@ function(lang, domClass, connect){
 		init: function(){
 			console.log("in init for view with this.name = "+this.name);
 
-			// handle the backButton onclick
-			connectResult = connect.connect(this.mainheaderBackButton, "onclick", lang.hitch(this, function(e){
+			// handle the backButton click
+			onResult = this.mainheaderBackButton.on("click", lang.hitch(this, function(e){
 				this.app.emit("MQ3ColApp/BackFromMain", e);
 			})); 
-			_connectResults.push(connectResult);
+			_onResults.push(onResult);
 
 			// This code will setup the view to work in the left or center depending upon the view name
-			if(this.name == "mainLeft"){
+			if(this.name == "mainLeft"){  // app was changed to stop using mainLeft for now.
 				this.mainOuterContainer["data-app-constraint"] = "left";
-				domClass.add(this.mainheaderBackButton, "showOnMedium");
+				domClass.add(this.mainheaderBackButton.domNode, "showOnMedium");
 				domClass.add(this.mainOuterContainer, "left");
 				domClass.add(this.mainOuterDiv, "navPane hideOnSmall");  // for main on left
 			}else{
 				this.mainOuterContainer["data-app-constraint"] = "center";				
-				domClass.add(this.mainheaderBackButton, "showOnSmall hideOnMedium hideOnLarge");
+				domClass.add(this.mainheaderBackButton.domNode, "showOnSmall hideOnMedium hideOnLarge");
 				domClass.add(this.mainOuterContainer, "center");
 			}
 
@@ -61,10 +61,10 @@ function(lang, domClass, connect){
 
 		// view destroy
 		destroy: function(){
-			var connectResult = _connectResults.pop();
-			while(connectResult){
-				connect.disconnect(connectResult);
-				connectResult = _connectResults.pop();
+			var onResult = _onResults.pop();
+			while(onResult){
+				onResult.remove();
+				onResult = _onResults.pop();
 			}
 		}
 	}
