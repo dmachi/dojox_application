@@ -1,4 +1,6 @@
-define({
+define(["dojo/_base/lang"], function(lang){
+	var constraints = [];
+	return {
 		getParams: function(hash){
 			// summary:
 			//		get the params from the hash
@@ -11,6 +13,22 @@ define({
 			//
 			var params;
 			if(hash && hash.length){
+				// fixed handle view specific params
+				
+				while(hash.indexOf("(") > 0){ 
+					var index = hash.indexOf("(");
+					var endindex = hash.indexOf(")");
+					var viewPart = hash.substring(index,endindex+1);
+					if(!params){ params = {}; }
+					params = this.getParamObj(params, viewPart);
+					// next need to remove the viewPart from the hash, and look for the next one
+					var viewName = viewPart.substring(1,viewPart.indexOf("&"));
+				//	var paramString = this.getParamString(params);
+				//	var newView = hash.charAt(index-1) + "(" + view + paramString + ")" + hash.charAt(index+view.length);
+					hash = hash.replace(viewPart, viewName);
+				}	
+				// after all of the viewParts need to get the other params	
+
 				for(var parts= hash.split("&"), x= 0; x<parts.length; x++){
 					var tp = parts[x].split("="), name=tp[0], value = encodeURIComponent(tp[1]||"");
 					if(name && value) {
@@ -19,6 +37,31 @@ define({
 					}
 				}
 			}
+			return params; // Object
+		},
+
+		getParamObj: function(params, viewPart){
+			// summary:
+			//		return the param string
+			// params: Object
+			//		the params object
+			// viewPart: String
+			//		the part of the view with the params for the view
+			//
+			// returns:
+	 		//		the params object for the view
+			//
+			var viewparams;
+			var viewName = viewPart.substring(1,viewPart.indexOf("&"));
+			var hash = viewPart.substring(viewPart.indexOf("&"), viewPart.length-1);
+				for(var parts= hash.split("&"), x= 0; x<parts.length; x++){
+					var tp = parts[x].split("="), name=tp[0], value = encodeURIComponent(tp[1]||"");
+					if(name && value) {
+                        if(!viewparams){ viewparams = {}; }
+						viewparams[name] = value;
+					}
+				}
+			params[viewName] = 	viewparams;
 			return params; // Object
 		},
 
@@ -38,15 +81,78 @@ define({
 			}
 			for(var item in params){
 				var value = params[item];
-				if(item && value != null){
-					hash = hash+"&"+item+"="+params[item];
+				// add a check to see if the params includes a view name if so setup the hash like &(viewName&item=value);
+				if(lang.isObject(value)){
+					hash = this.addViewParams(hash, item, value);
+				}else{
+					if(item && value != null){
+						hash = hash+"&"+item+"="+params[item];
+					}
 				}
 			}
 			return hash; // String
 		},
 
-		getTarget: function(hash){
-			return ((hash && hash.charAt(0) == "#") ? hash.substr(1) : hash).split('&')[0];
+		addViewParams: function(hash, view, params){
+			// summary:
+			//		build up the url hash adding the params
+			// hash: String
+			//		the url hash
+			// view: String
+			//		the view name
+			// params: Object
+			//		the params for this view
+			//
+			// returns:
+	 		//		the hash string
+			//
+			if(hash.charAt(0) !== "#"){
+				hash = "#"+hash;
+			}
+			var index = hash.indexOf(view);
+			if(index > 0){ // found the view?
+				if((hash.charAt(index-1) == "#" || hash.charAt(index-1) == "+") && // assume it is the view? or could check the char after for + or & or -
+					(hash.charAt(index+view.length) == "&" || hash.charAt(index+view.length) == "+" || hash.charAt(index+view.length) == "-")){  
+					// found the view at this index.
+					var oldView = hash.substring(index-1,index+view.length+1);
+					var paramString = this.getParamString(params);
+					var newView = hash.charAt(index-1) + "(" + view + paramString + ")" + hash.charAt(index+view.length);
+					hash = hash.replace(oldView, newView);
+				}
+			}
+			
+			return hash; // String
+		},
+
+		getParamString: function(params){
+			// summary:
+			//		return the param string
+			// params: Object
+			//		the params object
+			//
+			// returns:
+	 		//		the params string
+			//
+			var paramStr = "";
+			for(var item in params){
+				var value = params[item];
+				if(item && value != null){
+					paramStr = paramStr+"&"+item+"="+params[item];
+				}
+			}
+			return paramStr; // String
+		},
+
+		getTarget: function(hash, defaultView){
+			while(hash.indexOf("(") > 0){ 
+				var index = hash.indexOf("(");
+				var endindex = hash.indexOf(")");
+				var viewPart = hash.substring(index,endindex+1);
+				var viewName = viewPart.substring(1,viewPart.indexOf("&"));
+				hash = hash.replace(viewPart, viewName);
+			}	
+			
+			return (((hash && hash.charAt(0) == "#") ? hash.substr(1) : hash)  || defaultView).split('&')[0];
 		}
 	}
-)
+})

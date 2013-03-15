@@ -178,7 +178,8 @@ define(["require", "dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare",
 			// create application controller instance
 			// move set _startView operation from history module to application
 			var currentHash = window.location.hash;
-			this._startView = (((currentHash && currentHash.charAt(0) == "#") ? currentHash.substr(1) : currentHash) || this.defaultView).split('&')[0];
+		//	this._startView = (((currentHash && currentHash.charAt(0) == "#") ? currentHash.substr(1) : currentHash) || this.defaultView).split('&')[0];
+			this._startView = hash.getTarget(currentHash, this.defaultView);
 			this._startParams = hash.getParams(currentHash);
 		},
 

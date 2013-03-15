@@ -46,17 +46,20 @@ function(lang, declare, dom, domStyle, has, win, config, domClass, domAttr, domC
 		TestOption1: function(e){	
 			this.doTransition(e, "navLeft","TestInfo","lastRight", null, null);		
 		},
-		MainOption1: function(e){	
+		MainOption1: function(e){
+			var params = {"mainCenter":{'mainSel':"MainOption1","tparam1":"tValue1"}};
 			console.log("in NavigationController MainOption1 called.");
-			this.doTransition(e, "navLeft","mainCenter","lastRight", {'mainSel':"MainOption1"}, false);		
+			this.doTransition(e, "navLeft","mainCenter","lastRight", params, false);		
 		},
 		MainOption2: function(e){
+			var params = {"mainCenter2":{'mainSel':"MainOption2"}};
 			console.log("in NavigationController MainOption2 called.");
-			this.doTransition(e, "navLeft","mainCenter2","lastRight", {'mainSel':"MainOption2"}, false);		
+			this.doTransition(e, "navLeft","mainCenter2","lastRight", params, false);		
 		},
 		MainOption3: function(e){			
+			var params = {"mainCenter3":{'mainSel':"MainOption3"}};
 			console.log("in NavigationController MainOption3 called.");
-			this.doTransition(e, "navLeft","mainCenter3","lastRight", {'mainSel':"MainOption3"}, false);		
+			this.doTransition(e, "navLeft","mainCenter3","lastRight", params, false);		
 		},
 		LastOption1: function(e){	
 			var params = lang.mixin(this.lastParams,{'lastSel':"LastOption1"});

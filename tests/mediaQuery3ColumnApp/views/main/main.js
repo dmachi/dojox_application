@@ -37,7 +37,17 @@ function(lang, domClass){
 			
 			// Set the selection from the params
 			if(this.params["mainSel"]){ 
-				this.mainH2.set("label",this.params["mainSel"]+" selected");
+				if(this.mainH2){
+					this.mainH2.set("label",this.params["mainSel"]+" selected");
+				}else{
+					console.error("Problem this.mainH2 should not be null ");
+				}	
+			} else if(this.params[this.name] && this.params[this.name]["mainSel"]){ 
+				if(this.mainH2){
+					this.mainH2.set("label",this.params[this.name]["mainSel"]+" selected");
+				}else{
+					console.error("Problem this.mainH2 should not be null (2)");
+				}	
 			}
 		},
 
