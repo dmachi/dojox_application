@@ -32,7 +32,7 @@ define(["dojo/_base/lang"], function(lang){
 				for(var parts= hash.split("&"), x= 0; x<parts.length; x++){
 					var tp = parts[x].split("="), name=tp[0], value = encodeURIComponent(tp[1]||"");
 					if(name && value) {
-                        if(!params){ params = {}; }
+						if(!params){ params = {}; }
 						params[name] = value;
 					}
 				}
@@ -57,7 +57,7 @@ define(["dojo/_base/lang"], function(lang){
 				for(var parts= hash.split("&"), x= 0; x<parts.length; x++){
 					var tp = parts[x].split("="), name=tp[0], value = encodeURIComponent(tp[1]||"");
 					if(name && value) {
-                        if(!viewparams){ viewparams = {}; }
+						if(!viewparams){ viewparams = {}; }
 						viewparams[name] = value;
 					}
 				}
@@ -104,7 +104,7 @@ define(["dojo/_base/lang"], function(lang){
 			//		the params for this view
 			//
 			// returns:
-	 		//		the hash string
+			//		the hash string
 			//
 			if(hash.charAt(0) !== "#"){
 				hash = "#"+hash;
@@ -131,7 +131,7 @@ define(["dojo/_base/lang"], function(lang){
 			//		the params object
 			//
 			// returns:
-	 		//		the params string
+			//		the params string
 			//
 			var paramStr = "";
 			for(var item in params){

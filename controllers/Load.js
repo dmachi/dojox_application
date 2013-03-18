@@ -8,6 +8,9 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/Def
 
 	return declare("dojox.app.controllers.Load", Controller, {
 
+
+		waitingQueue:[],
+
 		constructor: function(app, events){
 			// summary:
 			//		bind "app-load" event on application instance.
@@ -62,24 +65,51 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/Def
 			}
 
 			var params = event.params || "";
-			var def;
-			if(viewArray && viewArray.length > 0){			
+			var def, proceedLoadViewDef;
+			this.proceedLoadViewDef = new Deferred();
+			if(viewArray && viewArray.length > 1){			
 				// loop thru the array calling loadView for each item in the array
 				for(var i=0; i<viewArray.length-1; i++){
 					var newEvent = lang.clone(event);
 					newEvent.callback = null;  // skip callback until after last view is loaded.
 					newEvent.viewId = viewArray[i];
-					this.loadView(newEvent);
+					this.waitingQueue.push(newEvent);
 				}
-				// for last view leave the callback to be notified				
-				var newEvent = lang.clone(event);
-				newEvent.viewId = viewArray[i];
-				def = this.loadView(newEvent);
-				return def;
+				this.proceedLoadView(this.waitingQueue.shift());
+				when(this.proceedLoadViewDef, lang.hitch(this, function(){
+					// for last view leave the callback to be notified				
+					var newEvent = lang.clone(event);
+					newEvent.viewId = viewArray[i];
+					def = this.loadView(newEvent);
+					return def;
+				}));
 			}else{
 				var def = this.loadView(event);
 				return def;
 			}
+		},
+		
+		proceedLoadView: function(loadEvt){
+			// summary:
+			//		Proceed load queue by FIFO by default.
+			//		If load is in proceeding, add the next load to waiting queue.
+			//
+			// loadEvt: Object
+			//		LoadArray event parameter. It should be like this: {"parent":parent, "viewId":viewId, "viewArray":viewArray, "callback":function(){...}}
+
+			var def = this.loadView(loadEvt);
+			when(def, lang.hitch(this, function(){
+						this.app.log("in app/controllers/Load proceedLoadView back from loadView for event", loadEvt);
+						var nextEvt = this.waitingQueue.shift();
+						if(nextEvt){
+							this.app.log("in app/controllers/Load proceedLoadView back from loadView calling this.proceedLoadView(nextEvt) for ",nextEvt);
+							this.proceedLoadView(nextEvt);
+						}else{
+							this.waitingQueue = [];
+							this.proceedLoadViewDef.resolve();
+						}
+			}));
+			return;		
 		},
 
 		loadView: function(event){
