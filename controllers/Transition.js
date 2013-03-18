@@ -203,6 +203,39 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 			return transition || opts.transition || defaultTransition || "none";
 		},
 
+
+		_getParamsForView: function(view, params){
+			// summary:
+			//		Get view's params only include view specific params if they are for this view.
+			//
+			// view: String
+			//		the view's name
+			// params: Object
+			//		the params
+			//
+			// returns:
+			//		params Object for this view
+			viewParams = {};
+			for(var item in params){
+				var value = params[item];
+				if(lang.isObject(value)){  	// view specific params
+					if(item == view){		// it is for this view
+						// need to add these params for the view
+						for(var viewItem in value){
+							if(viewItem && value[viewItem] != null){
+								viewParams[viewItem] = value[viewItem];
+							}
+						}
+					} 
+				}else{  // these params are for all views, so add them
+					if(item && value != null){
+						viewParams[item] = params[item];
+					}
+				}
+			}
+			return viewParams;
+		},
+
 		_doTransition: function(transitionTo, opts, params, data, parent, removeView, doResize, nested){
 			// summary:
 			//		Transitions from the currently visible scene to the defined scene.
@@ -265,7 +298,8 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 			var current = constraints.getSelectedChild(parent, next.constraint);
 
 			// set params on next view.
-			next.params = params || next.params;
+			//next.params = params || next.params;
+			next.params = this._getParamsForView(next.name, params || next.params);
 
 			// if no subIds and next has default view, 
 			// set the subIds to the default view and transition to default view.

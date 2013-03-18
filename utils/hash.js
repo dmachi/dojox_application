@@ -1,7 +1,7 @@
 define(["dojo/_base/lang"], function(lang){
 	var constraints = [];
 	return {
-		getParams: function(hash){
+		getParams: function(/*String*/ hash){
 			// summary:
 			//		get the params from the hash
 			//
@@ -23,8 +23,6 @@ define(["dojo/_base/lang"], function(lang){
 					params = this.getParamObj(params, viewPart);
 					// next need to remove the viewPart from the hash, and look for the next one
 					var viewName = viewPart.substring(1,viewPart.indexOf("&"));
-				//	var paramString = this.getParamString(params);
-				//	var newView = hash.charAt(index-1) + "(" + view + paramString + ")" + hash.charAt(index+view.length);
 					hash = hash.replace(viewPart, viewName);
 				}	
 				// after all of the viewParts need to get the other params	
@@ -40,11 +38,11 @@ define(["dojo/_base/lang"], function(lang){
 			return params; // Object
 		},
 
-		getParamObj: function(params, viewPart){
+		getParamObj: function(/*Object*/ params, /*String*/ viewPart){
 			// summary:
-			//		return the param string
+			//		called to handle a view specific params object
 			// params: Object
-			//		the params object
+			//		the view specific params object
 			// viewPart: String
 			//		the part of the view with the params for the view
 			//
@@ -65,7 +63,7 @@ define(["dojo/_base/lang"], function(lang){
 			return params; // Object
 		},
 
-		buildWithParams: function(hash, params){
+		buildWithParams: function(/*String*/ hash, /*Object*/ params){
 			// summary:
 			//		build up the url hash adding the params
 			// hash: String
@@ -81,7 +79,7 @@ define(["dojo/_base/lang"], function(lang){
 			}
 			for(var item in params){
 				var value = params[item];
-				// add a check to see if the params includes a view name if so setup the hash like &(viewName&item=value);
+				// add a check to see if the params includes a view name if so setup the hash like (viewName&item=value);
 				if(lang.isObject(value)){
 					hash = this.addViewParams(hash, item, value);
 				}else{
@@ -93,9 +91,9 @@ define(["dojo/_base/lang"], function(lang){
 			return hash; // String
 		},
 
-		addViewParams: function(hash, view, params){
+		addViewParams: function(/*String*/ hash, /*String*/ view, /*Object*/ params){
 			// summary:
-			//		build up the url hash adding the params
+			//		add the view specific params to the hash for example (view1&param1=value1)
 			// hash: String
 			//		the url hash
 			// view: String
@@ -124,7 +122,7 @@ define(["dojo/_base/lang"], function(lang){
 			return hash; // String
 		},
 
-		getParamString: function(params){
+		getParamString: function(/*Object*/ params){
 			// summary:
 			//		return the param string
 			// params: Object
@@ -143,7 +141,17 @@ define(["dojo/_base/lang"], function(lang){
 			return paramStr; // String
 		},
 
-		getTarget: function(hash, defaultView){
+		getTarget: function(/*String*/ hash, /*String?*/ defaultView){
+			// summary:
+			//		return the target string
+			// hash: String
+			//		the hash string
+			// defaultView: String
+			//		the optional defaultView string
+			//
+			// returns:
+			//		the target string
+			//
 			while(hash.indexOf("(") > 0){ 
 				var index = hash.indexOf("(");
 				var endindex = hash.indexOf(")");
@@ -152,7 +160,7 @@ define(["dojo/_base/lang"], function(lang){
 				hash = hash.replace(viewPart, viewName);
 			}	
 			
-			return (((hash && hash.charAt(0) == "#") ? hash.substr(1) : hash)  || defaultView).split('&')[0];
+			return (((hash && hash.charAt(0) == "#") ? hash.substr(1) : hash)  || defaultView).split('&')[0];  // String
 		}
 	}
 })
