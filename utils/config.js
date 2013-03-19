@@ -31,18 +31,18 @@ var config = {
 							while(parts.length > 0){ 	
 								var haspart = parts.shift();
 								// check for has(haspart) or if haspart starts with ! check for !(has(haspart))
-								if((has(haspart)) || (haspart.charAt(0) == '!' && !(has(haspart.substring(1))))) { // if true this one should be merged
+								if((has(haspart)) || (haspart.charAt(0) == '!' && !(has(haspart.substring(1))))){ // if true this one should be merged
 									var hasval = sval[hasname];
 									this.configMerge(source, hasval); // merge this has section into the source config
-									break;  // found a match for this multiple has test, so go to the next one
+									break;	// found a match for this multiple has test, so go to the next one
 								}
 							}
 						}
 					}
 				}
-				delete source["has"];  // after merge remove this has section from the config
+				delete source["has"];	// after merge remove this has section from the config
 			}else{
-				if(!(name.charAt(0) == '_' && name.charAt(1) == '_')&& sval && typeof sval === 'object'){
+				if(!(name.charAt(0) == '_' && name.charAt(1) == '_') && sval && typeof sval === 'object'){
 						this.configProcessHas(sval);
 				}
 			}

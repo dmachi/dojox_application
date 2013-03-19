@@ -67,17 +67,17 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/Def
 			var params = event.params || "";
 			var def, proceedLoadViewDef;
 			this.proceedLoadViewDef = new Deferred();
-			if(viewArray && viewArray.length > 1){			
+			if(viewArray && viewArray.length > 1){
 				// loop thru the array calling loadView for each item in the array
-				for(var i=0; i<viewArray.length-1; i++){
+				for(var i = 0; i < viewArray.length-1; i++){
 					var newEvent = lang.clone(event);
-					newEvent.callback = null;  // skip callback until after last view is loaded.
+					newEvent.callback = null;	// skip callback until after last view is loaded.
 					newEvent.viewId = viewArray[i];
 					this._waitingQueue.push(newEvent);
 				}
 				this.proceedLoadView(this._waitingQueue.shift());
 				when(this.proceedLoadViewDef, lang.hitch(this, function(){
-					// for last view leave the callback to be notified				
+					// for last view leave the callback to be notified
 					var newEvent = lang.clone(event);
 					newEvent.viewId = viewArray[i];
 					def = this.loadView(newEvent);

@@ -49,8 +49,8 @@ define(["dojo/_base/array"], function(arr){
 			//
 			selChildren = selChildren || [];
 			if(view && view.selectedChildren){
-				for(var hash in view.selectedChildren){  
-					if(view.selectedChildren[hash]) {
+				for(var hash in view.selectedChildren){
+					if(view.selectedChildren[hash]){
 						var subChild = view.selectedChildren[hash];
 						selChildren.push(subChild);
 						this.getAllSelectedChildren(subChild, selChildren);

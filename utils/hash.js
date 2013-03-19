@@ -33,9 +33,9 @@ var hashUtil = {
 				}	
 				// after all of the viewParts need to get the other params	
 
-				for(var parts= hash.split("&"), x= 0; x<parts.length; x++){
-					var tp = parts[x].split("="), name=tp[0], value = encodeURIComponent(tp[1]||"");
-					if(name && value) {
+				for(var parts = hash.split("&"), x = 0; x < parts.length; x++){
+					var tp = parts[x].split("="), name = tp[0], value = encodeURIComponent(tp[1] || "");
+					if(name && value){
 						if(!params){ params = {}; }
 						params[name] = value;
 					}
@@ -58,9 +58,9 @@ var hashUtil = {
 			var viewparams;
 			var viewName = viewPart.substring(1,viewPart.indexOf("&"));
 			var hash = viewPart.substring(viewPart.indexOf("&"), viewPart.length-1);
-				for(var parts= hash.split("&"), x= 0; x<parts.length; x++){
-					var tp = parts[x].split("="), name=tp[0], value = encodeURIComponent(tp[1]||"");
-					if(name && value) {
+				for(var parts = hash.split("&"), x = 0; x < parts.length; x++){
+					var tp = parts[x].split("="), name = tp[0], value = encodeURIComponent(tp[1] || "");
+					if(name && value){
 						if(!viewparams){ viewparams = {}; }
 						viewparams[name] = value;
 					}
@@ -116,7 +116,7 @@ var hashUtil = {
 			var index = hash.indexOf(view);
 			if(index > 0){ // found the view?
 				if((hash.charAt(index-1) == "#" || hash.charAt(index-1) == "+") && // assume it is the view? or could check the char after for + or & or -
-					(hash.charAt(index+view.length) == "&" || hash.charAt(index+view.length) == "+" || hash.charAt(index+view.length) == "-")){  
+					(hash.charAt(index+view.length) == "&" || hash.charAt(index+view.length) == "+" || hash.charAt(index+view.length) == "-")){
 					// found the view at this index.
 					var oldView = hash.substring(index-1,index+view.length+1);
 					var paramString = hashUtil.getParamString(params);
@@ -166,7 +166,7 @@ var hashUtil = {
 				hash = hash.replace(viewPart, viewName);
 			}	
 			
-			return (((hash && hash.charAt(0) == "#") ? hash.substr(1) : hash)  || defaultView).split('&')[0];  // String
+			return (((hash && hash.charAt(0) == "#") ? hash.substr(1) : hash) || defaultView).split('&')[0];	// String
 		}
 };
 
