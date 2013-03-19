@@ -1,5 +1,5 @@
 define(["require", "dojo/when", "dojo/on", "dojo/dom-attr", "dojo/_base/declare", "dojo/_base/lang",
-	"dojo/Deferred",  "./utils/model", "./utils/constraints"],
+	"dojo/Deferred", "./utils/model", "./utils/constraints"],
 	function(require, when, on, domAttr, declare, lang, Deferred, model, constraints){
 	return declare("dojox.app.ViewBase", null, {
 		// summary:
@@ -61,7 +61,7 @@ define(["require", "dojo/when", "dojo/on", "dojo/dom-attr", "dojo/_base/declare"
 			// tags:
 			//		private
 			
-			if(!this.loadedModels) {
+			if(!this.loadedModels){
 				var loadModelLoaderDeferred = new Deferred();
 				var createPromise;
 				try{
@@ -135,7 +135,7 @@ define(["require", "dojo/when", "dojo/on", "dojo/dom-attr", "dojo/_base/declare"
 			var viewControllerDef = new Deferred();
 			var path;
 
-			if(!this.controller){  // no longer using this.controller === "none", if we dont have one it means none.
+			if(!this.controller){ // no longer using this.controller === "none", if we dont have one it means none.
 				this.app.log("  > in app/ViewBase _loadViewController no controller set for view name=[",this.name,"], parent.name=[",this.parent.name,"]");
 				viewControllerDef.resolve(true);
 				return viewControllerDef;
@@ -151,10 +151,10 @@ define(["require", "dojo/when", "dojo/on", "dojo/dom-attr", "dojo/_base/declare"
 					loadFile = path.substring(index+2);
 				}
 				requireSignal = require.on("error", function(error){
-					if (viewControllerDef.isResolved() || viewControllerDef.isRejected()) {
+					if(viewControllerDef.isResolved() || viewControllerDef.isRejected()){
 						return;
 					}
-					if(error.info[0] && (error.info[0].indexOf(loadFile)>= 0)){
+					if(error.info[0] && (error.info[0].indexOf(loadFile) >= 0)){
 						viewControllerDef.resolve(false);
 						requireSignal.remove();
 					}

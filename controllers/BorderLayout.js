@@ -26,17 +26,17 @@ function(declare, domAttr, domStyle, LayoutBase, BorderContainer, StackContainer
 			if(!this.borderLayoutCreated){ // If the BorderContainer has not been created yet, create it.
 				this.borderLayoutCreated = true;
 				bc = new BorderContainer({id:this.app.id+"-BC", style: "height:100%;width:100%;border:1px solid black"});
-				event.view.parent.domNode.appendChild(bc.domNode);  // put the border container into the parent (app)
+				event.view.parent.domNode.appendChild(bc.domNode);	// put the border container into the parent (app)
 
-				bc.startup();  // startup the BorderContainer
+				bc.startup();	// startup the BorderContainer
 			}
 
 			this.app.log("in app/controllers/BorderLayout.initLayout event.view.constraint=",event.view.constraint);
-			var constraint = event.view.constraint;  // constraint holds the region for this view, center, top etc.
+			var constraint = event.view.constraint;	// constraint holds the region for this view, center, top etc.
 			
-			if(event.view.parent.id == this.app.id){  // If the parent of this view is the app we are working with the BorderContainer
+			if(event.view.parent.id == this.app.id){	// If the parent of this view is the app we are working with the BorderContainer
 				var reg = registry.byId(event.view.parent.id+"-"+constraint);			
-				if(reg){  // already has a stackContainer, just create the contentPane for this view and add it to the stackContainer.
+				if(reg){	// already has a stackContainer, just create the contentPane for this view and add it to the stackContainer.
 					cp1 = new ContentPane({id:event.view.id+"-cp-"+constraint});
 					cp1.addChild(event.view); // important to add the widget to the cp before adding cp to BorderContainer for height
 					reg.addChild(cp1);

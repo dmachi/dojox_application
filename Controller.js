@@ -61,7 +61,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/on"], function(lang, decl
 			//		event
 
 			var len = this._boundEvents.length;
-			for(var i=0; i<len; i++){
+			for(var i = 0; i < len; i++){
 				if((this._boundEvents[i]['event'] == event) && (this._boundEvents[i]['evented'] == evented)){
 					this._boundEvents[i]['signal'].remove();
 					this._boundEvents.splice(i, 1);

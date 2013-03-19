@@ -57,7 +57,7 @@ define(["require", "dojo/when", "dojo/on", "dojo/_base/declare", "dojo/_base/lan
 
 		// _TemplatedMixin requires a connect method if data-dojo-attach-* are used
 		connect: function(obj, event, method){
-			return this.own(on(obj, event, lang.hitch(this, method)))[0];  // handle
+			return this.own(on(obj, event, lang.hitch(this, method)))[0]; // handle
 		},
 
 		_loadTemplate: function(){
@@ -86,7 +86,7 @@ define(["require", "dojo/when", "dojo/on", "dojo/_base/declare", "dojo/_base/lan
 							if(def.isResolved() || def.isRejected()){
 								return;
 							}
-							if(error.info[0] && error.info[0].indexOf(this.template)>=0 ){
+							if(error.info[0] && error.info[0].indexOf(this.template) >= 0 ){
 								def.resolve(false);
 								requireSignal.remove();
 							}

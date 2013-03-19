@@ -20,7 +20,7 @@ function(lang, Deferred, when, getStateful){
 
 		var fixupQuery = function(query){
 			var ops = {};
-			for(var item in query){  // need this to handle query params without errors
+			for(var item in query){ // need this to handle query params without errors
 				if(item.charAt(0) !== "_"){
 					ops[item] = query[item];
 				}
@@ -57,7 +57,7 @@ function(lang, Deferred, when, getStateful){
 			}
 			options = {"data": params.data, query: {}};
 		}
-		else {
+		else{
 			console.warn("mvcModel: Missing parameters.");
 		}
 
@@ -85,7 +85,7 @@ function(lang, Deferred, when, getStateful){
 			loadMvcModelDeferred.reject("load mvc model error.");
 			return loadMvcModelDeferred.promise;
 		}
-		when(createMvcPromise, lang.hitch(this, function() {
+		when(createMvcPromise, lang.hitch(this, function(){
 			// now the loadedModels[item].models is set.
 			loadedModels = newModel;
 			loadMvcModelDeferred.resolve(loadedModels);

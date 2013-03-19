@@ -28,8 +28,8 @@ function(declare, lang, array, win, query, domGeom, domAttr, domStyle, registry,
 
 
 		resizeSelectedChildren: function(w){
-			for(var hash in w.selectedChildren){  // need this to handle all selectedChildren
-				if(w.selectedChildren[hash]) {
+			for(var hash in w.selectedChildren){	// need this to handle all selectedChildren
+				if(w.selectedChildren[hash]){
 					this.app.log("in Layout resizeSelectedChildren calling resizeSelectedChildren calling _doResize for w.selectedChildren[hash].id="+w.selectedChildren[hash].id);
 					this._doResize(w.selectedChildren[hash]);
 					// Call resize on child widgets, needed to get the scrollableView to resize correctly initially	
