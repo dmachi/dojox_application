@@ -135,7 +135,7 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 			if(this.proceeding){
 				this.app.log("in app/controllers/Transition proceedTransition push event", transitionEvt);
 				this.waitingQueue.push(transitionEvt);
-				this.processingQueue = false;  
+				this.processingQueue = false;
 				return;
 			}
 			// If there are events waiting, needed to have the last in be the last processed, so add it to waitingQueue
@@ -186,7 +186,7 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 			//		transition type like "slide", "fade", "flip" or "none".
 			var parentView = parent;
 			var transition = null;
-			if(parentView.views[transitionTo]) {
+			if(parentView.views[transitionTo]){
 				transition = parentView.views[transitionTo].transition;
 			} 
 			if(!transition){
@@ -218,16 +218,12 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 			viewParams = {};
 			for(var item in params){
 				var value = params[item];
-				if(lang.isObject(value)){  	// view specific params
+				if(lang.isObject(value)){	// view specific params
 					if(item == view){		// it is for this view
 						// need to add these params for the view
-						for(var viewItem in value){
-							if(viewItem && value[viewItem] != null){
-								viewParams[viewItem] = value[viewItem];
-							}
-						}
+						viewParams = lang.mixin(viewParams, value);
 					} 
-				}else{  // these params are for all views, so add them
+				}else{	// these params are for all views, so add them
 					if(item && value != null){
 						viewParams[item] = params[item];
 					}
@@ -290,8 +286,8 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 			if(!next){
 				if(removeView){
 					this.app.log("> in Transition._doTransition called with removeView true, but that view is not available to remove");
-					return;  // trying to remove a view which is not showing
-				}				
+					return;	// trying to remove a view which is not showing
+				}
 				throw Error("child view must be loaded before transition.");
 			}
 
@@ -310,7 +306,7 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 			if(removeView){
 				if(next !== current){ // nothing to remove
 					this.app.log("> in Transition._doTransition called with removeView true, but that view is not available to remove");
-					return;  // trying to remove a view which is not showing
+					return;	// trying to remove a view which is not showing
 				}	
 				// if next == current we will set next to null and remove the view with out a replacement
 				next = null;
@@ -354,7 +350,7 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 					// if we are removing the view we must delay the layout to _after_ the animation
 					this.app.emit("app-layoutView", {"parent": parent, "view": next });
 				}
-				if(doResize){  
+				if(doResize){
 					this.app.emit("app-resize"); // after last layoutView fire app-resize			
 				}
 				
@@ -365,7 +361,7 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 					// did not have any current
 					var mergedOpts = lang.mixin({}, opts); // handle reverse from mergedOpts or transitionDir
 					mergedOpts = lang.mixin({}, mergedOpts, {
-						reverse: (mergedOpts.reverse || mergedOpts.transitionDir===-1)?true:false,
+						reverse: (mergedOpts.reverse || mergedOpts.transitionDir === -1)?true:false,
 						// if transition is set for the view (or parent) in the config use it, otherwise use it from the event or defaultTransition from the config
 						transition: this._getTransition(parent, transitionTo, mergedOpts)
 					});
