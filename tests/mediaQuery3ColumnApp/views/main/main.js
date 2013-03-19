@@ -10,7 +10,11 @@ function(lang, domClass){
 
 			// handle the backButton click
 			onResult = this.mainheaderBackButton.on("click", lang.hitch(this, function(e){
-				this.app.emit("MQ3ColApp/BackFromMain", e);
+				if(history){
+					history.back();
+				}else{
+					this.app.emit("MQ3ColApp/BackFromMain", e);
+				}
 			})); 
 			_onResults.push(onResult);
 
@@ -37,7 +41,13 @@ function(lang, domClass){
 			
 			// Set the selection from the params
 			if(this.params["mainSel"]){ 
-				this.mainH2.set("label",this.params["mainSel"]+" selected");
+				if(this.mainH2){
+					this.mainH2.set("label",this.params["mainSel"]+" selected");
+				}else{
+					console.error("Problem this.mainH2 should not be null ");
+				}	
+			}else{
+				this.mainH2.set("label","None selected");				
 			}
 		},
 

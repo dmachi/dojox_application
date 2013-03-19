@@ -99,6 +99,7 @@
 	//the name of the view to load when the app is initialized.
 	//"defaultView": "header+navigation+TestInfo",
 	"defaultView": "main+header+navigation+TestInfo+simple+repeatList",
+	//"defaultView": "main+navigation+TestInfo+simple+repeatList",
 	
 
 	// these are the possilbe defaultTransitions

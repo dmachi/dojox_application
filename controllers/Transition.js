@@ -135,7 +135,7 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 			if(this.proceeding){
 				this.app.log("in app/controllers/Transition proceedTransition push event", transitionEvt);
 				this.waitingQueue.push(transitionEvt);
-				this.processingQueue = false;  
+				this.processingQueue = false;
 				return;
 			}
 			// If there are events waiting, needed to have the last in be the last processed, so add it to waitingQueue
@@ -186,7 +186,7 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 			//		transition type like "slide", "fade", "flip" or "none".
 			var parentView = parent;
 			var transition = null;
-			if(parentView.views[transitionTo]) {
+			if(parentView.views[transitionTo]){
 				transition = parentView.views[transitionTo].transition;
 			} 
 			if(!transition){
@@ -201,6 +201,35 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 				}
 			}
 			return transition || opts.transition || defaultTransition || "none";
+		},
+
+
+		_getParamsForView: function(view, params){
+			// summary:
+			//		Get view's params only include view specific params if they are for this view.
+			//
+			// view: String
+			//		the view's name
+			// params: Object
+			//		the params
+			//
+			// returns:
+			//		params Object for this view
+			viewParams = {};
+			for(var item in params){
+				var value = params[item];
+				if(lang.isObject(value)){	// view specific params
+					if(item == view){		// it is for this view
+						// need to add these params for the view
+						viewParams = lang.mixin(viewParams, value);
+					} 
+				}else{	// these params are for all views, so add them
+					if(item && value != null){
+						viewParams[item] = params[item];
+					}
+				}
+			}
+			return viewParams;
 		},
 
 		_doTransition: function(transitionTo, opts, params, data, parent, removeView, doResize, nested){
@@ -257,15 +286,15 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 			if(!next){
 				if(removeView){
 					this.app.log("> in Transition._doTransition called with removeView true, but that view is not available to remove");
-					return;  // trying to remove a view which is not showing
-				}				
+					return;	// trying to remove a view which is not showing
+				}
 				throw Error("child view must be loaded before transition.");
 			}
 
 			var current = constraints.getSelectedChild(parent, next.constraint);
 
 			// set params on next view.
-			next.params = params || next.params;
+			next.params = this._getParamsForView(next.name, params);
 
 			// if no subIds and next has default view, 
 			// set the subIds to the default view and transition to default view.
@@ -276,7 +305,7 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 			if(removeView){
 				if(next !== current){ // nothing to remove
 					this.app.log("> in Transition._doTransition called with removeView true, but that view is not available to remove");
-					return;  // trying to remove a view which is not showing
+					return;	// trying to remove a view which is not showing
 				}	
 				// if next == current we will set next to null and remove the view with out a replacement
 				next = null;
@@ -320,7 +349,7 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 					// if we are removing the view we must delay the layout to _after_ the animation
 					this.app.emit("app-layoutView", {"parent": parent, "view": next });
 				}
-				if(doResize){  
+				if(doResize){
 					this.app.emit("app-resize"); // after last layoutView fire app-resize			
 				}
 				
@@ -331,15 +360,19 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 					// did not have any current
 					var mergedOpts = lang.mixin({}, opts); // handle reverse from mergedOpts or transitionDir
 					mergedOpts = lang.mixin({}, mergedOpts, {
-						reverse: (mergedOpts.reverse || mergedOpts.transitionDir===-1)?true:false,
+						reverse: (mergedOpts.reverse || mergedOpts.transitionDir === -1)?true:false,
 						// if transition is set for the view (or parent) in the config use it, otherwise use it from the event or defaultTransition from the config
 						transition: this._getTransition(parent, transitionTo, mergedOpts)
-					}); 
-					this.app.log("    > in Transition._doTransition calling transit for next ="+next.name);
+					});
+					if(next){
+						this.app.log("    > in Transition._doTransition calling transit for current ="+next.name);
+					}
 					result = transit(current && current.domNode, next && next.domNode, mergedOpts);
 				}
 				when(result, lang.hitch(this, function(){
-					this.app.log("    < in Transition._doTransition back from transit for next ="+next.name);
+					if(next){
+						this.app.log("    < in Transition._doTransition back from transit for next ="+next.name);
+					}
 					if(removeView){
 						this.app.emit("app-layoutView", {"parent": parent, "view": current, "removeView": true});
 					}
