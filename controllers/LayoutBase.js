@@ -35,8 +35,8 @@ function(lang, declare, has, win, config, domAttr, topic, domStyle, constraints,
 			this._doResize(this.app);
 			// this is needed to resize the children on an orientation change or a resize of the browser.
 			// it was being done in _doResize, but was not needed for every call to _doResize.
-			for(var hash in this.app.selectedChildren){  // need this to handle all selectedChildren
-				if(this.app.selectedChildren[hash]) {
+			for(var hash in this.app.selectedChildren){	// need this to handle all selectedChildren
+				if(this.app.selectedChildren[hash]){
 					this._doResize(this.app.selectedChildren[hash]);
 				}
 			}
@@ -53,8 +53,8 @@ function(lang, declare, has, win, config, domAttr, topic, domStyle, constraints,
 			//
 			// event: Object
 			// |		{"view": view, "callback": function(){}};
-			domAttr.set(event.view.domNode, "id", event.view.id);  // Set the id for the domNode
-			if(event.callback){   // if the event has a callback, call it.
+			domAttr.set(event.view.domNode, "id", event.view.id);	// Set the id for the domNode
+			if(event.callback){	// if the event has a callback, call it.
 				event.callback();
 			}
 		},
@@ -101,10 +101,10 @@ function(lang, declare, has, win, config, domAttr, topic, domStyle, constraints,
 			
 			// if the parent has a child in the view constraint it has to be hidden, and this view displayed.
 			var parentSelChild = constraints.getSelectedChild(parent, view.constraint);
-			if(event.removeView){  // if this view is being removed set display to none and the selectedChildren entry to null
+			if(event.removeView){	// if this view is being removed set display to none and the selectedChildren entry to null
 				this.hideView(view);
 				if(view == parentSelChild){
-					constraints.setSelectedChild(parent, view.constraint, null);  // remove from selectedChildren
+					constraints.setSelectedChild(parent, view.constraint, null);	// remove from selectedChildren
 				}
 			}else if(view !== parentSelChild){
 				if(parentSelChild){

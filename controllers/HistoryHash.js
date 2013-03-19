@@ -41,7 +41,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/topic", "dojo/on", "../Co
 
 			// push the default page to the history stack
 			var currentHash = window.location.hash;
-			if (currentHash && (currentHash.length > 1)) {
+			if(currentHash && (currentHash.length > 1)){
 				currentHash = currentHash.substr(1);
 			}
 			this._historyStack.push({
@@ -83,7 +83,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/topic", "dojo/on", "../Co
 
 			var target = evt.detail.target;
 			var regex = /#(.+)/;
-			if (!target && regex.test(evt.detail.href)) {
+			if(!target && regex.test(evt.detail.href)){
 				target = evt.detail.href.match(regex)[1];
 			}
 
@@ -174,7 +174,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/topic", "dojo/on", "../Co
 			//window.history.length increase, add hash to application history stack.
 			if(this._historyLen < window.history.length){
 				this._addHistory(currentHash);
-				if (!this._startTransitionEvent) {
+				if(!this._startTransitionEvent){
 					// transition to the target view
 					this.app.emit("app-transition", {
 						viewId: hash.getTarget(currentHash),

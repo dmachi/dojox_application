@@ -57,7 +57,7 @@ function(lang, Deferred, when){
 			return loadSimpleModelDeferred.promise;
 		}
 		if(createMvcPromise.then){
-			when(createMvcPromise, lang.hitch(this, function(newModel) {
+			when(createMvcPromise, lang.hitch(this, function(newModel){
 				// now the loadedModels[item].models is set.
 				//console.log("in simpleModel promise path, loadedModels = ", loadedModels);
 				loadedModels = newModel;

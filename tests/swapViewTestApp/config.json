@@ -98,7 +98,7 @@
 
 	//the name of the view to load when the app is initialized.
 	//"defaultView": "header+navigation+TestInfo",
-	"defaultView": "main+header+navigation+TestInfo+simple+repeatList",
+	"defaultView": "main+header+TestInfo+simple+repeatList+navigation",
 	//"defaultView": "main+navigation+TestInfo+simple+repeatList",
 	
 

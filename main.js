@@ -236,7 +236,7 @@ define(["require", "dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare",
 				if(this.template){
 					// emit "app-init" event so that the Load controller can initialize root view
 					this.emit("app-init", {
-						app: this,  // pass the app into the View so it can have easy access to app
+						app: this,	// pass the app into the View so it can have easy access to app
 						name: this.name,
 						type: this.type,
 						parent: this,
@@ -317,7 +317,7 @@ define(["require", "dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare",
 				var app = new App(config, node || win.body());
 
 				if(has("app-log-api")){
-					app.log = function(){  
+					app.log = function(){
 						// summary:
 						//		If config is set to turn on app logging, then log msg to the console
 						//
