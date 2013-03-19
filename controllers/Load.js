@@ -9,7 +9,7 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/Def
 	return declare("dojox.app.controllers.Load", Controller, {
 
 
-		waitingQueue:[],
+		_waitingQueue:[],
 
 		constructor: function(app, events){
 			// summary:
@@ -73,9 +73,9 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/Def
 					var newEvent = lang.clone(event);
 					newEvent.callback = null;  // skip callback until after last view is loaded.
 					newEvent.viewId = viewArray[i];
-					this.waitingQueue.push(newEvent);
+					this._waitingQueue.push(newEvent);
 				}
-				this.proceedLoadView(this.waitingQueue.shift());
+				this.proceedLoadView(this._waitingQueue.shift());
 				when(this.proceedLoadViewDef, lang.hitch(this, function(){
 					// for last view leave the callback to be notified				
 					var newEvent = lang.clone(event);
@@ -100,12 +100,12 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/Def
 			var def = this.loadView(loadEvt);
 			when(def, lang.hitch(this, function(){
 						this.app.log("in app/controllers/Load proceedLoadView back from loadView for event", loadEvt);
-						var nextEvt = this.waitingQueue.shift();
+						var nextEvt = this._waitingQueue.shift();
 						if(nextEvt){
 							this.app.log("in app/controllers/Load proceedLoadView back from loadView calling this.proceedLoadView(nextEvt) for ",nextEvt);
 							this.proceedLoadView(nextEvt);
 						}else{
-							this.waitingQueue = [];
+							this._waitingQueue = [];
 							this.proceedLoadViewDef.resolve();
 						}
 			}));

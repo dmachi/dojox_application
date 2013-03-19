@@ -294,8 +294,7 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 			var current = constraints.getSelectedChild(parent, next.constraint);
 
 			// set params on next view.
-			//next.params = params || next.params;
-			next.params = this._getParamsForView(next.name, params || next.params);
+			next.params = this._getParamsForView(next.name, params);
 
 			// if no subIds and next has default view, 
 			// set the subIds to the default view and transition to default view.
