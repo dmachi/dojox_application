@@ -72,7 +72,8 @@
 		"navLeft":{
 			"constraint" : "left",
 			"controller": "mediaQuery3ColumnApp/views/nav/navigation.js",
-			"template": "mediaQuery3ColumnApp/views/nav/navigation.html"
+			"template": "mediaQuery3ColumnApp/views/nav/navigation.html",
+			"nls":      "mediaQuery3ColumnApp/nls/app"
 		},
 		"navCenter":{
 			"constraint" : "center",
@@ -82,7 +83,8 @@
 		"mainCenter":{
 			"constraint" : "center",
 			"controller": "mediaQuery3ColumnApp/views/main/main.js",
-			"template": "mediaQuery3ColumnApp/views/main/main.html"
+			"template": "mediaQuery3ColumnApp/views/main/main.html",
+			"nls":      "mediaQuery3ColumnApp/nls/app"
 		},
 		"mainCenter2":{
 			"constraint" : "center",

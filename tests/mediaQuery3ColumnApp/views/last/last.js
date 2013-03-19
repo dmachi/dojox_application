@@ -10,7 +10,11 @@ function(lang, domClass){
 
 			// handle the backButton click
 			onResult = this.lastheaderBackButton.on("click", lang.hitch(this, function(e){
-				this.app.emit("MQ3ColApp/BackFromLast", e);
+				if(history){
+					history.back();
+				}else{
+					this.app.emit("MQ3ColApp/BackFromLast", e);
+				}
 			})); 
 			_onResults.push(onResult);
 
@@ -38,6 +42,8 @@ function(lang, domClass){
 			// Set the selection from the params
 			if(this.params["lastSel"]){ 
 				this.lastH2.set("label",this.params["lastSel"]+" selected");
+			}else{
+				this.lastH2.set("label","None selected");				
 			}
 		},
 
