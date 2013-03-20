@@ -6,6 +6,7 @@
 
 	"dependencies": [
 		"dojox/app/utils/mvcModel",
+		"dojo/store/Observable",		
 		"dojox/mobile/_base",
 		"dojox/mobile/compat",
 		"dojox/mobile/TabBar",
@@ -14,6 +15,7 @@
 		"dojox/mobile/Button",
 		"dojox/mobile/RoundRect",
 		"dojox/mobile/Heading",
+		"dojox/mobile/EdgeToEdgeStoreList",
 		"dojo/store/Memory",
 		"dojox/mvc/EditStoreRefListController",
 		"dojox/mvc/Group",
@@ -46,6 +48,7 @@
 	   },
        "repeatStore":{
            "type": "dojo/store/Memory",
+	       "observable": true,
            "params": {
                 "data": "modelApp.repeatData"
            }

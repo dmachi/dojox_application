@@ -2,30 +2,37 @@ define(["dojo/dom", "dojo/_base/connect", "dijit/registry", "dojox/mvc/at", "doj
 function(dom, connect, registry, at, getStateful, Output){
 	var _connectResults = []; // events connect result
 
-	var repeatmodel = null;	//repeat view data model
+	var repeatStore = null;	//repeat view data model
+	var currentItem = null;
 
+	return {
 	// show an item detail
-	var setDetailsContext = function(index){
+	setDetailsContext: function(index){
 		// only set the cursor if it is different and valid
-		if(parseInt(index) != repeatmodel.cursorIndex && parseInt(index) < repeatmodel.model.length){
-			repeatmodel.set("cursorIndex", parseInt(index));
+		if(parseInt(index) < repeatStore.data.length){
+			currentItem = repeatStore.data[index];
+			//repeatmodel.set("cursorIndex", parseInt(index));
+			this.First.set("value",currentItem.First);
+			this.Last.set("value",currentItem.Last);
+			this.Email.set("value",currentItem.Email);
+			this.Tel.set("value",currentItem.Tel);
 		}
-	};
+	},
 
 	// get index from dom node id
-	var getIndexFromId = function(nodeId, perfix){
+	getIndexFromId: function(nodeId, perfix){
 		var len = perfix.length;
 		if(nodeId.length <= len){
 			throw Error("repeate node id error.");
 		}
 		var index = nodeId.substring(len, nodeId.length);
 		return parseInt(index);
-	};
+	},
 
-	return {
-		// repeate view init
+
+		// repeat view init
 		init: function(){
-			repeatmodel = this.loadedModels.repeatmodels;
+			repeatStore = this.app.stores.repeatStore.store;
 		},
 
 		beforeActivate: function(){
@@ -34,8 +41,21 @@ function(dom, connect, registry, at, getStateful, Output){
 			//
 			// if this.params["cursor"] is set use it to set the selected Details Context
 			if(this.params["cursor"]){
-				setDetailsContext(this.params["cursor"]);
+				this.setDetailsContext(this.params["cursor"]);
 			}
+		},
+
+		beforeDeactivate: function(){
+			// summary:
+			//		view life cycle beforeDeactivate()
+			//
+			// put any updates back to the store
+			currentItem.label = this.First.get("value")+ " "+this.Last.get("value");;
+			currentItem.First = this.First.get("value");
+			currentItem.Last = this.Last.get("value");
+			currentItem.Email = this.Email.get("value");
+			currentItem.Tel = this.Tel.get("value");
+			repeatStore.put(currentItem);
 		}
 	}
 });
