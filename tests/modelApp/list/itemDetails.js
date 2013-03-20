@@ -27,7 +27,7 @@ function(){
 			//		view life cycle beforeActivate()
 			//
 			// if this.params["cursor"] is set use it to set the selected Details Context
-			if(this.params["cursor"]){
+			if(this.params["cursor"] || this.params["cursor"] == 0){
 				this.setDetailsContext(this.params["cursor"]);
 			}
 		},
