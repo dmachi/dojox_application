@@ -1,11 +1,10 @@
 <div class="view mblView">
-	<script type="dojo/require">at: "dojox/mvc/at"</script>
 	<div data-dojo-type="dojox/mobile/Heading" data-dojo-props='label:"List Example", back:"Home"'>
   		<span data-dojo-type="dojox/mobile/ToolBarButton" data-dojo-attach-point="listInsert1"
        		 data-dojo-props='icon:"mblDomButtonWhitePlus"'
         		style="float:right;" onclick="console.log('+ was clicked')"></span>
 	</div>    
-	<form name="repeatTestForm">
+	<form name="listTestForm">
 		<ul data-dojo-type="dojox/mobile/EdgeToEdgeStoreList" data-dojo-attach-point="list" data-dojo-props='append:true'></ul>
 	</form>
 </div>

@@ -1,16 +1,7 @@
-define(["dojo/_base/lang", "dojo/dom", "dojo/_base/connect", "dijit/registry", "dojox/mvc/at", "dojox/mobile/TransitionEvent", "dojox/mvc/Repeat", "dojox/mvc/getStateful", "dojox/mvc/Output"],
-function(lang, dom, connect, registry, at, TransitionEvent, Repeat, getStateful, Output){
+define(["dojo/_base/lang", "dojo/dom", "dojo/on", "dijit/registry", "dojox/mobile/TransitionEvent"],
+function(lang, dom, on, registry, TransitionEvent){
 	var _onResults = []; // events on array
 
-	// delete an item
-//	var deleteResult = function(index){
-//		var nextIndex = repeatmodel.get("cursorIndex");
-//		if(nextIndex >= index){
-//			nextIndex = nextIndex-1;
-//		}
-//		repeatmodel.model.splice(index, 1);
-//		repeatmodel.set("cursorIndex", nextIndex);		
-//	};
 	// show an item detail
 	var setDetailsContext = function(index, e, params){
 		if(params){
@@ -18,11 +9,11 @@ function(lang, dom, connect, registry, at, TransitionEvent, Repeat, getStateful,
 		}else{
 			params = {"cursor":index};
 		}
-		// transition to repeatDetails view with the &cursor=index
+		// transition to itemDetails view with the &cursor=index
 		var transOpts = {
-			title : "repeatDetails",
-			target : "repeat,repeatDetails",
-			url : "#repeat,repeatDetails", // this is optional if not set it will be created from target   
+			title : "itemDetails",
+			target : "listMain,itemDetails",
+			url : "#listMain,itemDetails", // this is optional if not set it will be created from target   
 		//	params : {"cursor":index}
 			params : params
 		};
@@ -49,16 +40,18 @@ function(lang, dom, connect, registry, at, TransitionEvent, Repeat, getStateful,
 		init: function(){
 			list = this.list;
 			if(!list.Store){
-				list.setStore(this.app.stores.repeatStore.store);
+				list.setStore(this.app.stores.listStore.store);
 			}
-		//	var connectResult;
+			var onResult;
 		//	for(var i = 0; i < this.list.store.data.length; i++){
 		//		var item = dom.byId(this.list.store.data[i].id);
-		//		connectResult = connect.connect(item, "click", lang.hitch(this, function(e){
-		//			var index = this.list.store.index[e.target.innerHTML];
+		//		onResult = on(item, "click", lang.hitch(this, function(e){
+		//			var item = this.list.store.query({"label": e.target.innerHTML})
+		//			var index = this.list.store.index[item[0].id];
 		//			console.log("index is "+index);
 		//			setDetailsContext(index, e, this.params);
 		//		})); 
+		//		_onResults.push(onResult);
 		//	}
 			
 			onResult = this.list.on("click", lang.hitch(this, function(e){

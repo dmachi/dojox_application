@@ -23,26 +23,13 @@ function(win, Application, jsonRef, config, has){
 			}
 		}]
 	};
-	
-//	storeData = [
-//       { "label": "Wi-Fi", "icon": "images/i-icon-3.png", "rightText": "Off", "moveTo": "bar" },
-//        { "label": "VPN", "icon": "images/i-icon-4.png", "rightText": "VPN", "moveTo": "bar" }
-//    ];	
-	modelApp.repeatData2 = { 
-		identifier: "label",
-		'items':[
-        { "label": "Wi-Fi", "icon": "images/i-icon-3.png", "rightText": "Off", "moveTo": "bar" },
-        { "label": "VPN", "icon": "images/i-icon-4.png", "rightText": "VPN", "moveTo": "bar" }
-    ]
-	};
 
-	modelApp.repeatData = { 
+	modelApp.listData = { 
 		identifier: "id",
 		'items':[{
 			"id": "item1",
 			"label": "Chad Chapman",
 			"rightIcon":"mblDomButtonBlueCircleArrow",
-		//	"moveTo": "simple",
 			"First": "Chad",
 			"Last": "Chapman",
 			"Location": "CA",
@@ -54,7 +41,6 @@ function(win, Application, jsonRef, config, has){
 			"id": "item2",
 			"label": "Irene Ira",
 			"rightIcon":"mblDomButtonBlueCircleArrow",
-		//	"moveTo": "repeat,repeatDetails",
 			"First": "Irene",
 			"Last": "Ira",
 			"Location": "NJ",	
@@ -66,7 +52,6 @@ function(win, Application, jsonRef, config, has){
 			"id": "item3",
 			"label": "John Jacklin",
 			"rightIcon":"mblDomButtonBlueCircleArrow",
-		//	"moveTo": "repeat,repeatDetails",
 			"First": "John",
 			"Last": "Jacklin",
 			"Location": "CA",
@@ -76,39 +61,6 @@ function(win, Application, jsonRef, config, has){
 			"Fax": "408-764-4321"
 		}]
 	};
-/*
-	modelApp.repeatData = [{
-		"id": 1,
-		"label": "Chad Chapman",
-		"moveTo": "repeat,repeatDetails",
-		"First": "Chad",
-		"Last": "Chapman",
-		"Location": "CA",
-		"Office": "1278",
-		"Email": "c.c@test.com",
-		"Tel": "408-764-8237",
-		"Fax": "408-764-8228"
-	}, {
-		"id": 2,
-		"label": "Chad Chapman",
-		"moveTo": "repeat,repeatDetails",
-		"First": "Irene",
-		"Last": "Ira",
-		"Location": "NJ",
-		"Office": "F09",
-		"Email": "i.i@test.com",
-		"Tel": "514-764-6532",
-		"Fax": "514-764-7300"
-	}, {
-		"First": "John",
-		"Last": "Jacklin",
-		"Location": "CA",
-		"Office": "6701",
-		"Email": "j.j@test.com",
-		"Tel": "408-764-1234",
-		"Fax": "408-764-4321"
-	}];
-	*/
 	var config = jsonRef.fromJson(config);
 	has.add("ie9orLess", has("ie") && (has("ie") <= 9));
 	Application(config);
