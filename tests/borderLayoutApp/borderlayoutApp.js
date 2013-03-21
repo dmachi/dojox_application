@@ -1,28 +1,6 @@
 require(["dojo/_base/window","dojox/app/main", "dojox/json/ref", "dojo/text!./config.json", "dojo/sniff"],
 function(win, Application, jsonRef, config, has){
 	win.global.modelApp = {};
-	modelApp.names = {
-		identifier: "id",
-		items: [{
-			"id": "1",
-			"Serial": "360324",
-			"First": "John",
-			"Last": "Doe",
-			"Email": "jdoe@us.ibm.com",
-			"ShipTo": {
-				"Street": "123 Valley Rd",
-				"City": "Katonah",
-				"State": "NY",
-				"Zip": "10536"
-			},
-			"BillTo": {
-				"Street": "17 Skyline Dr",
-				"City": "Hawthorne",
-				"State": "NY",
-				"Zip": "10532"
-			}
-		}]
-	};
 	modelApp.repeatData = [{
 		"First": "Chad",
 		"Last": "Chapman",

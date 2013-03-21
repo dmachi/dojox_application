@@ -1,13 +1,7 @@
 -------------------------------------------------------------------------------
-DojoX app 
+dojox/app 
 -------------------------------------------------------------------------------
-Version 0.1
-Release date: 05/08/2011
--------------------------------------------------------------------------------
-Project state: EXPERIMENTAL / Under Construction
-
-This project is under active development with increasing capabilities beginning
-in dojo 1.7, but is not yet capable or stable enough to use in production.
+Project state: stable
 
 This project is licensed under the Dojo Tookit licensing scheme and contributions
 provided under the Dojo CLA.
@@ -251,16 +245,3 @@ define(["dojo/_base/lang", "dojo/_base/declare"], function(lang, declare){
 	});
 });
 ```
-
-TODO:
-
-dojox/app is still an experimental framework with several key pieces still under design and development before a final release. This final release is expected to occur prior to the Dojo 2.0 release. The following items are piece that are under development and testing and we see as requirements prior to the final release:
-
-- Model/Store support. We have a couple of preliminary implementations of model/store support, including one for dojox/mvc.
-However, additional work and testing are required to come to a simple and agreed up on API for these components.  While MVC systems such as dojox/mvc should be supported with first class capabilities, they should not be required. An application developer can 'control' the html of any one view by simply extending the view class and using javascript if they so desired.
-
-- Desktop/Mobile Branching -  Dojox/app is not to be specific to any one particular web platform.
-Using css media selectors and definitions within the config, there will be support for choosing which set of views and parameters to use based on the users browser.
-
-- Intelligent build support -  For performance, especially on the mobile side, an appropriate build of the application is required.
-Rather than adding a build profile for the app, there will be a wrapper utility that runs the build from the config.json. This will allow us to intelligently build the base layers and dynamically loaded layers which should be defined by dependencies and default views as well as other information.

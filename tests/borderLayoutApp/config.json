@@ -57,12 +57,6 @@
 
 	//stores we are using 
 	"stores": {
-	   "namesStore":{
-	       "type": "dojo/store/Memory",
-		   "params": {
-		      "data": "modelApp.names"
-		   }
-	   },
        "repeatStore":{
            "type": "dojo/store/Memory",
            "params": {
@@ -74,13 +68,6 @@
 	//models and instantiation parameters for the models. Including 'type' as a property allows
 	//one to overide the class that will be used for the model.  By default it is dojox/mvc/model
 	"models": {
-		"names": {
-			"modelLoader": "dojox/app/utils/mvcModel",
-			"type": "dojox/mvc/EditStoreRefListController",
-			"params":{
-				"store": {"$ref":"#stores.namesStore"}
-			}	       
-		},
 		"repeatmodels": {
 			"modelLoader": "dojox/app/utils/mvcModel",
 			"type": "dojox/mvc/EditStoreRefListController",
@@ -157,12 +144,6 @@
 			"constraint" : "bottom",
 			"template": "layoutApp/templates/view10.html"
 		},
-		"simple":{
-			"controller" : "layoutApp/views/simple.js",
-			"template": "layoutApp/templates/simple.html",
-			"constraint" : "center",
-			"dependencies":["dojox/mobile/TextBox"]
-		},
 
 		"repeat": {
 			"controller" : "layoutApp/views/repeat.js",
@@ -176,13 +157,6 @@
 					"template": "layoutApp/templates/repeatDetails.html",
 					"constraint" : "center",
 					"dependencies":["dojox/mobile/TextBox"]
-		},
-
-		"generate": {
-			"controller": "layoutApp/views/generate",
-			"template": "layoutApp/templates/generate.html",
-			"constraint" : "center",
-			"dependencies":["dojox/mobile/TextBox", "dojox/mobile/TextArea", "dojox/mvc/Generate"]
 		}
 	}	
 }

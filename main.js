@@ -4,7 +4,6 @@ define(["require", "dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare",
 	"./utils/hash", "./utils/constraints", "./utils/config"],
 	function(require, kernel, lang, declare, config, win, Evented, Deferred, when, has, on, ready, domConstruct, domAttr,
 		 model, nls, lifecycle, hash, constraints, configUtils){
-	kernel.experimental("dojox/app");
 
 	has.add("app-log-api", (config["app"] || {}).debugApp);
 
