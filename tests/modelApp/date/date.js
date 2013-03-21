@@ -1,19 +1,15 @@
-define(["dojo/_base/lang", "dojo/on", "dijit/registry"], 
-function(lang, on, registry){
+define(["dojo/_base/lang", "dojo/on", "dijit/registry", "dojo/date/stamp", "dojox/app/utils/constraints"], 
+function(lang, on, registry, stamp, constraints){
 	var _onResults = []; // events on array
 
 	var opener, updateDate, showDatePicker, onShow, onHide, datePicker2;
 	onShow = function(){
-			// console.log("Set datePicker to current date: ", date.toISOString());
-			datePicker2.set("value", date.toISOString());
+			datePicker2.set("value", date);
 		};
 	onHide = function(node, v){
 			if(v){
-				var newDate = datePicker2.get("value");
-				// console.log("newDate: ", newDate);
-				node.value = newDate;
-				// set new Date
-				date = new Date(newDate);
+				date = datePicker2.get("value");
+				node.value = date;
 			}
 	};
 		
@@ -22,16 +18,15 @@ function(lang, on, registry){
 		init: function(){
 			opener = this.opener;
 			onResult = on(this.selDate1, "click", lang.hitch(this, function(e){
-				this.datePicker2.set("value", date.toISOString());
+				this.datePicker2.set("value", date);
 				this.opener.show(this.selDate1, ['below-centered','above-centered','after','before']);
 			})); 
 			_onResults.push(onResult);
 
 			onResult = on(this.save, "click", lang.hitch(this, function(e){
-				this.opener.hide(true);
-				var newDate = this.datePicker2.get("value");
-				this.selDate1.value = newDate;
-				date = new Date(newDate);
+				this.opener.hide(true);				
+				date = this.datePicker2.get("value");
+				this.selDate1.value = date;
 			})); 
 			_onResults.push(onResult);
 
@@ -41,10 +36,8 @@ function(lang, on, registry){
 			_onResults.push(onResult);
 			
 			datePicker2 = registry.byId("datePicker2");
-			// initialize the globale Date variable as today
-			date = new Date();
-			// console.log("Initial date is: ", date.toISOString());
-			
+			// initialize the global Date variable as today
+			date = stamp.toISOString(new Date(), {selector: "date"});
 		},
 
 		beforeActivate: function(){

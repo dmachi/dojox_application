@@ -102,6 +102,7 @@ function(lang, declare, has, win, config, domAttr, topic, domStyle, constraints,
 			// if the parent has a child in the view constraint it has to be hidden, and this view displayed.
 			var parentSelChild = constraints.getSelectedChild(parent, view.constraint);
 			if(event.removeView){	// if this view is being removed set display to none and the selectedChildren entry to null
+				view.viewShowing = false;
 				this.hideView(view);
 				if(view == parentSelChild){
 					constraints.setSelectedChild(parent, view.constraint, null);	// remove from selectedChildren
@@ -109,8 +110,10 @@ function(lang, declare, has, win, config, domAttr, topic, domStyle, constraints,
 			}else if(view !== parentSelChild){
 				if(parentSelChild){
 				//	domStyle.set(parentSelChild.domNode, "zIndex", 25);
+					parentSelChild.viewShowing = false;
 					this.hideView(parentSelChild);
 				}
+				view.viewShowing = true;
 				this.showView(view);
 				//domStyle.set(view.domNode, "zIndex", 50);
 				constraints.setSelectedChild(parent, view.constraint, view);
