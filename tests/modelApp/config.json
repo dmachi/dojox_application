@@ -5,20 +5,21 @@
 	"splash": "splash",
 
 	"dependencies": [
-		"dojox/app/utils/mvcModel",
+		"dojox/app/utils/simpleModel",
+		"dojo/store/Observable",		
 		"dojox/mobile/_base",
 		"dojox/mobile/compat",
 		"dojox/mobile/TabBar",
 		"dojox/mobile/RoundRect",
 		"dojox/mobile/TabBarButton",
 		"dojox/mobile/Button",
+		"dojox/mobile/TextBox",
 		"dojox/mobile/RoundRect",
 		"dojox/mobile/Heading",
+		"dojox/mobile/EdgeToEdgeStoreList",
+		"dojox/mobile/DatePicker",
+		"dojox/mobile/Opener",
 		"dojo/store/Memory",
-		"dojox/mvc/EditStoreRefListController",
-		"dojox/mvc/Group",
-        "dojox/mvc/Repeat",
-        "dojox/mvc/Output",
 		"dojox/mobile/deviceTheme"
 	],
 	// Modules for the application.  The are basically used as the second
@@ -44,25 +45,14 @@
 		      "data": "modelApp.names"
 		   }
 	   },
-       "repeatStore":{
+       "listStore":{
            "type": "dojo/store/Memory",
+	       "observable": true,
            "params": {
-                "data": "modelApp.repeatData"
+                "data": "modelApp.listData"
            }
        }
 	},
-
-	//models and instantiation parameters for the models. Including 'type' as a property allows
-	//one to overide the class that will be used for the model.  By default it is dojox/mvc/model
-	"models": {
-       "repeatmodels": {
-					"modelLoader": "dojox/app/utils/mvcModel",
-					"type": "dojox/mvc/EditStoreRefListController",
-					"params":{
-						"store": {"$ref":"#stores.repeatStore"}
-					}
-		}
-	}, 
 	
 	// The has section will include the sections for which the has checks are true.  
 	// For the sections with ! it will include the section if the has check is not true.
@@ -91,20 +81,20 @@
 			"template": "./main/main.html"
 		},
 
-		//repeat scene, include list view and date view
-		"repeat": {
-			"defaultView": "repeatList",
+		//list view, include list view and date view
+		"listMain": {
+			"defaultView": "list",
 			"defaultTransition": "slide",
 
 			"views": {
-				"repeatList":{
-					"controller" : "./repeat/repeat.js",
-					"template": "./repeat/repeat.html",
+				"list":{
+					"controller" : "./list/list.js",
+					"template": "./list/list.html",
 					"dependencies":["dojox/mobile/TextBox"]
 				},
-				"repeatDetails":{
-					"controller" : "./repeat/repeatDetails.js",
-					"template": "./repeat/repeatDetails.html",
+				"itemDetails":{
+					"controller" : "./list/itemDetails.js",
+					"template": "./list/itemDetails.html",
 					"dependencies":["dojox/mobile/TextBox"],
 					"defaultParams": {"cursor":"2"}
 				}
@@ -114,11 +104,10 @@
 		"simple":{
             "models": {
 				"names": {
-					"modelLoader": "dojox/app/utils/mvcModel",
-					"type": "dojox/mvc/EditStoreRefListController",
+					"modelLoader": "dojox/app/utils/simpleModel",
 					"params":{
 						"store": {"$ref":"#stores.namesStore"}
-					}	       
+					}
 				}
 			},
 			"controller" : "./simple/simple.js",
@@ -126,10 +115,10 @@
 			"dependencies":["dojox/mobile/TextBox"]
 		},
 
-		"generate": {
-            "controller": "./generate/generate.js",
-            "template": "./generate/generate.html",
-            "dependencies":["dojox/mobile/TextBox", "dojox/mobile/TextArea", "dojox/mvc/Generate"]
+		"date": {
+            "controller": "./date/date.js",
+            "template": "./date/date.html",
+            "dependencies":["dojox/mobile/TextBox", "dojox/mobile/TextArea"]
 		}
 	}	
 }
