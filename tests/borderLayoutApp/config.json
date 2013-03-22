@@ -41,6 +41,8 @@
 	//	"dojox/app/controllers/Layout"         // this test can work with either Layout or BorderLayout
 	],
 
+	"borderLayoutNoSplitter": false,  // set true to turn off the splitter on the StackContainer.
+
 	// these are the possible defaultTransitions, 
 	// the defaultTransition is only used if transition is not set in the config and it is not set or defaulted on the transitionEvent
 	//"defaultTransition": "slide",

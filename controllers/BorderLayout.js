@@ -43,8 +43,8 @@ function(declare, domAttr, domStyle, LayoutBase, BorderContainer, StackContainer
 					bc.addChild(reg);
 				}else{ // need a contentPane
 					// this is where the region (constraint) is set for the BorderContainer's StackContainer
-					// TODO: may need a way to make doLayout and splitter configurable
-					sc1 = new StackContainer({doLayout: true, splitter:true, region:constraint, id:event.view.parent.id+"-"+constraint});
+					var noSplitter = this.app.borderLayoutNoSplitter || false;
+					sc1 = new StackContainer({doLayout: true, splitter:!noSplitter, region:constraint, id:event.view.parent.id+"-"+constraint});
 					cp1 = new ContentPane({id:event.view.id+"-cp-"+constraint});
 					cp1.addChild(event.view); // should we use addChild or appendChild?
 					sc1.addChild(cp1);

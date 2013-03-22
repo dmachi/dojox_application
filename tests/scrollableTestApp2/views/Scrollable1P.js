@@ -95,7 +95,7 @@ function(dom, domStyle, connect, lang, declare, registry, at, TransitionEvent, R
 						setDetailsContext(this.indexAtStartup);}
 				},
 				childBindings: {
-					titleNode: {value: at("rel:", "First")},
+					titleNode: {value: at("rel:", "First")}
 				},
 				templateString: RoundRectWidListTemplate
 			});
