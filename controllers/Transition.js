@@ -349,7 +349,7 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 					// if we are removing the view we must delay the layout to _after_ the animation
 					this.app.emit("app-layoutView", {"parent": parent, "view": next });
 				}
-				if(doResize){
+				if(doResize && !subIds){
 					this.app.emit("app-resize"); // after last layoutView fire app-resize			
 				}
 				
@@ -417,7 +417,7 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 			// layout current view, or remove it
 			this.app.log("> in Transition._doTransition calling app.triggger layoutView view next name=[",next.name,"], removeView = [",removeView,"], parent.name=[",next.parent.name,"], next==current path");
 			this.app.emit("app-layoutView", {"parent":parent, "view": next, "removeView": removeView});
-			if(doResize){
+			if(doResize && !subIds){
 				this.app.emit("app-resize"); // after last layoutView fire app-resize
 			}
 
