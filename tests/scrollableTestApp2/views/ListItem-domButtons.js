@@ -5,7 +5,7 @@ function(dom, domStyle, connect, registry, at, TransitionEvent, Repeat, getState
 
 
 	return {
-		// repeate view init
+		// repeat view init
 		init: function(){
 		},
 

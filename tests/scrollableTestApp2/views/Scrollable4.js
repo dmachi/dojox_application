@@ -59,14 +59,14 @@ function(dom, domStyle, connect, lang, registry, at, TransitionEvent, Repeat, ge
 	var getIndexFromId = function(nodeId, perfix){
 		var len = perfix.length;
 		if(nodeId.length <= len){
-			throw Error("repeate node id error.");
+			throw Error("repeat node id error.");
 		}
 		var index = nodeId.substring(len, nodeId.length);
 		return parseInt(index);
 	};
 
 	return {
-		// repeate view init
+		// repeat view init
 		init: function(){
 			app = this.app;
 

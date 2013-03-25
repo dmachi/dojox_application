@@ -45,14 +45,14 @@ function(dom, domStyle, connect, registry, at, TransitionEvent, Repeat, getState
 	var getIndexFromId = function(nodeId, perfix){
 		var len = perfix.length;
 		if(nodeId.length <= len){
-			throw Error("repeate node id error.");
+			throw Error("repeat node id error.");
 		}
 		var index = nodeId.substring(len, nodeId.length);
 		return parseInt(index);
 	};
 
 	return {
-		// repeate view init
+		// repeat view init
 		init: function(){
 			repeatmodel = this.loadedModels.repeatmodels;
 			var repeatDom = dom.byId('repeatWidget');
