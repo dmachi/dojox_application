@@ -148,7 +148,7 @@ function(lang, declare, dom, domStyle, has, win, config, domClass, domAttr, domC
 			//	"transition": "none",
 				params:params
 			};
-			new TransitionEvent(e.target,transOpts,e).dispatch();
+			this.app.transitionToView(e.target,transOpts,e);
 		},
 
 	

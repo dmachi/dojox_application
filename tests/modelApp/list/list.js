@@ -1,26 +1,27 @@
-define(["dojo/_base/lang", "dojo/dom", "dojo/on", "dijit/registry", "dojox/mobile/TransitionEvent"],
-function(lang, dom, on, registry, TransitionEvent){
+define(["dojo/_base/lang", "dojo/dom", "dojo/on", "dijit/registry"],
+function(lang, dom, on, registry){
 	var _onResults = []; // events on array
 
-	// show an item detail
-	var setDetailsContext = function(index, e, params){
-		if(params){
-			params.cursor = index;
-		}else{
-			params = {"cursor":index};
-		}
-		// transition to itemDetails view with the &cursor=index
-		var transOpts = {
-			title : "itemDetails",
-			target : "listMain,itemDetails",
-			url : "#listMain,itemDetails", // this is optional if not set it will be created from target   
-		//	params : {"cursor":index}
-			params : params
-		};
-		new TransitionEvent(e.target, transOpts, e).dispatch(); 
-		
-	};
 	return {
+	// setDetailsContext for an item
+		setDetailsContext: function(index, e, params){
+			if(params){
+				params.cursor = index;
+			}else{
+				params = {"cursor":index};
+			}
+			// transition to itemDetails view with the &cursor=index
+			var transOpts = {
+				title : "itemDetails",
+				target : "listMain,itemDetails",
+				url : "#listMain,itemDetails", // this is optional if not set it will be created from target   
+				params : params
+			};
+			this.app.transitionToView(e.target,transOpts,e);
+ 
+		
+		},
+
 	// insert an item
 		insertResult: function(index, e){
 			if(index<0 || index>this.list.store.data.length){
@@ -32,7 +33,7 @@ function(lang, dom, on, registry, TransitionEvent){
 			}
 			var data = {id:Math.random(), "label": "", "rightIcon":"mblDomButtonBlueCircleArrow", "First": "", "Last": "", "Location": "CA", "Office": "", "Email": "", "Tel": "", "Fax": ""};
 			this.list.store.add(data);
-			setDetailsContext(index, e);
+			this.setDetailsContext(index, e);
 		},
 
 
@@ -49,7 +50,7 @@ function(lang, dom, on, registry, TransitionEvent){
 		//			var item = this.list.store.query({"label": e.target.innerHTML})
 		//			var index = this.list.store.index[item[0].id];
 		//			console.log("index is "+index);
-		//			setDetailsContext(index, e, this.params);
+		//			this.setDetailsContext(index, e, this.params);
 		//		})); 
 		//		_onResults.push(onResult);
 		//	}
@@ -59,7 +60,7 @@ function(lang, dom, on, registry, TransitionEvent){
 				var item = this.list.store.query({"label": e.target.innerHTML})
 				var index = this.list.store.index[item[0].id];
 				console.log("index is "+index);
-				setDetailsContext(index, e, this.params);	
+				this.setDetailsContext(index, e, this.params);	
 			})); 
 			_onResults.push(onResult);
 
