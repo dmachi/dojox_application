@@ -12,7 +12,7 @@ function(dom, domStyle, connect, lang, registry, at, TransitionEvent, Repeat, ge
 
 
 	return {
-		// repeate view init
+		// repeat view init
 		init: function(){			
 		},
 

@@ -35,14 +35,14 @@ function(dom, connect, registry, at, Repeat, getStateful, Output){
 	var getIndexFromId = function(nodeId, perfix){
 		var len = perfix.length;
 		if(nodeId.length <= len){
-			throw Error("repeate node id error.");
+			throw Error("repeat node id error.");
 		}
 		var index = nodeId.substring(len, nodeId.length);
 		return parseInt(index);
 	};
 
 	return {
-		// repeate3 view init
+		// repeat3 view init
 		init: function(){
 			repeatmodel3 = this.loadedModels.repeatmodels3;
 			var repeatDom = dom.byId('repeatWidget3');
