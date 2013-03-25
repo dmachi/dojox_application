@@ -81,7 +81,7 @@
 			"template": "./main/main.html"
 		},
 
-		//list view, include list view and date view
+		//list view, include list view and details view
 		"listMain": {
 			"defaultView": "list",
 			"defaultTransition": "slide",
