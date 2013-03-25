@@ -336,6 +336,20 @@ define(["require", "dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare",
 					app.log = function(){}; // noop
 				}
 
+				app.transitionToView = function(/*DomNode*/target, /*Object*/transitionOptions, /*Event?*/triggerEvent){
+					// summary:
+					//		A convenience function to fire the transition event to transition to the view.
+					//
+					// target:
+					//		The DOM node that initiates the transition (for example a ListItem).
+					// transitionOptions:
+					//		Contains the transition options.
+					// triggerEvent:
+					//		The event that triggered the transition (for example a touch event on a ListItem).
+					var opts = {bubbles:true, cancelable:true, detail: transitionOptions, triggerEvent: triggerEvent||null};	
+					on.emit(target,"startTransition", opts);
+				};
+
 				app.setStatus(app.lifecycle.STARTING);
 				// Create global namespace for application.
 				// The global name is application id. For example: modelApp
