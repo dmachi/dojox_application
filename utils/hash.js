@@ -158,6 +158,7 @@ var hashUtil = {
 			// returns:
 			//		the target string
 			//
+			if(!defaultView){ defaultView = ""}
 			while(hash.indexOf("(") > 0){ 
 				var index = hash.indexOf("(");
 				var endindex = hash.indexOf(")");

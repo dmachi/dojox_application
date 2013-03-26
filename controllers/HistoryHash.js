@@ -230,7 +230,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/topic", "dojo/on", "../Co
 			}
 			this._current = currentHash;
 
-			var target = hash.getTarget(currentHash);
+			var target = hash.getTarget(currentHash, this.app.defaultView);
 
 			// publish history back event
 			topic.publish("/app/history/back", {"viewId": target, "detail": detail});
@@ -253,7 +253,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/topic", "dojo/on", "../Co
 			}
 			this._current = currentHash;
 
-			var target = hash.getTarget(currentHash);
+			var target = hash.getTarget(currentHash, this.app.defaultView);
 
 			// publish history forward event
 			topic.publish("/app/history/forward", {"viewId": target, "detail": detail});
@@ -275,7 +275,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/topic", "dojo/on", "../Co
 			this._previous = this._historyStack[index - 1] ? this._historyStack[index - 1]["hash"] : null;
 			this._next = this._historyStack[index + 1] ? this._historyStack[index + 1]["hash"] : null;
 
-			var target = hash.getTarget(this._current);
+			var target = hash.getTarget(this._current, this.app.defaultView);
 
 			// publish history go event
 			topic.publish("/app/history/go", {"viewId": target, "step": step, "detail": this._historyStack[index]["detail"]});
