@@ -16,6 +16,7 @@ define(["require", "dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare",
 			this.controllers = [];
 			this.children = {};
 			this.loadedModels = {};
+			this.loadedStores = {};
 			// Create a new domNode and append to body
 			// Need to bind startTransition event on application domNode,
 			// Because dojox/mobile/ViewController bind startTransition event on document.body
@@ -62,10 +63,11 @@ define(["require", "dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare",
 							}catch(e){
 								throw new Error("dojo/store/Observable must be listed in the dependencies");
 							}
-							params.stores[item].store = observableCtor(new storeCtor(config));							
+							params.stores[item].store = observableCtor(new storeCtor(config));
 						}else{
 							params.stores[item].store = new storeCtor(config);
 						}
+						this.loadedStores[item] = params.stores[item].store;							
 					}
 				}
 			}
