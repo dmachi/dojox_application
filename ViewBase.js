@@ -61,6 +61,8 @@ define(["require", "dojo/when", "dojo/on", "dojo/dom-attr", "dojo/_base/declare"
 			// tags:
 			//		private
 			
+			this.loadedStores = this.app.loadedStores; // setup global stores on the view.
+			
 			if(!this.loadedModels){
 				var loadModelLoaderDeferred = new Deferred();
 				var createPromise;

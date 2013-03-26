@@ -41,7 +41,7 @@ function(lang, dom, on, registry, domClass){
 		init: function(){
 			list = this.list;
 			if(!list.Store){
-				list.setStore(this.app.stores.listStore.store);
+				list.setStore(this.loadedStores.listStore);
 			}
 		},
 

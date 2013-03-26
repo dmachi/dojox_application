@@ -19,7 +19,7 @@ function(){
 
 		// list view init
 		init: function(){
-			listStore = this.app.stores.listStore.store;
+			listStore = this.loadedStores.listStore;
 		},
 
 		beforeActivate: function(){
