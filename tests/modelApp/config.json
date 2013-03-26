@@ -39,12 +39,6 @@
 
 	//stores we are using 
 	"stores": {
-	   "namesStore":{
-	       "type": "dojo/store/Memory",
-		   "params": {
-		      "data": "modelApp.names"
-		   }
-	   },
        "listStore":{
            "type": "dojo/store/Memory",
 	       "observable": true,
@@ -102,11 +96,19 @@
 		},
 
 		"simple":{
+			"stores": {
+				"namesStore":{
+					"type": "dojo/store/Memory",
+					"params": {
+		    	  		"data": "modelApp.names"
+		  		 	}
+		  		 }
+	   		},
             "models": {
 				"names": {
 					"modelLoader": "dojox/app/utils/simpleModel",
 					"params":{
-						"store": {"$ref":"#stores.namesStore"}
+						"store": {"$ref":"#views.simple.stores.namesStore"}
 					}
 				}
 			},
