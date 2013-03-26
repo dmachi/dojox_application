@@ -20,6 +20,7 @@ define(["require", "dojo/when", "dojo/on", "dojo/dom-attr", "dojo/_base/declare"
 			this.name = "";
 			this.children = {};
 			this.selectedChildren = {};
+			this.loadedStores = {};
 			// private
 			this._started = false;
 			lang.mixin(this, params);
@@ -40,6 +41,7 @@ define(["require", "dojo/when", "dojo/on", "dojo/dom-attr", "dojo/_base/declare"
 			this._startDef = new Deferred();
 			when(this.load(), lang.hitch(this, function(){
 				// call setupModel, after setupModel startup will be called after startup the loadViewDeferred will be resolved
+				this._createDataStore(this);
 				this._setupModel();
 			}));
 			return this._startDef;
@@ -55,14 +57,60 @@ define(["require", "dojo/when", "dojo/on", "dojo/dom-attr", "dojo/_base/declare"
 			return vcDef;
 		},
 
+		_createDataStore: function(){
+			// summary:
+			//		Create data store instance for View specific stores
+			//
+			// TODO: move this into a common place for use by main and ViewBase
+			//
+			if(this.parent.loadedStores){
+				lang.mixin(this.loadedStores, this.parent.loadedStores);
+			}
+
+			if(this.stores){
+				//create stores in the configuration.
+				for(var item in this.stores){
+					if(item.charAt(0) !== "_"){//skip the private properties
+						var type = this.stores[item].type ? this.stores[item].type : "dojo/store/Memory";
+						var config = {};
+						if(this.stores[item].params){
+							lang.mixin(config, this.stores[item].params);
+						}
+						// we assume the store is here through dependencies
+						try{
+							var storeCtor = require(type);
+						}catch(e){
+							throw new Error(type+" must be listed in the dependencies");
+						}
+						if(config.data && lang.isString(config.data)){
+							//get the object specified by string value of data property
+							//cannot assign object literal or reference to data property
+							//because json.ref will generate __parent to point to its parent
+							//and will cause infinitive loop when creating StatefulModel.
+							config.data = lang.getObject(config.data);
+						}
+						if(this.stores[item].observable){
+							try{
+								var observableCtor = require("dojo/store/Observable");
+							}catch(e){
+								throw new Error("dojo/store/Observable must be listed in the dependencies");
+							}
+							this.stores[item].store = observableCtor(new storeCtor(config));
+						}else{
+							this.stores[item].store = new storeCtor(config);
+						}
+						this.loadedStores[item] = this.stores[item].store; // add this store to loadedStores for the view							
+					}
+				}
+			}
+		},
+
 		_setupModel: function(){
 			// summary:
 			//		Load views model if it is not already loaded then call _startup.
 			// tags:
 			//		private
-			
-			this.loadedStores = this.app.loadedStores; // setup global stores on the view.
-			
+						
 			if(!this.loadedModels){
 				var loadModelLoaderDeferred = new Deferred();
 				var createPromise;
