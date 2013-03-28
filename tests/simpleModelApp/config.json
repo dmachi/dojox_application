@@ -58,11 +58,24 @@
 				"url": "./resources/data/repeat.json"
 			}
 		},
+		"nameItemStore":{
+			"type": "dojo/data/ItemFileWriteStore",
+			"params": {
+				"url": "./resources/data/names2.json"
+			}
+		},
 		// note that a jsonRest store requires the data be in a different format...
 		"jsonStore":{
 			"type": "dojo/store/JsonRest",
 			"params": {
 				"target": "./resources/data/jsonRestRepeatData.json"
+			}
+		},
+		// note that a jsonRest store requires the data be in a different format...
+		"jsonNameStore":{
+			"type": "dojo/store/JsonRest",
+			"params": {
+				"target": "./resources/data/jsonRestNamesData.json"
 			}
 		}
 	},
@@ -145,13 +158,28 @@
 
 		"simple3":{
 			"models": {
-				"namesXUnused": {
+				"names3": {
 					"modelLoader": "dojox/app/utils/simpleModel",
 					"params":{
 						"store": {"$ref":"#stores.namesStore"}
+
 					}
 				},
-				"names3": {
+				"names3JsonStoreUnused": {
+					"modelLoader": "dojox/app/utils/simpleModel",
+					"params":{
+						"store": {"$ref":"#stores.jsonNameStore"},
+						"query": {"id": "1"}
+					}
+				},
+				"names3dataStoreUnused": {
+					"modelLoader": "dojox/app/utils/simpleModel",
+					"params":{
+						"datastore": {"$ref":"#stores.nameItemStore"}
+
+					}
+				},
+				"namesXUnused": {
 					"modelLoader": "dojox/app/utils/simpleModel",
 					"params":{
 						"store": {"$ref":"#stores.namesStore"}
