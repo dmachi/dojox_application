@@ -19,6 +19,16 @@ function(lang, Deferred, when){
 		var loadedModels = {};
 		var loadSimpleModelDeferred = new Deferred();
 
+		var fixupQuery = function(query){
+			var ops = {};
+			for(var item in query){ // need this to handle query params without errors
+				if(item.charAt(0) !== "_"){
+					ops[item] = query[item];
+				}
+			}
+			return(ops);
+		}
+
 		var options;
 		if(params.store){
 			if(!params.store.params){
@@ -26,7 +36,7 @@ function(lang, Deferred, when){
 			}else if((params.store.params.data || params.store.params.store)){
 				options = {
 					"store": params.store.store,
-					"query": params.store.query ? params.store.query: {}
+					"query": params.query ? fixupQuery(params.query) : params.store.query ? fixupQuery(params.store.query) : {}
 				};
 			}else if(params.store.params.url){
 				try{
@@ -38,14 +48,34 @@ function(lang, Deferred, when){
 					"store": new dataStoreCtor({
 						store: params.store.store
 					}),
-					"query": params.store.query ? params.store.query: {}
+					"query": params.query ? fixupQuery(params.query) : params.store.query ? fixupQuery(params.store.query) : {}
+				};
+			} else if(params.store.store){
+				//	if query is not set on the model params, it may be set on the store
+				options = {
+					"store": params.store.store,
+					"query": params.query ? fixupQuery(params.query) : params.store.query ? fixupQuery(params.store.query) : {}
 				};
 			}
+		}else if(params.datastore){
+			try{
+				var dataStoreCtor = require("dojo/store/DataStore");
+			}catch(e){
+				throw new Error("When using datastore the dojo/store/DataStore module must be listed in the dependencies");
+			}
+			options = {
+				"store": new dataStoreCtor({
+					store: params.datastore.store
+				}),
+				"query": fixupQuery(params.query)
+			};
 		}else if(params.data){
 			if(params.data && lang.isString(params.data)){
 				params.data = lang.getObject(params.data);
 			}
 			options = {"data": params.data, query: {}};
+		} else{
+			console.warn("simpleModel: Missing parameters.");
 		}
 		var createSimplePromise;
 		try{

@@ -112,7 +112,6 @@ define(["require", "dojo/when", "dojo/on", "dojo/dom-attr", "dojo/_base/declare"
 			//		private
 						
 			if(!this.loadedModels){
-				var loadModelLoaderDeferred = new Deferred();
 				var createPromise;
 				try{
 					createPromise = model(this.models, this.parent, this.app);
