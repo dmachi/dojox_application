@@ -117,8 +117,7 @@ define(["require", "dojo/when", "dojo/on", "dojo/dom-attr", "dojo/_base/declare"
 				try{
 					createPromise = model(this.models, this.parent, this.app);
 				}catch(e){
-					loadModelLoaderDeferred.reject(e);
-					return loadModelLoaderDeferred.promise;
+					throw new Error("Error creating models: "+e.message);
 				}
 				when(createPromise, lang.hitch(this, function(models){
 					if(models){
@@ -129,7 +128,7 @@ define(["require", "dojo/when", "dojo/on", "dojo/dom-attr", "dojo/_base/declare"
 					this._startup();
 				}),
 				function(err){
-					loadModelLoaderDeferred.reject(err);
+					throw new Error("Error creating models: "+err.message);					
 				});
 			}else{ // loadedModels already created so call _startup
 				this._startup();				

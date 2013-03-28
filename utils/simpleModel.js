@@ -21,7 +21,9 @@ function(lang, Deferred, when){
 
 		var options;
 		if(params.store){
-			if((params.store.params.data || params.store.params.store)){
+			if(!params.store.params){
+				throw new Error("Invalid store for model ["+item+"]");
+			}else if((params.store.params.data || params.store.params.store)){
 				options = {
 					"store": params.store.store,
 					"query": params.store.query ? params.store.query: {}
@@ -45,19 +47,19 @@ function(lang, Deferred, when){
 			}
 			options = {"data": params.data, query: {}};
 		}
-		var createMvcPromise;
+		var createSimplePromise;
 		try{
 			if(options.store){
-				createMvcPromise = options.store.query();
+				createSimplePromise = options.store.query();
 			}else{
-				createMvcPromise = options.data;
+				createSimplePromise = options.data;
 			}
 		}catch(ex){
-			loadSimpleModelDeferred.reject("load mvc model error.");
+			loadSimpleModelDeferred.reject("load simple model error.");
 			return loadSimpleModelDeferred.promise;
 		}
-		if(createMvcPromise.then){
-			when(createMvcPromise, lang.hitch(this, function(newModel){
+		if(createSimplePromise.then){
+			when(createSimplePromise, lang.hitch(this, function(newModel){
 				// now the loadedModels[item].models is set.
 				//console.log("in simpleModel promise path, loadedModels = ", loadedModels);
 				loadedModels = newModel;
@@ -67,7 +69,7 @@ function(lang, Deferred, when){
 				loadModelLoaderDeferred.reject("load model error.")
 			});
 		}else{ // query did not return a promise, so use newModel
-			loadedModels = createMvcPromise;
+			loadedModels = createSimplePromise;
 			//console.log("in simpleModel else path, loadedModels = ",loadedModels);
 			loadSimpleModelDeferred.resolve(loadedModels);
 			return loadedModels;

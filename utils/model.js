@@ -47,8 +47,7 @@ define(["dojo/_base/lang", "dojo/Deferred", "dojo/promise/all", "dojo/when"], fu
 		try{
 			createModelPromise = modelCtor(config, params, item);
 		}catch(e){
-			loadModelDeferred.reject(e);
-			return loadModelDeferred.promise;
+			throw new Error("Error creating "+modelLoader+" for model named ["+item+"]: "+e.message);
 		}
 		when(createModelPromise, lang.hitch(this, function(newModel){
 			loadedModels[item] = newModel;
@@ -56,7 +55,7 @@ define(["dojo/_base/lang", "dojo/Deferred", "dojo/promise/all", "dojo/when"], fu
 			loadModelDeferred.resolve(loadedModels);
 			return loadedModels;
 		}), function(e){
-			loadModelDeferred.reject(e);
+			throw new Error("Error loading model named ["+item+"]: "+e.message);
 		});
 		return loadModelDeferred;
 	}
