@@ -11,7 +11,6 @@
 	},
 
 	"dependencies": [
-		"dojox/app/utils/mvcModel",
 		"dojox/mobile/_base",
 		"dojox/mobile/compat",
 		"dojox/mobile/TabBar",
@@ -23,11 +22,9 @@
 		"dojox/mobile/Heading",
 		"dojox/mobile/ScrollableView",
 		"dojo/store/Memory",
+		"dojox/mobile/EdgeToEdgeStoreList",
+		"dojo/store/Observable",		
 		"dijit/layout/BorderContainer",
-		"dojox/mvc/EditStoreRefListController",
-		"dojox/mvc/Group",
-        "dojox/mvc/Repeat",
-        "dojox/mvc/Output",
 		"dojox/mobile/View",
 		"dojox/app/widgets/Container"
 	],
@@ -59,6 +56,13 @@
 
 	//stores we are using 
 	"stores": {
+       "listStore":{
+           "type": "dojo/store/Memory",
+	       "observable": true,
+           "params": {
+                "data": "modelApp.listData"
+           }
+       },
        "repeatStore":{
            "type": "dojo/store/Memory",
            "params": {
@@ -66,18 +70,6 @@
            }
        }
 	},
-
-	//models and instantiation parameters for the models. Including 'type' as a property allows
-	//one to overide the class that will be used for the model.  By default it is dojox/mvc/model
-	"models": {
-		"repeatmodels": {
-			"modelLoader": "dojox/app/utils/mvcModel",
-			"type": "dojox/mvc/EditStoreRefListController",
-			"params":{
-				"store": {"$ref":"#stores.repeatStore"}
-			}           
-		}
-	}, 
 	
 	// The has section will include the sections for which the has checks are true.  
 	// For the sections with ! it will include the section if the has check is not true.
@@ -145,6 +137,18 @@
 		"view10":{
 			"constraint" : "bottom",
 			"template": "layoutApp/templates/view10.html"
+		},
+		//list view, include list view and details view
+		"list":{
+			"controller" : "layoutApp/views/list.js",
+			"template": "layoutApp/templates/list.html",
+			"dependencies":["dojox/mobile/TextBox"]
+		},
+		"itemDetails":{
+			"controller" : "layoutApp/views/itemDetails.js",
+			"template": "layoutApp/templates/itemDetails.html",
+			"dependencies":["dojox/mobile/TextBox"],
+			"defaultParams": {"cursor":"2"}
 		},
 
 		"repeat": {

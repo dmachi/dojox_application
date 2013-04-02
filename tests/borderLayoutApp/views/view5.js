@@ -1,13 +1,8 @@
-define(["dojo/dom", "dojo/_base/connect", "dijit/registry", "dojox/mvc/at"],
-function(dom, connect, registry, at){
+define([],
+function(){
 	var _connectResults = []; // events connect results
 	var currentModel = null;
 
-	var setRef = function (id, attr){
-		var widget = registry.byId(id);
-		widget.set("target", at("rel:", attr));
-		console.log("setRef done.");
-	};
 	return {
 		init: function(){
 			console.log("In view5 init called");
