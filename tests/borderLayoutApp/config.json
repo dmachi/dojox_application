@@ -62,12 +62,6 @@
            "params": {
                 "data": "modelApp.listData"
            }
-       },
-       "repeatStore":{
-           "type": "dojo/store/Memory",
-           "params": {
-                "data": "modelApp.repeatData"
-           }
        }
 	},
 	
@@ -149,20 +143,6 @@
 			"template": "layoutApp/templates/itemDetails.html",
 			"dependencies":["dojox/mobile/TextBox"],
 			"defaultParams": {"cursor":"2"}
-		},
-
-		"repeat": {
-			"controller" : "layoutApp/views/repeat.js",
-			"template": "layoutApp/templates/repeat.html",
-			"constraint" : "center",			
-			"dependencies":["dojox/mobile/TextBox"]
-		},
-		
-		"repeatDetails":{
-					"controller" : "layoutApp/views/repeatDetails.js",
-					"template": "layoutApp/templates/repeatDetails.html",
-					"constraint" : "center",
-					"dependencies":["dojox/mobile/TextBox"]
 		}
 	}	
 }

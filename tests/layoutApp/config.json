@@ -11,7 +11,7 @@
 	},
 
 	"dependencies": [
-		"dojox/app/utils/mvcModel",
+		"dojox/app/utils/simpleModel",
 		"dojox/mobile/_base",
 		"dojox/mobile/compat",
 		"dojox/mobile/TabBar",
@@ -21,10 +21,8 @@
 		"dojox/mobile/RoundRect",
 		"dojox/mobile/Heading",
 		"dojo/store/Memory",
-		"dojox/mvc/EditStoreRefListController",
-		"dojox/mvc/Group",
-        "dojox/mvc/Repeat",
-        "dojox/mvc/Output",
+		"dojo/store/Observable",		
+		"dojox/mobile/EdgeToEdgeStoreList",
 		"dojox/mobile/View",
 		"dojox/app/widgets/Container"
 	],
@@ -39,31 +37,31 @@
 	
 	//stores we are using
 	"stores": {
-	   "namesStore":{
-	       "type": "dojo/store/Memory",
-		   "params": {
-		      "data": "modelApp.names"
-		   }
-	   },
-       "repeatStore":{
-           "type": "dojo/store/Memory",
-           "params": {
-                "data": "modelApp.repeatData"
-           }
-       }
+		"namesStore":{
+			"type": "dojo/store/Memory",
+			"params": {
+				"data": "modelApp.names"
+			}
+		},
+		"listStore":{
+			"type": "dojo/store/Memory",
+			"observable": true,
+			"params": {
+				"data": "modelApp.listData"
+			}
+		}
 	},
 
 	//models and instantiation parameters for the models. Including 'type' as a property allows
-	//one to overide the class that will be used for the model.  By default it is dojox/mvc/model
+	//one to overide the class that will be used for the model.  
 	"models": {
 	   "names": {
-			"modelLoader": "dojox/app/utils/mvcModel",
-			"type": "dojox/mvc/EditStoreRefListController",
+			"modelLoader": "dojox/app/utils/simpleModel",
 			"params":{
 				"store": {"$ref":"#stores.namesStore"}
-			}	       
+			}
 	   }
-	}, 
+	},
 
 	// The has section will include the sections for which the has checks are true.  
 	// For the sections with ! it will include the section if the has check is not true.
@@ -106,39 +104,32 @@
 			"dependencies":["dojox/mobile/TextBox"]
 		},
 
-		"repeat": {
-            "models": {
-                "repeatmodels": {
-					"modelLoader": "dojox/app/utils/mvcModel",
-					"type": "dojox/mvc/EditStoreRefListController",
-					"params":{
-						"store": {"$ref":"#stores.repeatStore"}
-					}           
-                }
-            },
+		//list view, include list view and details view
+		"listMain": {
+			"defaultView": "list",
 			"transition": "fade",
-			"defaultView": "repeatList",
 
 			"views": {
-				"repeatList":{
+				"list":{
+					"controller" : "layoutApp/views/list.js",
 					"transition": "slide",
-					"controller" : "layoutApp/views/repeat.js",
-					"template": "layoutApp/views/repeat.html",
+					"template": "layoutApp/views/list.html",
 					"dependencies":["dojox/mobile/TextBox"]
 				},
-				"repeatDetails":{
+				"itemDetails":{
+					"controller" : "layoutApp/views/itemDetails.js",
 					"transition": "flip",
-					"controller" : "layoutApp/views/repeatDetails.js",
-					"template": "layoutApp/views/repeatDetails.html",
-					"dependencies":["dojox/mobile/TextBox"]
+					"template": "layoutApp/views/itemDetails.html",
+					"dependencies":["dojox/mobile/TextBox"],
+					"defaultParams": {"cursor":"2"}
 				}
 			}
 		},
 
-		"generate": {
-			"controller": "layoutApp/views/generate",
-            "template": "layoutApp/views/generate.html",
-            "dependencies":["dojox/mobile/TextBox", "dojox/mobile/TextArea", "dojox/mvc/Generate"]
+		"date": {
+            "controller": "layoutApp/views/date.js",
+            "template": "layoutApp/views/date.html",
+            "dependencies":["dojox/mobile/DatePicker", "dojox/mobile/Opener"]
 		}
 	}	
 }
