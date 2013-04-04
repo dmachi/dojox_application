@@ -38,10 +38,10 @@ function(win, Application, jsonRef, config, has){
 			"Fax": "408-764-4321"
 		}]
 	};
-	var config = jsonRef.fromJson(config);
+	var cfg = jsonRef.fromJson(config);
 	has.add("ie9orLess", has("ie") && (has("ie") <= 9));	
-	config.controllers[2] = "dojox/app/controllers/Layout";		
-	console.log("config.controllers[2] was set to Layout to force it to use Layout="+config.controllers[2]);	
-	Application(config);
+	cfg.controllers[2] = "dojox/app/controllers/Layout";		
+	console.log("cfg.controllers[2] was set to Layout to force it to use Layout="+cfg.controllers[2]);	
+	Application(cfg);
 	
 });

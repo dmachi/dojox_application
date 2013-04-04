@@ -8,6 +8,8 @@ define([
 		doh.registerUrl("dojox.app.tests.doh.lifecycleTest", require.toUrl("./lifecycleTest/" + userArgs), 999999);
 		doh.registerUrl("dojox.app.tests.doh.hasConfigTest", require.toUrl("./hasConfigTest/" + userArgs), 999999);
 		doh.registerUrl("dojox.app.tests.doh.simpleModelApp", require.toUrl("./simpleModelApp/" + userArgs), 999999);
+		doh.registerUrl("dojox.app.tests.doh.globalizedApp", require.toUrl("./globalizedApp/" + userArgs), 999999);
+		doh.registerUrl("dojox.app.tests.doh.borderLayoutApp", require.toUrl("./borderLayoutApp/" + userArgs), 999999);
 	}catch(e){
 		doh.debug(e);
 	}

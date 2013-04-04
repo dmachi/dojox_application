@@ -1,18 +1,7 @@
 define(["dojo/_base/lang", "dojo/on", "dijit/registry", "dojo/date/stamp", "dojox/app/utils/constraints"], 
 function(lang, on, registry, stamp, constraints){
 	var _onResults = []; // events on array
-
-	var opener, updateDate, showDatePicker, onShow, onHide, datePicker2;
-	onShow = function(){
-			datePicker2.set("value", date);
-		};
-	onHide = function(node, v){
-			if(v){
-				date = datePicker2.get("value");
-				node.value = date;
-			}
-	};
-		
+	var opener;
 
 	return {
 		init: function(){
@@ -35,7 +24,6 @@ function(lang, on, registry, stamp, constraints){
 			})); 
 			_onResults.push(onResult);
 			
-			datePicker2 = registry.byId("datePicker2");
 			// initialize the global Date variable as today
 			date = stamp.toISOString(new Date(), {selector: "date"});
 		},

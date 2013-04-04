@@ -84,7 +84,7 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/Def
 					return def;
 				}));
 			}else{
-				var def = this.loadView(event);
+				def = this.loadView(event);
 				return def;
 			}
 		},

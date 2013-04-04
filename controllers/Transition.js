@@ -48,11 +48,11 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 			var viewsId = event.viewId || "";
 			this.proceedingSaved = this.proceeding;	
 			var parts = viewsId.split('+');
-			var viewId;
+			var viewId, newEvent;
 			if(parts.length > 0){
 				while(parts.length > 1){ 	
 					viewId = parts.shift();
-					var newEvent = lang.clone(event);
+					newEvent = lang.clone(event);
 					newEvent.viewId = viewId;
 					this.proceeding = true;
 					this.proceedTransition(newEvent);					
@@ -63,7 +63,7 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 					viewId = removeParts.shift();
 					while(removeParts.length > 0){ 	
 						var remViewId = removeParts.shift();
-						var newEvent = lang.clone(event);
+						newEvent = lang.clone(event);
 						newEvent.viewId = remViewId;
 						this._doTransition(newEvent.viewId, newEvent.opts, newEvent.opts.params, event.opts.data, this.app, true, newEvent._doResize);
 					}
