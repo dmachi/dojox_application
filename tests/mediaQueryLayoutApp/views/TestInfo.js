@@ -17,7 +17,6 @@ function(dom, domStyle, connect, registry, TransitionEvent){
 			
 			var backButtomDom = dom.byId('headerBackButton');
 			connectResult = connect.connect(backButtomDom, "onclick", function(e){
-				// transition to repeatDetails view with the &cursor=index
 				
 				var transOpts = {
 					title:'header+navigation+centerNavigation',
@@ -43,7 +42,7 @@ function(dom, domStyle, connect, registry, TransitionEvent){
 			}
 		},
 		
-		// repeat view destroy
+		// view destroy
 		destroy: function(){
 			var connectResult = _connectResults.pop();
 			while(connectResult){

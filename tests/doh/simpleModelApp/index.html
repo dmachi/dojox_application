@@ -37,7 +37,7 @@
                 mblAlwaysHideAddressBar: false,	
 				async:1,
 				app: {debugApp: 0}  // set debugApp to log app transtions and view activate/deactivate 
-			}
+			};
 		</script>
 		<script type="text/javascript" src="../../../../../dojo/dojo.js"></script>
 
@@ -87,14 +87,14 @@
 										setTimeout(function() {
 											var ListItem_0Label = registry.byId("dojox_mobile_ListItem_0");
 											if(ListItem_0Label){
-												var lab = getLabelfromWid(ListItem_0Label,0,82); 
+												var lab = getLabelfromWid(ListItem_0Label,0,listItem_0TestStr.length); 
 												doh.is(lab, listItem_0TestStr);
 											}else{
 												throw new Error("In initial-listItem-labels ListItem_0Label not found."); 
 											}
 											var ListItem_1Label = registry.byId("dojox_mobile_ListItem_1");
 											if(ListItem_1Label){
-												doh.is(getLabelfromWid(ListItem_1Label,0,87), listItem_1TestStr);
+												doh.is(getLabelfromWid(ListItem_1Label,0,listItem_1TestStr.length), listItem_1TestStr);
 											}else{
 												throw new Error("In initial-listItem-labels ListItem_1Label not found."); 
 											}
@@ -110,7 +110,7 @@
 										setTimeout(function() {
 										// transition to first li
 											var liWidget = registry.byId("dojox_mobile_ListItem_0");
-											var ev = new TransitionEvent(liWidget.domNode, liWidget.transitionOptions);
+											var ev = new TransitionEvent(liWidget.domNode, liWidget.params);
 											ev.dispatch()
 											return dfd.callback(true);
 										}, 500);
@@ -201,7 +201,7 @@
 										var dfd = new doh.Deferred();
 										setTimeout(function() {
 											var liWidget = registry.byId("dojox_mobile_ListItem_3");
-											var ev = new TransitionEvent(liWidget.domNode, liWidget.transitionOptions);
+											var ev = new TransitionEvent(liWidget.domNode, liWidget.params);
 											ev.dispatch();
 											return dfd.callback(true);
 										}, 500);

@@ -14,9 +14,9 @@ require(["dojo/_base/window","dojox/app/main", "dojox/json/ref", "dojo/text!./co
 	};
 
 	
-	var config = jsonRef.fromJson(config);
+	var cfg = jsonRef.fromJson(config);
 	has.add("ie9orLess", has("ie") && (has("ie") <= 9));
 	has.add("isInitiallySmall", isSmall());
-	Application(config);
+	Application(cfg);
 	
 });

@@ -4,25 +4,25 @@
 
 <div data-dojo-type="dojox/app/widgets/Container" data-dojo-props="scrollable:true">    
     <ul data-dojo-type="dojox/mobile/RoundRectList">
-        <li data-dojo-type="dojox/mobile/ListItem" clickable="true" transitionOptions="{title:'simple',target:'simple',url:'#simple'}">
+        <li data-dojo-type="dojox/mobile/ListItem" data-dojo-props="clickable:true,target:'simple',url:'#simple'">
             simple - Using an mvcModel (dojox/mvc/ModelRefController) with json data, no store.
         </li>
-        <li data-dojo-type="dojox/mobile/ListItem" clickable="true" transitionOptions="{title:'simple2',target:'simple2',url:'#simple2'}">
+        <li data-dojo-type="dojox/mobile/ListItem" data-dojo-props="clickable:true,target:'simple2',url:'#simple2'">
             simple2 - Using an mvcModel (dojox/mvc/EditModelRefController) with json data, no store.
         </li>
-        <li data-dojo-type="dojox/mobile/ListItem" clickable="true" transitionOptions="{title:'simple',target:'simple3',url:'#simple3'}">
+        <li data-dojo-type="dojox/mobile/ListItem" data-dojo-props="clickable:true,target:'simple3',url:'#simple3'">
             simple 3 - Using simple JSON Model with data from a dojo.store.Memory
         </li>
-        <li data-dojo-type="dojox/mobile/ListItem" clickable="true" transitionOptions="{title:'repeat',target:'repeat',url:'#repeat'}">
+        <li data-dojo-type="dojox/mobile/ListItem" data-dojo-props="clickable:true,target:'repeat',url:'#repeat'">
             repeat - Using an mvcModel (dojox/mvc/EditStoreRefListController) with a dojo.store.JsonRest. 
         </li>
-        <li data-dojo-type="dojox/mobile/ListItem" clickable="true" transitionOptions="{title:'repeat2',target:'repeat2',url:'#repeat2'}">
+        <li data-dojo-type="dojox/mobile/ListItem" data-dojo-props="clickable:true,target:'repeat2',url:'#repeat2'">
             repeat2 - Using an mvcModel (dojox/mvc/EditStoreRefListController) with an ItemFileWriteStore which gets wrapped in DataStore, with a query. 
         </li>
-        <li data-dojo-type="dojox/mobile/ListItem" clickable="true" transitionOptions="{title:'repeat2',target:'repeat3',url:'#repeat3'}">
+        <li data-dojo-type="dojox/mobile/ListItem" data-dojo-props="clickable:true,target:'repeat3',url:'#repeat3'">
             repeat3 - Using an mvcModel (dojox/mvc/EditStoreRefListController) with an ItemFileWriteStore which gets wrapped in DataStore, no query. 
         </li>
-        <li data-dojo-type="dojox/mobile/ListItem" clickable="true" transitionOptions="{title:'generate',target:'generate',url:'#generate'}">
+        <li data-dojo-type="dojox/mobile/ListItem" data-dojo-props="clickable:true,target:'generate',url:'#generate'">
             generate - Simple Form Generate
         </li>
     </ul>

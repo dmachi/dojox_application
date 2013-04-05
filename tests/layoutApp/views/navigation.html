@@ -5,15 +5,9 @@
 		<div data-dojo-type="dojox/app/widgets/Container" data-app-constraint="center" data-dojo-props="scrollable: true">
 			<h2 data-dojo-type="dojox/mobile/EdgeToEdgeCategory" style="height: 32px;">Navigation</h2>
 			<ul data-dojo-type="dojox/mobile/RoundRectList" data-app-constraint="center">
-				<li data-dojo-type="dojox/mobile/ListItem" clickable="true" transitionOptions="{title:'simple',target:'simple',url:'#simple'}">
-					Simple Data Binding
-				</li>
-				<li data-dojo-type="dojox/mobile/ListItem" clickable="true" transitionOptions="{title:'repeat',target:'repeat',url:'#repeat'}">
-					Repeat Data Binding
-				</li>
-				<li data-dojo-type="dojox/mobile/ListItem" clickable="true" transitionOptions="{title:'generate',target:'generate',url:'#generate'}">
-					Simple Form Generate
-				</li>
+				<li dojoType="dojox/mobile/ListItem" data-dojo-props="clickable:true,label:'Simple Form Data',target:'simple',url:'#simple'"></li>
+				<li dojoType="dojox/mobile/ListItem" data-dojo-props="clickable:true,label:'List Data Test',target:'listMain',url:'#listMain'"></li>
+				<li dojoType="dojox/mobile/ListItem" data-dojo-props="clickable:true,label:'Date Test',target:'date',url:'#date'"></li>
 			</ul>
 		</div>
 	</div>
