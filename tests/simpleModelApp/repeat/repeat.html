@@ -1,5 +1,5 @@
 <div class="view mblView">
-<h1 data-dojo-type="dojox.mobile.Heading" data-app-constraint="top" data-dojo-props='back:"Home"'>repeat</h1>
+<h1 data-dojo-type="dojox/mobile/Heading" data-app-constraint="top" data-dojo-props='back:"Home"'>repeat</h1>
 
 <div data-dojo-type="dojox/app/widgets/Container" data-dojo-props="scrollable:true" data-app-constraint="center">    
 	<script type="dojo/require">at: "dojox/mvc/at"</script>
@@ -8,7 +8,7 @@
         <div id="repeatWidget" class="fieldset" data-dojo-type="dojox/mvc/Repeat" 
         	data-dojo-props="exprchar: '#', children: this.loadedModels.jsonRestModel.model" >
            <div class="row">            
-                    <input data-dojo-type="dojox.mobile.TextBox"
+                    <input data-dojo-type="dojox/mobile/TextBox"
                         id="nameInput#{this.index}" data-dojo-props="value: at('rel:#{this.index}','First')" placeHolder="First Name"></input>
                     <button type="button" id="detail#{this.index}" data-dojo-type="dojox/mobile/Button" class="mblBlueButton">
                         Details
@@ -34,14 +34,14 @@
 						<tr>
 							<td style="width: 100px;" class="layout">First Name</td>
 							<td class="layout">							
-								<input  id="firstInput" data-dojo-type="dojox.mobile.TextBox" 
+								<input  id="firstInput" data-dojo-type="dojox/mobile/TextBox" 
 									data-dojo-props="value: at('rel:', 'First'), placeholder:'First Name'">
 							</td>
 						</tr>
 						<tr>
 							<td style="width: 100px;" class="layout">Last Name</td>
 							<td class="layout">
-								<input id="lastInput" data-dojo-type="dojox.mobile.TextBox"
+								<input id="lastInput" data-dojo-type="dojox/mobile/TextBox"
 									 
 									data-dojo-props="placeholder:'Last Name', value: at('rel:', 'Last')">
 							</td>
@@ -49,14 +49,14 @@
 						<tr>
 							<td style="width: 100px;" class="layout">Email</td>
 							<td class="layout">
-								<input  id="emailInput2" data-dojo-type="dojox.mobile.TextBox"
+								<input  id="emailInput2" data-dojo-type="dojox/mobile/TextBox"
 									data-dojo-props="value: at('rel:', 'Email'), placeholder:'Email'">
 							</td>
 						</tr>
 						<tr>
 							<td style="width: 100px;" class="layout">Telephone</td>
 							<td class="layout">
-								<input  id="telInput" data-dojo-type="dojox.mobile.TextBox"
+								<input  id="telInput" data-dojo-type="dojox/mobile/TextBox"
 									data-dojo-props="value: at('rel:', 'Tel'), placeholder:'Telephone'">
 							</td>
 						</tr>
