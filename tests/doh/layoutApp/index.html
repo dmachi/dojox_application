@@ -3,7 +3,8 @@
 	<head>
 	<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no"/> 
 		<meta name="apple-mobile-web-app-capable" content="yes" /> 
-		<title>Simple Model App Test</title> 
+		<title>Layout App</title>
+		<link type="text/css" href="../../layoutApp/css/layoutApp.css" rel="stylesheet" />
 		<link href="../../../../mobile/themes/iphone/base.css" rel="stylesheet"></link>
 		<style>
 			html,body {
@@ -43,7 +44,7 @@
 
 		<script>
             // the actual  launcher
-            require(["../../globalizedApp/globalizedApp.js"], function(){});
+            require(["../../layoutApp/layoutApp.js"], function(){});
         </script>
 		<script type="text/javascript">
 			require([
@@ -68,10 +69,10 @@
 						topic.subscribe("/app/status", lang.hitch(this, function(newStatus) {
 							events.push(newStatus);
 							if (newStatus == 2) {
-								var listItem_0TestStr = "Label Zero";
-								var listItem_1TestStr = "Label One";
-								doh.register("Test-SimpleApp", [{
-									// Test initial listitem labels
+								var listItem_0TestStr = "Simple Form Data";
+								var listItem_1TestStr = "List Data Test";
+								doh.register("Test-layoutApp1", [{
+									// Test initial values
 									name : "initial-listItem-labels",
 									runTest : function() {
 										var dfd = new doh.Deferred();
@@ -80,14 +81,14 @@
 											if(ListItem_0Label){
 												var lab = getLabelfromWid(ListItem_0Label,0,listItem_0TestStr.length); 
 												doh.is(lab, listItem_0TestStr);
-											}else{
-												throw new Error("In initial-listItem-labels ListItem_0Label not found."); 
 											}
 											var ListItem_1Label = registry.byId("dojox_mobile_ListItem_1");
 											if(ListItem_1Label){
 												doh.is(getLabelfromWid(ListItem_1Label,0,listItem_1TestStr.length), listItem_1TestStr);
-											}else{
-												throw new Error("In initial-listItem-labels ListItem_1Label not found."); 
+											}
+											var shiptostreetInput1Text = registry.byId("shiptostreetInput1");
+											if(shiptostreetInput1Text){
+												doh.is(shiptostreetInput1Text.value,"123 Valley Rd");
 											}
 											return dfd.callback(true);
 										}, 500);
@@ -99,26 +100,23 @@
 									runTest : function() {
 										var dfd = new doh.Deferred();
 										setTimeout(function() {
-										// transition to first li
-											var liWidget = registry.byId("dojox_mobile_ListItem_2");
-											var ev = new TransitionEvent(liWidget.domNode, liWidget.params.transitionOptions);
+											var liWidget = registry.byId("dojox_mobile_ListItem_1");
+											var ev = new TransitionEvent(liWidget.domNode, liWidget.params);
 											ev.dispatch()
 											return dfd.callback(true);
 										}, 500);
 									}
 								}, {
-									// Test global data 1
-									name : "global-data-test-1",
+									// Test layout data 1
+									name : "layout-data-test-1",
 									runTest : function() {
 										var dfd = new doh.Deferred();
 										setTimeout(function() {
-											var d = dom.byId("label");
+											var d = registry.byId("dojox_mobile_EdgeToEdgeCategory_2");
 											if(d){
-												doh.is("Home-foo", d.innerText, "label should be of Home-foo");
-											}else{
-												throw new Error("In global-data-test-1 label should be of Home-foo.");
-												//console.warn("In simple-mvc-test-1 streetInput not found."); 
+												doh.is("Using a dojox/mobile/EdgeToEdgeStoreList", d.domNode.innerHTML, "dojox_mobile_EdgeToEdgeCategory_2 should be set");
 											}
+											doh.t(layoutApp.children["layoutApp_listMain"], "layoutApp_listMain viewShowing should be true");
 											return dfd.callback(true);
 										}, 1000);
 										return dfd;
@@ -131,21 +129,18 @@
 										if(history){
 											history.back();
 											setTimeout(function() {
-												doh.t(globalizedApp.children["globalizedApp_home"], "globalizedApp_home viewShowing should be true");
+												doh.t(layoutApp.children["layoutApp_simple"], "layoutApp_simple viewShowing should be true");
 												return dfd.callback(true);
 											}, 500);
 										}
 									}
 								}]);
-
 								doh.run();
 							}
 						}));
-
 					});
 		</script>
 	</head>
 	<body>
-		<script type="dojo/require">at: "dojox/mvc/at"</script>
 	</body>
 </html>

@@ -26,18 +26,9 @@
 				"dojo/_base/lang",
 				"dojo/dom",
 				"dojox/mobile/TransitionEvent",				
-				"dojo/parser",
-				"dojo/when",
-				"dojo/Stateful",
-				"dijit/registry",
-				"dojox/mvc/at",
- 				"dojox/app/controllers/Load", 
- 				"dojox/app/controllers/Transition", 
- 				"dojox/app/controllers/Layout",
-  				"dojox/app/controllers/History",				
-				"dojox/mvc/Output"
-					], function(doh, topic, lang, dom, TransitionEvent, parser, when, Stateful, registry, at, Load, Transition, Layout, History) {
-						window.at = at;
+				"dijit/registry"
+					], function(doh, topic, lang, dom, TransitionEvent, registry) {
+						
 						var events = [];
 
 						getLabelfromWid = function(wid, indx1, indx2){
@@ -84,7 +75,7 @@
 												throw new Error("borderLayoutApp_view2 not found."); 
 											}
 											return dfd.callback(true);
-										}, 2000);
+										}, 1000);
 										return dfd;
 									}
 								}, {
@@ -120,7 +111,45 @@
 										}, 3000);
 										return dfd;
 									}
-								}]);
+								}, {
+									// Test second transition
+									name : "transition-test-2",
+									runTest : function() {
+										var dfd = new doh.Deferred();
+										setTimeout(function() {
+											var liWidget = registry.byId("dojox_mobile_ListItem_19");
+											var ev = new TransitionEvent(liWidget.domNode, liWidget.params);
+											ev.dispatch()
+											return dfd.callback(true);
+										}, 500);
+									}			
+										}, {
+									// Test globalized view 2
+									name : "borderLayoutApp-test-2",
+									timeout: 5000,
+									runTest : function() {
+										var dfd = new doh.Deferred();
+										setTimeout(function() {
+											if(borderLayoutApp.children["borderLayoutApp_view2"]){
+												doh.t(borderLayoutApp.children["borderLayoutApp_view2"], "borderLayoutApp_view2 viewShowing should be true");
+												doh.t(borderLayoutApp.children["borderLayoutApp_view10"], "borderLayoutApp_view10 viewShowing should be true");
+												doh.t(borderLayoutApp.children["borderLayoutApp_view4"], "borderLayoutApp_view4 viewShowing should be true");
+												doh.t(borderLayoutApp.children["borderLayoutApp_view8"], "borderLayoutApp_view8 viewShowing should be true");
+												doh.t(borderLayoutApp.children["borderLayoutApp_view6"], "borderLayoutApp_view6 viewShowing should be true");
+											}else{
+												throw new Error("borderLayoutApp_view2 not found."); 
+											}
+											if(history){
+												history.back();
+												setTimeout(function() {
+													history.back();
+												}, 500);
+											}	
+											return dfd.callback(true);
+										}, 1000);
+										return dfd;
+									}
+						}]);
 
 								doh.run();
 							}
