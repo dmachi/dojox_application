@@ -29,7 +29,7 @@ function(lang, Deferred, when){
 			return(ops);
 		}
 
-		var options;
+		var options, dataStoreCtor;
 		if(params.store){
 			if(!params.store.params){
 				throw new Error("Invalid store for model ["+item+"]");
@@ -40,7 +40,7 @@ function(lang, Deferred, when){
 				};
 			}else if(params.store.params.url){
 				try{
-					var dataStoreCtor = require("dojo/store/DataStore");
+					dataStoreCtor = require("dojo/store/DataStore");
 				}catch(e){
 					throw new Error("dojo/store/DataStore must be listed in the dependencies");
 				}
@@ -59,7 +59,7 @@ function(lang, Deferred, when){
 			}
 		}else if(params.datastore){
 			try{
-				var dataStoreCtor = require("dojo/store/DataStore");
+				dataStoreCtor = require("dojo/store/DataStore");
 			}catch(e){
 				throw new Error("When using datastore the dojo/store/DataStore module must be listed in the dependencies");
 			}

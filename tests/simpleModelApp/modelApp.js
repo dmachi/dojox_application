@@ -70,8 +70,8 @@ function(win, Application, jsonRef, config, has){
 		"Tel": "408-764-1234",
 		"Fax": "408-764-4321"
 	}];
-	var config = jsonRef.fromJson(config);
+	var cfg = jsonRef.fromJson(config);
 	has.add("ie9orLess", has("ie") && (has("ie") <= 9));
-	Application(config);
+	Application(cfg);
 
 });
