@@ -1,13 +1,6 @@
-define(["dojo/dom", "dojo/_base/lang", "dojo/dom-style", "dijit/registry", "dojox/mvc/at", "dojox/mobile/TransitionEvent"],
-	function(dom, lang, domStyle, registry, at, TransitionEvent){
-
-	var wrapperId = 'cfg1Wrapper';
+define([], function(){
 
 	var app = null;
-
-	selectCompleted = function(index){
-		app.selected_configuration_item = index;
-	};
 
 	return {
 		init: function(){

@@ -53,11 +53,12 @@ function(lang, declare, on, Controller, hash){
 
 			// bubbling "startTransition", so Transition controller can response to it.
 
-			var target = evt.detail.target;
-			var regex = /#(.+)/;
-			if(!target && regex.test(evt.detail.href)){
-				target = evt.detail.href.match(regex)[1];
-			}
+			// TODO: useless code block, target is never used
+			//var target = evt.detail.target;
+			//var regex = /#(.+)/;
+			//if(!target && regex.test(evt.detail.href)){
+			//	target = evt.detail.href.match(regex)[1];
+			//}
 			
 			// create url hash from target if it is not set
 			var currentHash = evt.detail.url || "#"+evt.detail.target;

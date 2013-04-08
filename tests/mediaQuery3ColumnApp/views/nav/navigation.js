@@ -1,7 +1,5 @@
 define(["dojo/dom-class"],
 function(domClass){
-	var previousView = null;
-
 	return {
 		// view init
 		init: function(){
@@ -21,7 +19,7 @@ function(domClass){
 
 		},
 		
-		beforeActivate: function(previousView, data){
+		beforeActivate: function(previousView){
 			// summary:
 			//		view life cycle beforeActivate()
 			//

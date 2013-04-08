@@ -5,7 +5,7 @@
 		<meta name="apple-mobile-web-app-capable" content="yes" /> 
 		<title>Layout App</title>
 		<link type="text/css" href="../../layoutApp/css/layoutApp.css" rel="stylesheet" />
-		<link href="../../../../mobile/themes/iphone/base.css" rel="stylesheet"></link>
+		<link href="../../../../mobile/themes/iphone/base.css" rel="stylesheet">
 		<style>
 			html,body {
 				width: 100%;
@@ -14,8 +14,8 @@
 				font-family: arial;
 				color: #333;
 				overflow: hidden;
-				margin: 0px;
-				padding: 0px;
+				margin: 0;
+				padding: 0;
 				visibility: visible;
 			}
 
@@ -25,7 +25,7 @@
 				margin: auto;
 				overflow: hidden;
 				border: 2px solid green;
-				font-color: #333;
+				color: #333;
 				text-align: center;
 			}
 
@@ -37,7 +37,7 @@
 				mblAndroidWorkaround: false,
                 mblAlwaysHideAddressBar: false,	
 				async:1,
-				app: {debugApp: 0}  // set debugApp to log app transtions and view activate/deactivate 
+				app: {debugApp: 0}  // set debugApp to log app transitions and view activate/deactivate
 			};
 		</script>
 		<script type="text/javascript" src="../../../../../dojo/dojo.js"></script>
@@ -57,7 +57,7 @@
 					], function(doh, topic, lang, dom, TransitionEvent, registry) {
 						var events = [];
 
-						getLabelfromWid = function(wid, indx1, indx2){
+						var getLabelfromWid = function(wid, indx1, indx2){
 							var val = wid.labelNode.innerText || wid.labelNode.firstChild.nodeValue || "";
 							val = lang.trim(val);
 							if(indx2){
@@ -102,7 +102,7 @@
 										setTimeout(function() {
 											var liWidget = registry.byId("dojox_mobile_ListItem_1");
 											var ev = new TransitionEvent(liWidget.domNode, liWidget.params);
-											ev.dispatch()
+											ev.dispatch();
 											return dfd.callback(true);
 										}, 500);
 									}

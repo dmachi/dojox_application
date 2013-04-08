@@ -1,7 +1,5 @@
-define(["dojo/dom", "dojo/dom-style", "dojo/_base/connect", "dijit/registry", "dojox/mvc/at", "dojox/mvc/getStateful", "dojox/mvc/Output"],
-function(dom, domStyle, connect, registry, at, getStateful, Output){
-	var _connectResults = []; // events connect result
-
+define(["dojo/dom", "dojo/dom-style"],
+function(dom, domStyle){
 	var repeatmodel = null;	//repeat view data model
 
 	// show an item detail
@@ -12,20 +10,10 @@ function(dom, domStyle, connect, registry, at, getStateful, Output){
 		}
 	};
 
-	// get index from dom node id
-	var getIndexFromId = function(nodeId, perfix){
-		var len = perfix.length;
-		if(nodeId.length <= len){
-			throw Error("repeat node id error.");
-		}
-		var index = nodeId.substring(len, nodeId.length);
-		return parseInt(index);
-	};
-
 	return {
 		// repeat view init
 		init: function(){
-			console.log("IN REPEATDETAILS")
+			console.log("IN REPEATDETAILS");
 			repeatmodel = this.loadedModels.repeatmodels;
 		},
 

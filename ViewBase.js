@@ -218,7 +218,9 @@ define(["require", "dojo/when", "dojo/on", "dojo/dom-attr", "dojo/_base/declare"
 				});
 			}catch(e){
 				viewControllerDef.reject(e);
-				requireSignal.remove();
+				if(requireSignal){
+					requireSignal.remove();
+				}
 			}
 			return viewControllerDef;
 		},

@@ -1,5 +1,5 @@
-define(["dojo/dom", "dojo/_base/connect", "dijit/registry", "dojox/mvc/at", "dojox/mobile/TransitionEvent"],
-function(dom, connect, registry, at,TransitionEvent){
+define(["dojo/dom", "dojo/_base/connect", "dijit/registry", "dojox/mvc/at"],
+function(dom, connect, registry, at){
 	var _connectResults = []; // events connect results
 	var currentModel = null;
 

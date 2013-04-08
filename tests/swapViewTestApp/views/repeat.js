@@ -1,5 +1,5 @@
-define(["dojo/dom", "dojo/_base/connect", "dijit/registry", "dojox/mvc/at", "dojox/mobile/TransitionEvent", "dojox/mvc/Repeat", "dojox/mvc/getStateful", "dojox/mvc/Output"],
-function(dom, connect, registry, at, TransitionEvent, Repeat, getStateful, Output){
+define(["dojo/dom", "dojo/_base/connect", "dijit/registry", "dojox/mvc/at", "dojox/mobile/TransitionEvent", "dojox/mvc/Repeat", "dojox/mvc/getStateful"],
+function(dom, connect, registry, at, TransitionEvent, Repeat, getStateful){
 	var _connectResults = []; // events connect result
 
 	var repeatmodel = null;	//repeat view data model

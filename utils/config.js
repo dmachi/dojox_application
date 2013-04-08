@@ -3,7 +3,7 @@ define(["dojo/sniff"], function(has){
 // module:
 //		dojox/app/utils/config
 
-var config = {
+return {
 	// summary:
 	//		This module contains the config
 
@@ -81,7 +81,5 @@ var config = {
 		return target;
 	}
 };
-
-return config;
 
 });

@@ -37,7 +37,7 @@ function(){
 			//		view life cycle beforeDeactivate()
 			//
 			// put any updates back to the store
-			currentItem.label = this.First.get("value")+ " "+this.Last.get("value");;
+			currentItem.label = this.First.get("value") + " " + this.Last.get("value");
 			currentItem.First = this.First.get("value");
 			currentItem.Last = this.Last.get("value");
 			currentItem.Email = this.Email.get("value");

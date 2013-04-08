@@ -1,10 +1,5 @@
-define(["dojo/dom", "dojo/dom-style", "dojo/_base/connect", "dijit/registry", "dojox/mvc/at", "dojox/mobile/TransitionEvent", 
-	"dojo/Stateful", "dojox/mvc/parserExtension", "dojox/mvc/sync"],
-function(dom, domStyle, connect, registry, at, TransitionEvent, Stateful, parserExtension, sync){
+define(["dojo/dom", "dojo/dom-style", "dojo/_base/connect"], function(dom, domStyle, connect){
 	var _connectResults = []; // events connect result
-	var previousView = null;
-
-	navShowingStateful = new Stateful({value: false});
 
 	return {
 		// view init
@@ -15,9 +10,8 @@ function(dom, domStyle, connect, registry, at, TransitionEvent, Stateful, parser
 			// summary:
 			//		view life cycle beforeActivate()
 			//
-			currentModel = this.loadedModels.names;
-			var connectResult;
-		/*	
+		/*
+		 	var connectResult;
 			var backButtomDom = dom.byId('headerBackButton');
 			connectResult = connect.connect(backButtomDom, "onclick", function(e){
 				// transition to repeatDetails view with the &cursor=index

@@ -1,4 +1,4 @@
-define({
+{
 	"description":"A representation of an Application",
 	"type": "object",
 	"properties":{
@@ -52,4 +52,4 @@ define({
 			"default": {}
 		}
 	}
-});
+}

@@ -124,7 +124,7 @@ function(declare, lang, registry, domAttr, domGeom, domStyle, WidgetBase, Contai
 			// summary:
 			//		layout container
 
-			children = query("> [data-app-constraint]", this.domNode).map(function(node){
+			var children = query("> [data-app-constraint]", this.domNode).map(function(node){
 				var w = registry.getEnclosingWidget(node);
 				if(w){
 					w._constraint = domAttr.get(node, "data-app-constraint");

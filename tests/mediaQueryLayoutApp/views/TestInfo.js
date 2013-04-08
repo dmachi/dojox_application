@@ -1,7 +1,6 @@
-define(["dojo/dom", "dojo/dom-style", "dojo/_base/connect", "dijit/registry", "dojox/mobile/TransitionEvent"],
-function(dom, domStyle, connect, registry, TransitionEvent){
+define(["dojo/dom", "dojo/dom-style", "dojo/_base/connect", "dojox/mobile/TransitionEvent"],
+function(dom, domStyle, connect, TransitionEvent){
 	var _connectResults = []; // events connect result
-	var previousView = null;
 
 	return {
 		// view init
@@ -11,8 +10,7 @@ function(dom, domStyle, connect, registry, TransitionEvent){
 		beforeActivate: function(){
 			// summary:
 			//		view life cycle beforeActivate()
-			//
-			currentModel = this.loadedModels.names;
+
 			var connectResult;
 			
 			var backButtomDom = dom.byId('headerBackButton');

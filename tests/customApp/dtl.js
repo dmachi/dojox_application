@@ -3,4 +3,4 @@ define([], function(){
 		oldRepl: "Fruit: ",
 		items: ["apple", "banana", "orange"]
 	}
-})
+});

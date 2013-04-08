@@ -1,26 +1,25 @@
-define(["dojo/_base/lang", "dojo/on", "dijit/registry", "dojo/date/stamp", "dojox/app/utils/constraints"], 
-function(lang, on, registry, stamp, constraints){
+define(["dojo/_base/lang", "dojo/on", "dijit/registry", "dojo/date/stamp"],
+function(lang, on, registry, stamp){
 	var _onResults = []; // events on array
 	var opener;
 
 	return {
 		init: function(){
 			opener = this.opener;
-			onResult = on(this.selDate1, "click", lang.hitch(this, function(e){
+			var onResult = on(this.selDate1, "click", lang.hitch(this, function(){
 				this.datePicker2.set("value", date);
 				this.opener.show(this.selDate1, ['below-centered','above-centered','after','before']);
 			})); 
 			_onResults.push(onResult);
 
-			onResult = on(this.save, "click", lang.hitch(this, function(e){
-				this.opener.hide(true);				
-				date = this.datePicker2.get("value");
-				this.selDate1.value = date;
+			var onResult = on(this.save, "click", lang.hitch(this, function(){
+				this.opener.hide(true);
+				this.selDate1.value = this.datePicker2.get("value");
 			})); 
 			_onResults.push(onResult);
 
-			onResult = on(this.cancel, "click", lang.hitch(this, function(e){
-					this.opener.hide(false);
+			onResult = on(this.cancel, "click", lang.hitch(this, function(){
+				this.opener.hide(false);
 			})); 
 			_onResults.push(onResult);
 			

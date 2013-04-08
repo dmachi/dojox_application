@@ -73,13 +73,13 @@
 	}
 
 	.mainCenter {
-		left: 0px !important;
+		left: 0 !important;
 	}
 
 	.left {
 		display: none;
 		float: left; 
-		width:0px;
+		width:0;
 	}
 
 	#headerBackButton {
@@ -96,13 +96,13 @@
 	}
 
 	.mainCenter {
-		left: 0px !important;
+		left: 0 !important;
 	}
 
 	.left {
 		display: none;
 		float: left; 
-		width:0px;
+		width:0;
 	}
 
 	#headerBackButton {
@@ -193,7 +193,7 @@ button.whiteBtnSelected{
 
 #header button {
 	position:absolute;
-	margin:0px;
+	margin:0;
 }
 
 #navButton {
@@ -202,8 +202,8 @@ button.whiteBtnSelected{
 
 #loadDiv {
 	position:absolute;
-	left:0px;
-	top:0px;
+	left:0;
+	top:0;
 	width:100%;
 	height:100%;
 	z-index:999;
