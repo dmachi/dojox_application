@@ -1,7 +1,7 @@
 define(["dojo/_base/declare", "dojo/dom", "dojo/dom-style",
 		"dojo/dom-class", "dojo/dom-attr", "dojo/dom-construct", 
-		"dojox/app/controllers/LayoutBase", "dijit/registry"],
-function(declare, dom, domStyle, domClass, domAttr, domConstruct, LayoutBase, registry){
+		"dojox/app/controllers/LayoutBase"],
+function(declare, dom, domStyle, domClass, domAttr, domConstruct, LayoutBase){
 	// module:
 	//		dojox/app/tests/mediaQueryLayoutApp/controllers/CssLayout
 	// summary:

@@ -1,5 +1,4 @@
-define(["dojo/_base/lang", "dojo/dom", "dojo/on", "dijit/registry"],
-function(lang, dom, on, registry){
+define(["dojo/_base/lang"], function(lang){
 	var _onResults = []; // events on array
 
 	return {
@@ -39,7 +38,7 @@ function(lang, dom, on, registry){
 
 		// list view init
 		init: function(){
-			list = this.list;
+			var list = this.list;
 			if(!list.Store){
 				list.setStore(this.loadedStores.listStore);
 			}
@@ -57,7 +56,7 @@ function(lang, dom, on, registry){
 			
 			onResult = this.list.on("click", lang.hitch(this, function(e){
 				console.log("List on click hit ",e);
-				var item = this.list.store.query({"label": e.target.innerHTML})
+				var item = this.list.store.query({"label": e.target.innerHTML});
 				var index = this.list.store.index[item[0].id];
 				console.log("index is "+index);
 				this.setDetailsContext(index, e, this.params);	

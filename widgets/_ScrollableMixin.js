@@ -15,7 +15,7 @@ define([
 	// summary:
 	//		Mixin for widgets to have a touch scrolling capability.
 
-	var cls = declare("dojox.app.widgets._ScrollableMixin", Scrollable, {
+	return declare("dojox.app.widgets._ScrollableMixin", Scrollable, {
 		// summary:
 		//		Mixin for widgets to have a touch scrolling capability.
 		// description:
@@ -159,5 +159,4 @@ define([
 		}
 			
 	});
-	return cls;
 });

@@ -2,15 +2,12 @@ require(["dojo/_base/window","dojox/app/main", "dojox/json/ref", "dojo/text!./co
 	function(win, Application, jsonRef, config, has){
 
 	var small = 560;
-	var medium = 860;
-	
+
 	// large > 860 medium <= 860  small <= 560 
 	var isSmall = function(){				
 		var width = window.innerWidth || document.documentElement.clientWidth;
-		if(width <= small){
-			return true;
-		}
-		return false;		
+		return width <= small;
+
 	};
 
 	

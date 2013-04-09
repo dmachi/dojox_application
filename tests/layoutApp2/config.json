@@ -53,7 +53,7 @@
 	},
 
 	//models and instantiation parameters for the models. Including 'type' as a property allows
-	//one to overide the class that will be used for the model.  
+	//one to override the class that will be used for the model.
 	"models": {
 	   "names": {
 			"modelLoader": "dojox/app/utils/simpleModel",

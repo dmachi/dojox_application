@@ -3,8 +3,6 @@ define(["dojo/dom", "dojo/dom-style", "dojo/_base/connect", "dojo/_base/lang","d
 function(dom, domStyle, connect, lang, registry, at, TransitionEvent, Repeat, getStateful, Output, has){
 	var _connectResults = []; // events connect result
 
-	var repeatmodel = null;	//repeat view data model
-	
 	// these ids are updated here and in the html file to avoid duplicate ids
 	var backId = 'ti1back1';
 	var wrapperIdA = 'tst1WrapperA';

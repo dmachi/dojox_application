@@ -215,7 +215,7 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 			//
 			// returns:
 			//		params Object for this view
-			viewParams = {};
+			var viewParams = {};
 			for(var item in params){
 				var value = params[item];
 				if(lang.isObject(value)){	// view specific params

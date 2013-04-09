@@ -1,7 +1,4 @@
-define([],
-function(){
-	var _connectResults = []; // events connect results
-	var currentModel = null;
+define([], function(){
 
 	return {
 		init: function(){

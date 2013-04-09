@@ -1,17 +1,12 @@
-define(["dojo/dom", "dojo/dom-style", "dojo/_base/connect", "dijit/registry", "dojox/mvc/at", "dojox/mobile/TransitionEvent", 
-	"dojo/Stateful", "dojox/mvc/parserExtension", "dojox/mvc/sync"],
-function(dom, domStyle, connect, registry, at, TransitionEvent, Stateful, parserExtension, sync){
+define(["dojo/dom", "dojo/dom-style", "dojo/_base/connect"], function(dom, domStyle, connect){
 	var _connectResults = []; // events connect result
-	var previousView = null;
-
-	navShowingStateful = new Stateful({value: false});
 
 	return {
 		// view init
 		init: function(){
 		},
 		
-		beforeActivate: function(view, data){
+		beforeActivate: function(view){
 			// summary:
 			//		view life cycle beforeActivate()
 			//

@@ -1,5 +1,5 @@
-define(["dojo/dom", "dojo/_base/connect", "dijit/registry", "dojox/mvc/at", "dojox/mvc/Repeat", "dojox/mvc/getStateful", "dojox/mvc/Output"],
-function(dom, connect, registry, at, Repeat, getStateful, Output){
+define(["dojo/dom", "dojo/_base/connect", "dijit/registry", "dojox/mvc/at", "dojox/mvc/Repeat", "dojox/mvc/getStateful"],
+function(dom, connect, registry, at, Repeat, getStateful){
 
 	var _connectResults = []; // events connect result
 

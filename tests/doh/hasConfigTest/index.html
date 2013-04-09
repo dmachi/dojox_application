@@ -8,7 +8,7 @@
 			dojoConfig = {
 				parseOnLoad: false,
 				async:1,
-				app: {debugApp: 0}  // set debugApp to log app transtions and view activate/deactivate 
+				app: {debugApp: 0}  // set debugApp to log app transitions and view activate/deactivate
 			};
 		</script>
 		<script type="text/javascript" src="../../../../../dojo/dojo.js"></script>
@@ -36,7 +36,7 @@
 				"dojo/text!./config.json"  				
 					], function(doh, topic, lang, TransitionEvent, parser, when, Load, Transition, Layout, History, HistoryHash,
 						configUtil, jsonRef, has, config) {
-						originalConfig = jsonRef.fromJson(config);
+						var originalConfig = jsonRef.fromJson(config);
 						var isTablet = false;
 						var width = window.innerWidth || document.documentElement.clientWidth;
 						if(width > 600){
@@ -68,7 +68,7 @@
 									return dfd.callback(true);
 								}, 500);
 								return dfd;
-							},
+							}
 						}, {
 							// Test controllers
 							name : "test-Controllers",

@@ -1,5 +1,5 @@
-define(["dojo/dom", "dojo/_base/connect", "dijit/registry", "dojox/mvc/at"],
-function(dom, connect, registry, at){
+define(["dojo/dom", "dojo/_base/connect", "dijit/registry"],
+function(dom, connect, registry){
 
 	var _connectResults = []; // events connect results
 	var currentModel = null;

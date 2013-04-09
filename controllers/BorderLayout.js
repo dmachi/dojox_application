@@ -23,12 +23,15 @@ function(declare, domAttr, domStyle, LayoutBase, BorderContainer, StackContainer
 			// |		{"view": view, "callback": function(){}};
 			this.app.log("in app/controllers/BorderLayout.initLayout event.view.name=[",event.view.name,"] event.view.parent.name=[",event.view.parent.name,"]");
 
+			var bc;
 			if(!this.borderLayoutCreated){ // If the BorderContainer has not been created yet, create it.
 				this.borderLayoutCreated = true;
 				bc = new BorderContainer({id:this.app.id+"-BC", style: "height:100%;width:100%;border:1px solid black"});
 				event.view.parent.domNode.appendChild(bc.domNode);	// put the border container into the parent (app)
 
 				bc.startup();	// startup the BorderContainer
+			}else{
+				bc = registry.byId(this.app.id+"-BC");				
 			}
 
 			this.app.log("in app/controllers/BorderLayout.initLayout event.view.constraint=",event.view.constraint);
@@ -37,15 +40,15 @@ function(declare, domAttr, domStyle, LayoutBase, BorderContainer, StackContainer
 			if(event.view.parent.id == this.app.id){	// If the parent of this view is the app we are working with the BorderContainer
 				var reg = registry.byId(event.view.parent.id+"-"+constraint);			
 				if(reg){	// already has a stackContainer, just create the contentPane for this view and add it to the stackContainer.
-					cp1 = new ContentPane({id:event.view.id+"-cp-"+constraint});
+					var cp1 = new ContentPane({id:event.view.id+"-cp-"+constraint});
 					cp1.addChild(event.view); // important to add the widget to the cp before adding cp to BorderContainer for height
 					reg.addChild(cp1);
 					bc.addChild(reg);
 				}else{ // need a contentPane
 					// this is where the region (constraint) is set for the BorderContainer's StackContainer
 					var noSplitter = this.app.borderLayoutNoSplitter || false;
-					sc1 = new StackContainer({doLayout: true, splitter:!noSplitter, region:constraint, id:event.view.parent.id+"-"+constraint});
-					cp1 = new ContentPane({id:event.view.id+"-cp-"+constraint});
+					var sc1 = new StackContainer({doLayout: true, splitter:!noSplitter, region:constraint, id:event.view.parent.id+"-"+constraint});
+					var cp1 = new ContentPane({id:event.view.id+"-cp-"+constraint});
 					cp1.addChild(event.view); // should we use addChild or appendChild?
 					sc1.addChild(cp1);
 					bc.addChild(sc1);

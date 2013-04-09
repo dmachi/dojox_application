@@ -13,28 +13,16 @@ function(dom, domStyle, connect, lang, declare, registry, at, TransitionEvent, R
 	var insert1Id = 'sc1insert1xP';
 	var insert10Id = 'sc1insert10xP';
 	var remove10Id = 'sc1remove10xP';
-	var wrapperIdA = 'sc1WrapperA';
-	var wrapperIdB = 'sc1WrapperB';
-	var wrapperIdC = 'sc1WrapperC';
-	var wrapperIdD = 'sc1WrapperD';
 
 	var app = null;
 
-	// delete an item
-	deleteResult = function(index){
-		var nextIndex = repeatmodel.get("cursorIndex");
-		if(nextIndex >= index){
-			nextIndex = nextIndex-1;
-		}
-		repeatmodel.model.splice(index, 1);
-		repeatmodel.set("cursorIndex", nextIndex);		
-	};
 	// show an item detail
-	setDetailsContext = function(index){
+	var setDetailsContext = function(index){
 		repeatmodel.set("cursorIndex", index);
 		
 	};
-	
+
+	// global for call from template
 	removeScrollableItem = function(index){
 				var repeatmodel = app.loadedModels.repeatmodels;
 				repeatmodel.model.splice(index, 1);
@@ -61,16 +49,6 @@ function(dom, domStyle, connect, lang, declare, registry, at, TransitionEvent, R
 		};
 		new TransitionEvent(e.target, transOpts, e).dispatch(); 
 		
-	};
-
-	// get index from dom node id
-	var getIndexFromId = function(nodeId, perfix){
-		var len = perfix.length;
-		if(nodeId.length <= len){
-			throw Error("repeat node id error.");
-		}
-		var index = nodeId.substring(len, nodeId.length);
-		return parseInt(index);
 	};
 	
 	var showListData = function(/*dojox/mvc/EditStoreRefListController*/ datamodel){
@@ -122,8 +100,8 @@ function(dom, domStyle, connect, lang, declare, registry, at, TransitionEvent, R
 				//Add 10 items to the end of the model
 				app.showProgressIndicator(true);
 				setTimeout(lang.hitch(this,function(){
-					maxentries = repeatmodel.model.length+10;
-					for(i = repeatmodel.model.length; i < maxentries; i++){
+					var maxentries = repeatmodel.model.length+10;
+					for(var i = repeatmodel.model.length; i < maxentries; i++){
 						var data = {id:Math.random(), "First": "First"+repeatmodel.model.length, "Last": "Last"+repeatmodel.model.length, "Location": "CA", "Office": "", "Email": "", "Tel": "", "Fax": ""};
 						repeatmodel.model.splice(repeatmodel.model.length, 0, new getStateful(data));					
 					}
@@ -137,8 +115,8 @@ function(dom, domStyle, connect, lang, declare, registry, at, TransitionEvent, R
 				//remove 10 items to the end of the model
 				app.showProgressIndicator(true);
 				setTimeout(lang.hitch(this,function(){				
-					maxentries = repeatmodel.model.length-10;
-					for(i = repeatmodel.model.length; i > maxentries; i--){
+					var maxentries = repeatmodel.model.length-10;
+					for(var i = repeatmodel.model.length; i >= maxentries; i--){
 						repeatmodel.model.splice(i, 1);
 					}
 					repeatmodel.set("cursorIndex", 0);		

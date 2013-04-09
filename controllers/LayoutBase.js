@@ -68,7 +68,6 @@ function(lang, declare, has, win, config, domAttr, topic, domStyle, constraints,
 
 			if(!view){
 				console.warn("layout empty view.");
-				return;
 			}
 		},
 

@@ -26,7 +26,7 @@ function(lang, Deferred, when, getStateful){
 				}
 			}
 			return(ops);
-		}
+		};
 
 		var options;
 		if(params.store){

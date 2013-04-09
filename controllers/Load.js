@@ -54,9 +54,8 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/Def
 			//		If the caller need to use the return value, pass callback function in event parameter and process return value in callback function.
 
 			this.app.log("in app/controllers/Load event.viewId="+event.viewId+" event =", event);
-			var parent = event.parent || this.app;
 			var views = event.viewId || "";
-			viewArray = [];
+			var viewArray = [];
 			// create an array from the diff views in event.viewId (they are separated by +)
 			var parts = views.split('+');
 			while(parts.length > 0){ 	
@@ -64,8 +63,7 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/Def
 				viewArray.push(viewId);
 			}
 
-			var params = event.params || "";
-			var def, proceedLoadViewDef;
+			var def;
 			this.proceedLoadViewDef = new Deferred();
 			if(viewArray && viewArray.length > 1){
 				// loop thru the array calling loadView for each item in the array
@@ -109,7 +107,6 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/Def
 							this.proceedLoadViewDef.resolve();
 						}
 			}));
-			return;		
 		},
 
 		loadView: function(event){

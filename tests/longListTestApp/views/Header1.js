@@ -4,10 +4,9 @@ function(dom, domStyle, connect, Memory, Observable, has){
 		var _connectResults = []; // events connect result
 		var backId = 'sc1back1';
 		var insert10Id = 'sc1insert10x';
-		var	loadMoreItem = null;
 		var app = null;
 		
-		loadMore=function(){
+		var loadMore = function(){
 			if(!app){
 				return;
 			}
@@ -16,7 +15,7 @@ function(dom, domStyle, connect, Memory, Observable, has){
 				app.listCount = 5;
 			}
 			setTimeout(function(){ // to simulate network latency
-				for(i = app.listStart; i < app.listStart+5; i++){
+				for(var i = app.listStart; i < app.listStart+5; i++){
 					var newdata = {'label': 'Item #'+i};
 					app.stores.longlistStore.store.put(newdata);
 				}
@@ -29,7 +28,7 @@ function(dom, domStyle, connect, Memory, Observable, has){
 		init: function(){
 			app = this.app;
 			var memoryStore = new Memory({data: {}});
-			store = new Observable(memoryStore);
+			new Observable(memoryStore);
 
 			var connectResult;
 			connectResult = connect.connect(dom.byId(insert10Id), "click", function(){

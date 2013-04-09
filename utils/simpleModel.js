@@ -27,7 +27,7 @@ function(lang, Deferred, when){
 				}
 			}
 			return(ops);
-		}
+		};
 
 		var options, dataStoreCtor;
 		if(params.store){
