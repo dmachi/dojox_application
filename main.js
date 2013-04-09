@@ -104,7 +104,9 @@ define(["require", "dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare",
 					});
 				}catch(e){
 					def.reject(e);
-					requireSignal.remove();
+					if(requireSignal){
+						requireSignal.remove();
+					}
 				}
 
 				var controllerDef = new Deferred();
@@ -233,7 +235,7 @@ define(["require", "dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare",
 					})
 				});
 			};
-			when(controllers, lang.hitch(this, function(result){
+			when(controllers, lang.hitch(this, function(){
 				if(this.template){
 					// emit "app-init" event so that the Load controller can initialize root view
 					this.emit("app-init", {
@@ -255,7 +257,7 @@ define(["require", "dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare",
 		}		
 	});
 
-	function generateApp(config, node, appSchema, validate){
+	function generateApp(config, node){
 		// summary:
 		//		generate the application
 		//

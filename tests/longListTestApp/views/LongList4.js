@@ -10,11 +10,11 @@ function(dom, domStyle, connect, registry, has){
 		init: function(){
 			app = this.app;
 			
-			var connectResult;
-			connectResult = connect.connect(dom.byId(insert10Id), "click", function(){
-				//Add 5 items to the end of the model
+			var connectResult = connect.connect(dom.byId(insert10Id), "click", function(){
+				//Add 10 items to the end of the model
 				loadMore();
 			});
+			_connectResults.push(connectResult);
 		},
 
 

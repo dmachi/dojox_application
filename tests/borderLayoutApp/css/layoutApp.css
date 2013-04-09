@@ -37,7 +37,7 @@ button.whiteBtnSelected{
 
 #header button {
 	position:absolute;
-	margin:0px;
+	margin:0;
 }
 
 #navButton {
@@ -46,8 +46,8 @@ button.whiteBtnSelected{
 
 #loadDiv {
 	position:absolute;
-	left:0px;
-	top:0px;
+	left:0;
+	top:0;
 	width:100%;
 	height:100%;
 	z-index:999;

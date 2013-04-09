@@ -147,7 +147,7 @@ function(declare, lang, array, win, query, domGeom, domAttr, domStyle, registry,
 			}
 			this.app.log("in Layout _doLayout called for view.id="+view.id+" view=",view);
 
-			var fullScreenScene, children;
+			var children;
 			// TODO: probably need to handle selectedChildren here, not just selected child...
 			// TODO: why are we passing view here? not parent? This call does not seem logical?
 			var selectedChild = constraints.getSelectedChild(view, view.constraint);

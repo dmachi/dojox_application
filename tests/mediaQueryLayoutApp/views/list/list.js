@@ -1,4 +1,4 @@
-define(["dojo/_base/lang", "dojo/dom", "dojo/on", "dijit/registry", "dojo/dom-class",],
+define(["dojo/_base/lang", "dojo/dom", "dojo/on", "dijit/registry", "dojo/dom-class"],
 function(lang, dom, on, registry, domClass){
 	var _onResults = []; // events on array
 
@@ -39,7 +39,7 @@ function(lang, dom, on, registry, domClass){
 
 		// list view init
 		init: function(){
-			list = this.list;
+			var list = this.list;
 			if(!list.Store){
 				list.setStore(this.loadedStores.listStore);
 			}
@@ -49,7 +49,7 @@ function(lang, dom, on, registry, domClass){
 			// summary:
 			//		view life cycle beforeActivate()
 			//
-			list = this.list;
+
 			var onResult;
 			
 			domClass.remove(dom.byId("listInsert1"), "hide");
@@ -68,7 +68,7 @@ function(lang, dom, on, registry, domClass){
 			
 			onResult = this.list.on("click", lang.hitch(this, function(e){
 				console.log("List on click hit ",e);
-				var item = this.list.store.query({"label": e.target.innerHTML})
+				var item = this.list.store.query({"label": e.target.innerHTML});
 				var index = this.list.store.index[item[0].id];
 				console.log("index is "+index);
 				this.setDetailsContext(index, e, this.params);	

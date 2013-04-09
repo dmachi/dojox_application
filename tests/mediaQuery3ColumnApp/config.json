@@ -51,11 +51,11 @@
 		},
 		"isInitiallySmall" : {
 			//the name of the view to load when the app is initialized.
-			"defaultView": "navLeft+navCenter+lastRight",
+			"defaultView": "navLeft+navCenter+lastRight"
 		},
 		"!isInitiallySmall" : {
 			//the name of the view to load when the app is initialized.
-			"defaultView": "navLeft+mainCenter+lastRight",
+			"defaultView": "navLeft+mainCenter+lastRight"
 		}
 	},	
 
@@ -119,6 +119,6 @@
 		"header":{
 			"constraint" : "top",
 			"template": "mediaQuery3ColumnApp/views/header.html"
-		},
+		}
 	}	
 }

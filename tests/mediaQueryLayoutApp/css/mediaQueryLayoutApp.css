@@ -8,10 +8,6 @@
 	width:69.8%;
 }
 
-.top {
-	float: top;
-}
-
 .showOnTablet {
 	display: block !important;
 }
@@ -34,7 +30,7 @@
 
 	.left {
 		float: left; 
-		width:0px;
+		width:0;
 	}
 	.center {
 		float: left;
@@ -54,7 +50,7 @@
 
 	.left {
 		float: left; 
-		width:0px;
+		width:0;
 	}
 	.center {
 		float: left;
@@ -108,7 +104,7 @@ button.whiteBtnSelected{
 
 #header button {
 	position:absolute;
-	margin:0px;
+	margin:0;
 }
 
 #navButton {
@@ -117,8 +113,8 @@ button.whiteBtnSelected{
 
 #loadDiv {
 	position:absolute;
-	left:0px;
-	top:0px;
+	left:0;
+	top:0;
 	width:100%;
 	height:100%;
 	z-index:999;

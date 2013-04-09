@@ -1,7 +1,6 @@
 define(["dojo/_base/lang", "dojo/dom-class"],
 function(lang, domClass){
 	var _onResults = []; // events on array
-	var previousView = null;
 
 	return {
 		// view init
@@ -9,7 +8,7 @@ function(lang, domClass){
 			console.log("in init for view with this.name = "+this.name);
 
 			// handle the backButton click
-			onResult = this.testheaderBackButton.on("click", lang.hitch(this, function(e){
+			var onResult = this.testheaderBackButton.on("click", lang.hitch(this, function(e){
 				this.app.emit("MQ3ColApp/BackFromTest", e);
 			})); 
 			_onResults.push(onResult);

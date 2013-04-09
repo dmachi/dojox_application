@@ -31,7 +31,7 @@
 						
 						var events = [];
 
-						getLabelfromWid = function(wid, indx1, indx2){
+						var getLabelfromWid = function(wid, indx1, indx2){
 							var val = wid.labelNode.innerText || wid.labelNode.firstChild.nodeValue || "";
 							val = lang.trim(val);
 							if(indx2){
@@ -87,7 +87,7 @@
 										// transition to first li
 											var liWidget = registry.byId("dojox_mobile_ListItem_1");
 											var ev = new TransitionEvent(liWidget.domNode, liWidget.params);
-											ev.dispatch()
+											ev.dispatch();
 											return dfd.callback(true);
 										}, 500);
 									}			
@@ -119,7 +119,7 @@
 										setTimeout(function() {
 											var liWidget = registry.byId("dojox_mobile_ListItem_19");
 											var ev = new TransitionEvent(liWidget.domNode, liWidget.params);
-											ev.dispatch()
+											ev.dispatch();
 											return dfd.callback(true);
 										}, 500);
 									}			

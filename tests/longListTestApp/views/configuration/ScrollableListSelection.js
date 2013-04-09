@@ -1,8 +1,6 @@
-define(["dojo/dom", "dojo/_base/lang", "dojo/dom-style", "dijit/registry"],
-	function(dom, lang, domStyle, registry){
+define([],function(){
 
-		var wrapperId = 'cfg1Wrapper';
-		var app = null;
+	var app = null;
 
 	return {
 		init: function(){

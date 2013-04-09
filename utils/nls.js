@@ -37,7 +37,9 @@ define(["require", "dojo/Deferred"],  function(require, Deferred){
 				});
 			}catch(e){
 				nlsDef.reject(e);
-				requireSignal.remove();
+				if(requireSignal){
+					requireSignal.remove();
+				}
 			}
 			return nlsDef;
 		}else{

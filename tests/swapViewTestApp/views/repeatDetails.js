@@ -1,6 +1,4 @@
-define(["dojo/dom", "dojo/_base/connect", "dijit/registry", "dojox/mvc/at", "dojox/mvc/getStateful", "dojox/mvc/Output"],
-function(dom, connect, registry, at, getStateful, Output){
-	var _connectResults = []; // events connect result
+define([], function(){
 
 	var repeatmodel = null;	//repeat view data model
 
@@ -10,16 +8,6 @@ function(dom, connect, registry, at, getStateful, Output){
 		if(parseInt(index) != repeatmodel.cursorIndex && parseInt(index) < repeatmodel.model.length){
 			repeatmodel.set("cursorIndex", parseInt(index));
 		}
-	};
-
-	// get index from dom node id
-	var getIndexFromId = function(nodeId, perfix){
-		var len = perfix.length;
-		if(nodeId.length <= len){
-			throw Error("repeat node id error.");
-		}
-		var index = nodeId.substring(len, nodeId.length);
-		return parseInt(index);
 	};
 
 	return {

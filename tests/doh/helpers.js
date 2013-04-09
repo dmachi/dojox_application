@@ -52,8 +52,7 @@ function tabOrder(/*DomNode?*/ root){
 				walkTree(child);
 			}
 		});
-	};
-
+	}
 	walkTree(root || dojo.body());
 
 	elems.sort(function(a, b){

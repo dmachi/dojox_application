@@ -82,7 +82,7 @@
 	},
 
 	//models and instantiation parameters for the models. Including 'type' as a property allows
-	//one to overide the class that will be used for the model.  By default it is dojox/mvc/mvcModel
+	//one to override the class that will be used for the model.  By default it is dojox/mvc/mvcModel
 	"models": {
 		"namesXUnused": {
 					"modelLoader": "dojox/app/utils/mvcModel",

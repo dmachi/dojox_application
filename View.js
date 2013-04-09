@@ -97,7 +97,9 @@ define(["require", "dojo/when", "dojo/on", "dojo/_base/declare", "dojo/_base/lan
 						});
 					}catch(e){
 						def.resolve(false);
-						requireSignal.remove();
+						if(requireSignal){
+							requireSignal.remove();
+						}
 					}
 				}else{
 					def.resolve(true);

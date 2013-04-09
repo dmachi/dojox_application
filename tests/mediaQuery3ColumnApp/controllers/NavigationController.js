@@ -1,6 +1,6 @@
 define(["dojo/_base/lang","dojo/_base/declare", "dojo/dom", "dojo/dom-style", "dojo/sniff", "dojo/_base/window", "dojo/_base/config",
-		"dojo/dom-class", "dojo/dom-attr", "dojo/dom-construct", "dojox/app/Controller", "dijit/registry", "dojox/mobile/TransitionEvent"],
-function(lang, declare, dom, domStyle, has, win, config, domClass, domAttr, domConstruct, Controller, registry, TransitionEvent){
+		"dojo/dom-class", "dojo/dom-attr", "dojo/dom-construct", "dojox/app/Controller"],
+function(lang, declare, dom, domStyle, has, win, config, domClass, domAttr, domConstruct, Controller){
 	// module:
 	//		dojox/app/tests/mediaQuery3ColumnApp/controllers/NavigationController
 	// summary:
@@ -9,7 +9,7 @@ function(lang, declare, dom, domStyle, has, win, config, domClass, domAttr, domC
 
 	return declare("dojox/app/tests/mediaQuery3ColumnApp/controllers/NavigationController", Controller, {
 
-		constructor: function(app, events){
+		constructor: function(app){
 			this.app = app;
 			// large > 860 medium <= 860  small <= 560 
 			this.small = 560;
@@ -193,26 +193,20 @@ function(lang, declare, dom, domStyle, has, win, config, domClass, domAttr, domC
 		// large > 860 medium <= 860  small <= 560 
 		isLarge: function(){
 			var width = window.innerWidth || document.documentElement.clientWidth;
-			if(width > this.medium){
-				return true;
-			}
-			return false;
+			return width > this.medium;
+
 		},
 
 		isMedium: function(){
 			var width = window.innerWidth || document.documentElement.clientWidth;
-			if(width <= this.medium && width > this.small){
-				return true;
-			}
-			return false;
+			return width <= this.medium && width > this.small;
+
 		},
 
 		isSmall: function(){
 			var width = window.innerWidth || document.documentElement.clientWidth;
-			if(width <= this.small){
-				return true;
-			}
-			return false;
+			return width <= this.small;
+
 		}
 		
 	});

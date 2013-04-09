@@ -7,7 +7,7 @@ function(lang, dom, on, registry, stamp, constraints, TransitionEvent){
 		init: function(){
 			//console.log("date view beforeActivate()");
 			var backButtomDom = dom.byId('headerBackButton');
-			onResult = on(backButtomDom, "click", lang.hitch(this, function(e){
+			var onResult = on(backButtomDom, "click", lang.hitch(this, function(e){
 
 				if(this.app.children.mediaQueryLayoutApp_itemDetails && this.app.children.mediaQueryLayoutApp_itemDetails.viewShowing){
 					var transOpts = {

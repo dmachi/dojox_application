@@ -1,7 +1,4 @@
-define(["dojo/dom", "dojo/dom-class"],
-function(dom, domClass){
-	var previousView = null;
-
+define(["dojo/dom", "dojo/dom-class"], function(dom, domClass){
 
 	return {
 		// view init

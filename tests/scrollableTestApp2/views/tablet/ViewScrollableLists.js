@@ -1,13 +1,5 @@
-define(["dojo/_base/lang", "dojo/dom", "dojo/dom-style", "dijit/registry", "dojox/mobile/TransitionEvent"],
-function(lang, dom, domStyle, registry, TransitionEvent){
+define([], function(){
 
-	selectItems = function(node, index){
-		//if(this.app.selected_configuration_item == index){
-		//	return;
-		//}
-		this.app.selected_configuration_item = index;
-
-	};
 	return {
 		init: function(){
 			console.log("navigation view init ok");
