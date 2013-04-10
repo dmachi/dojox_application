@@ -1,6 +1,5 @@
 define(["dojo/_base/lang", "dojo/dom-class"],
 function(lang, domClass){
-	var _onResults = []; // events on array
 
 	return {
 		// view init
@@ -8,14 +7,13 @@ function(lang, domClass){
 			console.log("in init for view with this.name = "+this.name);
 
 			// handle the backButton click
-			var onResult = this.mainheaderBackButton.on("click", lang.hitch(this, function(e){
+			this.mainheaderBackButton.on("click", lang.hitch(this, function(e){
 				if(history){
 					history.back();
 				}else{
 					this.app.emit("MQ3ColApp/BackFromMain", e);
 				}
 			})); 
-			_onResults.push(onResult);
 
 			// This code will setup the view to work in the left or center depending upon the view name
 			if(this.name == "mainLeft"){  // app was changed to stop using mainLeft for now.
@@ -68,13 +66,10 @@ function(lang, domClass){
 			this.app.emit("MQ3ColApp/LastOption3", e);
 		},
 
-		// view destroy
+		// view destroy, this destroy function can be removed since it is empty except for the call to this.inherited(arguments);
 		destroy: function(){
-			var onResult = _onResults.pop();
-			while(onResult){
-				onResult.remove();
-				onResult = _onResults.pop();
-			}
+			// _WidgetBase.on listener is automatically destroyed when the Widget itself is. 
+			this.inherited(arguments);
 		}
-	}
+	};
 });

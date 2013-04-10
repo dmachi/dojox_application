@@ -30,8 +30,10 @@ define([], function(){
 			//domStyle.set(dom.byId("configurewrapper"), "visibility", "hidden"); // hide the items list 
 		},
 
+		// view destroy, this destroy function can be removed since it is empty except for the call to this.inherited(arguments);
 		destroy: function(){
-			// _WidgetBase.on listener is automatically destroyed when the Widget itself his.
+			// _WidgetBase.on listener is automatically destroyed when the Widget itself is. 
+			this.inherited(arguments);
 		}
 	}
 });

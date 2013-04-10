@@ -64,13 +64,14 @@ function(dom, connect, registry, at){
 		},
 		
 
-		// simple view destroy
+		// view destroy
 		destroy: function(){
 			var connectResult = _connectResults.pop();
 			while(connectResult){
 				connect.disconnect(connectResult);
 				connectResult = _connectResults.pop();
 			}
+			this.inherited(arguments);
 		}
-	}
+	};
 });
