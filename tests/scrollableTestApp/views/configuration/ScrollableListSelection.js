@@ -29,7 +29,8 @@ define([], function(){
 		},
 
 		destroy: function(){
-			// _WidgetBase.on listener is automatically destroyed when the Widget itself his.
+			// _WidgetBase.on listener is automatically destroyed when the Widget itself is.
+			this.inherited(arguments);
 		}
 	}
 });

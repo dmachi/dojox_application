@@ -186,7 +186,6 @@
 			"constraint" : "center"
 		},
 		"ListItemDomButtons2": {
-			"controller": "scrollableTestApp/views/ListItem-domButtons2",
 			"template": "scrollableTestApp/views/ListItem-domButtons2.html",
 			"constraint" : "center"
 		},
