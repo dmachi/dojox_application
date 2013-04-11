@@ -22,13 +22,14 @@ define(["dojo/dom", "dojo/dom-style", "dojo/_base/connect"], function(dom, domSt
 			//
 		},
 		
-		// repeat view destroy
+		// view destroy
 		destroy: function(){
 			var connectResult = _connectResults.pop();
 			while(connectResult){
 				connect.disconnect(connectResult);
 				connectResult = _connectResults.pop();
 			}
+			this.inherited(arguments);
 		}
-	}
+	};
 });

@@ -1,6 +1,6 @@
-define(["dojo/dom", "dojo/dom-style", "dojo/_base/connect", "dojo/_base/lang","dijit/registry", "dojox/mvc/at", "dojox/mobile/TransitionEvent",
+define(["dojo/dom", "dojo/dom-style", "dojo/_base/connect", "dojo/_base/lang","dijit/registry", "dojox/mvc/at", 
 		"dojox/mvc/Repeat", "dojox/mvc/getStateful", "dojox/mvc/Output", "dojo/sniff"],
-function(dom, domStyle, connect, lang, registry, at, TransitionEvent, Repeat, getStateful, Output, has){
+function(dom, domStyle, connect, lang, registry, at, Repeat, getStateful, Output, has){
 	var _connectResults = []; // events connect result
 
 	var repeatmodel = null;	//repeat view data model
@@ -13,40 +13,6 @@ function(dom, domStyle, connect, lang, registry, at, TransitionEvent, Repeat, ge
 
 	var app = null;
 
-	// show an item detail
-	var setDetailsContext = function(index){
-		repeatmodel.set("cursorIndex", index);		
-	};
-
-	// global for call from template
-	removeScrollableItem = function(index){
-				var repeatmodel = app.loadedModels.repeatmodels;
-				repeatmodel.model.splice(index, 1);
-				return false; 	 		
-	};
-
-	// insert an item
-	var insertResult = function(index, e){
-		if(index<0 || index>repeatmodel.model.length){
-			throw Error("index out of data model.");
-		}
-		if((repeatmodel.model[index].First=="") ||
-			(repeatmodel.model[index+1] && (repeatmodel.model[index+1].First == ""))){
-			return;
-		}
-		var data = {id:Math.random(), "First": "", "Last": "", "Location": "CA", "Office": "", "Email": "", "Tel": "", "Fax": ""};
-		repeatmodel.model.splice(index+1, 0, new getStateful(data));
-		setDetailsContext(index+1);
-		var transOpts = {
-			title : "repeatDetails",
-			target : "repeatDetails",
-			url : "#repeatDetails", // this is optional if not set it will be created from target   
-			params : {"cursor":index+1}
-		};
-		new TransitionEvent(e.target, transOpts, e).dispatch(); 
-		
-	};
-
 	return {
 		// repeat view init
 		init: function(){
@@ -55,9 +21,9 @@ function(dom, domStyle, connect, lang, registry, at, TransitionEvent, Repeat, ge
 			repeatmodel = this.loadedModels.repeatmodels;
 			var connectResult;
 
-			connectResult = connect.connect(dom.byId(insert1Id), "click", function(e){
-				insertResult(repeatmodel.model.length-1,e);
-			});
+			connectResult = connect.connect(dom.byId(insert1Id), "click", lang.hitch(this,function(e){
+				this.app.insertResult(repeatmodel.model.length-1,e);
+			}));
 			_connectResults.push(connectResult);
 
 			connectResult = connect.connect(dom.byId(insert10Id), "click", function(){
@@ -101,10 +67,6 @@ function(dom, domStyle, connect, lang, registry, at, TransitionEvent, Repeat, ge
 				domStyle.set(dom.byId("tab1WrapperA"), "visibility", "visible");  // show the nav view if it being used
 				domStyle.set(dom.byId("tab1WrapperB"), "visibility", "visible");  // show the nav view if it being used
 			}
-			//domStyle.set(dom.byId(wrapperIdA), "visibility", "visible");  // show the view when it is ready
-			//domStyle.set(dom.byId(wrapperIdB), "visibility", "visible");  // show the view when it is ready
-			//domStyle.set(dom.byId(wrapperIdC), "visibility", "visible");  // show the view when it is ready
-			//domStyle.set(dom.byId(wrapperIdD), "visibility", "visible");  // show the view when it is ready
 		},
 
 		afterActivate: function(){
@@ -119,6 +81,7 @@ function(dom, domStyle, connect, lang, registry, at, TransitionEvent, Repeat, ge
 				connect.disconnect(connectResult);
 				connectResult = _connectResults.pop();
 			}
+			this.inherited(arguments);
 		}
 	};
 });

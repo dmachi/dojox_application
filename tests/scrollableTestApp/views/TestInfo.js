@@ -41,6 +41,7 @@ function(dom, domStyle, connect, lang, registry, at, TransitionEvent, Repeat, ge
 				connect.disconnect(connectResult);
 				connectResult = _connectResults.pop();
 			}
+			this.inherited(arguments);
 		}
-	}
+	};
 });

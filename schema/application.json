@@ -21,7 +21,7 @@
 
 
 		"defaultScene": {
-			"type": "string"
+			"type": "string",
 			"description": "id of scene to load for this application at startup"
 		},
 

@@ -21,6 +21,7 @@ define([],function(){
 		},
 
 		destroy: function(){
+			this.inherited(arguments);
 		}
-	}
+	};
 });
