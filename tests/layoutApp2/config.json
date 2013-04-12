@@ -32,7 +32,8 @@
 	"controllers": [
 		"dojox/app/controllers/Load",
 		"dojox/app/controllers/Transition",
-		"dojox/app/controllers/Layout"
+		"dojox/app/controllers/Layout",
+		"dojox/app/tests/layoutApp2/controllers/UnloadViewController"
 	],
 
 	//stores we are using
