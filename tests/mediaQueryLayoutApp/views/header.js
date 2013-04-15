@@ -39,7 +39,6 @@ function(lang, dom, on, registry, stamp, constraints, TransitionEvent){
 				onResult.remove();
 				onResult = _onResults.pop();
 			}
-			this.inherited(arguments);
 		}
 	};
 	

@@ -39,7 +39,6 @@ function(lang, on, registry, stamp){
 				onResult.remove();
 				onResult = _onResults.pop();
 			}
-			this.inherited(arguments);
 		}
 	};
 });

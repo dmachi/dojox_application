@@ -68,10 +68,9 @@ define(["dojo/_base/lang"], function(lang){
 			
 		},
 
-		// view destroy, this destroy function can be removed since it is empty except for the call to this.inherited(arguments);
+		// view destroy, this destroy function can be removed since it is empty
 		destroy: function(){
 			// _WidgetBase.on listener is automatically destroyed when the Widget itself is.
-			this.inherited(arguments);
 		}
 	};
 });

@@ -48,7 +48,6 @@ define(["dojo/dom", "dojo/_base/connect", "dijit/registry", "dojox/mvc"], functi
 				connect.disconnect(connectResult);
 				connectResult = _connectResults.pop();
 			}
-			this.inherited(arguments);
 		}
 	};
 });
