@@ -81,7 +81,6 @@ function(dom, domStyle, connect, lang, registry, at, Repeat, getStateful, Output
 				connect.disconnect(connectResult);
 				connectResult = _connectResults.pop();
 			}
-			this.inherited(arguments);
 		}
 	};
 });

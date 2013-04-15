@@ -30,7 +30,6 @@ function(dom, domStyle, connect, registry, at, TransitionEvent, Repeat, getState
 				connect.disconnect(connectResult);
 				connectResult = _connectResults.pop();
 			}
-			this.inherited(arguments);
 		}
 	};
 });
