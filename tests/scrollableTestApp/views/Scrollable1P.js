@@ -146,7 +146,6 @@ function(dom, domStyle, connect, lang, declare, registry, at, TransitionEvent, R
 				connect.disconnect(connectResult);
 				connectResult = _connectResults.pop();
 			}
-			this.inherited(arguments);
 		}
 	};
 });

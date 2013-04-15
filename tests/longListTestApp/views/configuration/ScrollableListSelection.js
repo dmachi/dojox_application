@@ -18,10 +18,6 @@ define([],function(){
 		},
 
 		afterDeactivate: function(){
-		},
-
-		destroy: function(){
-			this.inherited(arguments);
 		}
 	};
 });

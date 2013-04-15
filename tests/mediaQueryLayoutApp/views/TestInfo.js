@@ -47,7 +47,6 @@ function(dom, domStyle, connect, TransitionEvent){
 				connect.disconnect(connectResult);
 				connectResult = _connectResults.pop();
 			}
-			this.inherited(arguments);
 		}
 	};
 });

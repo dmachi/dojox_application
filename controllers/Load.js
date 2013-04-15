@@ -166,6 +166,7 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/Def
 				if(params){
 					view.params = params;
 				}
+				this.app.log("in app/controllers/Load createChild view is already loaded so return the loaded view with the new parms ",view);
 				return view;
 			}
 			var def = new Deferred();

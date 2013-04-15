@@ -35,7 +35,6 @@ function(dom, domStyle, connect, registry){
 				connect.disconnect(connectResult);
 				connectResult = _connectResults.pop();
 			}
-			this.inherited(arguments);
 		}
 	};
 });

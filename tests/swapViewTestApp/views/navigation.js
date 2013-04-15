@@ -29,7 +29,6 @@ define(["dojo/dom", "dojo/dom-style", "dojo/_base/connect"], function(dom, domSt
 				connect.disconnect(connectResult);
 				connectResult = _connectResults.pop();
 			}
-			this.inherited(arguments);
 		}
 	};
 });
