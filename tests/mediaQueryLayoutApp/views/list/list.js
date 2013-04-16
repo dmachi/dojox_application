@@ -74,7 +74,7 @@ function(lang, dom, on, registry, domClass){
 				this.setDetailsContext(index, e, this.params);	
 			})); 
 			_onResults.push(onResult);
-
+	
 			var listInsert1 = dom.byId("listInsert1");
 			onResult = on(listInsert1, "click", lang.hitch(this, function(e){
 				console.log("listInsert1 on click hit ",e);
@@ -105,13 +105,9 @@ function(lang, dom, on, registry, domClass){
 		},
 		
 		
-		// view destroy
+		// view destroy, this destroy function can be removed since it is empty
 		destroy: function(){
-			var onResult = _onResults.pop();
-			while(onResult){
-				onResult.remove();
-				onResult = _onResults.pop();
-			}
+			// _WidgetBase.on listener is automatically destroyed when the Widget itself is. 
 		}
-	}
+	};
 });

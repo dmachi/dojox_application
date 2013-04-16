@@ -6,6 +6,25 @@ function(dom, domStyle, connect, registry, has){
 		var backId = 'sc4back1';
 		var insert10Id = 'sc4insert10x';
 		var app = null;
+
+	var loadMore = function(){
+		if(!app){
+			return;
+		}
+		if(!app.listStart){
+			app.listStart = 1;
+			app.listCount = 5;
+		}
+		setTimeout(function(){ // to simulate network latency
+			for(var i = app.listStart; i < app.listStart+5; i++){
+				var newdata = {'label': 'Item #'+i};
+				app.stores.longlistStore.store.put(newdata);
+			}
+			app.listStart += app.listCount;
+			app.listTotal = app.listStart-1;
+			return false;
+		}, 500);
+	};
 	return {
 		init: function(){
 			app = this.app;
@@ -45,5 +64,5 @@ function(dom, domStyle, connect, registry, has){
 				connectResult = _connectResults.pop();
 			}
 		}
-	}
+	};
 });

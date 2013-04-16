@@ -31,7 +31,6 @@ function(lang, on, registry, stamp){
 			//console.log("date view beforeActivate()");
 		},
 
-
 		// view destroy
 		destroy: function(){
 			var onResult = _onResults.pop();
@@ -40,6 +39,5 @@ function(lang, on, registry, stamp){
 				onResult = _onResults.pop();
 			}
 		}
-	}
-	
+	};	
 });

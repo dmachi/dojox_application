@@ -73,5 +73,5 @@ function(dom, connect, registry, at, Repeat, getStateful){
 				connectResult = _connectResults.pop();
 			}
 		}
-	}
+	};
 });

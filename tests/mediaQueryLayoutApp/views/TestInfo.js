@@ -48,5 +48,5 @@ function(dom, domStyle, connect, TransitionEvent){
 				connectResult = _connectResults.pop();
 			}
 		}
-	}
+	};
 });

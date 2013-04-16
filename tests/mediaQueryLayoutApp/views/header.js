@@ -40,6 +40,6 @@ function(lang, dom, on, registry, stamp, constraints, TransitionEvent){
 				onResult = _onResults.pop();
 			}
 		}
-	}
+	};
 	
 });

@@ -16,19 +16,6 @@ function(dom, domStyle, connect, lang, declare, registry, at, TransitionEvent, R
 
 	var app = null;
 
-	// show an item detail
-	var setDetailsContext = function(index){
-		repeatmodel.set("cursorIndex", index);
-		
-	};
-
-	// global for call from template
-	removeScrollableItem = function(index){
-				var repeatmodel = app.loadedModels.repeatmodels;
-				repeatmodel.model.splice(index, 1);
-				return false; 	 		
-	};
-
 	// insert an item
 	var insertResult = function(index, e){
 		if(index<0 || index>repeatmodel.model.length){
@@ -40,7 +27,7 @@ function(dom, domStyle, connect, lang, declare, registry, at, TransitionEvent, R
 		}
 		var data = {id:Math.random(), "First": "", "Last": "", "Location": "CA", "Office": "", "Email": "", "Tel": "", "Fax": ""};
 		repeatmodel.model.splice(index+1, 0, new getStateful(data));
-		setDetailsContext(index+1);
+		this.app.setDetailsContext(index+1);
 		var transOpts = {
 			title : "repeatDetails",
 			target : "repeatDetails",
@@ -70,7 +57,7 @@ function(dom, domStyle, connect, lang, declare, registry, at, TransitionEvent, R
 					clickable: true,
 					onClick: function(){
 						console.log("in onClick this.indexAtStartup="+this.indexAtStartup);
-						setDetailsContext(this.indexAtStartup);}
+						app.setDetailsContext(this.indexAtStartup);}
 				},
 				childBindings: {
 					titleNode: {value: at("rel:", "First")}
@@ -92,7 +79,7 @@ function(dom, domStyle, connect, lang, declare, registry, at, TransitionEvent, R
 			var connectResult;
 
 			connectResult = connect.connect(dom.byId(insert1Id), "click", function(e){
-				insertResult(repeatmodel.model.length-1,e);
+				app.insertResult(repeatmodel.model.length-1,e);
 			});
 			_connectResults.push(connectResult);
 
@@ -160,5 +147,5 @@ function(dom, domStyle, connect, lang, declare, registry, at, TransitionEvent, R
 				connectResult = _connectResults.pop();
 			}
 		}
-	}
+	};
 });

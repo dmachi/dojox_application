@@ -13,9 +13,6 @@ define([], function(){
 		afterActivate: function(){
 			// summary:
 			//		view life cycle afterActivate()
-		},
-				
-		destroy: function(){
 		}
-	}
+	};
 });

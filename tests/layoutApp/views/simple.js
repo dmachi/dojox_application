@@ -58,5 +58,5 @@ function(dom, connect, registry){
 				connectResult = _connectResults.pop();
 			}
 		}
-	}
+	};
 });

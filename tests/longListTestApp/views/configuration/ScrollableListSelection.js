@@ -18,9 +18,6 @@ define([],function(){
 		},
 
 		afterDeactivate: function(){
-		},
-
-		destroy: function(){
 		}
-	}
+	};
 });

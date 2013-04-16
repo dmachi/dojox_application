@@ -26,10 +26,6 @@ define([], function(){
 			//console.log("configuration/ScrollableListSelection afterDeactivate called this.app.selected_configuration_item=",this.app.selected_configuration_item);
 			//console.log("setting configurewrapper hidden");
 			//domStyle.set(dom.byId("configurewrapper"), "visibility", "hidden"); // hide the items list 
-		},
-
-		destroy: function(){
-			// _WidgetBase.on listener is automatically destroyed when the Widget itself his.
 		}
 	}
 });

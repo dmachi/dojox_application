@@ -40,5 +40,5 @@ function(dom, connect, registry, at){
 				connectResult = _connectResults.pop();
 			}
 		}
-	}
+	};
 });

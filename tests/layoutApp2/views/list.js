@@ -54,31 +54,26 @@ define(["dojo/_base/lang", "dojo/on"], function(lang, on){
 		//		_onResults.push(onResult);
 		//	}
 			
-			onResult = this.list.on("click", lang.hitch(this, function(e){
+			this.list.on("click", lang.hitch(this, function(e){
 				console.log("List on click hit ",e);
 				var item = this.list.store.query({"label": e.target.innerHTML});
 				var index = this.list.store.index[item[0].id];
 				console.log("index is "+index);
 				this.setDetailsContext(index, e, this.params);	
 			})); 
-			_onResults.push(onResult);
 
-			onResult = this.listInsert1.on("click", lang.hitch(this, function(e){
+			this.listInsert1.on("click", lang.hitch(this, function(e){
 				console.log("listInsert1 on click hit ",e);
 				var index = this.list.store.data.length;
 				this.insertResult(index, e);
 			})); 
-			_onResults.push(onResult);
 			
 		},
 
-		// view destroy
+		// view destroy, this destroy function can be removed since it is empty
 		destroy: function(){
-			var onResult = _onResults.pop();
-			while(onResult){
-				onResult.remove();
-				onResult = _onResults.pop();
-			}
+			// _WidgetBase.on listener is automatically destroyed when the Widget itself is. 
+			console.log("layoutApp2 list view destroy called");
 		}
-	}
+	};
 });

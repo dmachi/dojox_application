@@ -22,7 +22,27 @@ function(lang, on, registry, stamp){
 				this.opener.hide(false);
 			})); 
 			_onResults.push(onResult);
-			
+
+			onResult = on(this.unloadSimple, "click", lang.hitch(this, function(e){
+				var params = {};
+				params.parent = this.parent;
+				var view = this.parent.children.layoutApp2_simple;
+				params.view = view;
+			//	params.viewId = view.id;
+				this.app.emit("unload-view", params);
+			}));
+			_onResults.push(onResult);
+
+			onResult = on(this.unloadList, "click", lang.hitch(this, function(e){
+				var params = {};
+				params.parent = this.parent;
+				var view = this.parent.children.layoutApp2_listMain;
+				params.view = view;
+				//params.viewId = view.id;
+				this.app.emit("unload-view", params);
+			}));
+			_onResults.push(onResult);
+
 			// initialize the global Date variable as today
 			date = stamp.toISOString(new Date(), {selector: "date"});
 		},
@@ -40,6 +60,6 @@ function(lang, on, registry, stamp){
 				onResult = _onResults.pop();
 			}
 		}
-	}
+	};
 	
 });

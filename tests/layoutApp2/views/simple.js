@@ -19,7 +19,7 @@ function(dom, connect, registry){
 	};
 
 	return {
-		// simple view init
+		// view init
 		init: function(){
 			currentModel = this.loadedModels.names;
 			var connectResult;
@@ -50,7 +50,7 @@ function(dom, connect, registry){
 			
 		},
 
-		// simple view destroy
+		// view destroy
 		destroy: function(){
 			var connectResult = _connectResults.pop();
 			while(connectResult){
@@ -58,5 +58,5 @@ function(dom, connect, registry){
 				connectResult = _connectResults.pop();
 			}
 		}
-	}
+	};
 });

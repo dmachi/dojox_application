@@ -42,5 +42,5 @@ function(dom, domStyle, connect, lang, registry, at, TransitionEvent, Repeat, ge
 				connectResult = _connectResults.pop();
 			}
 		}
-	}
+	};
 });

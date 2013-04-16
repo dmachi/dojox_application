@@ -40,6 +40,5 @@ function(lang, on, registry, stamp){
 				onResult = _onResults.pop();
 			}
 		}
-	}
-	
+	};
 });

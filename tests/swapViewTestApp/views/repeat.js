@@ -110,7 +110,7 @@ function(dom, connect, registry, at, TransitionEvent, Repeat, getStateful){
 			}
 		},
 		
-		// repeat view destroy
+		// view destroy
 		destroy: function(){
 			var connectResult = _connectResults.pop();
 			while(connectResult){
@@ -118,5 +118,5 @@ function(dom, connect, registry, at, TransitionEvent, Repeat, getStateful){
 				connectResult = _connectResults.pop();
 			}
 		}
-	}
+	};
 });

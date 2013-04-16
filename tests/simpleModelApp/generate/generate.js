@@ -49,5 +49,5 @@ define(["dojo/dom", "dojo/_base/connect", "dijit/registry", "dojox/mvc"], functi
 				connectResult = _connectResults.pop();
 			}
 		}
-	}
+	};
 });

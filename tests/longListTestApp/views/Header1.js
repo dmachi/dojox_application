@@ -63,5 +63,5 @@ function(dom, domStyle, connect, Memory, Observable, has){
 				connectResult = _connectResults.pop();
 			}
 		}
-	}
+	};
 });

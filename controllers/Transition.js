@@ -412,14 +412,14 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 			// activate next view
 			this.app.log("> in Transition._doTransition calling next.beforeActivate next name=[",next.name,"], parent.name=[",next.parent.name,"], next==current path");
 			next.beforeActivate(current, data);
-			this.app.log("  > in Transition._doTransition calling next.afterActivate next name=[",next.name,"], parent.name=[",next.parent.name,"], next==current path");
-			next.afterActivate(current, data);
 			// layout current view, or remove it
 			this.app.log("> in Transition._doTransition calling app.triggger layoutView view next name=[",next.name,"], removeView = [",removeView,"], parent.name=[",next.parent.name,"], next==current path");
 			this.app.emit("app-layoutView", {"parent":parent, "view": next, "removeView": removeView});
 			if(doResize && !subIds){
 				this.app.emit("app-resize"); // after last layoutView fire app-resize
 			}
+			this.app.log("  > in Transition._doTransition calling next.afterActivate next name=[",next.name,"], parent.name=[",next.parent.name,"], next==current path");
+			next.afterActivate(current, data);
 
 			// do sub transition like transition from "tabScene,tab1" to "tabScene,tab2"
 			if(subIds){

@@ -33,5 +33,5 @@ function(dom, domStyle, connect, has){
 				connectResult = _connectResults.pop();
 			}
 		}
-	}
+	};
 });

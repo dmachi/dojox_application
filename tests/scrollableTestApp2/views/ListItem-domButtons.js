@@ -23,7 +23,7 @@ function(dom, domStyle, connect, registry, at, TransitionEvent, Repeat, getState
 		},
 		
 		
-		// repeat view destroy
+		// view destroy
 		destroy: function(){
 			var connectResult = _connectResults.pop();
 			while(connectResult){
@@ -31,5 +31,5 @@ function(dom, domStyle, connect, registry, at, TransitionEvent, Repeat, getState
 				connectResult = _connectResults.pop();
 			}
 		}
-	}
+	};
 });
