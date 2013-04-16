@@ -14,7 +14,7 @@ function(lang, on, registry, stamp){
 
 			var onResult = on(this.save, "click", lang.hitch(this, function(){
 				this.opener.hide(true);
-				this.selDate1.value = this.datePicker2.get("value");
+				date = this.selDate1.value = this.datePicker2.get("value");
 			})); 
 			_onResults.push(onResult);
 
