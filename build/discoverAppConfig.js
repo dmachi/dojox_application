@@ -17,7 +17,7 @@ define([
 			if(view.controller && view.controller != "none"){
 				var mid = view.controller.replace(/(\.js)$/, "");
 				if(!bc.layers[mid] && bc.multipleAppConfigLayers){
-					bc.layers[mid] = { include: [], exclude: [ mainLayer ] };
+					bc.layers[mid] = { include: [], exclude: [ "dojo/dojo", mainLayer ] };
 					mids = bc.layers[mid].include;
 				}
 				mids.push(mid);
@@ -69,7 +69,7 @@ define([
 				}
 			}
 			if(!mainLayer && !bc.layers[argv.args.appConfigLayer]){
-				bc.layers[mainLayer = argv.args.appConfigLayer] = { include: [], exclude: [] };
+				bc.layers[mainLayer = argv.args.appConfigLayer] = { include: [], exclude: [ "dojo/dojo"] };
 			}
 			if(config.dependencies){
 				mids = mids.concat(config.dependencies);
