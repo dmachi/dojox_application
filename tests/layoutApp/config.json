@@ -129,7 +129,7 @@
 		"date": {
             "controller": "layoutApp/views/date.js",
             "template": "layoutApp/views/date.html",
-            "dependencies":["dojox/mobile/DatePicker", "dojox/mobile/Opener"]
+            "dependencies":["dojox/mobile/DatePicker", "dojox/mobile/Opener", "dojox/mobile/SpinWheelDatePicker"]
 		}
 	}	
 }
