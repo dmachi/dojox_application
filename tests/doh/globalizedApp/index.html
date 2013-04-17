@@ -3,7 +3,7 @@
 	<head>
 	<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no"/> 
 		<meta name="apple-mobile-web-app-capable" content="yes" /> 
-		<title>Simple Model App Test</title> 
+		<title>Globalized Model App Test</title>
 		<link href="../../../../mobile/themes/iphone/base.css" rel="stylesheet">
 		<style>
 			html,body {
@@ -65,12 +65,21 @@
 							return val;
 						};
 
+						var getLabelfromDom = function(node, indx1, indx2){
+							var val = node.innerText || node.firstChild.nodeValue || "";
+							val = lang.trim(val);
+							if(indx2){
+								val = val.substring(indx1,indx2)
+							}
+							return val;
+						};
+
 						topic.subscribe("/app/status", lang.hitch(this, function(newStatus) {
 							events.push(newStatus);
 							if (newStatus == 2) {
 								var listItem_0TestStr = "Label Zero";
 								var listItem_1TestStr = "Label One";
-								doh.register("Test-SimpleApp", [{
+								doh.register("Test-GlobalizedApp", [{
 									// Test initial listitem labels
 									name : "initial-listItem-labels",
 									runTest : function() {
@@ -109,18 +118,20 @@
 								}, {
 									// Test global data 1
 									name : "global-data-test-1",
+									timeout: 4000,
 									runTest : function() {
 										var dfd = new doh.Deferred();
 										setTimeout(function() {
 											var d = dom.byId("label");
 											if(d){
-												doh.is("Home-foo", d.innerText, "label should be of Home-foo");
+												var globalOutput = "Home-foo";
+												var lab = getLabelfromDom(d,0,globalOutput.length);
+												doh.is(globalOutput, lab, "label should be of Home-foo");
 											}else{
 												throw new Error("In global-data-test-1 label should be of Home-foo.");
-												//console.warn("In simple-mvc-test-1 streetInput not found."); 
 											}
 											return dfd.callback(true);
-										}, 1000);
+										}, 2000);
 										return dfd;
 									}
 								}, {
@@ -146,6 +157,5 @@
 		</script>
 	</head>
 	<body>
-		<script type="dojo/require">at: "dojox/mvc/at"</script>
 	</body>
 </html>
