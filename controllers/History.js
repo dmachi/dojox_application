@@ -1,22 +1,30 @@
-define(["dojo/_base/lang", "dojo/_base/declare", "dojo/on", "../Controller", "../utils/hash"],
-function(lang, declare, on, Controller, hash){
+define(["dojo/_base/lang", "dojo/_base/declare", "dojo/on", "../Controller", "../utils/hash", "dojo/topic"],
+function(lang, declare, on, Controller, hash, topic){
 	// module:
 	//		dojox/app/controllers/History
 	// summary:
-	//		Bind "app-domNode" event on dojox/app application instance,
-	//		Bind "startTransition" event on dojox/app application domNode,
+	//		Bind "app-domNode" event on dojox/app application instance.
+	//		Bind "startTransition" event on dojox/app application domNode.
 	//		Bind "popstate" event on window object.
 	//		Maintain history by HTML5 "pushState" method and "popstate" event.
 
 	return declare("dojox.app.controllers.History", Controller, {
-		constructor: function(app){
+		// _currentPosition:     Integer
+		//              Persistent variable which indicates the current position/index in the history
+		//              (so as to be able to figure out whether the popState event was triggerd by
+		//              a backward or forward action).
+		_currentPosition: 0,
+
+		// currentState: Object
+		//              Current state
+		currentState: {},
+
+		constructor: function(){
 			// summary:
-			//		Bind "app-domNode" event on dojox/app application instance,
-			//		Bind "startTransition" event on dojox/app application domNode,
+			//		Bind "app-domNode" event on dojox/app application instance.
+			//		Bind "startTransition" event on dojox/app application domNode.
 			//		Bind "popstate" event on window object.
 			//
-			// app:
-			//		dojox/app application instance.
 
 			this.events = {
 				"app-domNode": this.onDomNodeChange
@@ -49,15 +57,42 @@ function(lang, declare, on, Controller, hash){
 			//		|	new TransitionEvent(domNode, transOpts, e).dispatch();
 			//
 			// evt: Object
-			//		transition options parameter
-			
-			// create url hash from target if it is not set
-			var currentHash = evt.detail.url || "#"+evt.detail.target;
-			if(evt.detail.params){
-				currentHash = hash.buildWithParams(currentHash, evt.detail.params);
+			//		Transition options parameter
+			var currentHash = window.location.hash;
+			var currentView = hash.getTarget(currentHash, this.app.defaultView);
+			var currentParams =  hash.getParams(currentHash);
+			var _detail = lang.clone(evt.detail);
+			_detail.target = _detail.title = currentView;
+			_detail.url = currentHash;
+			_detail.params = currentParams;
+			_detail.id = this._currentPosition;
+
+			// Create initial state if necessary
+			if(history.length == 1){
+				history.pushState(_detail, _detail.href, currentHash);
 			}
-			// push states to history list
-			history.pushState(evt.detail, evt.detail.href, currentHash);
+
+			// Update the current state
+			_detail.bwdTransition = _detail.transition;
+			lang.mixin(this.currentState, _detail);
+			history.replaceState(this.currentState, this.currentState.href, currentHash);
+
+			// Create a new "current state" history entry
+			this._currentPosition += 1;
+			evt.detail.id = this._currentPosition;
+
+			var newHash = evt.detail.url || "#" + evt.detail.target;
+
+			if(evt.detail.params){
+				newHash = hash.buildWithParams(newHash, evt.detail.params);
+			}
+
+			evt.detail.fwdTransition = evt.detail.transition;
+			history.pushState(evt.detail, evt.detail.href, newHash);
+			this.currentState = lang.clone(evt.detail);
+
+			// Finally: Publish pushState topic
+			topic.publish("/app/history/pushState", evt.detail.target);
 		},
 
 		onPopState: function(evt){
@@ -65,40 +100,28 @@ function(lang, declare, on, Controller, hash){
 			//		Response to dojox/app "popstate" event.
 			//
 			// evt: Object
-			//		transition options parameter
+			//		Transition options parameter
 
 			// Clean browser's cache and refresh the current page will trigger popState event,
 			// but in this situation the application has not started and throws an error.
-			// so we need to check application status, if application not STARTED, do nothing.
-			if(this.app.getStatus() !== this.app.lifecycle.STARTED){
+			// So we need to check application status, if application not STARTED, do nothing.
+			if((this.app.getStatus() !== this.app.lifecycle.STARTED) || !evt.state ){
 				return;
 			}
 
-			var state = evt.state;
-			if(!state){
-				if(window.location.hash){
-					state = {
-						target: hash.getTarget(location.hash),
-						url: location.hash,
-						params: hash.getParams(location.hash)
-					}
-				}else{
-					state = {
-						target: this.app.defaultView
-					};
-				}
-			}
+			// Get direction of navigation and update _currentPosition accordingly
+			var backward = evt.state.id < this._currentPosition;
+			backward ? this._currentPosition -= 1 : this._currentPosition += 1;
 
-			// TODO explain what is the purpose of this, _sim is never set in dojox/app
-			if(evt._sim){
-				history.replaceState(state, state.title, state.href);
-			}
-
-			// transition to the target view
+			// Publish popState topic and transition to the target view. Important: Use correct transition.
+			// Reverse transitionDir only if the user navigates backwards.
+			var opts = lang.mixin({reverse: backward ? true : false}, evt.state);
+			opts.transition = backward ? opts.bwdTransition : opts.fwdTransition;
 			this.app.emit("app-transition", {
-				viewId: state.target,
-				opts: lang.mixin({reverse: true}, evt.detail, {"params": state.params})
+				viewId: evt.state.target,
+				opts: opts
 			});
+			topic.publish("/app/history/popState", evt.state.target);
 		}
 	});
 });

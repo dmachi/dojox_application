@@ -95,7 +95,7 @@
 	//"transition": "slide",
 	//"transition": "none",
 	//"transition": "fade",
-	"transition": "flip",
+	"defaultTransition": "flip",
 
 	"views": {
 		"simple":{
@@ -107,18 +107,18 @@
 		//list view, include list view and details view
 		"listMain": {
 			"defaultView": "list",
-			"transition": "fade",
+			"defaultTransition": "fade",
 
 			"views": {
 				"list":{
 					"controller" : "layoutApp/views/list.js",
-					"transition": "slide",
+					"defaultTransition": "slide",
 					"template": "layoutApp/views/list.html",
 					"dependencies":["dojox/mobile/TextBox"]
 				},
 				"itemDetails":{
 					"controller" : "layoutApp/views/itemDetails.js",
-					"transition": "flip",
+					"defaultTransition": "flip",
 					"template": "layoutApp/views/itemDetails.html",
 					"dependencies":["dojox/mobile/TextBox"],
 					"defaultParams": {"cursor":"2"}

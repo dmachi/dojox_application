@@ -10,6 +10,7 @@ define(["dojo/_base/lang", "dojo/on"], function(lang, on){
 			}
 			// transition to itemDetails view with the &cursor=index
 			var transOpts = {
+				transition: "flip",
 				title : "itemDetails",
 				target : "listMain,itemDetails",
 				url : "#listMain,itemDetails", // this is optional if not set it will be created from target   
