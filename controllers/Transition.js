@@ -362,7 +362,7 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 					mergedOpts = lang.mixin({}, mergedOpts, {
 						reverse: (mergedOpts.reverse || mergedOpts.transitionDir === -1)?true:false,
 						// if transition is set for the view (or parent) in the config use it, otherwise use it from the event or defaultTransition from the config
-						transition: this._getTransition(parent, transitionTo, mergedOpts)
+						transition: this._getTransition(parent, toId, mergedOpts)
 					});
 					if(next){
 						this.app.log("    > in Transition._doTransition calling transit for current ="+next.name);
