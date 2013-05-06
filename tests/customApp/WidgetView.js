@@ -1,13 +1,12 @@
-define(["dojo/_base/declare", "dojox/app/ViewBase", "dijit/form/Button"],
-	function(declare, ViewBase, Button){
-		return declare([Button, ViewBase], {
-			postscript: function(){
-				// we want to avoid kickin the Dijit lifecycle at ctor time so that definition has been mixed into the
-				// widget when it is instanciated. This is only really needed if you need the definition
-			},
-			_startup: function(){
-				this.create();
+define(["dojo/_base/declare", "dojox/app/ViewBase", "dijit/_WidgetBase", "dijit/_TemplatedMixin", "dijit/_WidgetsInTemplateMixin"],
+	function(declare, ViewBase, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin){
+		return declare([_WidgetBase, ViewBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
+			postCreate: function(){
 				this.inherited(arguments);
+				// use the dojo attach point
+				this.myButton.on("click", function(){
+					console.log("I was correctly attached!")
+				});
 			}
 		});
 	}
