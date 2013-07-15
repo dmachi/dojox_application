@@ -344,13 +344,19 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 					this.app.log("> in Transition._doTransition calling next.beforeActivate next name=[",next.name,"], parent.name=[",next.parent.name,"], next!==current path");
 					next.beforeActivate(current, data);
 				}
+
+				// Moved subIds processing before emit of app-layoutView avoid early or double transition problem.
+				if(subIds){
+					this._doTransition(subIds, opts, params, data, next || parent, removeView, doResize, true);
+				}
+
 				this.app.log("> in Transition._doTransition calling app.emit layoutView view next");
 				if(!removeView){
 					// if we are removing the view we must delay the layout to _after_ the animation
 					this.app.emit("app-layoutView", {"parent": parent, "view": next });
 				}
-				if(doResize && !subIds){
-					this.app.emit("app-resize"); // after last layoutView fire app-resize			
+				if(doResize){
+					this.app.emit("app-resize"); // after last layoutView fire app-resize
 				}
 				
 				var result = true;
@@ -395,10 +401,6 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 						this.app.log("  > in Transition._doTransition calling next.afterActivate next name=[",next.name,"], parent.name=[",next.parent.name,"], next!==current path");
 						next.afterActivate(current, data);
 					}
-
-					if(subIds){
-						this._doTransition(subIds, opts, params, data, next || parent, removeView, doResize, true);
-					}
 				}));
 				return result; // dojo/promise/all
 			}
@@ -412,19 +414,21 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 			// activate next view
 			this.app.log("> in Transition._doTransition calling next.beforeActivate next name=[",next.name,"], parent.name=[",next.parent.name,"], next==current path");
 			next.beforeActivate(current, data);
+
+			// do sub transition like transition from "tabScene,tab1" to "tabScene,tab2"
+			// Moved subIds processing before emit of app-layoutView avoid early or double transition problem,
+			if(subIds){
+				return this._doTransition(subIds, opts, params, data, next, removeView, doResize, true); //dojo.DeferredList
+			}
+
 			// layout current view, or remove it
 			this.app.log("> in Transition._doTransition calling app.triggger layoutView view next name=[",next.name,"], removeView = [",removeView,"], parent.name=[",next.parent.name,"], next==current path");
 			this.app.emit("app-layoutView", {"parent":parent, "view": next, "removeView": removeView});
-			if(doResize && !subIds){
+			if(doResize){
 				this.app.emit("app-resize"); // after last layoutView fire app-resize
 			}
 			this.app.log("  > in Transition._doTransition calling next.afterActivate next name=[",next.name,"], parent.name=[",next.parent.name,"], next==current path");
 			next.afterActivate(current, data);
-
-			// do sub transition like transition from "tabScene,tab1" to "tabScene,tab2"
-			if(subIds){
-				return this._doTransition(subIds, opts, params, data, next, removeView); //dojo.DeferredList
-			}
 		}
 	});
 });
