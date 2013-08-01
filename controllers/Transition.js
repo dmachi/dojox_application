@@ -330,13 +330,13 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 				var selChildren = constraints.getAllSelectedChildren(current);
 				for(var i = 0; i < selChildren.length; i++){					
 					var subChild = selChildren[i];
-					if(subChild && subChild.beforeDeactivate){ 
+					if(subChild && subChild.beforeDeactivate && subChild._active){
 						this.app.log("< in Transition._doTransition calling subChild.beforeDeactivate subChild name=[",subChild.name,"], parent.name=[",subChild.parent.name,"], next!==current path");
 						// TODO what to pass to beforeDeactivate here?
 						subChild.beforeDeactivate();
 					}
 				}
-				if(current){
+				if(current && current._active){
 					this.app.log("< in Transition._doTransition calling current.beforeDeactivate current name=[",current.name,"], parent.name=[",current.parent.name,"], next!==current path");
 					current.beforeDeactivate(next, data);
 				}
@@ -387,30 +387,35 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 					var selChildren = constraints.getAllSelectedChildren(current);
 					for(var i = 0; i < selChildren.length; i++){					
 						var subChild = selChildren[i];
-						if(subChild && subChild.beforeDeactivate){ 
+						if(subChild && subChild.afterDeactivate && subChild._active){
 							this.app.log("  < in Transition._doTransition calling subChild.afterDeactivate subChild name=[",subChild.name,"], parent.name=[",subChild.parent.name,"], next!==current path");
-							// TODO what  to pass to beforeDeactivate here?
 							subChild.afterDeactivate();
+							subChild._active = false;
 						}
 					}
 					if(current){
 						this.app.log("  < in Transition._doTransition calling current.afterDeactivate current name=[",current.name,"], parent.name=[",current.parent.name,"], next!==current path");
 						current.afterDeactivate(next, data);
+						current._active = false;
 					}
 					if(next){
 						this.app.log("  > in Transition._doTransition calling next.afterActivate next name=[",next.name,"], parent.name=[",next.parent.name,"], next!==current path");
 						next.afterActivate(current, data);
+						next._active = true;
 					}
 				}));
 				return result; // dojo/promise/all
 			}
 
 			// next view == current view, refresh current view
+			if(next._active){
 			// deactivate next view
-			this.app.log("< in Transition._doTransition calling next.beforeDeactivate refresh current view next name=[",next.name,"], parent.name=[",next.parent.name,"], next==current path");
-			next.beforeDeactivate(current, data);
-			this.app.log("  < in Transition._doTransition calling next.afterDeactivate refresh current view next name=[",next.name,"], parent.name=[",next.parent.name,"], next==current path");
-			next.afterDeactivate(current, data);
+				this.app.log("< in Transition._doTransition calling next.beforeDeactivate refresh current view next name=[",next.name,"], parent.name=[",next.parent.name,"], next==current path");
+				next.beforeDeactivate(current, data);
+				this.app.log("  < in Transition._doTransition calling next.afterDeactivate refresh current view next name=[",next.name,"], parent.name=[",next.parent.name,"], next==current path");
+				next.afterDeactivate(current, data);
+				next._active = false;
+			}
 			// activate next view
 			this.app.log("> in Transition._doTransition calling next.beforeActivate next name=[",next.name,"], parent.name=[",next.parent.name,"], next==current path");
 			next.beforeActivate(current, data);
@@ -429,6 +434,7 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 			}
 			this.app.log("  > in Transition._doTransition calling next.afterActivate next name=[",next.name,"], parent.name=[",next.parent.name,"], next==current path");
 			next.afterActivate(current, data);
+			next._active = true;
 		}
 	});
 });
