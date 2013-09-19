@@ -97,7 +97,9 @@ function(lang, declare, has, win, config, domAttr, topic, domStyle, constraints,
 			if(!view){
 				return;
 			}
-			
+
+			this.app.log("in LayoutBase layoutView called for event.view.id="+event.view.id);
+
 			// if the parent has a child in the view constraint it has to be hidden, and this view displayed.
 			var parentSelChild = constraints.getSelectedChild(parent, view.constraint);
 			if(event.removeView){	// if this view is being removed set display to none and the selectedChildren entry to null
@@ -116,14 +118,18 @@ function(lang, declare, has, win, config, domAttr, topic, domStyle, constraints,
 				this.showView(view);
 				//domStyle.set(view.domNode, "zIndex", 50);
 				constraints.setSelectedChild(parent, view.constraint, view);
+			}else{ // this view is already the selected child and showing
+				view.viewShowing = true;
 			}
 		},
 
 		hideView: function(view){
+			this.app.log("in LayoutBase:hideView called for view.id="+view.id);
 			domStyle.set(view.domNode, "display", "none");
 		},
 
 		showView: function(view){
+			this.app.log("in LayoutBase:showView called for view.id="+view.id);
 			domStyle.set(view.domNode, "display", "");
 		}
 	});

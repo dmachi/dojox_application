@@ -35,21 +35,7 @@ function(dom, connect, registry, at){
 				console.log("reset done. ");
 			});
 			_connectResults.push(connectResult);
-		/*	
-			var backButtomDom = dom.byId('headerBackButton');
-			connectResult = connect.connect(backButtomDom, "onclick", function(e){
-				// transition to repeatDetails view with the &cursor=index
-				
-				var transOpts = {
-					title:'main+TestInfo+simple+repeatList+navigation+header',
-					target:'main+TestInfo+simple+repeatList+navigation+header',
-					url:'#main+TestInfo+simple+repeatList+navigation+header'					
-				};
-				new TransitionEvent(e.target, transOpts, e).dispatch(); 
 
-			});
-		*/	
-			
 		},
 
 		afterDeactivate: function(){

@@ -98,8 +98,8 @@
 
 	//the name of the view to load when the app is initialized.
 	//"defaultView": "header+navigation+TestInfo",
-	"defaultView": "main+header+TestInfo+simple+repeatList+navigation",
-	//"defaultView": "main+navigation+TestInfo+simple+repeatList",
+	//"defaultView": "main+header+TestInfo+simple+repeatList+navigation",
+	"defaultView": "header+TestInfo+simple+repeatList+navigation",
 	
 
 	// these are the possilbe defaultTransitions
@@ -107,13 +107,14 @@
 	//"defaultTransition": "none",
 	//"defaultTransition": "fade",
 	//"defaultTransition": "flip",     
+	"template": "swapViewTestApp/views/main.html",
 
 	"views": {
-		"main": {
-			"controller" : "swapViewTestApp/views/main.js",
-			"constraint" : "center",
-			"template": "swapViewTestApp/views/main.html"
-		},	
+	//	"main": {
+	//		"controller" : "swapViewTestApp/views/main.js",
+	//		"constraint" : "center",
+	//		"template": "swapViewTestApp/views/main.html"
+	//	},
 		"navigation":{
 			"controller" : "swapViewTestApp/views/navigation.js",
 			"constraint" : "nav1Id",

@@ -3,9 +3,11 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 	function(require, lang, declare, has, on, Deferred, when, domStyle, Controller, constraints){
 
 	var transit;
+	var MODULE = "app/controllers/Transition";
+	var LOGKEY = "logTransitions:";
 
 	// module:
-	//		dojox/app/controllers/transition
+	//		dojox/app/controllers/Transition
 	//		Bind "app-transition" event on dojox/app application instance.
 	//		Do transition from one view to another view.
 	return declare("dojox.app.controllers.Transition", Controller, {
@@ -43,39 +45,50 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 			//		|	this.app.emit("app-transition", {"viewId": viewId, "opts": opts});
 			//
 			// event: Object
-			//		"app-transition" event parameter. It should be like this: {"viewId": viewId, "opts": opts}
-			
+			//		"app-transition" event parameter. It should be like: {"viewId": viewId, "opts": opts}
+			var F = MODULE+":transition";
+			this.app.log(LOGKEY,F,"New Transition event.viewId=["+event.viewId+"]");
+			this.app.log(F,"event.viewId=["+event.viewId+"]","event.opts=",event.opts);
+
 			var viewsId = event.viewId || "";
 			this.proceedingSaved = this.proceeding;	
 			var parts = viewsId.split('+');
+			var removePartsTest = viewsId.split('-');
 			var viewId, newEvent;
-			if(parts.length > 0){
+			if(parts.length > 0 || removePartsTest.length > 0){
 				while(parts.length > 1){ 	
 					viewId = parts.shift();
 					newEvent = lang.clone(event);
 					newEvent.viewId = viewId;
 					this.proceeding = true;
-					this.proceedTransition(newEvent);					
+					newEvent._removeView = false;
+					this.proceedTransition(newEvent);
 				}
 				viewId = parts.shift();
 				var removeParts = viewId.split('-');
 				if(removeParts.length > 0){
 					viewId = removeParts.shift();
-					while(removeParts.length > 0){ 	
-						var remViewId = removeParts.shift();
-						newEvent = lang.clone(event);
-						newEvent.viewId = remViewId;
-						this._doTransition(newEvent.viewId, newEvent.opts, newEvent.opts.params, event.opts.data, this.app, true, newEvent._doResize);
-					}
 				}
 				if(viewId.length > 0){ // check viewId.length > 0 to skip this section for a transition with only -viewId
 					this.proceeding = this.proceedingSaved;
-					event.viewId = viewId;	
+					event.viewId = viewId;
 					event._doResize = true; // at the end of the last transition call resize
+					event._removeView = false;
 					this.proceedTransition(event);
+				}
+				if(removeParts.length > 0){
+					while(removeParts.length > 0){
+						var remViewId = removeParts.shift();
+						newEvent = lang.clone(event);
+						newEvent.viewId = remViewId;
+						newEvent._removeView = true;
+						newEvent._doResize = true; // at the end of the last transition call resize
+						this.proceedTransition(newEvent);
+					}
 				}
 			}else{
 				event._doResize = true; // at the end of the last transition call resize
+				event._removeView = false;
 				this.proceedTransition(event);
 			}
 		},
@@ -130,25 +143,29 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 			//		If transition is in proceeding, add the next transition to waiting queue.
 			//
 			// transitionEvt: Object
-			//		"app-transition" event parameter. It should be like this: {"viewId":viewId, "opts":opts}
+			//		"app-transition" event parameter. It should be like: {"viewId":viewId, "opts":opts}
+			var F = MODULE+":proceedTransition";
 
 			if(this.proceeding){
-				this.app.log("in app/controllers/Transition proceedTransition push event", transitionEvt);
+				this.app.log(F+" push event", transitionEvt);
 				this.waitingQueue.push(transitionEvt);
 				this.processingQueue = false;
 				return;
 			}
 			// If there are events waiting, needed to have the last in be the last processed, so add it to waitingQueue
 			// process the events in order.
+			this.app.log(F+" this.waitingQueue.length ="+ this.waitingQueue.length+ " this.processingQueue="+this.processingQueue);
 			if(this.waitingQueue.length > 0 && !this.processingQueue){
 				this.processingQueue = true;
+				this.app.log(F+" push event past proceeding", transitionEvt);
 				this.waitingQueue.push(transitionEvt);
-				transitionEvt = this.waitingQueue.shift();	
+				transitionEvt = this.waitingQueue.shift();
+				this.app.log(F+" shifted waitingQueue to process", transitionEvt);
 			}
 			
 			this.proceeding = true;
 
-			this.app.log("in app/controllers/Transition proceedTransition calling trigger load", transitionEvt);
+			this.app.log(F+" calling trigger load", transitionEvt);
 			if(!transitionEvt.opts){
 				transitionEvt.opts = {};
 			}
@@ -157,9 +174,10 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 				"viewId": transitionEvt.viewId,
 				"params": params,
 				"callback": lang.hitch(this, function(){
-					var transitionDef = this._doTransition(transitionEvt.viewId, transitionEvt.opts, params, transitionEvt.opts.data, this.app, false, transitionEvt._doResize);
+					var transitionDef = this._doTransition(transitionEvt.viewId, transitionEvt.opts, params, transitionEvt.opts.data, this.app, transitionEvt._removeView, transitionEvt._doResize);
 					when(transitionDef, lang.hitch(this, function(){
 						this.proceeding = false;
+						this.processingQueue = true;
 						var nextEvt = this.waitingQueue.shift();
 						if(nextEvt){
 							this.proceedTransition(nextEvt);
@@ -169,7 +187,7 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 			});
 		},
 
-		_getTransition: function(parent, transitionTo, opts){
+		_getTransition: function(nextView, parent, transitionTo, opts){
 			// summary:
 			//		Get view's transition type from the config for the view or from the parent view recursively.
 			//		If not available use the transition option otherwise get view default transition type in the
@@ -186,13 +204,16 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 			//		transition type like "slide", "fade", "flip" or "none".
 			var parentView = parent;
 			var transition = null;
-			if(parentView.views[transitionTo]){
+			if(nextView){
+				transition = nextView.transition;
+			}
+			if(!transition && parentView.views[transitionTo]){
 				transition = parentView.views[transitionTo].transition;
 			} 
 			if(!transition){
 				transition = parentView.transition;
 			}
-			var defaultTransition = parentView.defaultTransition;
+			var defaultTransition = (nextView && nextView.defaultTransition) ?  nextView.defaultTransition : parentView.defaultTransition;
 			while(!transition && parentView.parent){
 				parentView = parentView.parent;
 				transition = parentView.transition;
@@ -234,18 +255,13 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 
 		_doTransition: function(transitionTo, opts, params, data, parent, removeView, doResize, nested){
 			// summary:
-			//		Transitions from the currently visible scene to the defined scene.
+			//		Transitions from the currently visible view to the defined view.
 			//		It should determine what would be the best transition unless
 			//		an override in opts tells it to use a specific transitioning methodology
-			//		the transitionTo is a string in the form of [view]@[scene].  If
-			//		view is left of, the current scene will be transitioned to the default
-			//		view of the specified scene (eg @scene2), if the scene is left off
-			//		the app controller will instruct the active scene to the view (eg view1).  If both
-			//		are supplied (view1@scene2), then the application should transition to the scene,
-			//		and instruct the scene to navigate to the view.
+			//		the transitionTo is a string in the form of [view1,view2].
 			//
 			// transitionTo: Object
-			//		transition to view id. It looks like #tabScene,tab1
+			//		transition to view id. It looks like #tabView,tab1
 			// opts: Object
 			//		transition options
 			// params: Object
@@ -263,12 +279,13 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 			//
 			// returns:
 			//		transit dojo/promise/all object.
+			var F = MODULE+":_doTransition";
 
 			if(!parent){
 				throw Error("view parent not found in transition.");
 			}
 
-			this.app.log("in app/controllers/Transition._doTransition transitionTo=[",transitionTo,"], removeView = [",removeView,"] parent.name=[",parent.name,"], opts=",opts);
+			this.app.log(F+" transitionTo=[",transitionTo,"], removeView=[",removeView,"] parent.name=[",parent.name,"], opts=",opts);
 
 			var parts, toId, subIds, next;
 			if(transitionTo){
@@ -285,34 +302,55 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 			next = parent.children[parent.id + '_' + toId];
 			if(!next){
 				if(removeView){
-					this.app.log("> in Transition._doTransition called with removeView true, but that view is not available to remove");
+					this.app.log(F+" called with removeView true, but that view is not available to remove");
 					return;	// trying to remove a view which is not showing
 				}
 				throw Error("child view must be loaded before transition.");
 			}
-
-			var current = constraints.getSelectedChild(parent, next.constraint);
-
-			// set params on next view.
-			next.params = this._getParamsForView(next.name, params);
-
-			// if no subIds and next has default view, 
+			// if no subIds and next has default view,
 			// set the subIds to the default view and transition to default view.
 			if(!subIds && next.defaultView){
 				subIds = next.defaultView;
 			}
 
+			var nextSubViewArray = [next || parent];
+			if(subIds){
+				nextSubViewArray = this._getNextSubViewArray(subIds, next, parent);
+			}
+
+			var current = constraints.getSelectedChild(parent, next.constraint);
+			var currentSubViewArray = this._getCurrentSubViewArray(parent, nextSubViewArray, removeView);
+
+			var currentSubNames = this._getCurrentSubViewNamesArray(currentSubViewArray);
+
+			// set params on next view.
+			next.params = this._getParamsForView(next.name, params);
+
 			if(removeView){
 				if(next !== current){ // nothing to remove
-					this.app.log("> in Transition._doTransition called with removeView true, but that view is not available to remove");
+					this.app.log(F+" called with removeView true, but that view is not available to remove");
 					return;	// trying to remove a view which is not showing
 				}	
+				this.app.log(LOGKEY,F,"Transition Remove current From=["+currentSubNames+"]");
 				// if next == current we will set next to null and remove the view with out a replacement
 				next = null;
 			}
 
-			// next is not a Deferred object, so Deferred.when is no needed.
-			if(next !== current){
+			// get the list of nextSubNames, this is next.name followed by the subIds
+			var nextSubNames = "";
+			if(next){
+				nextSubNames = next.name;
+				if(subIds){
+					nextSubNames = nextSubNames+","+subIds;
+				}
+			}
+
+			if(nextSubNames == currentSubNames && next == current){ // new test to see if current matches next
+				this.app.log(LOGKEY,F,"Transition current and next DO MATCH From=["+currentSubNames+"] TO=["+nextSubNames+"]");
+				this._handleMatchingViews(nextSubViewArray, next, current, parent, data, removeView, doResize, subIds, currentSubNames);
+
+			}else{
+				this.app.log(LOGKEY,F,"Transition current and next DO NOT MATCH From=["+currentSubNames+"] TO=["+nextSubNames+"]");
 				//When clicking fast, history module will cache the transition request que
 				//and prevent the transition conflicts.
 				//Originally when we conduct transition, selectedChild will not be the
@@ -326,115 +364,286 @@ define(["require", "dojo/_base/lang", "dojo/_base/declare", "dojo/has", "dojo/on
 				//a promise object. this.set(...) will handles the this.selectedChild,
 				//activate or deactivate views and refresh layout.
 
-				// deactivate sub child of current view, then deactivate current view
-				var selChildren = constraints.getAllSelectedChildren(current);
-				for(var i = 0; i < selChildren.length; i++){					
-					var subChild = selChildren[i];
-					if(subChild && subChild.beforeDeactivate && subChild._active){
-						this.app.log("< in Transition._doTransition calling subChild.beforeDeactivate subChild name=[",subChild.name,"], parent.name=[",subChild.parent.name,"], next!==current path");
-						// TODO what to pass to beforeDeactivate here?
-						subChild.beforeDeactivate();
-					}
-				}
 				if(current && current._active){
-					this.app.log("< in Transition._doTransition calling current.beforeDeactivate current name=[",current.name,"], parent.name=[",current.parent.name,"], next!==current path");
-					current.beforeDeactivate(next, data);
+					this._handleBeforeDeactivateCalls(currentSubViewArray, this.nextLastSubChildMatch || next, current, data, subIds);
 				}
 				if(next){
-					this.app.log("> in Transition._doTransition calling next.beforeActivate next name=[",next.name,"], parent.name=[",next.parent.name,"], next!==current path");
-					next.beforeActivate(current, data);
+					this.app.log(F+" calling _handleBeforeActivateCalls next name=[",next.name,"], parent.name=[",next.parent.name,"]");
+					this._handleBeforeActivateCalls(nextSubViewArray, this.currentLastSubChildMatch || current, data, subIds);
 				}
-
-				// Moved subIds processing before emit of app-layoutView avoid early or double transition problem.
-				if(subIds){
-					this._doTransition(subIds, opts, params, data, next || parent, removeView, doResize, true);
-				}
-
-				this.app.log("> in Transition._doTransition calling app.emit layoutView view next");
 				if(!removeView){
-					// if we are removing the view we must delay the layout to _after_ the animation
-					this.app.emit("app-layoutView", {"parent": parent, "view": next });
+					this.app.log(F+" calling _handleLayoutAndResizeCalls");
+					this._handleLayoutAndResizeCalls(nextSubViewArray, removeView, doResize, subIds);
 				}
-				if(doResize){
-					this.app.emit("app-resize"); // after last layoutView fire app-resize
-				}
-				
 				var result = true;
-				if(transit && (!nested || current != null)){
+
+				// this.currentLastSubChildMatch holds the view to transition from
+				if(transit && (!nested || this.currentLastSubChildMatch != null) && this.currentLastSubChildMatch !== next){
 					// css3 transit has the check for IE so it will not try to do it on ie, so we do not need to check it here.
 					// We skip in we are transitioning to a nested view from a parent view and that nested view
 					// did not have any current
-					var mergedOpts = lang.mixin({}, opts); // handle reverse from mergedOpts or transitionDir
-					mergedOpts = lang.mixin({}, mergedOpts, {
-						reverse: (mergedOpts.reverse || mergedOpts.transitionDir === -1)?true:false,
-						// if transition is set for the view (or parent) in the config use it, otherwise use it from the event or defaultTransition from the config
-						transition: this._getTransition(parent, toId, mergedOpts)
-					});
-					if(next){
-						this.app.log("    > in Transition._doTransition calling transit for current ="+next.name);
-					}
-					result = transit(current && current.domNode, next && next.domNode, mergedOpts);
+					result = this._handleTransit(next, parent, this.currentLastSubChildMatch, opts, toId, removeView)
 				}
 				when(result, lang.hitch(this, function(){
 					if(next){
-						this.app.log("    < in Transition._doTransition back from transit for next ="+next.name);
+						this.app.log(F+" back from transit for next ="+next.name);
 					}
 					if(removeView){
-						this.app.emit("app-layoutView", {"parent": parent, "view": current, "removeView": true});
+						this._handleLayoutAndResizeCalls(nextSubViewArray, removeView, doResize, subIds);
 					}
 
-					// deactivate sub child of current view, then deactivate current view
-					var selChildren = constraints.getAllSelectedChildren(current);
-					for(var i = 0; i < selChildren.length; i++){					
-						var subChild = selChildren[i];
-						if(subChild && subChild.afterDeactivate && subChild._active){
-							this.app.log("  < in Transition._doTransition calling subChild.afterDeactivate subChild name=[",subChild.name,"], parent.name=[",subChild.parent.name,"], next!==current path");
-							subChild.afterDeactivate();
-							subChild._active = false;
-						}
-					}
-					if(current){
-						this.app.log("  < in Transition._doTransition calling current.afterDeactivate current name=[",current.name,"], parent.name=[",current.parent.name,"], next!==current path");
-						current.afterDeactivate(next, data);
-						current._active = false;
-					}
-					if(next){
-						this.app.log("  > in Transition._doTransition calling next.afterActivate next name=[",next.name,"], parent.name=[",next.parent.name,"], next!==current path");
-						next.afterActivate(current, data);
-						next._active = true;
-					}
+					// Add call to handleAfterDeactivate and handleAfterActivate here!
+					this._handleAfterDeactivateCalls(currentSubViewArray, this.nextLastSubChildMatch || next, current, data, subIds);
+					this._handleAfterActivateCalls(nextSubViewArray, removeView, this.currentLastSubChildMatch || current, data, subIds);
 				}));
 				return result; // dojo/promise/all
 			}
+		},
 
-			// next view == current view, refresh current view
-			if(next._active){
-			// deactivate next view
-				this.app.log("< in Transition._doTransition calling next.beforeDeactivate refresh current view next name=[",next.name,"], parent.name=[",next.parent.name,"], next==current path");
-				next.beforeDeactivate(current, data);
-				this.app.log("  < in Transition._doTransition calling next.afterDeactivate refresh current view next name=[",next.name,"], parent.name=[",next.parent.name,"], next==current path");
-				next.afterDeactivate(current, data);
-				next._active = false;
+		_handleMatchingViews: function(subs, next, current, parent, data, removeView, doResize, subIds, currentSubNames){
+			// summary:
+			//		Called when the current views and the next views match
+			var F = MODULE+":_handleMatchingViews";
+
+			this._handleBeforeDeactivateCalls(subs, this.nextLastSubChildMatch || next, current, data, subIds);
+			// this is the order that things were being done before on a reload of the same views, so I left it
+			// calling _handleAfterDeactivateCalls here instead of after _handleLayoutAndResizeCalls
+			this._handleAfterDeactivateCalls(subs, this.nextLastSubChildMatch || next, current, data, subIds);
+			this._handleBeforeActivateCalls(subs, this.currentLastSubChildMatch || current, data, subIds);
+			this._handleLayoutAndResizeCalls(subs, removeView, doResize, subIds);
+			this._handleAfterActivateCalls(subs, removeView, this.currentLastSubChildMatch || current, data, subIds);
+		},
+
+		_handleBeforeDeactivateCalls: function(subs, next, current, /*parent,*/ data, /*removeView, doResize,*/ subIds/*, currentSubNames*/){
+			// summary:
+			//		Call beforeDeactivate for each of the current views which are about to be deactivated
+			var F = MODULE+":_handleBeforeDeactivateCalls";
+			if(current._active){
+				//now we need to loop backwards thru subs calling beforeDeactivate
+				for(var i = subs.length-1; i >= 0; i--){
+					var v = subs[i];
+					if(v && v.beforeDeactivate && v._active){
+						this.app.log(LOGKEY,F,"beforeDeactivate for v.id="+v.id);
+						v.beforeDeactivate(next, data);
+					}
+				}
 			}
-			// activate next view
-			this.app.log("> in Transition._doTransition calling next.beforeActivate next name=[",next.name,"], parent.name=[",next.parent.name,"], next==current path");
-			next.beforeActivate(current, data);
+		},
 
-			// do sub transition like transition from "tabScene,tab1" to "tabScene,tab2"
-			// Moved subIds processing before emit of app-layoutView avoid early or double transition problem,
-			if(subIds){
-				return this._doTransition(subIds, opts, params, data, next, removeView, doResize, true); //dojo.DeferredList
+		_handleAfterDeactivateCalls: function(subs, next, current, data, subIds){
+			// summary:
+			//		Call afterDeactivate for each of the current views which have been deactivated
+			var F = MODULE+":_handleAfterDeactivateCalls";
+			if(current && current._active){
+				//now we need to loop forwards thru subs calling afterDeactivate
+				for(var i = 0; i < subs.length; i++){
+					var v = subs[i];
+					if(v && v.beforeDeactivate && v._active){
+						this.app.log(LOGKEY,F,"afterDeactivate for v.id="+v.id);
+						v.afterDeactivate(next, data);
+						v._active = false;
+					}
+				}
+
 			}
+		},
 
-			// layout current view, or remove it
-			this.app.log("> in Transition._doTransition calling app.triggger layoutView view next name=[",next.name,"], removeView = [",removeView,"], parent.name=[",next.parent.name,"], next==current path");
-			this.app.emit("app-layoutView", {"parent":parent, "view": next, "removeView": removeView});
+		_handleBeforeActivateCalls: function(subs, current, data, subIds){
+			// summary:
+			//		Call beforeActivate for each of the next views about to be activated
+			var F = MODULE+":_handleBeforeActivateCalls";
+			//now we need to loop backwards thru subs calling beforeActivate (ok since next matches current)
+			for(var i = subs.length-1; i >= 0; i--){
+				var v = subs[i];
+				this.app.log(LOGKEY,F,"beforeActivate for v.id="+v.id);
+				v.beforeActivate(current, data);
+			}
+		},
+
+		_handleLayoutAndResizeCalls: function(subs, removeView, doResize, subIds){
+			// summary:
+			//		fire app-layoutView for each of the next views about to be activated, and fire app-resize if doResize is true
+			var F = MODULE+":_handleLayoutAndResizeCalls";
+			var remove = removeView;
+			for(var i = 0; i < subs.length; i++){
+				var v = subs[i];
+				this.app.log(LOGKEY,F,"emit layoutView v.id=["+v.id+"] removeView=["+remove+"]");
+				// it seems like we should be able to minimize calls to resize by passing doResize: false and only doing resize on the app-resize emit
+				this.app.emit("app-layoutView", {"parent": v.parent, "view": v, "removeView": remove, "doResize": false});
+				remove = false;
+			}
 			if(doResize){
+				this.app.log(LOGKEY,F,"emit doResize called");
 				this.app.emit("app-resize"); // after last layoutView fire app-resize
 			}
-			this.app.log("  > in Transition._doTransition calling next.afterActivate next name=[",next.name,"], parent.name=[",next.parent.name,"], next==current path");
-			next.afterActivate(current, data);
-			next._active = true;
+		},
+
+		_handleAfterActivateCalls: function(subs, removeView, current, data, subIds){
+			// summary:
+			//		Call afterActivate for each of the next views which have been activated
+			var F = MODULE+":_handleAfterActivateCalls";
+			//now we need to loop backwards thru subs calling beforeActivate (ok since next matches current)
+			var startInt = 0;
+			if(removeView && subs.length > 1){
+				startInt = 1;
+			}
+			for(var i = startInt; i < subs.length; i++){
+				var v = subs[i];
+				if(v.afterActivate){
+					this.app.log(LOGKEY,F,"afterActivate for v.id="+v.id);
+					v.afterActivate(current, data);
+					v._active = true;
+				}
+			}
+		},
+
+		_getNextSubViewArray: function(subIds, next, parent){
+			// summary:
+			//		Get next sub view array, this array will hold the views which are about to be transitioned to
+			//
+			// subIds: String
+			//		the subids, the views are separated with a comma
+			// next: Object
+			//		the next view to be transitioned to.
+			// parent: Object
+			//		the parent view used in place of next if next is not set.
+			//
+			// returns:
+			//		Array of views which will be transitioned to during this transition
+			var F = MODULE+":_getNextSubViewArray";
+			var parts = [];
+			var p = next || parent;
+			if(subIds){
+				parts = subIds.split(",");
+			}
+			var nextSubViewArray = [p];
+			//now we need to loop forwards thru subIds calling beforeActivate
+			for(var i = 0; i < parts.length; i++){
+				toId = parts[i];
+				var v = p.children[p.id + '_' + toId];
+				if(v){
+					nextSubViewArray.push(v);
+					p = v;
+				}
+			}
+			nextSubViewArray.reverse();
+			return nextSubViewArray;
+		},
+
+		_getCurrentSubViewArray: function(parent, nextSubViewArray, removeView){
+			// summary:
+			//		Get current sub view array which will be replaced by the views in the nextSubViewArray
+			//
+			// parent: String
+			//		the parent view whose selected children will be replaced
+			// nextSubViewArray: Array
+			//		the array of views which are to be transitioned to.
+			//
+			// returns:
+			//		Array of views which will be deactivated during this transition
+			var F = MODULE+":_getCurrentSubViewArray";
+			var currentSubViewArray = [];
+			var constraint, type, hash;
+			var p = parent;
+			this.currentLastSubChildMatch = null;
+			this.nextLastSubChildMatch = null;
+
+			for(var i = nextSubViewArray.length-1; i >= 0; i--){
+				constraint = nextSubViewArray[i].constraint;
+				type = typeof(constraint);
+				hash = (type == "string" || type == "number") ? constraint : constraint.__hash;
+				// if there is a selected child for this constraint, and the child matches this view, push it.
+				if(p && p.selectedChildren && p.selectedChildren[hash]){
+					if(p.selectedChildren[hash] == nextSubViewArray[i]){
+						this.currentLastSubChildMatch = p.selectedChildren[hash];
+						this.nextLastSubChildMatch = nextSubViewArray[i];
+						currentSubViewArray.push(this.currentLastSubChildMatch);
+						p = this.currentLastSubChildMatch;
+					}else{
+						this.currentLastSubChildMatch = p.selectedChildren[hash];
+						currentSubViewArray.push(this.currentLastSubChildMatch);
+						this.nextLastSubChildMatch = nextSubViewArray[i]; // setting this means the transition will be done to the child instead of the parent
+						// since the constraint was set, but it did not match, need to deactivate all selected children of this.currentLastSubChildMatch
+						if(!removeView){
+							var selChildren = constraints.getAllSelectedChildren(this.currentLastSubChildMatch);
+							currentSubViewArray = currentSubViewArray.concat(selChildren);
+						}
+						break;
+					}
+				}else{ // the else is for the constraint not matching which means no more to deactivate.
+					this.currentLastSubChildMatch = null; // there was no view selected for this constraint
+					this.nextLastSubChildMatch = nextSubViewArray[i]; // set this to the next view for transition to an empty constraint
+					break;
+				}
+
+			}
+			// Here since they had the constraint but it was not the same I need to deactivate all children of p
+			if(removeView){
+				var selChildren = constraints.getAllSelectedChildren(p);
+				currentSubViewArray = currentSubViewArray.concat(selChildren);
+			}
+
+			return currentSubViewArray;
+		},
+
+		_getCurrentSubViewNamesArray: function(currentSubViewArray){
+			// summary:
+			//		Get current sub view names array, the names of the views which will be transitioned from
+			//
+			// currentSubViewArray: Array
+			//		the array of views which are to be transitioned from.
+			//
+			// returns:
+			//		Array of views which will be deactivated during this transition
+			var F = MODULE+":_getCurrentSubViewNamesArray";
+			var currentSubViewNamesArray = [];
+			for(var i = 0; i < currentSubViewArray.length; i++){
+				currentSubViewNamesArray.push(currentSubViewArray[i].name);
+			}
+			return currentSubViewNamesArray;
+		},
+
+		_handleTransit: function(next, parent, currentLastSubChild, opts, toId, removeView){
+			// summary:
+			//		Setup the options and call transit to do the transition
+			//
+			// next: Object
+			//		the next view, the view which will be transitioned to
+			// parent: Object
+			//		the parent view which is used to get the transition type to be used
+			// currentLastSubChild: Object
+			//		the current view which is being transitioned away from
+			// opts: Object
+			//		the options used for the transition
+			// removeView: boolean
+			//		true if the view is being removed
+			// toId: String
+			//		the id of the view being transitioned to
+			//
+			// returns:
+			//		the promise returned by the call to transit
+			var F = MODULE+":_handleTransit";
+
+			var nextLastSubChild = this.nextLastSubChildMatch || next;
+
+			var mergedOpts = lang.mixin({}, opts); // handle reverse from mergedOpts or transitionDir
+			mergedOpts = lang.mixin({}, mergedOpts, {
+				reverse: (mergedOpts.reverse || mergedOpts.transitionDir === -1)?true:false,
+				// if transition is set for the view (or parent) in the config use it, otherwise use it from the event or defaultTransition from the config
+				transition: this._getTransition(nextLastSubChild, parent, toId, mergedOpts)
+			});
+
+			if(removeView){
+				nextLastSubChild = null;
+			}
+			if(currentLastSubChild){
+				this.app.log(LOGKEY,F,"transit FROM currentLastSubChild.id=["+currentLastSubChild.id+"]");
+			}
+			if(nextLastSubChild){
+				this.app.log(LOGKEY,F,"transit TO nextLastSubChild.id=["+nextLastSubChild.id+"] transition=["+mergedOpts.transition+"]");
+			}
+			return transit(currentLastSubChild && currentLastSubChild.domNode, nextLastSubChild && nextLastSubChild.domNode, mergedOpts);
 		}
+
 	});
 });

@@ -32,8 +32,8 @@ function(declare, dom, domStyle, domClass, domAttr, domConstruct, LayoutBase){
 				parentDiv.appendChild(event.view.domNode);
 			}else{
 				event.view.parent.domNode.appendChild(event.view.domNode);
-			//	domClass.add(event.view.domNode, constraint);  // set the class to the constraint
 			}
+			domClass.add(event.view.domNode, constraint);  // set the class to the constraint
 
 			this.inherited(arguments);
 		},
@@ -44,27 +44,10 @@ function(declare, dom, domStyle, domClass, domAttr, domConstruct, LayoutBase){
 
 		hideView: function(view){
 			domStyle.set(view.domNode, "display", "none");
-			//var sc = registry.byId(view.parent.id+"-"+view.constraint);
-			//if(sc){
-			//	sc.removedFromBc = true;
-			//	sc.removeChild(view.domNode);
-			//}
 		},
 
 		showView: function(view){
 			domStyle.set(view.domNode, "display", "");
-			
-			//var sc = registry.byId(view.parent.id+"-"+view.constraint);
-			//if(sc){
-			//	if(sc.removedFromBc){
-			//		sc.removedFromBc = false;
-			//		registry.byId(this.app.id+"-BC").addChild(sc);
-			//		domStyle.set(view.domNode, "display", "");
-			//	}
-			//	domStyle.set(cp.domNode, "display", "");
-			//	sc.selectChild(cp);
-			//	sc.resize();
-			//}
 		}
 	});
 });

@@ -203,34 +203,20 @@ define(["require", "dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare",
 					viewId: this.defaultView,
 					params: this._startParams,
 					callback: lang.hitch(this, function (){
-						var parts = this.defaultView.split('+'), selectId, constraint;
-						// TODO all this code should be moved to a controller, there is no reason to do that here
-						// for initial view and somewhere else for the rest
-						if(parts.length > 0){		
-							while(parts.length > 0){ 	
-								var viewId = parts.shift();
-								selectId = viewId.split(",").shift();
-								// set the constraint
-								if(!this.children[this.id + "_" + selectId].hasOwnProperty("constraint")){
-									this.children[this.id + '_' + selectId].constraint = domAttr.get(this.children[this.id + '_' + selectId].domNode, "data-app-constraint") || "center";
-								}
-								constraints.register(constraint = this.children[this.id + '_' + selectId].constraint);
-								constraints.setSelectedChild(this, constraint, this.children[this.id + '_' + selectId]);
-							}
-						}else{
-							var selectId = this.defaultView.split(",").shift();
-							// set the constraint
-							if(!this.children[this.id + "_" + selectId].hasOwnProperty("constraint")){
-								this.children[this.id + '_' + selectId].constraint = domAttr.get(this.children[this.id + '_' + selectId].domNode, "data-app-constraint") || "center";
-							}
-							constraints.register(constraint = this.children[this.id + '_' + selectId].constraint);
-							constraints.setSelectedChild(this, constraint, this.children[this.id + '_' + selectId]);
-						}
-						// transition to startView. If startView==defaultView, that means initial the default view.
+						var saveTrans = this.transition; // save this to set it to none and restore it
+						this.transition = "none";	// we want to avoid the transition on the first display for the defaultView
 						this.emit("app-transition", {
-							viewId: this._startView,
+							viewId: this.defaultView,
 							opts: { params: this._startParams }
 						});
+						this.transition = saveTrans;
+						if(this.defaultView !== this._startView){
+						// transition to startView. If startView==defaultView, that means initial the default view.
+							this.emit("app-transition", {
+								viewId: this._startView,
+								opts: { params: this._startParams }
+							});
+						}
 						this.setStatus(this.lifecycle.STARTED);
 					})
 				});
@@ -350,13 +336,13 @@ define(["require", "dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare",
 					//		Contains the transition options.
 					// triggerEvent:
 					//		The event that triggered the transition (for example a touch event on a ListItem).
-					var opts = {bubbles:true, cancelable:true, detail: transitionOptions, triggerEvent: triggerEvent||null};	
+					var opts = {bubbles:true, cancelable:true, detail: transitionOptions, triggerEvent: triggerEvent || null};
 					on.emit(target,"startTransition", opts);
 				};
 
 				app.setStatus(app.lifecycle.STARTING);
 				// Create global namespace for application.
-				// The global name is application id. For example: modelApp
+				// The global name is application id. ie: modelApp
 				var globalAppName = app.id;
 				if(window[globalAppName]){
 					lang.mixin(app, window[globalAppName]);
