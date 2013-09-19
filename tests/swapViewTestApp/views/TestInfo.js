@@ -1,5 +1,6 @@
-define(["dojo/dom", "dojo/dom-style", "dojo/_base/connect"], function(dom, domStyle, connect){
+define(["dojo/dom", "dojo/dom-style", "dojo/_base/connect", "dojo/_base/lang"], function(dom, domStyle, connect, lang){
 	var _connectResults = []; // events connect result
+	var doneOnce = false;
 
 	return {
 		// view init
@@ -10,22 +11,12 @@ define(["dojo/dom", "dojo/dom-style", "dojo/_base/connect"], function(dom, domSt
 			// summary:
 			//		view life cycle beforeActivate()
 			//
-		/*
-		 	var connectResult;
-			var backButtomDom = dom.byId('headerBackButton');
-			connectResult = connect.connect(backButtomDom, "onclick", function(e){
-				// transition to repeatDetails view with the &cursor=index
-				
-				var transOpts = {
-					title:'main+TestInfo+simple+repeatList+navigation+header',
-					target:'main+TestInfo+simple+repeatList+navigation+header',
-					url:'#main+TestInfo+simple+repeatList+navigation+header'					
-				};
-				new TransitionEvent(e.target, transOpts, e).dispatch(); 
-
-			});
-		*/	
-			
+			// this code was added to get the testInfo to resize to fix the layout.
+			if(!doneOnce){
+				var dm = lang.getObject("dojox.mobile", true);
+				dm.resizeAll();
+				doneOnce = true;
+			}
 		},
 
 

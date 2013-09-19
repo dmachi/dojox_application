@@ -19,12 +19,9 @@ function(dom, connect, registry, at, TransitionEvent, Repeat, getStateful){
 
 		// transition to repeatDetails view with the &cursor=index
 		var transOpts = {
-	//		title : "main+TestInfo+simple+repeatDetails+navigation+header",
-	//		target : "main+TestInfo+simple+repeatDetails+navigation+header",
-	//		url : "#main+TestInfo+simple+repeatDetails+navigation+header", // this is optional if not set it will be created from target   
-			title : "main+TestInfo+simple+repeatDetails+navigation",
-			target : "main+TestInfo+simple+repeatDetails+navigation",
-			url : "#main+TestInfo+simple+repeatDetails+navigation", // this is optional if not set it will be created from target   
+			title : "TestInfo+simple+repeatDetails+navigation",
+			target : "TestInfo+simple+repeatDetails+navigation",
+			url : "#TestInfo+simple+repeatDetails+navigation", // this is optional if not set it will be created from target
 			params : {"cursor":index}
 		};
 		new TransitionEvent(e.target, transOpts, e).dispatch(); 
@@ -82,21 +79,7 @@ function(dom, connect, registry, at, TransitionEvent, Repeat, getStateful){
 				deleteResult(index);
 			});
 			_connectResults.push(connectResult);
-		/*	
-			var backButtomDom = dom.byId('headerBackButton');
-			connectResult = connect.connect(backButtomDom, "onclick", function(e){
-				// transition to repeatDetails view with the &cursor=index
-				
-				var transOpts = {
-					title:'main+TestInfo+simple+repeatList+navigation+header',
-					target:'main+TestInfo+simple+repeatList+navigation+header',
-					url:'#main+TestInfo+simple+repeatList+navigation+header'					
-				};
-				new TransitionEvent(e.target, transOpts, e).dispatch(); 
 
-			});
-		*/	
-			
 		},
 
 		afterDeactivate: function(){
