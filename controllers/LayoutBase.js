@@ -112,7 +112,9 @@ function(lang, declare, has, win, config, domAttr, topic, domStyle, constraints,
 				if(parentSelChild){
 				//	domStyle.set(parentSelChild.domNode, "zIndex", 25);
 					parentSelChild.viewShowing = false;
-					this.hideView(parentSelChild);
+					if(event.transition == "none" || event.currentLastSubChildMatch !== parentSelChild){
+						this.hideView(parentSelChild); // only call hideView for transition none or when the transition will not hide it
+					}
 				}
 				view.viewShowing = true;
 				this.showView(view);
@@ -124,13 +126,15 @@ function(lang, declare, has, win, config, domAttr, topic, domStyle, constraints,
 		},
 
 		hideView: function(view){
-			this.app.log("in LayoutBase:hideView called for view.id="+view.id);
+			this.app.log("logTransitions:","LayoutBase"+" setting domStyle display none for view.id=["+view.id+"], visibility=["+view.domNode.style.visibility+"]");
 			domStyle.set(view.domNode, "display", "none");
 		},
 
 		showView: function(view){
-			this.app.log("in LayoutBase:showView called for view.id="+view.id);
-			domStyle.set(view.domNode, "display", "");
+			if(view.domNode){
+				this.app.log("logTransitions:","LayoutBase"+" setting domStyle display to display for view.id=["+view.id+"], visibility=["+view.domNode.style.visibility+"]");
+				domStyle.set(view.domNode, "display", "");
+			}
 		}
 	});
 });
