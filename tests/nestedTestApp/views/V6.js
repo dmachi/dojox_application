@@ -102,8 +102,10 @@ function(dom, domStyle, connect, registry, has, TransitionEvent){
 				liWidget = registry.byId("dojox_mobile_ListItem_12"); //Test Instructions
 			}
 			if(liWidget){
-				var ev = new TransitionEvent(liWidget.domNode, liWidget.params);
-				ev.dispatch();
+				setTimeout(function(){ // to simulate network latency
+					var ev = new TransitionEvent(liWidget.domNode, liWidget.params);
+					ev.dispatch();
+				}, 50);
 			}
 		},
 		beforeDeactivate: function(){
