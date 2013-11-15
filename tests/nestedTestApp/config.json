@@ -93,7 +93,7 @@
 			"logTransitions:"
 		]
 	},
-	"timedAutoFlow": 0,
+	"timedAutoFlow": 1,
 	"timed100Loops": 0,
 
 	//views are groups of views and models loaded at once
