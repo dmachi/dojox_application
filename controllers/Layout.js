@@ -57,10 +57,12 @@ function(declare, lang, array, win, query, domGeom, domAttr, domStyle, registry,
 			this.app.log("in app/controllers/Layout.initLayout event=",event);
 			this.app.log("in app/controllers/Layout.initLayout event.view.parent.name=[",event.view.parent.name,"]");
 
-			if(this.app.noAddViewByConstriant){
-				event.view.parent.domNode.appendChild(event.view.domNode);
-			}else{
-				this.addViewToParentDomByConstraint(event);
+			if (!event.view.domNode.parentNode) {
+				if(this.app.noAddViewByConstriant){
+					event.view.parent.domNode.appendChild(event.view.domNode);
+				}else{
+					this.addViewToParentDomByConstraint(event);
+				}
 			}
 			domAttr.set(event.view.domNode, "data-app-constraint", event.view.constraint);
 			this.inherited(arguments);
