@@ -70,7 +70,7 @@
 	//the name of the scene to load when the app is initialized.
 	"defaultView": "footer,header,right,left,center",
 
-	//"useConfigOrder": true, // test to see how it would layout without ordering dom by constraint
+	"useConfigOrder": true, // test to see how it would layout without ordering dom by constraint
 
 	"defaultTransition": "slide",
 	//scenes are groups of views and models loaded at once

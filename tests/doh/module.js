@@ -13,6 +13,7 @@ define([
 		doh.registerUrl("dojox.app.tests.doh.layoutApp", require.toUrl("./layoutApp/" + userArgs), 999999);
 		doh.registerUrl("dojox.app.tests.doh.mediaQuery3ColumnApp", require.toUrl("./mediaQuery3ColumnApp/" + userArgs), 999999);
 		doh.registerUrl("dojox.app.tests.doh.domOrderByConstraint", require.toUrl("./domOrderByConstraint/" + userArgs), 999999);
+		doh.registerUrl("dojox.app.tests.doh.domOrderByConfig", require.toUrl("./domOrderByConfig/" + userArgs), 999999);
 		doh.registerUrl("dojox.app.tests.doh.domOrderByConstraintRTL", require.toUrl("./domOrderByConstraintRTL/" + userArgs), 999999);
 	}catch(e){
 		doh.debug(e);

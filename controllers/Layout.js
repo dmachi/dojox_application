@@ -58,7 +58,7 @@ function(declare, lang, array, win, query, domGeom, domAttr, domStyle, registry,
 			this.app.log("in app/controllers/Layout.initLayout event.view.parent.name=[",event.view.parent.name,"]");
 
 			if (!event.view.domNode.parentNode) {
-				if(this.app.noAddViewByConstriant){
+				if(this.app.useConfigOrder){
 					event.view.parent.domNode.appendChild(event.view.domNode);
 				}else{
 					this.addViewToParentDomByConstraint(event);
@@ -88,16 +88,16 @@ function(declare, lang, array, win, query, domGeom, domAttr, domStyle, registry,
 						var child = event.view.parent.domNode.children[childIndex];
 						var dir = domStyle.get(event.view.parent.domNode,"direction");
 						var isltr = (dir === "ltr");
+						var LEADING_VIEW = isltr ? "left" : "right";
+						var TRAILING_VIEW = isltr ? "right" : "left";
 						if(child.getAttribute && child.getAttribute("data-app-constraint")) {
 							var previousViewConstraint = child.getAttribute("data-app-constraint");
- 							// if previous is bottom or (right && ltr) or (left && rtl) or new is left and
- 							// previous is not top need to insert before this child
+ 							// if previous is bottom or previous is Trailing
+ 							// or previous is not top and newView is Leading we need to insert before this child
 							if(previousViewConstraint === "bottom" ||
-								(previousViewConstraint === "right" && isltr) ||
-								(previousViewConstraint === "left" && !isltr) ||
+								(previousViewConstraint === TRAILING_VIEW) ||
 								(previousViewConstraint !== "top" &&
-									(newViewConstraint === "left" && isltr) ||
-									(newViewConstraint === "right" && !isltr))){
+									(newViewConstraint === LEADING_VIEW))){
 								event.view.parent.domNode.insertBefore(event.view.domNode, child);
 								break;
 							}
