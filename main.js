@@ -91,16 +91,20 @@ define(["require", "dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare",
 				var def = new Deferred();
 				var requireSignal;
 				try{
-					requireSignal = require.on("error", function(error){
+					requireSignal = require.on ? require.on("error", function(error){
 						if(def.isResolved() || def.isRejected()){
 							return;
 						}
 						def.reject("load controllers error.");
-						requireSignal.remove();
-					});
+						if(requireSignal){
+							requireSignal.remove();
+						}
+					}) : null;
 					require(requireItems, function(){
 						def.resolve.call(def, arguments);
-						requireSignal.remove();
+						if(requireSignal){
+							requireSignal.remove();
+						}
 					});
 				}catch(e){
 					def.reject(e);
