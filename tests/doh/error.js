@@ -106,9 +106,9 @@ define(["doh", "dojox/app/main", "dojox/json/ref", "dojo/text!./error1.json", "d
 					events.push(evt);
 				});
 				require(["dojox/app/main"], function(Application){
-					require.on("error", function(){
+					require.on ? require.on("error", function(){
 						goterror = true;
-					});
+					}) : null;
 					Application(json.fromJson(config5));
 					// we need to check that before timeout we _never_ entered the START (2) state
 					// and we must check error has been thrown
