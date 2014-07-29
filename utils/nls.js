@@ -17,7 +17,7 @@ define(["require", "dojo/Deferred"],  function(require, Deferred){
 				if(index >= 0){
 					loadFile = path.substring(index+2);
 				}
-				requireSignal = require.on("error", function(error){
+				requireSignal = require.on ? require.on("error", function(error){
 					if (nlsDef.isResolved() || nlsDef.isRejected()) {
 						return;
 					}
@@ -25,7 +25,7 @@ define(["require", "dojo/Deferred"],  function(require, Deferred){
 						nlsDef.resolve(false);
 						requireSignal.remove();
 					}
-				});
+				}) : null;
 
 				if(path.indexOf("./") == 0){
 					path = "app/"+path;
