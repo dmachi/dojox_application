@@ -23,7 +23,9 @@ define(["require", "dojo/Deferred"],  function(require, Deferred){
 					}
 					if(error.info[0] && (error.info[0].indexOf(loadFile)>= 0)){
 						nlsDef.resolve(false);
-						requireSignal.remove();
+						if(requireSignal){
+							requireSignal.remove();
+						}
 					}
 				}) : null;
 
