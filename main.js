@@ -9,7 +9,7 @@ define(["require", "dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare",
 
 	var Application = declare(Evented, {
 		constructor: function(params, node){
-			lang.mixin(this, params);
+			declare.safeMixin(this, params);
 			this.params = params;
 			this.id = params.id;
 			this.defaultView = params.defaultView;
@@ -348,7 +348,7 @@ define(["require", "dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare",
 				// The global name is application id. ie: modelApp
 				var globalAppName = app.id;
 				if(window[globalAppName]){
-					lang.mixin(app, window[globalAppName]);
+					declare.safeMixin(app, window[globalAppName]);
 				}
 				window[globalAppName] = app;
 				app.start();

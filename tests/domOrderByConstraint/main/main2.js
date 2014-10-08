@@ -24,7 +24,7 @@ function(dom, connect, registry){
 			currentModel = this.loadedModels.names;
 			var connectResult;
 
-			self = this;
+			var self = this;
 			connectResult = connect.connect(dom.byId('2testRTL'), "click", function(e){
 				console.log("testRTL called. ");
 				//first set the dir="rtl" on the app root
