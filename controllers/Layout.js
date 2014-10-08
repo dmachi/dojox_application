@@ -1,7 +1,7 @@
 define(["dojo/_base/declare", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/window",
 		"dojo/query", "dojo/dom-geometry", "dojo/dom-attr", "dojo/dom-style", "dijit/registry",
-		"./LayoutBase", "../utils/layout", "../utils/constraints"],
-function(declare, lang, array, win, query, domGeom, domAttr, domStyle, registry, LayoutBase, layout, constraints){
+		"./LayoutBase", "../utils/layout", "../utils/constraints", "dojo/sniff"],
+function(declare, lang, array, win, query, domGeom, domAttr, domStyle, registry, LayoutBase, layout, constraints, has){
 	// module:
 	//		dojox/app/controllers/Layout
 	// summary:
@@ -57,7 +57,7 @@ function(declare, lang, array, win, query, domGeom, domAttr, domStyle, registry,
 			this.app.log("in app/controllers/Layout.initLayout event=",event);
 			this.app.log("in app/controllers/Layout.initLayout event.view.parent.name=[",event.view.parent.name,"]");
 
-			if (!event.view.domNode.parentNode) {
+			if (!event.view.domNode.parentNode || (has("ie") == 8 && !event.view.domNode.parentElement)) {
 				if(this.app.useConfigOrder){
 					event.view.parent.domNode.appendChild(event.view.domNode);
 				}else{
@@ -105,7 +105,8 @@ function(declare, lang, array, win, query, domGeom, domAttr, domStyle, registry,
 					}
 				}
 			}
-			if(!event.view.domNode.parentNode){ // if the domNode was not added to the parent yet add it to the end now
+			// if the domNode was not added to the parent yet add it to the end now
+			if (!event.view.domNode.parentNode || (has("ie") == 8 && !event.view.domNode.parentElement)) {
 				event.view.parent.domNode.appendChild(event.view.domNode);
 			}
 		},
